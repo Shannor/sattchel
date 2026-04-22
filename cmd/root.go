@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"os"
-	"test-cli/internal/cli/flags"
+	"test-cli/internal/cli/contentful"
+	"test-cli/internal/cli/optimizely"
+	"test-cli/internal/config"
 
 	"github.com/spf13/cobra"
 )
@@ -26,11 +28,11 @@ func Execute() {
 }
 
 func init() {
-
-	//err := configs.Setup()
-	//if err != nil {
-	//	panic(err)
-	//}
-
-	rootCmd.AddCommand(flags.NewCommand())
+	svc := config.NewConfigurationService()
+	err := svc.Init()
+	if err != nil {
+		panic(err)
+	}
+	rootCmd.AddCommand(optimizely.NewCommand())
+	rootCmd.AddCommand(contentful.NewCommand())
 }

@@ -9,6 +9,7 @@ func NewCommand() *cobra.Command {
 		Use:          "flags",
 		Short:        "Manage feature flags",
 		Aliases:      []string{"ff"},
+		Version:      "0.0.1",
 		SilenceUsage: true,
 	}
 	configCmd.AddCommand(add(), list(), remove())
@@ -26,6 +27,9 @@ func list() *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: ": List feature flags",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
 	}
 }
 
