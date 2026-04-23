@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"os"
-	"test-cli/internal/cli/contentful"
-	"test-cli/internal/cli/optimizely"
 	"test-cli/internal/config"
+	"test-cli/internal/contentful"
+	"test-cli/internal/optimizely"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -28,11 +29,17 @@ func Execute() {
 }
 
 func init() {
-	svc := config.NewConfigurationService()
-	err := svc.Init()
+	v := viper.New()
+	err := config.Init(v)
 	if err != nil {
 		panic(err)
 	}
-	rootCmd.AddCommand(optimizely.NewCommand())
-	rootCmd.AddCommand(contentful.NewCommand())
+	cRepo := contentful.NewContentfulRepository(v)
+	opRepo := optimizely.NewConfigRepo(v)
+
+	cService := contentful.NewConfigurationService(cRepo)
+	opService := optimizely.NewOptimizelyService(opRepo)
+
+	rootCmd.AddCommand(optimizely.NewCommand(opService))
+	rootCmd.AddCommand(contentful.NewCommand(cService))
 }
