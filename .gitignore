@@ -1,5 +1,6 @@
 # Binaries for programs and plugins
 my-cli
+test-cli
 
 # Test binary, built with `go test -c`
 *.test
@@ -17,4 +18,3 @@ go.work
 .DS_Store
 
 # Dependency directories
-vendor/
