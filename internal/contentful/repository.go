@@ -1,6 +1,8 @@
 package contentful
 
 import (
+	"test-cli/internal/repository"
+
 	"github.com/spf13/viper"
 )
 
@@ -8,7 +10,7 @@ type Repository struct {
 	v *viper.Viper
 }
 
-func NewContentfulRepository(v *viper.Viper) *Repository {
+func NewConfigRepo(v *viper.Viper) repository.Configuration[Configuration] {
 	return &Repository{v: v}
 }
 

@@ -11,8 +11,8 @@ test-cli
 # Go workspace file
 go.work
 
-# IDE
-.idea/
+.idea
+.junie
 
 # macOS
 .DS_Store

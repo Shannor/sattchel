@@ -1,6 +1,8 @@
 package optimizely
 
 import (
+	"test-cli/internal/repository"
+
 	"github.com/spf13/viper"
 )
 
@@ -8,7 +10,7 @@ type Repository struct {
 	v *viper.Viper
 }
 
-func NewConfigRepo(v *viper.Viper) *Repository {
+func NewConfigurationRepo(v *viper.Viper) repository.Configuration[Configuration] {
 	return &Repository{v: v}
 }
 

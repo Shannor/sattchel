@@ -1,0 +1,239 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Optimizely API - Projects Only",
+    "version": "2.0"
+  },
+  "paths": {
+    "/projects": {
+      "get": {
+        "description": "Get a list of all the Projects in your account, with associated metadata",
+        "operationId": "list_projects",
+        "parameters": [
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/page" }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/Project" },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Return all Projects"
+          },
+          "401": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Invalid credentials"
+          },
+          "default": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Unexpected error"
+          }
+        },
+        "summary": "List Projects",
+        "tags": [ "Projects" ]
+      },
+      "post": {
+        "description": "Create a new Project in your account",
+        "operationId": "create_project",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Project" } } },
+          "description": "A string in JSON format that includes all the fields to create a Project",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Project" } } },
+            "description": "Return the created Project"
+          },
+          "default": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Unexpected error"
+          }
+        },
+        "summary": "Create a Project",
+        "tags": [ "Projects" ]
+      }
+    },
+    "/projects/{project_id}": {
+      "get": {
+        "description": "Get all the properties of a single Project",
+        "operationId": "get_project",
+        "parameters": [
+          {
+            "description": "The Project ID of the Project you want to get",
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": { "format": "int64", "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Project" } } },
+            "description": "Return Project info"
+          },
+          "400": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Invalid Project ID supplied"
+          },
+          "403": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "You do not have permission to access the specified Project"
+          },
+          "404": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Project not found"
+          }
+        },
+        "summary": "Read a Project",
+        "tags": [ "Projects" ]
+      },
+      "patch": {
+        "description": "Update a Project",
+        "operationId": "update_project",
+        "parameters": [
+          {
+            "description": "The Project ID of the Project you want to change",
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": { "format": "int64", "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProjectUpdate" } } },
+          "description": "A string in JSON format that includes all the fields you'd like to change for a Project",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Project" } } },
+            "description": "Return the updated Project"
+          },
+          "400": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Invalid Project ID supplied"
+          },
+          "401": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Invalid credentials"
+          },
+          "403": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "You do not have permission to update the specified Project"
+          },
+          "404": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Project not found"
+          },
+          "default": {
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } },
+            "description": "Unexpected error"
+          }
+        },
+        "summary": "Update a Project",
+        "tags": [ "Projects" ]
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "page": {
+        "description": "Optional pagination argument that specifies the page to return. The default value is 1.\n",
+        "in": "query",
+        "name": "page",
+        "required": false,
+        "schema": { "default": 1, "type": "integer" }
+      },
+      "per_page": {
+        "description": "Optional pagination argument that specifies the maximum number of objects to return per request",
+        "in": "query",
+        "name": "per_page",
+        "required": false,
+        "schema": { "default": 25, "maximum": 100, "type": "integer" }
+      }
+    },
+    "schemas": {
+      "Project": {
+        "properties": {
+          "account_id": { "description": "The account the Project is associated with", "example": 12345, "format": "int64", "readOnly": true, "type": "integer" },
+          "confidence_threshold": { "description": "The significance level...", "example": 0.9, "format": "double", "maximum": 1, "minimum": 0.5, "type": "number" },
+          "created": { "description": "The time that the Project was originally created", "format": "date-time", "readOnly": true, "type": "string" },
+          "dcp_service_id": { "description": "The ID of a Dynamic Customer Profile Service associated with this Project", "example": 121234, "format": "int64", "type": "integer" },
+          "description": { "description": "A short description of the Project", "example": "Project for user sign up flow", "type": "string" },
+          "id": { "description": "The unique identifier for the Project", "example": 1000, "format": "int64", "readOnly": true, "type": "integer" },
+          "is_classic": { "description": "If is_classic is true it means that the project doesn't have Optimizely X enabled.", "readOnly": true, "type": "boolean" },
+          "is_flags_enabled": { "description": "If is_flags_enabled is true, this project uses the new Flags-First user experience.", "type": "boolean" },
+          "last_modified": { "description": "The time the Project was last modified", "format": "date-time", "readOnly": true, "type": "string" },
+          "name": { "description": "The name of the Project", "example": "Test Project", "type": "string" },
+          "platform": { "default": "web", "description": "The platform of the Project", "enum": ["web", "ios", "android", "custom"], "type": "string" },
+          "sdks": { "description": "For Full Stack, Mobile, and OTT projects, the language used for the SDK", "items": { "enum": ["android", "android_tv", "ios", "java", "javascript", "node", "php", "python", "ruby", "tv_os"], "type": "string" }, "type": "array" },
+          "socket_token": { "description": "The token used to identify your mobile app to Optimizely (mobile only)", "example": "AABBCCDD~123456789", "readOnly": true, "type": "string" },
+          "status": { "default": "active", "description": "The current status of the Project", "enum": ["active", "archived"], "type": "string" },
+          "third_party_platform": { "description": "The third party platform with which the project is intended to be used.", "enum": ["salesforce"], "nullable": true, "type": "string" },
+          "web_snippet": { "$ref": "#/components/schemas/WebSnippet" }
+        },
+        "required": [ "name" ],
+        "type": "object"
+      },
+      "ProjectUpdate": {
+        "properties": {
+          "account_id": { "description": "The ID of the account the Project is associated with", "example": 12345, "format": "int64", "readOnly": true, "type": "integer" },
+          "confidence_threshold": { "description": "The significance level...", "example": 0.9, "format": "double", "maximum": 1, "minimum": 0.5, "type": "number" },
+          "dcp_service_id": { "description": "The ID of a Dynamic Customer Profile Service associated with this Project", "example": 121234, "format": "int64", "type": "integer" },
+          "description": { "description": "A short description of the Project", "example": "Project for user sign up flow", "type": "string" },
+          "name": { "description": "The name of the Project", "example": "Test Project", "type": "string" },
+          "status": { "description": "The current status of the Project", "enum": ["active", "archived"], "type": "string" },
+          "web_snippet": { "$ref": "#/components/schemas/WebSnippetUpdate" }
+        },
+        "type": "object"
+      },
+      "WebSnippet": {
+        "properties": {
+          "code_revision": { "description": "The current revision number of the Project snippet", "readOnly": true, "type": "integer" },
+          "enable_force_variation": { "default": false, "description": "Enables the option to force yourself into a specific variation on any page", "type": "boolean" },
+          "exclude_disabled_experiments": { "default": false, "description": "Set to true to remove paused and draft Experiment from the snippet", "type": "boolean" },
+          "exclude_names": { "default": true, "description": "Set to true to mask descriptive names", "type": "boolean" },
+          "include_jquery": { "default": true, "description": "Set to true to include jQuery in your snippet", "type": "boolean" },
+          "ip_anonymization": { "default": false, "description": "Set to true to change the last octet of IP addresses to 0 prior to logging", "type": "boolean" },
+          "ip_filter": { "description": "A regular expression matching ip addresses for filtering out visitors.", "example": "^206\\.23\\.100\\.([5-9][0-9]|1([0-4][0-9]|50))$", "type": "string" },
+          "js_file_size": { "description": "The current size in bytes of the Project snippet", "example": 63495, "readOnly": true, "type": "integer" },
+          "library": { "default": "jquery-1.11.3-trim", "description": "The prefered jQuery library version you would like to use with your snippet.", "enum": ["jquery-1.11.3-trim", "jquery-1.11.3-full", "jquery-1.6.4-trim", "jquery-1.6.4-full", "none"], "type": "string" },
+          "project_javascript": { "description": "The javascript code which runs before Optimizely on all pages", "example": "alert(\"Active Experiment\")", "type": "string" },
+          "visitor_id_locator_name": { "description": "(BETA) The name of said identifier that locates the visitor id", "example": "cookie_name", "nullable": true, "type": "string" },
+          "visitor_id_locator_type": { "description": "(BETA) The type of identifer where the visitor id is located", "enum": ["cookie", "query", "localStorage", "js"], "nullable": true, "type": "string" }
+        },
+        "type": "object"
+      },
+      "WebSnippetUpdate": {
+        "properties": {
+          "enable_force_variation": { "description": "Enables the option to force yourself into a specific variation on any page", "type": "boolean" },
+          "exclude_disabled_experiments": { "description": "Set to true to remove paused and draft Experiment from the snippet", "type": "boolean" },
+          "exclude_names": { "description": "Set to true to mask descriptive names", "type": "boolean" },
+          "include_jquery": { "description": "Set to true to include jQuery in your snippet", "type": "boolean" },
+          "ip_anonymization": { "description": "Set to true to change the last octet of IP addresses to 0 prior to logging", "type": "boolean" },
+          "ip_filter": { "description": "A regular expression matching ip addresses for filtering out visitors.", "example": "^206\\.23\\.100\\.([5-9][0-9]|1([0-4][0-9]|50))$", "type": "string" },
+          "library": { "description": "The prefered jQuery library version you would like to use with your snippet.", "enum": ["jquery-1.11.3-trim", "jquery-1.11.3-full", "jquery-1.6.4-trim", "jquery-1.6.4-full", "none"], "type": "string" },
+          "project_javascript": { "description": "The javascript code which runs before Optimizely on all pages", "example": "alert(\"Active Experiment\")", "type": "string" },
+          "visitor_id_locator_name": { "description": "(BETA) The name of said identifier that locates the visitor id", "example": "cookie_name", "nullable": true, "type": "string" },
+          "visitor_id_locator_type": { "description": "(BETA) The type of identifer where the visitor id is located", "enum": ["cookie", "query", "localStorage", "js"], "nullable": true, "type": "string" }
+        },
+        "type": "object"
+      },
+      "Error": {
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "messages": { "type": "object" },
+          "uuid": { "format": "uuid", "type": "string" }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

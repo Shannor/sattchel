@@ -7,7 +7,6 @@ import (
 	"test-cli/internal/optimizely"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -29,15 +28,15 @@ func Execute() {
 }
 
 func init() {
-	v := viper.New()
-	err := config.Init(v)
+	v, err := config.Init()
 	if err != nil {
 		panic(err)
 	}
-	cRepo := contentful.NewContentfulRepository(v)
-	opRepo := optimizely.NewConfigRepo(v)
-
+	// TODO: If configuration repos stay simple then they could be a genrator/factory instead.
+	cRepo := contentful.NewConfigRepo(v)
 	cService := contentful.NewConfigurationService(cRepo)
+
+	opRepo := optimizely.NewConfigurationRepo(v)
 	opService := optimizely.NewOptimizelyService(opRepo)
 
 	rootCmd.AddCommand(optimizely.NewCommand(opService))
