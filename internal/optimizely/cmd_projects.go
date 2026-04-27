@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// TODO: Need a way to edit Project names, so they are easily identifiable
+
 func cmdProjects(s Service, styles tui.Styles) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "projects",

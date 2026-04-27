@@ -13,37 +13,21 @@ func cmdFlags(s Service) *cobra.Command {
 		SilenceUsage: true,
 	}
 
-	configCmd.AddCommand(add(), list(), remove(), compare())
+	configCmd.AddCommand(compare(s))
 	return configCmd
 }
 
-func add() *cobra.Command {
-	return &cobra.Command{
-		Use:   "add",
-		Short: ": add a feature flag",
-	}
-}
+// TODO: Would need to see our existing Compare and use it as a guide
+// Should need a flags filter, brands filter, etc.
 
-func compare() *cobra.Command {
-	return &cobra.Command{
+func compare(s Service) *cobra.Command {
+	cmd := &cobra.Command{
 		Use:   "compare",
-		Short: "Comapre feature flags between projects",
-	}
-}
-func list() *cobra.Command {
-	return &cobra.Command{
-		Use:   "list",
-		Short: "List feature flags",
+		Short: "Compare feature flags between projects",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// Steps needed to list flags
+
 			return nil
 		},
 	}
-}
-
-func remove() *cobra.Command {
-	return &cobra.Command{
-		Use:   "delete",
-		Short: ": Remove feature flag",
-	}
+	return cmd
 }

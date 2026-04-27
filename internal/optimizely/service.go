@@ -71,9 +71,6 @@ func (o service) SetConfig(config Configuration) error {
 		c.APIKey = config.APIKey
 	}
 
-	if config.DefaultAccount != "" {
-		c.DefaultAccount = config.DefaultAccount
-	}
 	if len(config.Projects) > 0 {
 		c.Projects = config.Projects
 	}

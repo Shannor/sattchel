@@ -51,18 +51,22 @@ func set(service Service) *cobra.Command {
 
 func noChoiceConfig(service Service) error {
 	choice := ""
-	err := huh.NewSelect[string]().
-		Title("Pick a config to set").
-		Options(
-			huh.NewOption("API Key", "apiKey"),
-			huh.NewOption("Products", "products"),
-			huh.NewOption("Count", "count"),
-		).
-		Value(&choice).Run()
+	err := huh.NewForm(
+		huh.NewGroup(
+			huh.NewSelect[string]().
+				Title("Pick a config to set").
+				Options(
+					huh.NewOption("API Key", "apiKey"),
+					huh.NewOption("Products", "products"),
+				).
+				Value(&choice),
+		).WithShowHelp(true),
+	).Run()
 	if err != nil {
 		return fmt.Errorf("failed to select: %w", err)
 	}
 
+	// TODO: Convert to useing a full form since it isn't as dynamic
 	switch choice {
 	case "apiKey":
 		value, err := tea.NewProgram(tui.NewTextPrompt(tui.InputConfig{
