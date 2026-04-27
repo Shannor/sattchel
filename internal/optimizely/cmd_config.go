@@ -75,13 +75,8 @@ func noChoiceConfig(service Service) error {
 			if v.Value() == "" {
 				return fmt.Errorf("value cannot be empty")
 			}
-			c, err := service.GetConfig()
-			if err != nil {
-				return fmt.Errorf("failed to get config: %w", err)
-
-			}
-			c.APIKey = v.Value()
-			err = service.SetConfig(*c)
+			c := Configuration{APIKey: v.Value()}
+			err = service.SetConfig(c)
 			if err != nil {
 				return fmt.Errorf("failed to set config: %w", err)
 			}

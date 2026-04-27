@@ -1,21 +1,22 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"test-cli/internal/config"
 	"test-cli/internal/contentful"
 	"test-cli/internal/optimizely"
+	"test-cli/internal/tui"
 
 	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "test-cli",
-	Short: "A brief description of your application",
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//Run: func(cmd *cobra.Command, args []string) {},
+	Use:           "test-cli",
+	Short:         "A brief description of your application",
+	SilenceErrors: true,
+	SilenceUsage:  true,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -23,22 +24,38 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
+		styles := tui.AutoStyles()
+		errPrefix := styles.Error.Render("Error:")
+		_, err := fmt.Fprintf(os.Stderr, "%s %s\n", errPrefix, err.Error())
+		if err != nil {
+			return
+		}
 		os.Exit(1)
 	}
 }
 
 func init() {
+	rootCmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
+		cmd.Println(cmd.UsageString())
+		return err
+	})
+
 	v, err := config.Init()
 	if err != nil {
 		panic(err)
 	}
-	// TODO: If configuration repos stay simple then they could be a genrator/factory instead.
+
 	cRepo := contentful.NewConfigRepo(v)
 	cService := contentful.NewConfigurationService(cRepo)
 
 	opRepo := optimizely.NewConfigurationRepo(v)
-	opService := optimizely.NewOptimizelyService(opRepo)
+	sourceRepo, err := optimizely.NewSourceRepository()
+	if err != nil {
+		panic(err)
+	}
+	opService := optimizely.NewOptimizelyService(opRepo, sourceRepo)
 
-	rootCmd.AddCommand(optimizely.NewCommand(opService))
+	styles := tui.AutoStyles()
+	rootCmd.AddCommand(optimizely.NewCommand(opService, styles))
 	rootCmd.AddCommand(contentful.NewCommand(cService))
 }
