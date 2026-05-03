@@ -7,6 +7,7 @@ import (
 	"test-cli/internal/config"
 	"test-cli/internal/contentful"
 	"test-cli/internal/optimizely"
+	"test-cli/internal/printer"
 	"test-cli/internal/tui"
 
 	"github.com/spf13/cobra"
@@ -29,7 +30,8 @@ var rootCmd = &cobra.Command{
 		}
 		if msg, ok := <-updateCh; ok {
 			styles := tui.AutoStyles()
-			_, err := fmt.Fprintln(os.Stderr, styles.Warning.Render(msg))
+			writer := printer.NewStyleWriter(styles)
+			err := writer.Info(msg)
 			if err != nil {
 				return
 			}
@@ -43,8 +45,9 @@ func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
 		styles := tui.AutoStyles()
-		errPrefix := styles.Error.Render("Error:")
-		_, err := fmt.Fprintf(os.Stderr, "%s %s\n", errPrefix, err.Error())
+		writer := printer.NewStyleWriter(styles)
+		msg := fmt.Sprintf("%s %s\n", "Error:", err.Error())
+		err := writer.Error(msg)
 		if err != nil {
 			return
 		}
@@ -74,7 +77,9 @@ func init() {
 	opService := optimizely.NewOptimizelyService(opRepo, sourceRepo)
 
 	styles := tui.AutoStyles()
-	rootCmd.AddCommand(optimizely.NewCommand(opService, styles))
+	writer := printer.NewStyleWriter(styles)
+
+	rootCmd.AddCommand(optimizely.NewCommand(opService, writer))
 	rootCmd.AddCommand(contentful.NewCommand(cService))
 	rootCmd.AddCommand(update.NewCommand())
 }

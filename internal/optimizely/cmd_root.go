@@ -1,12 +1,12 @@
 package optimizely
 
 import (
-	"test-cli/internal/tui"
+	"test-cli/internal/printer"
 
 	"github.com/spf13/cobra"
 )
 
-func NewCommand(s Service, styles tui.Styles) *cobra.Command {
+func NewCommand(s Service, styles printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "optimizely",
 		Short:   "Optimizely commands",

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-	"test-cli/internal/tui"
+	"test-cli/internal/printer"
 
 	"charm.land/huh/v2"
 	"charm.land/huh/v2/spinner"
@@ -13,7 +13,7 @@ import (
 
 // TODO: Need a way to edit Project names, so they are easily identifiable
 
-func cmdProjects(s Service, styles tui.Styles) *cobra.Command {
+func cmdProjects(s Service, writer printer.Writer) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "projects",
 		Short:        "Manage projects",
@@ -21,11 +21,11 @@ func cmdProjects(s Service, styles tui.Styles) *cobra.Command {
 		SilenceUsage: true,
 	}
 
-	configCmd.AddCommand(listProjects(s, styles))
+	configCmd.AddCommand(listProjects(s, writer))
 	return configCmd
 }
 
-func listProjects(s Service, styles tui.Styles) *cobra.Command {
+func listProjects(s Service, writer printer.Writer) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List Projects",
@@ -93,7 +93,11 @@ func listProjects(s Service, styles tui.Styles) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Println(styles.Success.Render("Set configuration successfully"))
+
+			err = writer.Success("Set configuration successfully")
+			if err != nil {
+				return err
+			}
 			return nil
 		},
 	}

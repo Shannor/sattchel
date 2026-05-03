@@ -48,19 +48,23 @@ func CheckForUpdate() <-chan string {
 			return
 		}
 		// Normalize versions by stripping 'v' prefix
-		currentVersion := Version
-		if strings.HasPrefix(currentVersion, "v") {
-			currentVersion = currentVersion[1:]
-		}
-		latestVersion := release.TagName
-		if strings.HasPrefix(latestVersion, "v") {
-			latestVersion = latestVersion[1:]
-		}
-		if latestVersion != currentVersion {
+		if needed := needsUpdate(release); needed {
 			ch <- fmt.Sprintf("A new version is available: %s (current: %s). Run \"test-cli update\" to upgrade.", release.TagName, Version)
 		}
 	}()
 	return ch
+}
+
+func needsUpdate(release *githubRelease) bool {
+	currentVersion := Version
+	if strings.HasPrefix(currentVersion, "v") {
+		currentVersion = currentVersion[1:]
+	}
+	latestVersion := release.TagName
+	if strings.HasPrefix(latestVersion, "v") {
+		latestVersion = latestVersion[1:]
+	}
+	return latestVersion != currentVersion
 }
 
 // RunUpdate fetches the latest release and applies the update.
@@ -70,7 +74,12 @@ func RunUpdate() error {
 		return fmt.Errorf("failed to fetch latest release: %w", err)
 	}
 
-	fmt.Printf("Latest version: %s\n", release.TagName)
+	if !needsUpdate(release) {
+		fmt.Println("Already up to date!")
+		return nil
+	}
+
+	fmt.Printf("Current Version: v%s, Latest version: %s\n", Version, release.TagName)
 
 	assetName := buildAssetName()
 	var downloadURL string
