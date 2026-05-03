@@ -2,16 +2,19 @@ package update
 
 import (
 	"test-cli/internal/config"
+	"test-cli/internal/printer"
 
 	"github.com/spf13/cobra"
 )
 
-func NewCommand() *cobra.Command {
+func NewCommand(writer printer.Writer) *cobra.Command {
+	updater := config.NewUpdater(writer)
 	return &cobra.Command{
-		Use:   "update",
-		Short: "Update the CLI to the latest version",
+		Use:     "update",
+		Short:   "Update the CLI to the latest version",
+		Aliases: []string{"u"},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return config.RunUpdate()
+			return updater.RunUpdate()
 		},
 	}
 }

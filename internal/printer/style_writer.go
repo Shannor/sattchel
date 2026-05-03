@@ -7,9 +7,9 @@ import (
 )
 
 type Writer interface {
-	Info(msg string) error
-	Success(msg string) error
-	Error(msg string) error
+	Info(msg string)
+	Success(msg string)
+	Error(msg string)
 }
 
 type StyleWriter struct {
@@ -20,27 +20,15 @@ func NewStyleWriter(styles tui.Styles) Writer {
 	return &StyleWriter{styles: styles}
 }
 
-func (w StyleWriter) Info(msg string) error {
-	_, err := fmt.Fprintln(os.Stderr, w.styles.Info.Render(msg))
-	if err != nil {
-		return err
-	}
-	return nil
+func (w StyleWriter) Info(msg string) {
+	fmt.Fprintln(os.Stdout, w.styles.Info.Render(msg))
 }
 
-func (w StyleWriter) Success(msg string) error {
-	_, err := fmt.Fprintln(os.Stderr, w.styles.Success.Render(msg))
-	if err != nil {
-		return err
-	}
-	return nil
+func (w StyleWriter) Success(msg string) {
+	fmt.Fprintln(os.Stdout, w.styles.Success.Render(msg))
 }
 
-func (w StyleWriter) Error(msg string) error {
+func (w StyleWriter) Error(msg string) {
 	// TODO: Add a check for if the message starts with Error/error and add it if not
-	_, err := fmt.Fprintln(os.Stderr, w.styles.Error.Render(msg))
-	if err != nil {
-		return err
-	}
-	return nil
+	fmt.Fprintln(os.Stderr, w.styles.Error.Render(msg))
 }

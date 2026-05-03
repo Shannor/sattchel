@@ -94,10 +94,7 @@ func listProjects(s Service, writer printer.Writer) *cobra.Command {
 				return err
 			}
 
-			err = writer.Success("Set configuration successfully")
-			if err != nil {
-				return err
-			}
+			writer.Success("Set configuration successfully")
 			return nil
 		},
 	}

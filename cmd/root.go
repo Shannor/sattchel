@@ -13,27 +13,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var updateCh <-chan string
+var updateCh <-chan config.UpdateInformation
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:           "test-cli",
 	Short:         "A brief description of your application",
 	SilenceErrors: true,
 	SilenceUsage:  true,
+	Version:       config.Version,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		updateCh = config.CheckForUpdate()
+		writer := printer.NewStyleWriter(tui.AutoStyles())
+		updateCh = config.NewUpdater(writer).CheckForUpdate()
 	},
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
 		if updateCh == nil {
 			return
 		}
-		if msg, ok := <-updateCh; ok {
-			styles := tui.AutoStyles()
-			writer := printer.NewStyleWriter(styles)
-			err := writer.Info(msg)
-			if err != nil {
-				return
+		if update, ok := <-updateCh; ok {
+			writer := printer.NewStyleWriter(tui.AutoStyles())
+			if update.NeedToUpdate {
+				msg := fmt.Sprintf("A new version is available: %s (current: %s). Run \"test-cli update\" to upgrade.", update.NewVersion, update.CurrentVersion)
+				writer.Info(msg)
 			}
 		}
 	},
@@ -47,10 +47,7 @@ func Execute() {
 		styles := tui.AutoStyles()
 		writer := printer.NewStyleWriter(styles)
 		msg := fmt.Sprintf("%s %s\n", "Error:", err.Error())
-		err := writer.Error(msg)
-		if err != nil {
-			return
-		}
+		writer.Error(msg)
 		os.Exit(1)
 	}
 }
@@ -81,5 +78,5 @@ func init() {
 
 	rootCmd.AddCommand(optimizely.NewCommand(opService, writer))
 	rootCmd.AddCommand(contentful.NewCommand(cService))
-	rootCmd.AddCommand(update.NewCommand())
+	rootCmd.AddCommand(update.NewCommand(writer))
 }

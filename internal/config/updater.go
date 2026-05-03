@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"runtime"
 	"strings"
+	"test-cli/internal/printer"
 
 	"github.com/minio/selfupdate"
 	"golang.org/x/text/cases"
@@ -33,24 +34,49 @@ type githubAsset struct {
 	BrowserDownloadURL string `json:"browser_download_url"`
 }
 
+type UpdateInformation struct {
+	CurrentVersion string
+	NewVersion     string
+	NeedToUpdate   bool
+}
+type Updater interface {
+	CheckForUpdate() <-chan UpdateInformation
+	RunUpdate() error
+}
+type updater struct {
+	Writer printer.Writer
+}
+
+func NewUpdater(writer printer.Writer) Updater {
+	return &updater{
+		Writer: writer,
+	}
+}
+
 // CheckForUpdate checks GitHub for a newer release in the background.
 // Returns a channel that will receive a message string if an update is available,
 // or be closed with no value if the current version is up-to-date or the check fails.
-func CheckForUpdate() <-chan string {
-	ch := make(chan string, 1)
+func (u *updater) CheckForUpdate() <-chan UpdateInformation {
+	ch := make(chan UpdateInformation, 1)
 	go func() {
 		defer close(ch)
+		update := UpdateInformation{
+			NeedToUpdate:   false,
+			CurrentVersion: Version,
+		}
 		if Version == "dev" {
+			update.NewVersion = Version
+			ch <- update
 			return
 		}
 		release, err := fetchLatestRelease()
 		if err != nil {
+			ch <- update
 			return
 		}
-		// Normalize versions by stripping 'v' prefix
-		if needed := needsUpdate(release); needed {
-			ch <- fmt.Sprintf("A new version is available: %s (current: %s). Run \"test-cli update\" to upgrade.", release.TagName, Version)
-		}
+		update.NewVersion = release.TagName
+		update.NeedToUpdate = needsUpdate(release)
+		ch <- update
 	}()
 	return ch
 }
@@ -68,14 +94,14 @@ func needsUpdate(release *githubRelease) bool {
 }
 
 // RunUpdate fetches the latest release and applies the update.
-func RunUpdate() error {
+func (u *updater) RunUpdate() error {
 	release, err := fetchLatestRelease()
 	if err != nil {
 		return fmt.Errorf("failed to fetch latest release: %w", err)
 	}
 
 	if !needsUpdate(release) {
-		fmt.Println("Already up to date!")
+		u.Writer.Info("Already up to date!")
 		return nil
 	}
 
