@@ -47,7 +47,16 @@ func CheckForUpdate() <-chan string {
 		if err != nil {
 			return
 		}
-		if release.TagName != Version {
+		// Normalize versions by stripping 'v' prefix
+		currentVersion := Version
+		if strings.HasPrefix(currentVersion, "v") {
+			currentVersion = currentVersion[1:]
+		}
+		latestVersion := release.TagName
+		if strings.HasPrefix(latestVersion, "v") {
+			latestVersion = latestVersion[1:]
+		}
+		if latestVersion != currentVersion {
 			ch <- fmt.Sprintf("A new version is available: %s (current: %s). Run \"test-cli update\" to upgrade.", release.TagName, Version)
 		}
 	}()
