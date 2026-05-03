@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"test-cli/internal/cli/update"
 	"test-cli/internal/config"
 	"test-cli/internal/contentful"
 	"test-cli/internal/optimizely"
@@ -58,4 +59,5 @@ func init() {
 	styles := tui.AutoStyles()
 	rootCmd.AddCommand(optimizely.NewCommand(opService, styles))
 	rootCmd.AddCommand(contentful.NewCommand(cService))
+	rootCmd.AddCommand(update.NewCommand())
 }
