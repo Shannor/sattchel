@@ -35,33 +35,42 @@ Download pre-built binaries directly from GitHub releases:
 #### Linux (amd64)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-linux-amd64.tar.gz | tar xz -C /usr/local/bin/
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_x86_64.tar.gz | tar xz -C /usr/local/bin/
 ```
 
 #### Linux (arm64)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-linux-arm64.tar.gz | tar xz -C /usr/local/bin/
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_arm64.tar.gz | tar xz -C /usr/local/bin/
 ```
 
 #### macOS (Intel)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-darwin-amd64.tar.gz | tar xz -C /usr/local/bin/
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_x86_64.tar.gz | tar xz -C /usr/local/bin/
 ```
 
 #### macOS (Apple Silicon)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-darwin-arm64.tar.gz | tar xz -C /usr/local/bin/
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_arm64.tar.gz | tar xz -C /usr/local/bin/
 ```
 
-#### Windows
+#### Windows (amd64)
 
 ```powershell
-Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli-windows-amd64.zip -OutFile test-cli.zip
+Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Windows_x86_64.zip -OutFile test-cli.zip
 Expand-Archive test-cli.zip -DestinationPath C:\\temp
-Move-Item C:\\temp\\test-cli-windows-amd64\\test-cli.exe C:\\Windows\\System32\\
+Move-Item C:\\temp\\test-cli_Windows_x86_64\\test-cli.exe C:\\Windows\\System32\\
+Remove-Item test-cli.zip, C:\\temp -Recurse -Force
+```
+
+#### Windows (arm64)
+
+```powershell
+Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Windows_arm64.zip -OutFile test-cli.zip
+Expand-Archive test-cli.zip -DestinationPath C:\\temp
+Move-Item C:\\temp\\test-cli_Windows_arm64\\test-cli.exe C:\\Windows\\System32\\
 Remove-Item test-cli.zip, C:\\temp -Recurse -Force
 ```
 
