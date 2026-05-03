@@ -12,12 +12,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var updateCh <-chan string
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:           "test-cli",
 	Short:         "A brief description of your application",
 	SilenceErrors: true,
 	SilenceUsage:  true,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		updateCh = config.CheckForUpdate()
+	},
+	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		if updateCh == nil {
+			return
+		}
+		if msg, ok := <-updateCh; ok {
+			styles := tui.AutoStyles()
+			_, err := fmt.Fprintln(os.Stderr, styles.Warning.Render(msg))
+			if err != nil {
+				return
+			}
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

@@ -3,6 +3,8 @@ project_name: test-cli
 builds:
   - env:
       - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X test-cli/internal/config.Version={{.Version}}
     goos:
       - linux
       - windows
