@@ -28,6 +28,13 @@ I don't want to use AI too much during this process. Though I'm sure I'll use it
 
 ## Installation
 
+
+### Build from Source (preferred if using Go)
+
+```bash
+go install github.com/Shannor/test-cli/cmd/test-cli@latest
+```
+
 ### From GitHub Releases
 
 Download pre-built binaries directly from GitHub releases:
@@ -35,51 +42,77 @@ Download pre-built binaries directly from GitHub releases:
 #### Linux (amd64)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_x86_64.tar.gz | tar xz -C /usr/local/bin/
+mkdir -p ~/bin
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_x86_64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### Linux (arm64)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_arm64.tar.gz | tar xz -C /usr/local/bin/
+mkdir -p ~/bin
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_arm64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### macOS (Intel)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_x86_64.tar.gz | tar xz -C /usr/local/bin/
+mkdir -p ~/bin
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_x86_64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### macOS (Apple Silicon)
 
 ```bash
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_arm64.tar.gz | tar xz -C /usr/local/bin/
+mkdir -p ~/bin
+curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_arm64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### Windows (amd64)
 
 ```powershell
+$env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
 Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Windows_x86_64.zip -OutFile test-cli.zip
-Expand-Archive test-cli.zip -DestinationPath C:\\temp
-Move-Item C:\\temp\\test-cli_Windows_x86_64\\test-cli.exe C:\\Windows\\System32\\
-Remove-Item test-cli.zip, C:\\temp -Recurse -Force
+Expand-Archive test-cli.zip -DestinationPath $env:USERPROFILE/temp
+copy-item $env:USERPROFILE/temp/test-cli_Windows_x86_64/test-cli.exe $env:USERPROFILE/bin/
+Remove-Item test-cli.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
 #### Windows (arm64)
 
 ```powershell
+$env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
 Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Windows_arm64.zip -OutFile test-cli.zip
-Expand-Archive test-cli.zip -DestinationPath C:\\temp
-Move-Item C:\\temp\\test-cli_Windows_arm64\\test-cli.exe C:\\Windows\\System32\\
-Remove-Item test-cli.zip, C:\\temp -Recurse -Force
+Expand-Archive test-cli.zip -DestinationPath $env:USERPROFILE/temp
+copy-item $env:USERPROFILE/temp/test-cli_Windows_arm64/test-cli.exe $env:USERPROFILE/bin/
+Remove-Item test-cli.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
 Or download manually from the [Releases page](https://github.com/Shannor/test-cli/releases) and place the binary in your PATH.
 
-### Build from Source
+**Important:** Make sure `~/bin` is in your PATH. Add the following to your shell configuration file (e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`):
 
 ```bash
-go install github.com/Shannor/test-cli/cmd/test-cli@latest
+export PATH="$HOME/bin:$PATH"
+```
+
+Then reload your shell configuration:
+
+```bash
+source ~/.bashrc  # or source ~/.zshrc, or source ~/.profile
+```
+
+**Verify your PATH:**
+
+Check if `~/bin` is in your PATH:
+
+```bash
+echo $PATH | grep "$HOME/bin"
+```
+
+If you don't see `~/bin` in the output, your PATH isn't set up correctly. You can also check your current PATH:
+
+```bash
+echo $PATH
 ```
 
 ---
