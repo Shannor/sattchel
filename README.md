@@ -18,13 +18,13 @@ I don't want to use AI too much during this process. Though I'm sure I'll use it
 
 - [x] Setup a Simple CLI
 - [x] Add GitHub installation instructions
-- [] Write tests for CLI commands 
-- [] Write tests for CLI commands
-- [] Setup an Install and Update Flow
-- [] Add commands useful for Optimizely
-- [] Use Arch/Business Patterns that I'm learning
+- [ ] Write tests for CLI commands 
+- [ ] Write tests for CLI commands
+- [ ] Setup an Install and Update Flow
+- [ ] Add commands useful for Optimizely
+- [ ] Use Arch/Business Patterns that I'm learning
   - Document the patterns being used and why so they are getting commit to my memory of why I thought they were good at the time.
-- [] More comfortable with Architecture Patterns
+- [ ] More comfortable with Architecture Patterns
 
 ## Installation
 
@@ -32,20 +32,33 @@ I don't want to use AI too much during this process. Though I'm sure I'll use it
 
 Download pre-built binaries directly from GitHub releases:
 
+#### Linux (amd64)
+
 ```bash
-# Linux (amd64)
 curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-linux-amd64.tar.gz | tar xz -C /usr/local/bin/
+```
 
-# Linux (arm64)
+#### Linux (arm64)
+
+```bash
 curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-linux-arm64.tar.gz | tar xz -C /usr/local/bin/
+```
 
-# macOS (Intel)
+#### macOS (Intel)
+
+```bash
 curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-darwin-amd64.tar.gz | tar xz -C /usr/local/bin/
+```
 
-# macOS (Apple Silicon)
+#### macOS (Apple Silicon)
+
+```bash
 curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli-darwin-arm64.tar.gz | tar xz -C /usr/local/bin/
+```
 
-# Windows (PowerShell)
+#### Windows
+
+```powershell
 Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli-windows-amd64.zip -OutFile test-cli.zip
 Expand-Archive test-cli.zip -DestinationPath C:\\temp
 Move-Item C:\\temp\\test-cli-windows-amd64\\test-cli.exe C:\\Windows\\System32\\
