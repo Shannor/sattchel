@@ -40,7 +40,7 @@ type UpdateInformation struct {
 }
 type Updater interface {
 	CheckForUpdate() <-chan UpdateInformation
-	RunUpdate() (UpdateInformation, error)
+	RunUpdate(force bool) (UpdateInformation, error)
 }
 type updater struct {
 }
@@ -90,7 +90,7 @@ func needsUpdate(release *githubRelease) bool {
 }
 
 // RunUpdate fetches the latest release and applies the update if needed
-func (u *updater) RunUpdate() (UpdateInformation, error) {
+func (u *updater) RunUpdate(force bool) (UpdateInformation, error) {
 	result := UpdateInformation{NeedToUpdate: false, CurrentVersion: Version}
 	release, err := fetchLatestRelease()
 	if err != nil {
@@ -98,8 +98,10 @@ func (u *updater) RunUpdate() (UpdateInformation, error) {
 	}
 
 	result.NewVersion = release.TagName
-	if !needsUpdate(release) {
-		return result, nil
+	if !force {
+		if !needsUpdate(release) {
+			return result, nil
+		}
 	}
 
 	result.NeedToUpdate = true

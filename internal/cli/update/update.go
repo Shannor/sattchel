@@ -9,9 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var force bool
+
 func NewCommand(writer printer.Writer) *cobra.Command {
 	updater := config.NewUpdater()
-	return &cobra.Command{
+	command := cobra.Command{
 		Use:     "update",
 		Short:   "Update the CLI to the latest version",
 		Aliases: []string{"u"},
@@ -24,7 +26,7 @@ func NewCommand(writer printer.Writer) *cobra.Command {
 				New().
 				Title("Checking for updates ...").
 				Action(func() {
-					update, err = updater.RunUpdate()
+					update, err = updater.RunUpdate(force)
 					if err != nil {
 						return
 					}
@@ -40,4 +42,6 @@ func NewCommand(writer printer.Writer) *cobra.Command {
 			return nil
 		},
 	}
+	command.Flags().BoolVarP(&force, "force", "f", false, "force an update")
+	return &command
 }
