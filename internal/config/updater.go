@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"runtime"
 	"strings"
-	"test-cli/internal/printer"
 
 	"github.com/minio/selfupdate"
 	"golang.org/x/text/cases"
@@ -41,16 +40,13 @@ type UpdateInformation struct {
 }
 type Updater interface {
 	CheckForUpdate() <-chan UpdateInformation
-	RunUpdate() error
+	RunUpdate() (UpdateInformation, error)
 }
 type updater struct {
-	Writer printer.Writer
 }
 
-func NewUpdater(writer printer.Writer) Updater {
-	return &updater{
-		Writer: writer,
-	}
+func NewUpdater() Updater {
+	return &updater{}
 }
 
 // CheckForUpdate checks GitHub for a newer release in the background.
@@ -93,20 +89,20 @@ func needsUpdate(release *githubRelease) bool {
 	return latestVersion != currentVersion
 }
 
-// RunUpdate fetches the latest release and applies the update.
-func (u *updater) RunUpdate() error {
+// RunUpdate fetches the latest release and applies the update if needed
+func (u *updater) RunUpdate() (UpdateInformation, error) {
+	result := UpdateInformation{NeedToUpdate: false, CurrentVersion: Version}
 	release, err := fetchLatestRelease()
 	if err != nil {
-		return fmt.Errorf("failed to fetch latest release: %w", err)
+		return result, fmt.Errorf("failed to fetch latest release: %w", err)
 	}
 
+	result.NewVersion = release.TagName
 	if !needsUpdate(release) {
-		u.Writer.Info("Already up to date!")
-		return nil
+		return result, nil
 	}
 
-	fmt.Printf("Current Version: v%s, Latest version: %s\n", Version, release.TagName)
-
+	result.NeedToUpdate = true
 	assetName := buildAssetName()
 	var downloadURL string
 	for _, asset := range release.Assets {
@@ -117,16 +113,14 @@ func (u *updater) RunUpdate() error {
 	}
 
 	if downloadURL == "" {
-		return fmt.Errorf("no release asset found for %s", assetName)
+		return result, fmt.Errorf("no release asset found for %s", assetName)
 	}
 
-	fmt.Printf("Downloading %s...\n", assetName)
 	if err := doUpdate(downloadURL); err != nil {
-		return fmt.Errorf("update failed: %w", err)
+		return result, fmt.Errorf("update failed: %w", err)
 	}
 
-	fmt.Println("Successfully updated!")
-	return nil
+	return result, nil
 }
 
 func fetchLatestRelease() (*githubRelease, error) {

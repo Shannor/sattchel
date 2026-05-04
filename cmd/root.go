@@ -22,8 +22,7 @@ var rootCmd = &cobra.Command{
 	SilenceUsage:  true,
 	Version:       config.Version,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		writer := printer.NewStyleWriter(tui.AutoStyles())
-		updateCh = config.NewUpdater(writer).CheckForUpdate()
+		updateCh = config.NewUpdater().CheckForUpdate()
 	},
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
 		if updateCh == nil {
