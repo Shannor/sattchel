@@ -1,9 +1,11 @@
-package optimizely
+package optcli
 
 import (
 	"fmt"
 	"slices"
 	"strings"
+	"test-cli/internal/models"
+	"test-cli/internal/optimizely"
 	"test-cli/internal/printer"
 
 	"charm.land/huh/v2"
@@ -13,11 +15,10 @@ import (
 
 // TODO: Need a way to edit Project names, so they are easily identifiable
 
-func cmdProjects(s Service, writer printer.Writer) *cobra.Command {
+func cmdProjects(s optimizely.Service, writer printer.Writer) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "projects",
 		Short:        "Manage projects",
-		Version:      "0.0.1",
 		SilenceUsage: true,
 	}
 
@@ -25,14 +26,14 @@ func cmdProjects(s Service, writer printer.Writer) *cobra.Command {
 	return configCmd
 }
 
-func listProjects(s Service, writer printer.Writer) *cobra.Command {
+func listProjects(s optimizely.Service, writer printer.Writer) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List Projects",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			var (
-				projects []Project
+				projects []models.Project
 				err      error
 			)
 
@@ -58,7 +59,7 @@ func listProjects(s Service, writer printer.Writer) *cobra.Command {
 				options     []huh.Option[string]
 			)
 
-			slices.SortFunc(projects, func(i, j Project) int {
+			slices.SortFunc(projects, func(i, j models.Project) int {
 				return strings.Compare(i.Name, j.Name)
 			})
 
@@ -81,14 +82,14 @@ func listProjects(s Service, writer printer.Writer) *cobra.Command {
 			for _, id := range selectedIds {
 				selectedSet[id] = true
 			}
-			var results []Project
+			var results []models.Project
 			for _, project := range projects {
 				if selectedSet[project.ID] {
 					results = append(results, project)
 				}
 			}
 
-			c := Configuration{Projects: results}
+			c := optimizely.Configuration{Projects: results}
 			err = s.SetConfig(c)
 			if err != nil {
 				return err

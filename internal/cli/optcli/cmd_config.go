@@ -1,7 +1,8 @@
-package optimizely
+package optcli
 
 import (
 	"fmt"
+	"test-cli/internal/optimizely"
 	"test-cli/internal/tui"
 
 	tea "charm.land/bubbletea/v2"
@@ -9,19 +10,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func cmdConfig(service Service) *cobra.Command {
+func cmdConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "config",
 		Short:        "Manage configs",
 		Aliases:      []string{"co"},
-		Version:      "0.0.1",
 		SilenceUsage: true,
 	}
 	configCmd.AddCommand(set(service))
+	configCmd.AddCommand(get(service, styles))
 	return configCmd
 }
 
-func set(service Service) *cobra.Command {
+func set(service optimizely.Service) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set [key] [value]",
 		Short: "Set a configuration value",
@@ -49,7 +50,37 @@ func set(service Service) *cobra.Command {
 	}
 }
 
-func noChoiceConfig(service Service) error {
+func get(service optimizely.Service, styles tui.Styles) *cobra.Command {
+	return &cobra.Command{
+		Use:   "get [key]",
+		Short: "Get a configuration value",
+		Long: `Get an configuration value.
+	If no key is provided, all keys will be displayed.
+   Examples:
+     test-cli optimizely config get 
+     test-cli optimizely config get apiKey
+     `,
+		Args:         cobra.MaximumNArgs(1),
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cfg, err := service.GetConfig()
+			if err != nil {
+				return err
+			}
+			switch len(args) {
+			case 0:
+				fmt.Println(renderConfig(cfg, styles))
+			case 1:
+				fmt.Println(renderConfig(cfg, styles))
+			default:
+				return fmt.Errorf("unsupported amount of commands")
+			}
+			return nil
+		},
+	}
+}
+
+func noChoiceConfig(service optimizely.Service) error {
 	choice := ""
 	err := huh.NewForm(
 		huh.NewGroup(
@@ -66,7 +97,7 @@ func noChoiceConfig(service Service) error {
 		return fmt.Errorf("failed to select: %w", err)
 	}
 
-	// TODO: Convert to useing a full form since it isn't as dynamic
+	// TODO: Convert to using a full form since it isn't as dynamic
 	switch choice {
 	case "apiKey":
 		value, err := tea.NewProgram(tui.NewTextPrompt(tui.InputConfig{
@@ -79,7 +110,7 @@ func noChoiceConfig(service Service) error {
 			if v.Value() == "" {
 				return fmt.Errorf("value cannot be empty")
 			}
-			c := Configuration{APIKey: v.Value()}
+			c := optimizely.Configuration{APIKey: v.Value()}
 			err = service.SetConfig(c)
 			if err != nil {
 				return fmt.Errorf("failed to set config: %w", err)

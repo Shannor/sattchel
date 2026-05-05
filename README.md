@@ -16,12 +16,12 @@ I don't want to use AI too much during this process. Though I'm sure I'll use it
 
 ## Goals
 
-- [x] Setup a Simple CLI
-- [x] Add GitHub installation instructions
+- [x] Set up a Simple CLI
+- [x] Add installation instructions
+- [x] Setup an Install and Update Flow
 - [ ] Write tests for CLI commands 
-- [ ] Write tests for CLI commands
-- [ ] Setup an Install and Update Flow
 - [ ] Add commands useful for Optimizely
+- [ ] Play with Commands around Contentful
 - [ ] Use Arch/Business Patterns that I'm learning
   - Document the patterns being used and why so they are getting commit to my memory of why I thought they were good at the time.
 - [ ] More comfortable with Architecture Patterns
@@ -140,7 +140,11 @@ test-cli update --force
 
 The main Architecture Patterns used so far in this project are:
 - Service Layer
+  - Where the domain logic should live and stop. Things above this would be the UI/CLI/Consumer Layer.
 - Repository Pattern
+  - Focuses on how the data is returned from a Data Source. Data source could be a 3rd Party, Database, Local File system, etc.
+  - Based on the pure description of this. It should be interacted with a Query Critera Constructor by the Domain Layer. 
+  - 
 - Module Pattern 
 - Dependency Injection
 

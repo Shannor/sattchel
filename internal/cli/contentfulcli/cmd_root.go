@@ -1,10 +1,12 @@
-package contentful
+package contentfulcli
 
 import (
+	"test-cli/internal/contentful"
+
 	"github.com/spf13/cobra"
 )
 
-func NewCommand(s Service) *cobra.Command {
+func NewCommand(s contentful.Service) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "contentful",
 		Short:   "Contentful commands",

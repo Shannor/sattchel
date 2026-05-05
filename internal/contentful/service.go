@@ -1,6 +1,6 @@
 package contentful
 
-import "test-cli/internal/repository"
+import "test-cli/internal/models"
 
 type Service interface {
 	GetConfig() (*Configuration, error)
@@ -8,7 +8,7 @@ type Service interface {
 }
 
 type contentfulService struct {
-	repo repository.Configuration[Configuration]
+	repo models.Configuration[Configuration]
 }
 
 func (s contentfulService) GetConfig() (*Configuration, error) {
@@ -21,7 +21,7 @@ func (s contentfulService) SetConfig(config Configuration) error {
 	panic("implement me")
 }
 
-func NewConfigurationService(repo repository.Configuration[Configuration]) Service {
+func NewConfigurationService(repo models.Configuration[Configuration]) Service {
 	return &contentfulService{
 		repo: repo,
 	}

@@ -3,14 +3,15 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"test-cli/internal/cli/optcli"
 	"test-cli/internal/cli/update"
 	"test-cli/internal/config"
-	"test-cli/internal/contentful"
 	"test-cli/internal/optimizely"
 	"test-cli/internal/printer"
 	"test-cli/internal/tui"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var updateCh <-chan config.UpdateInformation
@@ -62,20 +63,25 @@ func init() {
 		panic(err)
 	}
 
-	cRepo := contentful.NewConfigRepo(v)
-	cService := contentful.NewConfigurationService(cRepo)
+	styles := tui.AutoStyles()
+	writer := printer.NewStyleWriter(styles)
 
+	opService := setupOptimizely(v)
+	rootCmd.AddCommand(optcli.NewCommand(opService, writer, styles))
+	rootCmd.AddCommand(update.NewCommand(writer))
+}
+
+func setupOptimizely(v *viper.Viper) optimizely.Service {
 	opRepo := optimizely.NewConfigurationRepo(v)
 	sourceRepo, err := optimizely.NewSourceRepository()
 	if err != nil {
 		panic(err)
 	}
-	opService := optimizely.NewOptimizelyService(opRepo, sourceRepo)
-
-	styles := tui.AutoStyles()
-	writer := printer.NewStyleWriter(styles)
-
-	rootCmd.AddCommand(optimizely.NewCommand(opService, writer))
-	rootCmd.AddCommand(contentful.NewCommand(cService))
-	rootCmd.AddCommand(update.NewCommand(writer))
+	cfg, err := opRepo.GetConfig()
+	if err != nil {
+		panic(err)
+	}
+	client := optimizely.BaseFlagClient(cfg)
+	factory := optimizely.NewFlagsDMFactory(client, cfg.APIKey)
+	return optimizely.NewOptimizelyService(opRepo, sourceRepo, factory)
 }

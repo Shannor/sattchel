@@ -1,13 +1,8 @@
-package repository
-
-type FeatureFlagRepository interface {
-	GetFlags() ([]FeatureFlag, error)
-	GetFlag() (*FeatureFlag, error)
-}
+package models
 
 // FeatureFlag represents a feature flag with various variable types
-// TODO: May use on struct for all the variable types
 type FeatureFlag struct {
+	ID        string    `json:"id"`
 	Name      string    `json:"name"`
 	Variables Variables `json:"variables"`
 }
@@ -17,6 +12,7 @@ type Variables struct {
 	IntVariables    VariableMap[int]     `json:"intVariables"`
 	StringVariables VariableMap[string]  `json:"stringVariables"`
 	JsonVariables   VariableMap[any]     `json:"jsonVariables"`
+	BoolVariables   VariableMap[bool]    `json:"boolVariables"`
 }
 type VariableMap[T any] map[string]Variable[T]
 type Variable[T any] struct {
