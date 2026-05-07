@@ -2,7 +2,9 @@ package optcli
 
 import (
 	"fmt"
+	"test-cli/internal/models"
 	"test-cli/internal/optimizely"
+	"test-cli/internal/tui"
 
 	"github.com/spf13/cobra"
 )
@@ -55,6 +57,16 @@ func list(s optimizely.Service) *cobra.Command {
 			for _, project := range projects {
 				ids = append(ids, project.ID)
 			}
+
+			spinner := tui.NewSpinner()
+			spinner.Start()
+			defer spinner.Stop()
+
+			reporter := &tui.TerminalReporter{
+				Spinner: spinner,
+			}
+
+			ctx = models.WithProgress(ctx, reporter)
 			flags, err := s.GetFlags(ctx, ids)
 			if err != nil {
 				return err

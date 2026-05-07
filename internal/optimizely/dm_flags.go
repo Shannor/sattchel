@@ -7,6 +7,8 @@ import (
 	"log/slog"
 	"net/url"
 	"strconv"
+	"sync"
+	"sync/atomic"
 	"test-cli/internal/models"
 	"test-cli/internal/optimizely/features"
 )
@@ -84,6 +86,11 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlag, erro
 	if err != nil {
 		return nil, err
 	}
+
+	reporter := models.ProgressFromContext(ctx)
+	if reporter != nil {
+		reporter.Report(f.projectID, 0.0, "starting")
+	}
 	response, err := f.client.ListFlagsWithResponse(ctx, id, &features.ListFlagsParams{
 		PageWindow: new(pageSize),
 	})
@@ -110,25 +117,41 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlag, erro
 		results = append(results, ff)
 	}
 
-	// Technically, the API says that it will return 1 page.
-	// But when passing pageWindow it returns a list of all the next URLs needed after the first request.
-	// Could be an optimization later
-	if info.NextUrl != nil && len(*info.NextUrl) > 0 {
-		nextToken := extractPageToken((*info.NextUrl)[0])
-		for nextToken != "" {
+	if info.NextUrl == nil {
+		if reporter != nil {
+			reporter.Report(f.projectID, 1.0, "done")
+		}
+		return results, nil
+	}
+
+	// We can do this only because we're sending the page size we want.
+	// If we didn't send a pageSize/PageWindow it wouldn't work this way. The API would only send one url in the array
+	tokens := make([]string, 0)
+	for _, u := range *info.NextUrl {
+		tokens = append(tokens, extractPageToken(u))
+	}
+
+	var wg sync.WaitGroup
+	var completedPages atomic.Int64
+	totalPages := info.TotalPages
+	for _, token := range tokens {
+		wg.Go(func() {
 			response, err := f.client.ListFlagsWithResponse(ctx, id, &features.ListFlagsParams{
-				PageToken:  &nextToken,
+				PageToken:  &token,
 				PageWindow: new(pageSize),
 			})
 			if err != nil {
-				return nil, fmt.Errorf("failed to list flags. %v", err)
+				slog.Error("failed to get flags", slog.String("error", err.Error()))
+				return
 			}
 			if response.StatusCode() != 200 {
-				return nil, fmt.Errorf("non-200 status code: %d", response.StatusCode())
+				slog.Error("non-200 status code", slog.Int("code", response.StatusCode()))
+				return
 			}
 
 			if response.JSON200 == nil {
-				return nil, fmt.Errorf("missing flag response")
+				slog.Error("missing flag response")
+				return
 			}
 
 			r := response.JSON200
@@ -140,15 +163,14 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlag, erro
 				}
 				results = append(results, ff)
 			}
-
-			if r.NextUrl != nil && len(*r.NextUrl) > 0 {
-				nextToken = extractPageToken((*r.NextUrl)[0])
-			} else {
-				nextToken = ""
+			n := completedPages.Add(1)
+			if reporter != nil {
+				reporter.Report(f.projectID, float64(n)/float64(totalPages), "fetching pages")
 			}
-		}
+		})
 	}
 
+	wg.Wait()
 	return results, nil
 }
 
