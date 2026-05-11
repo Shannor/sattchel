@@ -50,8 +50,36 @@ func NewFlagsDM(client *features.ClientWithResponses, token string, projectID st
 }
 
 func (f *flagDataMapper) Get(ctx context.Context, ID string) (*models.FeatureFlag, error) {
-	//TODO implement me
-	panic("implement me")
+	err := f.validate()
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := f.getIdForService()
+	if err != nil {
+		return nil, err
+	}
+	reporter := models.ProgressFromContext(ctx)
+	if reporter != nil {
+		reporter.Report(f.projectID, 0.0, "starting")
+	}
+	response, err := f.client.FetchFlagWithResponse(ctx, id, ID)
+	if err != nil {
+		return nil, err
+	}
+	if response.StatusCode() != 200 {
+		return nil, fmt.Errorf("non-200 status code: %d", response.StatusCode())
+	}
+
+	if response.JSON200 == nil {
+		return nil, fmt.Errorf("missing flag response")
+	}
+
+	result, err := toFeatureFlag(*response.JSON200)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
 
 func (f *flagDataMapper) validate() error {
@@ -98,7 +126,6 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlag, erro
 		return nil, fmt.Errorf("failed to list flags. %v", err)
 	}
 	if response.StatusCode() != 200 {
-
 		return nil, fmt.Errorf("non-200 status code: %d", response.StatusCode())
 	}
 
@@ -107,8 +134,10 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlag, erro
 	}
 
 	info := response.JSON200
+
 	results := make([]models.FeatureFlag, 0)
 	for _, flag := range info.Items {
+
 		ff, err := toFeatureFlag(flag)
 		if err != nil {
 			slog.Warn("failed to convert a feature flag")
@@ -174,6 +203,11 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlag, erro
 	return results, nil
 }
 
+func getVariations(client *features.ClientWithResponses, projectID string, flagID string) {
+	client.ListVariationsWithResponse()
+
+}
+
 // extractPageToken pulls the page_token query param from a next_url value.
 // The API returns full URLs like "/projects/.../flags?page_token=...&page_window=20"
 // but the PageToken param expects only the token string.
@@ -190,11 +224,46 @@ func toFeatureFlag(flag features.Flag) (models.FeatureFlag, error) {
 		return models.FeatureFlag{}, fmt.Errorf("missing id")
 	}
 	id := strconv.Itoa(*flag.Id)
-	return models.FeatureFlag{
-		ID:        id,
-		Name:      flag.Name,
-		Variables: models.Variables{},
-	}, nil
+	// TODO: need to add support for the default Variables and the variation variables
+	result := models.FeatureFlag{
+		ID:               id,
+		Name:             flag.Name,
+		DefaultVariables: models.Variables{},
+	}
+
+	if flag.Archived != nil {
+		result.IsArchived = *flag.Archived
+	}
+
+	if flag.Environments != nil {
+		envs := make([]models.Environment, 0)
+		for _, environment := range *flag.Environments {
+			e, err := toEnvironment(environment)
+			if err != nil {
+				slog.Error("Failed to convert an environment", slog.String("err", err.Error()))
+				continue
+			}
+			envs = append(envs, e)
+		}
+		result.Environments = envs
+	}
+	return result, nil
+}
+
+func toEnvironment(env features.FlagEnvironment) (models.Environment, error) {
+	if env.Id == nil {
+		return models.Environment{}, fmt.Errorf("missing id")
+	}
+	id := strconv.Itoa(int(*env.Id))
+	result := models.Environment{
+		ID:   id,
+		Key:  env.Key,
+		Name: env.Name,
+	}
+	if env.Enabled != nil {
+		result.Enabled = *env.Enabled
+	}
+	return result, nil
 }
 
 func (f *flagDataMapper) Delete(ctx context.Context, ID string) (string, error) {
@@ -208,11 +277,6 @@ func (f *flagDataMapper) Create(ctx context.Context, value models.FeatureFlag) (
 }
 
 func (f *flagDataMapper) Update(ctx context.Context, updater func(value *models.FeatureFlag) error) (*models.FeatureFlag, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (f *flagDataMapper) With(ctx context.Context, updater func(dm *models.DataMapper[models.FeatureFlag]) error) {
 	//TODO implement me
 	panic("implement me")
 }

@@ -1,0 +1,5 @@
+package flags
+
+func Compare() {
+
+}

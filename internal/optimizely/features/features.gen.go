@@ -1525,7 +1525,9 @@ type Flag struct {
 
 // FlagEnvironment defines model for FlagEnvironment.
 type FlagEnvironment struct {
-	CreatedTime *time.Time `json:"created_time,omitempty"`
+	CreatedTime          *time.Time `json:"created_time,omitempty"`
+	DefaultVariationKey  *string    `json:"default_variation_key,omitempty"`
+	DefaultVariationName *string    `json:"default_variation_name,omitempty"`
 
 	// DisableUrl Link to disable this flag in the environment
 	DisableUrl *UrlValue `json:"disable_url,omitempty"`

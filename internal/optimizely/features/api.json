@@ -1253,6 +1253,14 @@
             "readOnly": true,
             "type": "string"
           },
+          "default_variation_key": {
+            "example": "off",
+            "type": "string"
+          },
+          "default_variation_name": {
+            "example": "Off",
+            "type": "string"
+          },
           "disable_url": {
             "allOf": [
               {
