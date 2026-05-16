@@ -90,7 +90,7 @@ func listProjects(s optimizely.Service, writer printer.Writer) *cobra.Command {
 			}
 
 			c := optimizely.Configuration{Projects: results}
-			err = s.SetConfig(c)
+			err = s.SetConfig(cmd.Context(), c)
 			if err != nil {
 				return err
 			}

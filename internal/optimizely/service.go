@@ -8,20 +8,20 @@ import (
 
 type Service interface {
 	GetProjects(ctx context.Context) ([]models.Project, error)
-	GetConfig() (*Configuration, error)
-	SetConfig(config Configuration) error
+	GetConfig(ctx context.Context) (*Configuration, error)
+	SetConfig(ctx context.Context, config Configuration) error
 	GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlag, error)
 }
 
 type service struct {
-	config      models.Configuration[Configuration]
+	config      ConfigDataMapper
 	source      *SourceRepository
 	flagFactory FlagsDMFactory
 }
 
-func NewOptimizelyService(repo models.Configuration[Configuration], source *SourceRepository, factory FlagsDMFactory) Service {
+func NewOptimizelyService(dm ConfigDataMapper, source *SourceRepository, factory FlagsDMFactory) Service {
 	return &service{
-		config:      repo,
+		config:      dm,
 		source:      source,
 		flagFactory: factory,
 	}
@@ -32,7 +32,7 @@ func (o service) GetProjects(ctx context.Context) ([]models.Project, error) {
 		return nil, fmt.Errorf("source repository is not initialized")
 	}
 
-	cfg, err := o.config.GetConfig()
+	cfg, err := o.config.Get(ctx, "")
 	if err != nil {
 		return nil, err
 	}
@@ -69,24 +69,21 @@ func (o service) GetProjects(ctx context.Context) ([]models.Project, error) {
 	return results, nil
 }
 
-func (o service) GetConfig() (*Configuration, error) {
-	return o.config.GetConfig()
+func (o service) GetConfig(ctx context.Context) (*Configuration, error) {
+	return o.config.Get(ctx, "")
 }
 
-func (o service) SetConfig(config Configuration) error {
-	c, err := o.config.GetConfig()
-	if err != nil {
-		return err
-	}
-	if config.APIKey != "" {
-		c.APIKey = config.APIKey
-	}
-
-	if len(config.Projects) > 0 {
-		c.Projects = config.Projects
-	}
-
-	return o.config.SetConfig(*c)
+func (o service) SetConfig(ctx context.Context, config Configuration) error {
+	_, err := o.config.Update(ctx, func(value *Configuration) error {
+		if config.APIKey != "" {
+			value.APIKey = config.APIKey
+		}
+		if len(config.Projects) > 0 {
+			value.Projects = config.Projects
+		}
+		return nil
+	})
+	return err
 }
 
 func (o service) GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlag, error) {

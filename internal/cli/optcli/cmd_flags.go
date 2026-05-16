@@ -48,7 +48,7 @@ func list(s optimizely.Service) *cobra.Command {
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
-			cfg, err := s.GetConfig()
+			cfg, err := s.GetConfig(cmd.Context())
 			if err != nil {
 				return err
 			}

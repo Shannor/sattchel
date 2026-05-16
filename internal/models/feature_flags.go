@@ -42,11 +42,3 @@ type Variable[T any] struct {
 	Value T
 	Type  string
 }
-
-type Environment struct {
-	ID      string         `json:"id"`
-	Key     string         `json:"key"`
-	Name    string         `json:"name"`
-	Enabled bool           `json:"enabled"`
-	Meta    map[string]any `json:"meta"`
-}

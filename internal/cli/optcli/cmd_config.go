@@ -1,6 +1,7 @@
 package optcli
 
 import (
+	"context"
 	"fmt"
 	"test-cli/internal/optimizely"
 	"test-cli/internal/tui"
@@ -38,7 +39,7 @@ func set(service optimizely.Service) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			switch len(args) {
 			case 0:
-				err := noChoiceConfig(service)
+				err := noChoiceConfig(cmd.Context(), service)
 				if err != nil {
 					return fmt.Errorf("failed to set config: %w", err)
 				}
@@ -63,7 +64,7 @@ func get(service optimizely.Service, styles tui.Styles) *cobra.Command {
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cfg, err := service.GetConfig()
+			cfg, err := service.GetConfig(cmd.Context())
 			if err != nil {
 				return err
 			}
@@ -80,7 +81,7 @@ func get(service optimizely.Service, styles tui.Styles) *cobra.Command {
 	}
 }
 
-func noChoiceConfig(service optimizely.Service) error {
+func noChoiceConfig(ctx context.Context, service optimizely.Service) error {
 	choice := ""
 	err := huh.NewForm(
 		huh.NewGroup(
@@ -111,7 +112,7 @@ func noChoiceConfig(service optimizely.Service) error {
 				return fmt.Errorf("value cannot be empty")
 			}
 			c := optimizely.Configuration{APIKey: v.Value()}
-			err = service.SetConfig(c)
+			err = service.SetConfig(ctx, c)
 			if err != nil {
 				return fmt.Errorf("failed to set config: %w", err)
 			}

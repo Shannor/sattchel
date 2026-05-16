@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"test-cli/internal/cli/optcli"
@@ -72,12 +73,12 @@ func init() {
 }
 
 func setupOptimizely(v *viper.Viper) optimizely.Service {
-	opRepo := optimizely.NewConfigurationRepo(v)
+	opRepo := optimizely.NewConfigDM(v)
 	sourceRepo, err := optimizely.NewSourceRepository()
 	if err != nil {
 		panic(err)
 	}
-	cfg, err := opRepo.GetConfig()
+	cfg, err := opRepo.Get(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}

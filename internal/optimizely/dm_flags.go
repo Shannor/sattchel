@@ -203,11 +203,6 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlag, erro
 	return results, nil
 }
 
-func getVariations(client *features.ClientWithResponses, projectID string, flagID string) {
-	client.ListVariationsWithResponse()
-
-}
-
 // extractPageToken pulls the page_token query param from a next_url value.
 // The API returns full URLs like "/projects/.../flags?page_token=...&page_window=20"
 // but the PageToken param expects only the token string.
@@ -261,7 +256,7 @@ func toEnvironment(env features.FlagEnvironment) (models.Environment, error) {
 		Name: env.Name,
 	}
 	if env.Enabled != nil {
-		result.Enabled = *env.Enabled
+		result.IsActive = *env.Enabled
 	}
 	return result, nil
 }
