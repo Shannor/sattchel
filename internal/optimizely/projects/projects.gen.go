@@ -18,6 +18,1622 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
+const (
+	OAuth2Scopes = "OAuth2.Scopes"
+	ApiKeyScopes = "apiKey.Scopes"
+)
+
+// Defines values for AttributeConditionType.
+const (
+	CustomAttribute AttributeConditionType = "custom_attribute"
+	CustomDimension AttributeConditionType = "custom_dimension"
+)
+
+// Valid indicates whether the value is a known member of the AttributeConditionType enum.
+func (e AttributeConditionType) Valid() bool {
+	switch e {
+	case CustomAttribute:
+		return true
+	case CustomDimension:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CampaignStatus.
+const (
+	CampaignStatusArchived   CampaignStatus = "archived"
+	CampaignStatusNotStarted CampaignStatus = "not_started"
+	CampaignStatusPaused     CampaignStatus = "paused"
+	CampaignStatusRunning    CampaignStatus = "running"
+)
+
+// Valid indicates whether the value is a known member of the CampaignStatus enum.
+func (e CampaignStatus) Valid() bool {
+	switch e {
+	case CampaignStatusArchived:
+		return true
+	case CampaignStatusNotStarted:
+		return true
+	case CampaignStatusPaused:
+		return true
+	case CampaignStatusRunning:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CampaignType.
+const (
+	CampaignTypeOther           CampaignType = "other"
+	CampaignTypePersonalization CampaignType = "personalization"
+)
+
+// Valid indicates whether the value is a known member of the CampaignType enum.
+func (e CampaignType) Valid() bool {
+	switch e {
+	case CampaignTypeOther:
+		return true
+	case CampaignTypePersonalization:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CampaignMetricResultsAggregator.
+const (
+	CampaignMetricResultsAggregatorBounce CampaignMetricResultsAggregator = "bounce"
+	CampaignMetricResultsAggregatorCount  CampaignMetricResultsAggregator = "count"
+	CampaignMetricResultsAggregatorExit   CampaignMetricResultsAggregator = "exit"
+	CampaignMetricResultsAggregatorRatio  CampaignMetricResultsAggregator = "ratio"
+	CampaignMetricResultsAggregatorSum    CampaignMetricResultsAggregator = "sum"
+	CampaignMetricResultsAggregatorUnique CampaignMetricResultsAggregator = "unique"
+)
+
+// Valid indicates whether the value is a known member of the CampaignMetricResultsAggregator enum.
+func (e CampaignMetricResultsAggregator) Valid() bool {
+	switch e {
+	case CampaignMetricResultsAggregatorBounce:
+		return true
+	case CampaignMetricResultsAggregatorCount:
+		return true
+	case CampaignMetricResultsAggregatorExit:
+		return true
+	case CampaignMetricResultsAggregatorRatio:
+		return true
+	case CampaignMetricResultsAggregatorSum:
+		return true
+	case CampaignMetricResultsAggregatorUnique:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CampaignMetricResultsField.
+const (
+	CampaignMetricResultsFieldRevenue CampaignMetricResultsField = "revenue"
+	CampaignMetricResultsFieldValue   CampaignMetricResultsField = "value"
+)
+
+// Valid indicates whether the value is a known member of the CampaignMetricResultsField enum.
+func (e CampaignMetricResultsField) Valid() bool {
+	switch e {
+	case CampaignMetricResultsFieldRevenue:
+		return true
+	case CampaignMetricResultsFieldValue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CampaignMetricResultsScope.
+const (
+	CampaignMetricResultsScopeEvent   CampaignMetricResultsScope = "event"
+	CampaignMetricResultsScopeSession CampaignMetricResultsScope = "session"
+	CampaignMetricResultsScopeVisitor CampaignMetricResultsScope = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the CampaignMetricResultsScope enum.
+func (e CampaignMetricResultsScope) Valid() bool {
+	switch e {
+	case CampaignMetricResultsScopeEvent:
+		return true
+	case CampaignMetricResultsScopeSession:
+		return true
+	case CampaignMetricResultsScopeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CampaignMetricResultsWinningDirection.
+const (
+	CampaignMetricResultsWinningDirectionDecreasing CampaignMetricResultsWinningDirection = "decreasing"
+	CampaignMetricResultsWinningDirectionIncreasing CampaignMetricResultsWinningDirection = "increasing"
+)
+
+// Valid indicates whether the value is a known member of the CampaignMetricResultsWinningDirection enum.
+func (e CampaignMetricResultsWinningDirection) Valid() bool {
+	switch e {
+	case CampaignMetricResultsWinningDirectionDecreasing:
+		return true
+	case CampaignMetricResultsWinningDirectionIncreasing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ChangeType.
+const (
+	ChangeTypeAttribute   ChangeType = "attribute"
+	ChangeTypeCustomCode  ChangeType = "custom_code"
+	ChangeTypeCustomCss   ChangeType = "custom_css"
+	ChangeTypeExtension   ChangeType = "extension"
+	ChangeTypeInsertHtml  ChangeType = "insert_html"
+	ChangeTypeInsertImage ChangeType = "insert_image"
+	ChangeTypeRedirect    ChangeType = "redirect"
+)
+
+// Valid indicates whether the value is a known member of the ChangeType enum.
+func (e ChangeType) Valid() bool {
+	switch e {
+	case ChangeTypeAttribute:
+		return true
+	case ChangeTypeCustomCode:
+		return true
+	case ChangeTypeCustomCss:
+		return true
+	case ChangeTypeExtension:
+		return true
+	case ChangeTypeInsertHtml:
+		return true
+	case ChangeTypeInsertImage:
+		return true
+	case ChangeTypeRedirect:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ChangeHistoryChangeChangeType.
+const (
+	ChangeHistoryChangeChangeTypeArchive ChangeHistoryChangeChangeType = "archive"
+	ChangeHistoryChangeChangeTypeCreate  ChangeHistoryChangeChangeType = "create"
+	ChangeHistoryChangeChangeTypeDelete  ChangeHistoryChangeChangeType = "delete"
+	ChangeHistoryChangeChangeTypePublish ChangeHistoryChangeChangeType = "publish"
+	ChangeHistoryChangeChangeTypeUpdate  ChangeHistoryChangeChangeType = "update"
+)
+
+// Valid indicates whether the value is a known member of the ChangeHistoryChangeChangeType enum.
+func (e ChangeHistoryChangeChangeType) Valid() bool {
+	switch e {
+	case ChangeHistoryChangeChangeTypeArchive:
+		return true
+	case ChangeHistoryChangeChangeTypeCreate:
+		return true
+	case ChangeHistoryChangeChangeTypeDelete:
+		return true
+	case ChangeHistoryChangeChangeTypePublish:
+		return true
+	case ChangeHistoryChangeChangeTypeUpdate:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ChangeHistoryChangeSource.
+const (
+	Api ChangeHistoryChangeSource = "api"
+	Ui  ChangeHistoryChangeSource = "ui"
+)
+
+// Valid indicates whether the value is a known member of the ChangeHistoryChangeSource enum.
+func (e ChangeHistoryChangeSource) Valid() bool {
+	switch e {
+	case Api:
+		return true
+	case Ui:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CompoundSubMetricAggregator.
+const (
+	CompoundSubMetricAggregatorCount  CompoundSubMetricAggregator = "count"
+	CompoundSubMetricAggregatorSum    CompoundSubMetricAggregator = "sum"
+	CompoundSubMetricAggregatorUnique CompoundSubMetricAggregator = "unique"
+)
+
+// Valid indicates whether the value is a known member of the CompoundSubMetricAggregator enum.
+func (e CompoundSubMetricAggregator) Valid() bool {
+	switch e {
+	case CompoundSubMetricAggregatorCount:
+		return true
+	case CompoundSubMetricAggregatorSum:
+		return true
+	case CompoundSubMetricAggregatorUnique:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CompoundSubMetricEventType.
+const (
+	CompoundSubMetricEventTypeClick    CompoundSubMetricEventType = "click"
+	CompoundSubMetricEventTypeCustom   CompoundSubMetricEventType = "custom"
+	CompoundSubMetricEventTypePageview CompoundSubMetricEventType = "pageview"
+)
+
+// Valid indicates whether the value is a known member of the CompoundSubMetricEventType enum.
+func (e CompoundSubMetricEventType) Valid() bool {
+	switch e {
+	case CompoundSubMetricEventTypeClick:
+		return true
+	case CompoundSubMetricEventTypeCustom:
+		return true
+	case CompoundSubMetricEventTypePageview:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CompoundSubMetricField.
+const (
+	CompoundSubMetricFieldRevenue CompoundSubMetricField = "revenue"
+	CompoundSubMetricFieldValue   CompoundSubMetricField = "value"
+)
+
+// Valid indicates whether the value is a known member of the CompoundSubMetricField enum.
+func (e CompoundSubMetricField) Valid() bool {
+	switch e {
+	case CompoundSubMetricFieldRevenue:
+		return true
+	case CompoundSubMetricFieldValue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CompoundSubMetricScope.
+const (
+	CompoundSubMetricScopeEvent   CompoundSubMetricScope = "event"
+	CompoundSubMetricScopeSession CompoundSubMetricScope = "session"
+	CompoundSubMetricScopeVisitor CompoundSubMetricScope = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the CompoundSubMetricScope enum.
+func (e CompoundSubMetricScope) Valid() bool {
+	switch e {
+	case CompoundSubMetricScopeEvent:
+		return true
+	case CompoundSubMetricScopeSession:
+		return true
+	case CompoundSubMetricScopeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CustomEventEventType.
+const (
+	CustomEventEventTypeCustom CustomEventEventType = "custom"
+)
+
+// Valid indicates whether the value is a known member of the CustomEventEventType enum.
+func (e CustomEventEventType) Valid() bool {
+	switch e {
+	case CustomEventEventTypeCustom:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for DatapointLiftStatus.
+const (
+	Better DatapointLiftStatus = "better"
+	Equal  DatapointLiftStatus = "equal"
+	Worse  DatapointLiftStatus = "worse"
+)
+
+// Valid indicates whether the value is a known member of the DatapointLiftStatus enum.
+func (e DatapointLiftStatus) Valid() bool {
+	switch e {
+	case Better:
+		return true
+	case Equal:
+		return true
+	case Worse:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EventEventType.
+const (
+	EventEventTypeClassicClick               EventEventType = "classic_click"
+	EventEventTypeClassicCustom              EventEventType = "classic_custom"
+	EventEventTypeClassicEngagement          EventEventType = "classic_engagement"
+	EventEventTypeClassicMobileNumSession    EventEventType = "classic_mobile_num_session"
+	EventEventTypeClassicMobileSessionLength EventEventType = "classic_mobile_session_length"
+	EventEventTypeClassicMobileTap           EventEventType = "classic_mobile_tap"
+	EventEventTypeClassicMobileView          EventEventType = "classic_mobile_view"
+	EventEventTypeClassicPageview            EventEventType = "classic_pageview"
+	EventEventTypeClassicRevenue             EventEventType = "classic_revenue"
+	EventEventTypeClick                      EventEventType = "click"
+	EventEventTypeCustom                     EventEventType = "custom"
+	EventEventTypePageview                   EventEventType = "pageview"
+)
+
+// Valid indicates whether the value is a known member of the EventEventType enum.
+func (e EventEventType) Valid() bool {
+	switch e {
+	case EventEventTypeClassicClick:
+		return true
+	case EventEventTypeClassicCustom:
+		return true
+	case EventEventTypeClassicEngagement:
+		return true
+	case EventEventTypeClassicMobileNumSession:
+		return true
+	case EventEventTypeClassicMobileSessionLength:
+		return true
+	case EventEventTypeClassicMobileTap:
+		return true
+	case EventEventTypeClassicMobileView:
+		return true
+	case EventEventTypeClassicPageview:
+		return true
+	case EventEventTypeClassicRevenue:
+		return true
+	case EventEventTypeClick:
+		return true
+	case EventEventTypeCustom:
+		return true
+	case EventEventTypePageview:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EventCategories.
+const (
+	EventCategoriesAddToCart EventCategories = "add_to_cart"
+	EventCategoriesConvert   EventCategories = "convert"
+	EventCategoriesOther     EventCategories = "other"
+	EventCategoriesPurchase  EventCategories = "purchase"
+	EventCategoriesSave      EventCategories = "save"
+	EventCategoriesSearch    EventCategories = "search"
+	EventCategoriesShare     EventCategories = "share"
+	EventCategoriesSignUp    EventCategories = "sign_up"
+	EventCategoriesSubscribe EventCategories = "subscribe"
+)
+
+// Valid indicates whether the value is a known member of the EventCategories enum.
+func (e EventCategories) Valid() bool {
+	switch e {
+	case EventCategoriesAddToCart:
+		return true
+	case EventCategoriesConvert:
+		return true
+	case EventCategoriesOther:
+		return true
+	case EventCategoriesPurchase:
+		return true
+	case EventCategoriesSave:
+		return true
+	case EventCategoriesSearch:
+		return true
+	case EventCategoriesShare:
+		return true
+	case EventCategoriesSignUp:
+		return true
+	case EventCategoriesSubscribe:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EventPropertyDataType.
+const (
+	EventPropertyDataTypeBoolean EventPropertyDataType = "boolean"
+	EventPropertyDataTypeNumber  EventPropertyDataType = "number"
+	EventPropertyDataTypeString  EventPropertyDataType = "string"
+)
+
+// Valid indicates whether the value is a known member of the EventPropertyDataType enum.
+func (e EventPropertyDataType) Valid() bool {
+	switch e {
+	case EventPropertyDataTypeBoolean:
+		return true
+	case EventPropertyDataTypeNumber:
+		return true
+	case EventPropertyDataTypeString:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMultivariateTrafficPolicy.
+const (
+	FullFactorial ExperimentMultivariateTrafficPolicy = "full_factorial"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMultivariateTrafficPolicy enum.
+func (e ExperimentMultivariateTrafficPolicy) Valid() bool {
+	switch e {
+	case FullFactorial:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentStatus.
+const (
+	ExperimentStatusArchived       ExperimentStatus = "archived"
+	ExperimentStatusCampaignPaused ExperimentStatus = "campaign_paused"
+	ExperimentStatusConcluded      ExperimentStatus = "concluded"
+	ExperimentStatusNotStarted     ExperimentStatus = "not_started"
+	ExperimentStatusPaused         ExperimentStatus = "paused"
+	ExperimentStatusRunning        ExperimentStatus = "running"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentStatus enum.
+func (e ExperimentStatus) Valid() bool {
+	switch e {
+	case ExperimentStatusArchived:
+		return true
+	case ExperimentStatusCampaignPaused:
+		return true
+	case ExperimentStatusConcluded:
+		return true
+	case ExperimentStatusNotStarted:
+		return true
+	case ExperimentStatusPaused:
+		return true
+	case ExperimentStatusRunning:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentEnvType.
+const (
+	ExperimentEnvTypeAb               ExperimentEnvType = "a/b"
+	ExperimentEnvTypeFeature          ExperimentEnvType = "feature"
+	ExperimentEnvTypeMultiarmedBandit ExperimentEnvType = "multiarmed_bandit"
+	ExperimentEnvTypeMultivariate     ExperimentEnvType = "multivariate"
+	ExperimentEnvTypePersonalization  ExperimentEnvType = "personalization"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentEnvType enum.
+func (e ExperimentEnvType) Valid() bool {
+	switch e {
+	case ExperimentEnvTypeAb:
+		return true
+	case ExperimentEnvTypeFeature:
+		return true
+	case ExperimentEnvTypeMultiarmedBandit:
+		return true
+	case ExperimentEnvTypeMultivariate:
+		return true
+	case ExperimentEnvTypePersonalization:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentEnvironmentStatus.
+const (
+	ExperimentEnvironmentStatusArchived   ExperimentEnvironmentStatus = "archived"
+	ExperimentEnvironmentStatusNotStarted ExperimentEnvironmentStatus = "not_started"
+	ExperimentEnvironmentStatusPaused     ExperimentEnvironmentStatus = "paused"
+	ExperimentEnvironmentStatusRunning    ExperimentEnvironmentStatus = "running"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentEnvironmentStatus enum.
+func (e ExperimentEnvironmentStatus) Valid() bool {
+	switch e {
+	case ExperimentEnvironmentStatusArchived:
+		return true
+	case ExperimentEnvironmentStatusNotStarted:
+		return true
+	case ExperimentEnvironmentStatusPaused:
+		return true
+	case ExperimentEnvironmentStatusRunning:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentEnvironmentUpdateStatus.
+const (
+	ExperimentEnvironmentUpdateStatusNotStarted ExperimentEnvironmentUpdateStatus = "not_started"
+	ExperimentEnvironmentUpdateStatusPaused     ExperimentEnvironmentUpdateStatus = "paused"
+	ExperimentEnvironmentUpdateStatusRunning    ExperimentEnvironmentUpdateStatus = "running"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentEnvironmentUpdateStatus enum.
+func (e ExperimentEnvironmentUpdateStatus) Valid() bool {
+	switch e {
+	case ExperimentEnvironmentUpdateStatusNotStarted:
+		return true
+	case ExperimentEnvironmentUpdateStatusPaused:
+		return true
+	case ExperimentEnvironmentUpdateStatusRunning:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricResultsAggregator.
+const (
+	ExperimentMetricResultsAggregatorBounce ExperimentMetricResultsAggregator = "bounce"
+	ExperimentMetricResultsAggregatorCount  ExperimentMetricResultsAggregator = "count"
+	ExperimentMetricResultsAggregatorExit   ExperimentMetricResultsAggregator = "exit"
+	ExperimentMetricResultsAggregatorRatio  ExperimentMetricResultsAggregator = "ratio"
+	ExperimentMetricResultsAggregatorSum    ExperimentMetricResultsAggregator = "sum"
+	ExperimentMetricResultsAggregatorUnique ExperimentMetricResultsAggregator = "unique"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricResultsAggregator enum.
+func (e ExperimentMetricResultsAggregator) Valid() bool {
+	switch e {
+	case ExperimentMetricResultsAggregatorBounce:
+		return true
+	case ExperimentMetricResultsAggregatorCount:
+		return true
+	case ExperimentMetricResultsAggregatorExit:
+		return true
+	case ExperimentMetricResultsAggregatorRatio:
+		return true
+	case ExperimentMetricResultsAggregatorSum:
+		return true
+	case ExperimentMetricResultsAggregatorUnique:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricResultsField.
+const (
+	ExperimentMetricResultsFieldRevenue ExperimentMetricResultsField = "revenue"
+	ExperimentMetricResultsFieldValue   ExperimentMetricResultsField = "value"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricResultsField enum.
+func (e ExperimentMetricResultsField) Valid() bool {
+	switch e {
+	case ExperimentMetricResultsFieldRevenue:
+		return true
+	case ExperimentMetricResultsFieldValue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricResultsScope.
+const (
+	ExperimentMetricResultsScopeEvent   ExperimentMetricResultsScope = "event"
+	ExperimentMetricResultsScopeSession ExperimentMetricResultsScope = "session"
+	ExperimentMetricResultsScopeVisitor ExperimentMetricResultsScope = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricResultsScope enum.
+func (e ExperimentMetricResultsScope) Valid() bool {
+	switch e {
+	case ExperimentMetricResultsScopeEvent:
+		return true
+	case ExperimentMetricResultsScopeSession:
+		return true
+	case ExperimentMetricResultsScopeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricResultsWinningDirection.
+const (
+	ExperimentMetricResultsWinningDirectionDecreasing ExperimentMetricResultsWinningDirection = "decreasing"
+	ExperimentMetricResultsWinningDirectionIncreasing ExperimentMetricResultsWinningDirection = "increasing"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricResultsWinningDirection enum.
+func (e ExperimentMetricResultsWinningDirection) Valid() bool {
+	switch e {
+	case ExperimentMetricResultsWinningDirectionDecreasing:
+		return true
+	case ExperimentMetricResultsWinningDirectionIncreasing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricTimeseriesAggregator.
+const (
+	ExperimentMetricTimeseriesAggregatorBounce ExperimentMetricTimeseriesAggregator = "bounce"
+	ExperimentMetricTimeseriesAggregatorCount  ExperimentMetricTimeseriesAggregator = "count"
+	ExperimentMetricTimeseriesAggregatorExit   ExperimentMetricTimeseriesAggregator = "exit"
+	ExperimentMetricTimeseriesAggregatorRatio  ExperimentMetricTimeseriesAggregator = "ratio"
+	ExperimentMetricTimeseriesAggregatorSum    ExperimentMetricTimeseriesAggregator = "sum"
+	ExperimentMetricTimeseriesAggregatorUnique ExperimentMetricTimeseriesAggregator = "unique"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricTimeseriesAggregator enum.
+func (e ExperimentMetricTimeseriesAggregator) Valid() bool {
+	switch e {
+	case ExperimentMetricTimeseriesAggregatorBounce:
+		return true
+	case ExperimentMetricTimeseriesAggregatorCount:
+		return true
+	case ExperimentMetricTimeseriesAggregatorExit:
+		return true
+	case ExperimentMetricTimeseriesAggregatorRatio:
+		return true
+	case ExperimentMetricTimeseriesAggregatorSum:
+		return true
+	case ExperimentMetricTimeseriesAggregatorUnique:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricTimeseriesField.
+const (
+	ExperimentMetricTimeseriesFieldRevenue ExperimentMetricTimeseriesField = "revenue"
+	ExperimentMetricTimeseriesFieldValue   ExperimentMetricTimeseriesField = "value"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricTimeseriesField enum.
+func (e ExperimentMetricTimeseriesField) Valid() bool {
+	switch e {
+	case ExperimentMetricTimeseriesFieldRevenue:
+		return true
+	case ExperimentMetricTimeseriesFieldValue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricTimeseriesScope.
+const (
+	ExperimentMetricTimeseriesScopeEvent   ExperimentMetricTimeseriesScope = "event"
+	ExperimentMetricTimeseriesScopeSession ExperimentMetricTimeseriesScope = "session"
+	ExperimentMetricTimeseriesScopeVisitor ExperimentMetricTimeseriesScope = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricTimeseriesScope enum.
+func (e ExperimentMetricTimeseriesScope) Valid() bool {
+	switch e {
+	case ExperimentMetricTimeseriesScopeEvent:
+		return true
+	case ExperimentMetricTimeseriesScopeSession:
+		return true
+	case ExperimentMetricTimeseriesScopeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentMetricTimeseriesWinningDirection.
+const (
+	ExperimentMetricTimeseriesWinningDirectionDecreasing ExperimentMetricTimeseriesWinningDirection = "decreasing"
+	ExperimentMetricTimeseriesWinningDirectionIncreasing ExperimentMetricTimeseriesWinningDirection = "increasing"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentMetricTimeseriesWinningDirection enum.
+func (e ExperimentMetricTimeseriesWinningDirection) Valid() bool {
+	switch e {
+	case ExperimentMetricTimeseriesWinningDirectionDecreasing:
+		return true
+	case ExperimentMetricTimeseriesWinningDirectionIncreasing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentResultsReportInferredOutcome.
+const (
+	Inconclusive ExperimentResultsReportInferredOutcome = "inconclusive"
+	Loss         ExperimentResultsReportInferredOutcome = "loss"
+	Win          ExperimentResultsReportInferredOutcome = "win"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentResultsReportInferredOutcome enum.
+func (e ExperimentResultsReportInferredOutcome) Valid() bool {
+	switch e {
+	case Inconclusive:
+		return true
+	case Loss:
+		return true
+	case Win:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExperimentSummaryType.
+const (
+	ExperimentSummaryTypeCampaign   ExperimentSummaryType = "campaign"
+	ExperimentSummaryTypeExperiment ExperimentSummaryType = "experiment"
+)
+
+// Valid indicates whether the value is a known member of the ExperimentSummaryType enum.
+func (e ExperimentSummaryType) Valid() bool {
+	switch e {
+	case ExperimentSummaryTypeCampaign:
+		return true
+	case ExperimentSummaryTypeExperiment:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for FeatureVariableType.
+const (
+	FeatureVariableTypeBoolean FeatureVariableType = "boolean"
+	FeatureVariableTypeDouble  FeatureVariableType = "double"
+	FeatureVariableTypeInteger FeatureVariableType = "integer"
+	FeatureVariableTypeJson    FeatureVariableType = "json"
+	FeatureVariableTypeString  FeatureVariableType = "string"
+)
+
+// Valid indicates whether the value is a known member of the FeatureVariableType enum.
+func (e FeatureVariableType) Valid() bool {
+	switch e {
+	case FeatureVariableTypeBoolean:
+		return true
+	case FeatureVariableTypeDouble:
+		return true
+	case FeatureVariableTypeInteger:
+		return true
+	case FeatureVariableTypeJson:
+		return true
+	case FeatureVariableTypeString:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for FeatureVariableUpdateType.
+const (
+	FeatureVariableUpdateTypeBoolean FeatureVariableUpdateType = "boolean"
+	FeatureVariableUpdateTypeDouble  FeatureVariableUpdateType = "double"
+	FeatureVariableUpdateTypeInteger FeatureVariableUpdateType = "integer"
+	FeatureVariableUpdateTypeJson    FeatureVariableUpdateType = "json"
+	FeatureVariableUpdateTypeString  FeatureVariableUpdateType = "string"
+)
+
+// Valid indicates whether the value is a known member of the FeatureVariableUpdateType enum.
+func (e FeatureVariableUpdateType) Valid() bool {
+	switch e {
+	case FeatureVariableUpdateTypeBoolean:
+		return true
+	case FeatureVariableUpdateTypeDouble:
+		return true
+	case FeatureVariableUpdateTypeInteger:
+		return true
+	case FeatureVariableUpdateTypeJson:
+		return true
+	case FeatureVariableUpdateTypeString:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for FieldFieldType.
+const (
+	FieldFieldTypeColor       FieldFieldType = "color"
+	FieldFieldTypeCss         FieldFieldType = "css"
+	FieldFieldTypeDropdown    FieldFieldType = "dropdown"
+	FieldFieldTypeHtml        FieldFieldType = "html"
+	FieldFieldTypeImage       FieldFieldType = "image"
+	FieldFieldTypeJs          FieldFieldType = "js"
+	FieldFieldTypeMultiSelect FieldFieldType = "multi_select"
+	FieldFieldTypeMultiText   FieldFieldType = "multi_text"
+	FieldFieldTypeNumber      FieldFieldType = "number"
+	FieldFieldTypeRichText    FieldFieldType = "rich_text"
+	FieldFieldTypeSelector    FieldFieldType = "selector"
+	FieldFieldTypeSlider      FieldFieldType = "slider"
+	FieldFieldTypeText        FieldFieldType = "text"
+	FieldFieldTypeToggle      FieldFieldType = "toggle"
+)
+
+// Valid indicates whether the value is a known member of the FieldFieldType enum.
+func (e FieldFieldType) Valid() bool {
+	switch e {
+	case FieldFieldTypeColor:
+		return true
+	case FieldFieldTypeCss:
+		return true
+	case FieldFieldTypeDropdown:
+		return true
+	case FieldFieldTypeHtml:
+		return true
+	case FieldFieldTypeImage:
+		return true
+	case FieldFieldTypeJs:
+		return true
+	case FieldFieldTypeMultiSelect:
+		return true
+	case FieldFieldTypeMultiText:
+		return true
+	case FieldFieldTypeNumber:
+		return true
+	case FieldFieldTypeRichText:
+		return true
+	case FieldFieldTypeSelector:
+		return true
+	case FieldFieldTypeSlider:
+		return true
+	case FieldFieldTypeText:
+		return true
+	case FieldFieldTypeToggle:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GroupEntityKind.
+const (
+	GroupEntityKindCampaign   GroupEntityKind = "Campaign"
+	GroupEntityKindExperiment GroupEntityKind = "Experiment"
+)
+
+// Valid indicates whether the value is a known member of the GroupEntityKind enum.
+func (e GroupEntityKind) Valid() bool {
+	switch e {
+	case GroupEntityKindCampaign:
+		return true
+	case GroupEntityKindExperiment:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for InPageEventEventType.
+const (
+	InPageEventEventTypeClick InPageEventEventType = "click"
+)
+
+// Valid indicates whether the value is a known member of the InPageEventEventType enum.
+func (e InPageEventEventType) Valid() bool {
+	switch e {
+	case InPageEventEventTypeClick:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListAttributeListType.
+const (
+	ListAttributeListTypeCookies         ListAttributeListType = "cookies"
+	ListAttributeListTypeJsVariables     ListAttributeListType = "js_variables"
+	ListAttributeListTypeQueryParameters ListAttributeListType = "query_parameters"
+	ListAttributeListTypeZipCodes        ListAttributeListType = "zip_codes"
+)
+
+// Valid indicates whether the value is a known member of the ListAttributeListType enum.
+func (e ListAttributeListType) Valid() bool {
+	switch e {
+	case ListAttributeListTypeCookies:
+		return true
+	case ListAttributeListTypeJsVariables:
+		return true
+	case ListAttributeListTypeQueryParameters:
+		return true
+	case ListAttributeListTypeZipCodes:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListAttributeUpdateListType.
+const (
+	ListAttributeUpdateListTypeCookies         ListAttributeUpdateListType = "cookies"
+	ListAttributeUpdateListTypeJsVariables     ListAttributeUpdateListType = "js_variables"
+	ListAttributeUpdateListTypeQueryParameters ListAttributeUpdateListType = "query_parameters"
+	ListAttributeUpdateListTypeZipCodes        ListAttributeUpdateListType = "zip_codes"
+)
+
+// Valid indicates whether the value is a known member of the ListAttributeUpdateListType enum.
+func (e ListAttributeUpdateListType) Valid() bool {
+	switch e {
+	case ListAttributeUpdateListTypeCookies:
+		return true
+	case ListAttributeUpdateListTypeJsVariables:
+		return true
+	case ListAttributeUpdateListTypeQueryParameters:
+		return true
+	case ListAttributeUpdateListTypeZipCodes:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricAggregator.
+const (
+	MetricAggregatorBounce MetricAggregator = "bounce"
+	MetricAggregatorCount  MetricAggregator = "count"
+	MetricAggregatorExit   MetricAggregator = "exit"
+	MetricAggregatorRatio  MetricAggregator = "ratio"
+	MetricAggregatorSum    MetricAggregator = "sum"
+	MetricAggregatorUnique MetricAggregator = "unique"
+)
+
+// Valid indicates whether the value is a known member of the MetricAggregator enum.
+func (e MetricAggregator) Valid() bool {
+	switch e {
+	case MetricAggregatorBounce:
+		return true
+	case MetricAggregatorCount:
+		return true
+	case MetricAggregatorExit:
+		return true
+	case MetricAggregatorRatio:
+		return true
+	case MetricAggregatorSum:
+		return true
+	case MetricAggregatorUnique:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricField.
+const (
+	MetricFieldRevenue MetricField = "revenue"
+	MetricFieldValue   MetricField = "value"
+)
+
+// Valid indicates whether the value is a known member of the MetricField enum.
+func (e MetricField) Valid() bool {
+	switch e {
+	case MetricFieldRevenue:
+		return true
+	case MetricFieldValue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricScope.
+const (
+	MetricScopeEvent   MetricScope = "event"
+	MetricScopeSession MetricScope = "session"
+	MetricScopeVisitor MetricScope = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the MetricScope enum.
+func (e MetricScope) Valid() bool {
+	switch e {
+	case MetricScopeEvent:
+		return true
+	case MetricScopeSession:
+		return true
+	case MetricScopeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricWinningDirection.
+const (
+	MetricWinningDirectionDecreasing MetricWinningDirection = "decreasing"
+	MetricWinningDirectionIncreasing MetricWinningDirection = "increasing"
+)
+
+// Valid indicates whether the value is a known member of the MetricWinningDirection enum.
+func (e MetricWinningDirection) Valid() bool {
+	switch e {
+	case MetricWinningDirectionDecreasing:
+		return true
+	case MetricWinningDirectionIncreasing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricFilterCombineOperator.
+const (
+	And MetricFilterCombineOperator = "and"
+	Or  MetricFilterCombineOperator = "or"
+)
+
+// Valid indicates whether the value is a known member of the MetricFilterCombineOperator enum.
+func (e MetricFilterCombineOperator) Valid() bool {
+	switch e {
+	case And:
+		return true
+	case Or:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricFilterConditionOperator.
+const (
+	Contains             MetricFilterConditionOperator = "contains"
+	DoesNotContain       MetricFilterConditionOperator = "does_not_contain"
+	EqualTo              MetricFilterConditionOperator = "equal_to"
+	GreaterThan          MetricFilterConditionOperator = "greater_than"
+	GreaterThanOrEqualTo MetricFilterConditionOperator = "greater_than_or_equal_to"
+	LessThan             MetricFilterConditionOperator = "less_than"
+	LessThanOrEqualTo    MetricFilterConditionOperator = "less_than_or_equal_to"
+	NotEqualTo           MetricFilterConditionOperator = "not_equal_to"
+)
+
+// Valid indicates whether the value is a known member of the MetricFilterConditionOperator enum.
+func (e MetricFilterConditionOperator) Valid() bool {
+	switch e {
+	case Contains:
+		return true
+	case DoesNotContain:
+		return true
+	case EqualTo:
+		return true
+	case GreaterThan:
+		return true
+	case GreaterThanOrEqualTo:
+		return true
+	case LessThan:
+		return true
+	case LessThanOrEqualTo:
+		return true
+	case NotEqualTo:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricFilterConditionType.
+const (
+	MetricFilterConditionTypeBoolean MetricFilterConditionType = "boolean"
+	MetricFilterConditionTypeNumber  MetricFilterConditionType = "number"
+	MetricFilterConditionTypeString  MetricFilterConditionType = "string"
+)
+
+// Valid indicates whether the value is a known member of the MetricFilterConditionType enum.
+func (e MetricFilterConditionType) Valid() bool {
+	switch e {
+	case MetricFilterConditionTypeBoolean:
+		return true
+	case MetricFilterConditionTypeNumber:
+		return true
+	case MetricFilterConditionTypeString:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsAggregator.
+const (
+	MetricsAggregatorBounce MetricsAggregator = "bounce"
+	MetricsAggregatorCount  MetricsAggregator = "count"
+	MetricsAggregatorExit   MetricsAggregator = "exit"
+	MetricsAggregatorRatio  MetricsAggregator = "ratio"
+	MetricsAggregatorSum    MetricsAggregator = "sum"
+	MetricsAggregatorUnique MetricsAggregator = "unique"
+)
+
+// Valid indicates whether the value is a known member of the MetricsAggregator enum.
+func (e MetricsAggregator) Valid() bool {
+	switch e {
+	case MetricsAggregatorBounce:
+		return true
+	case MetricsAggregatorCount:
+		return true
+	case MetricsAggregatorExit:
+		return true
+	case MetricsAggregatorRatio:
+		return true
+	case MetricsAggregatorSum:
+		return true
+	case MetricsAggregatorUnique:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsEventType.
+const (
+	MetricsEventTypeClick    MetricsEventType = "click"
+	MetricsEventTypeCustom   MetricsEventType = "custom"
+	MetricsEventTypePageview MetricsEventType = "pageview"
+)
+
+// Valid indicates whether the value is a known member of the MetricsEventType enum.
+func (e MetricsEventType) Valid() bool {
+	switch e {
+	case MetricsEventTypeClick:
+		return true
+	case MetricsEventTypeCustom:
+		return true
+	case MetricsEventTypePageview:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsField.
+const (
+	MetricsFieldRevenue         MetricsField = "revenue"
+	MetricsFieldSessionDuration MetricsField = "session_duration"
+	MetricsFieldValue           MetricsField = "value"
+)
+
+// Valid indicates whether the value is a known member of the MetricsField enum.
+func (e MetricsField) Valid() bool {
+	switch e {
+	case MetricsFieldRevenue:
+		return true
+	case MetricsFieldSessionDuration:
+		return true
+	case MetricsFieldValue:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsScope.
+const (
+	MetricsScopeEvent   MetricsScope = "event"
+	MetricsScopeSession MetricsScope = "session"
+	MetricsScopeVisitor MetricsScope = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the MetricsScope enum.
+func (e MetricsScope) Valid() bool {
+	switch e {
+	case MetricsScopeEvent:
+		return true
+	case MetricsScopeSession:
+		return true
+	case MetricsScopeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsWinningDirection.
+const (
+	MetricsWinningDirectionDecreasing MetricsWinningDirection = "decreasing"
+	MetricsWinningDirectionIncreasing MetricsWinningDirection = "increasing"
+)
+
+// Valid indicates whether the value is a known member of the MetricsWinningDirection enum.
+func (e MetricsWinningDirection) Valid() bool {
+	switch e {
+	case MetricsWinningDirectionDecreasing:
+		return true
+	case MetricsWinningDirectionIncreasing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsUpdateAggregator.
+const (
+	Bounce MetricsUpdateAggregator = "bounce"
+	Count  MetricsUpdateAggregator = "count"
+	Exit   MetricsUpdateAggregator = "exit"
+	Ratio  MetricsUpdateAggregator = "ratio"
+	Sum    MetricsUpdateAggregator = "sum"
+	Unique MetricsUpdateAggregator = "unique"
+)
+
+// Valid indicates whether the value is a known member of the MetricsUpdateAggregator enum.
+func (e MetricsUpdateAggregator) Valid() bool {
+	switch e {
+	case Bounce:
+		return true
+	case Count:
+		return true
+	case Exit:
+		return true
+	case Ratio:
+		return true
+	case Sum:
+		return true
+	case Unique:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsUpdateEventType.
+const (
+	MetricsUpdateEventTypeClick    MetricsUpdateEventType = "click"
+	MetricsUpdateEventTypeCustom   MetricsUpdateEventType = "custom"
+	MetricsUpdateEventTypePageview MetricsUpdateEventType = "pageview"
+)
+
+// Valid indicates whether the value is a known member of the MetricsUpdateEventType enum.
+func (e MetricsUpdateEventType) Valid() bool {
+	switch e {
+	case MetricsUpdateEventTypeClick:
+		return true
+	case MetricsUpdateEventTypeCustom:
+		return true
+	case MetricsUpdateEventTypePageview:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsUpdateField.
+const (
+	Revenue MetricsUpdateField = "revenue"
+	Value   MetricsUpdateField = "value"
+)
+
+// Valid indicates whether the value is a known member of the MetricsUpdateField enum.
+func (e MetricsUpdateField) Valid() bool {
+	switch e {
+	case Revenue:
+		return true
+	case Value:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsUpdateScope.
+const (
+	MetricsUpdateScopeEvent   MetricsUpdateScope = "event"
+	MetricsUpdateScopeSession MetricsUpdateScope = "session"
+	MetricsUpdateScopeVisitor MetricsUpdateScope = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the MetricsUpdateScope enum.
+func (e MetricsUpdateScope) Valid() bool {
+	switch e {
+	case MetricsUpdateScopeEvent:
+		return true
+	case MetricsUpdateScopeSession:
+		return true
+	case MetricsUpdateScopeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MetricsUpdateWinningDirection.
+const (
+	MetricsUpdateWinningDirectionDecreasing MetricsUpdateWinningDirection = "decreasing"
+	MetricsUpdateWinningDirectionIncreasing MetricsUpdateWinningDirection = "increasing"
+)
+
+// Valid indicates whether the value is a known member of the MetricsUpdateWinningDirection enum.
+func (e MetricsUpdateWinningDirection) Valid() bool {
+	switch e {
+	case MetricsUpdateWinningDirectionDecreasing:
+		return true
+	case MetricsUpdateWinningDirectionIncreasing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PageActivationType.
+const (
+	PageActivationTypeCallback   PageActivationType = "callback"
+	PageActivationTypeDomChanged PageActivationType = "dom_changed"
+	PageActivationTypeImmediate  PageActivationType = "immediate"
+	PageActivationTypeManual     PageActivationType = "manual"
+	PageActivationTypePolling    PageActivationType = "polling"
+	PageActivationTypeUrlChanged PageActivationType = "url_changed"
+)
+
+// Valid indicates whether the value is a known member of the PageActivationType enum.
+func (e PageActivationType) Valid() bool {
+	switch e {
+	case PageActivationTypeCallback:
+		return true
+	case PageActivationTypeDomChanged:
+		return true
+	case PageActivationTypeImmediate:
+		return true
+	case PageActivationTypeManual:
+		return true
+	case PageActivationTypePolling:
+		return true
+	case PageActivationTypeUrlChanged:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PageCategory.
+const (
+	PageCategoryArticle       PageCategory = "article"
+	PageCategoryCart          PageCategory = "cart"
+	PageCategoryCategory      PageCategory = "category"
+	PageCategoryCheckout      PageCategory = "checkout"
+	PageCategoryHome          PageCategory = "home"
+	PageCategoryLandingPage   PageCategory = "landing_page"
+	PageCategoryOther         PageCategory = "other"
+	PageCategoryPricing       PageCategory = "pricing"
+	PageCategoryProductDetail PageCategory = "product_detail"
+	PageCategorySearchResults PageCategory = "search_results"
+)
+
+// Valid indicates whether the value is a known member of the PageCategory enum.
+func (e PageCategory) Valid() bool {
+	switch e {
+	case PageCategoryArticle:
+		return true
+	case PageCategoryCart:
+		return true
+	case PageCategoryCategory:
+		return true
+	case PageCategoryCheckout:
+		return true
+	case PageCategoryHome:
+		return true
+	case PageCategoryLandingPage:
+		return true
+	case PageCategoryOther:
+		return true
+	case PageCategoryPricing:
+		return true
+	case PageCategoryProductDetail:
+		return true
+	case PageCategorySearchResults:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PagePageType.
+const (
+	PagePageTypeGlobal    PagePageType = "global"
+	PagePageTypeSingleUrl PagePageType = "single_url"
+	PagePageTypeUrlSet    PagePageType = "url_set"
+)
+
+// Valid indicates whether the value is a known member of the PagePageType enum.
+func (e PagePageType) Valid() bool {
+	switch e {
+	case PagePageTypeGlobal:
+		return true
+	case PagePageTypeSingleUrl:
+		return true
+	case PagePageTypeUrlSet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PageUpdateActivationType.
+const (
+	PageUpdateActivationTypeCallback   PageUpdateActivationType = "callback"
+	PageUpdateActivationTypeDomChanged PageUpdateActivationType = "dom_changed"
+	PageUpdateActivationTypeImmediate  PageUpdateActivationType = "immediate"
+	PageUpdateActivationTypeManual     PageUpdateActivationType = "manual"
+	PageUpdateActivationTypePolling    PageUpdateActivationType = "polling"
+	PageUpdateActivationTypeUrlChanged PageUpdateActivationType = "url_changed"
+)
+
+// Valid indicates whether the value is a known member of the PageUpdateActivationType enum.
+func (e PageUpdateActivationType) Valid() bool {
+	switch e {
+	case PageUpdateActivationTypeCallback:
+		return true
+	case PageUpdateActivationTypeDomChanged:
+		return true
+	case PageUpdateActivationTypeImmediate:
+		return true
+	case PageUpdateActivationTypeManual:
+		return true
+	case PageUpdateActivationTypePolling:
+		return true
+	case PageUpdateActivationTypeUrlChanged:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PageUpdateCategory.
+const (
+	PageUpdateCategoryArticle       PageUpdateCategory = "article"
+	PageUpdateCategoryCart          PageUpdateCategory = "cart"
+	PageUpdateCategoryCategory      PageUpdateCategory = "category"
+	PageUpdateCategoryCheckout      PageUpdateCategory = "checkout"
+	PageUpdateCategoryHome          PageUpdateCategory = "home"
+	PageUpdateCategoryLandingPage   PageUpdateCategory = "landing_page"
+	PageUpdateCategoryOther         PageUpdateCategory = "other"
+	PageUpdateCategoryPricing       PageUpdateCategory = "pricing"
+	PageUpdateCategoryProductDetail PageUpdateCategory = "product_detail"
+	PageUpdateCategorySearchResults PageUpdateCategory = "search_results"
+)
+
+// Valid indicates whether the value is a known member of the PageUpdateCategory enum.
+func (e PageUpdateCategory) Valid() bool {
+	switch e {
+	case PageUpdateCategoryArticle:
+		return true
+	case PageUpdateCategoryCart:
+		return true
+	case PageUpdateCategoryCategory:
+		return true
+	case PageUpdateCategoryCheckout:
+		return true
+	case PageUpdateCategoryHome:
+		return true
+	case PageUpdateCategoryLandingPage:
+		return true
+	case PageUpdateCategoryOther:
+		return true
+	case PageUpdateCategoryPricing:
+		return true
+	case PageUpdateCategoryProductDetail:
+		return true
+	case PageUpdateCategorySearchResults:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PageUpdatePageType.
+const (
+	PageUpdatePageTypeGlobal    PageUpdatePageType = "global"
+	PageUpdatePageTypeSingleUrl PageUpdatePageType = "single_url"
+	PageUpdatePageTypeUrlSet    PageUpdatePageType = "url_set"
+)
+
+// Valid indicates whether the value is a known member of the PageUpdatePageType enum.
+func (e PageUpdatePageType) Valid() bool {
+	switch e {
+	case PageUpdatePageTypeGlobal:
+		return true
+	case PageUpdatePageTypeSingleUrl:
+		return true
+	case PageUpdatePageTypeUrlSet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PlanStatus.
+const (
+	PlanStatusActive   PlanStatus = "active"
+	PlanStatusInactive PlanStatus = "inactive"
+	PlanStatusTrial    PlanStatus = "trial"
+)
+
+// Valid indicates whether the value is a known member of the PlanStatus enum.
+func (e PlanStatus) Valid() bool {
+	switch e {
+	case PlanStatusActive:
+		return true
+	case PlanStatusInactive:
+		return true
+	case PlanStatusTrial:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PlanUnitOfMeasurement.
+const (
+	Impressions           PlanUnitOfMeasurement = "Impressions"
+	MonthlyUniqueVisitors PlanUnitOfMeasurement = "Monthly Unique Visitors"
+)
+
+// Valid indicates whether the value is a known member of the PlanUnitOfMeasurement enum.
+func (e PlanUnitOfMeasurement) Valid() bool {
+	switch e {
+	case Impressions:
+		return true
+	case MonthlyUniqueVisitors:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ProductUsageProductName.
+const (
+	ProductUsageProductNameClassicABTesting     ProductUsageProductName = "Classic AB Testing"
+	ProductUsageProductNameFullStack            ProductUsageProductName = "Full Stack"
+	ProductUsageProductNameImpressions          ProductUsageProductName = "Impressions"
+	ProductUsageProductNameMobile               ProductUsageProductName = "Mobile"
+	ProductUsageProductNameOptimizelyXABTesting ProductUsageProductName = "Optimizely X AB Testing"
+	ProductUsageProductNameOverTheTop           ProductUsageProductName = "Over The Top"
+	ProductUsageProductNamePersonalization      ProductUsageProductName = "Personalization"
+	ProductUsageProductNameRecommendations      ProductUsageProductName = "Recommendations"
+)
+
+// Valid indicates whether the value is a known member of the ProductUsageProductName enum.
+func (e ProductUsageProductName) Valid() bool {
+	switch e {
+	case ProductUsageProductNameClassicABTesting:
+		return true
+	case ProductUsageProductNameFullStack:
+		return true
+	case ProductUsageProductNameImpressions:
+		return true
+	case ProductUsageProductNameMobile:
+		return true
+	case ProductUsageProductNameOptimizelyXABTesting:
+		return true
+	case ProductUsageProductNameOverTheTop:
+		return true
+	case ProductUsageProductNamePersonalization:
+		return true
+	case ProductUsageProductNameRecommendations:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ProjectPlatform.
 const (
 	ProjectPlatformAndroid ProjectPlatform = "android"
@@ -117,6 +1733,54 @@ func (e ProjectThirdPartyPlatform) Valid() bool {
 	}
 }
 
+// Defines values for ProjectRoleInvitationStatus.
+const (
+	ProjectRoleInvitationStatusPending ProjectRoleInvitationStatus = "pending"
+)
+
+// Valid indicates whether the value is a known member of the ProjectRoleInvitationStatus enum.
+func (e ProjectRoleInvitationStatus) Valid() bool {
+	switch e {
+	case ProjectRoleInvitationStatusPending:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ProjectRoleRole.
+const (
+	Administrator       ProjectRoleRole = "administrator"
+	Editor              ProjectRoleRole = "editor"
+	ProjectOwner        ProjectRoleRole = "project_owner"
+	Publisher           ProjectRoleRole = "publisher"
+	RestrictedEditor    ProjectRoleRole = "restricted_editor"
+	RestrictedPublisher ProjectRoleRole = "restricted_publisher"
+	Viewer              ProjectRoleRole = "viewer"
+)
+
+// Valid indicates whether the value is a known member of the ProjectRoleRole enum.
+func (e ProjectRoleRole) Valid() bool {
+	switch e {
+	case Administrator:
+		return true
+	case Editor:
+		return true
+	case ProjectOwner:
+		return true
+	case Publisher:
+		return true
+	case RestrictedEditor:
+		return true
+	case RestrictedPublisher:
+		return true
+	case Viewer:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ProjectUpdateStatus.
 const (
 	ProjectUpdateStatusActive   ProjectUpdateStatus = "active"
@@ -129,6 +1793,522 @@ func (e ProjectUpdateStatus) Valid() bool {
 	case ProjectUpdateStatusActive:
 		return true
 	case ProjectUpdateStatusArchived:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ScheduledJobFrequency.
+const (
+	ScheduledJobFrequencyDaily  ScheduledJobFrequency = "daily"
+	ScheduledJobFrequencyWeekly ScheduledJobFrequency = "weekly"
+)
+
+// Valid indicates whether the value is a known member of the ScheduledJobFrequency enum.
+func (e ScheduledJobFrequency) Valid() bool {
+	switch e {
+	case ScheduledJobFrequencyDaily:
+		return true
+	case ScheduledJobFrequencyWeekly:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ScheduledJobJobType.
+const (
+	ScheduledJobJobTypeProjectResults ScheduledJobJobType = "project_results"
+)
+
+// Valid indicates whether the value is a known member of the ScheduledJobJobType enum.
+func (e ScheduledJobJobType) Valid() bool {
+	switch e {
+	case ScheduledJobJobTypeProjectResults:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ScheduledJobUpdateFrequency.
+const (
+	ScheduledJobUpdateFrequencyDaily  ScheduledJobUpdateFrequency = "daily"
+	ScheduledJobUpdateFrequencyWeekly ScheduledJobUpdateFrequency = "weekly"
+)
+
+// Valid indicates whether the value is a known member of the ScheduledJobUpdateFrequency enum.
+func (e ScheduledJobUpdateFrequency) Valid() bool {
+	switch e {
+	case ScheduledJobUpdateFrequencyDaily:
+		return true
+	case ScheduledJobUpdateFrequencyWeekly:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ScheduledJobUpdateJobType.
+const (
+	ScheduledJobUpdateJobTypeProjectResults ScheduledJobUpdateJobType = "project_results"
+)
+
+// Valid indicates whether the value is a known member of the ScheduledJobUpdateJobType enum.
+func (e ScheduledJobUpdateJobType) Valid() bool {
+	switch e {
+	case ScheduledJobUpdateJobTypeProjectResults:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SearchResultType.
+const (
+	SearchResultTypeAudience   SearchResultType = "audience"
+	SearchResultTypeCampaign   SearchResultType = "campaign"
+	SearchResultTypeEvent      SearchResultType = "event"
+	SearchResultTypeExperiment SearchResultType = "experiment"
+	SearchResultTypeFeature    SearchResultType = "feature"
+	SearchResultTypeFlag       SearchResultType = "flag"
+	SearchResultTypePage       SearchResultType = "page"
+	SearchResultTypeRule       SearchResultType = "rule"
+)
+
+// Valid indicates whether the value is a known member of the SearchResultType enum.
+func (e SearchResultType) Valid() bool {
+	switch e {
+	case SearchResultTypeAudience:
+		return true
+	case SearchResultTypeCampaign:
+		return true
+	case SearchResultTypeEvent:
+		return true
+	case SearchResultTypeExperiment:
+		return true
+	case SearchResultTypeFeature:
+		return true
+	case SearchResultTypeFlag:
+		return true
+	case SearchResultTypePage:
+		return true
+	case SearchResultTypeRule:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SharedCodeChangeType.
+const (
+	SharedCodeChangeTypeCustomCode SharedCodeChangeType = "custom_code"
+	SharedCodeChangeTypeCustomCss  SharedCodeChangeType = "custom_css"
+)
+
+// Valid indicates whether the value is a known member of the SharedCodeChangeType enum.
+func (e SharedCodeChangeType) Valid() bool {
+	switch e {
+	case SharedCodeChangeTypeCustomCode:
+		return true
+	case SharedCodeChangeTypeCustomCss:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for StatsConfigDifferenceType.
+const (
+	Absolute StatsConfigDifferenceType = "absolute"
+	Relative StatsConfigDifferenceType = "relative"
+)
+
+// Valid indicates whether the value is a known member of the StatsConfigDifferenceType enum.
+func (e StatsConfigDifferenceType) Valid() bool {
+	switch e {
+	case Absolute:
+		return true
+	case Relative:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestDataType.
+const (
+	SubjectAccessRequestDataTypeUser    SubjectAccessRequestDataType = "user"
+	SubjectAccessRequestDataTypeVisitor SubjectAccessRequestDataType = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestDataType enum.
+func (e SubjectAccessRequestDataType) Valid() bool {
+	switch e {
+	case SubjectAccessRequestDataTypeUser:
+		return true
+	case SubjectAccessRequestDataTypeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestIdentifierType.
+const (
+	SubjectAccessRequestIdentifierTypeDcpId               SubjectAccessRequestIdentifierType = "dcp_id"
+	SubjectAccessRequestIdentifierTypeEmail               SubjectAccessRequestIdentifierType = "email"
+	SubjectAccessRequestIdentifierTypeFullstackId         SubjectAccessRequestIdentifierType = "fullstack_id"
+	SubjectAccessRequestIdentifierTypeOptimizelyEndUserId SubjectAccessRequestIdentifierType = "optimizely_end_user_id"
+	SubjectAccessRequestIdentifierTypeOther               SubjectAccessRequestIdentifierType = "other"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestIdentifierType enum.
+func (e SubjectAccessRequestIdentifierType) Valid() bool {
+	switch e {
+	case SubjectAccessRequestIdentifierTypeDcpId:
+		return true
+	case SubjectAccessRequestIdentifierTypeEmail:
+		return true
+	case SubjectAccessRequestIdentifierTypeFullstackId:
+		return true
+	case SubjectAccessRequestIdentifierTypeOptimizelyEndUserId:
+		return true
+	case SubjectAccessRequestIdentifierTypeOther:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestRequestType.
+const (
+	SubjectAccessRequestRequestTypeAccess SubjectAccessRequestRequestType = "access"
+	SubjectAccessRequestRequestTypeDelete SubjectAccessRequestRequestType = "delete"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestRequestType enum.
+func (e SubjectAccessRequestRequestType) Valid() bool {
+	switch e {
+	case SubjectAccessRequestRequestTypeAccess:
+		return true
+	case SubjectAccessRequestRequestTypeDelete:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestStatus.
+const (
+	SubjectAccessRequestStatusCompleted  SubjectAccessRequestStatus = "completed"
+	SubjectAccessRequestStatusFailure    SubjectAccessRequestStatus = "failure"
+	SubjectAccessRequestStatusPending    SubjectAccessRequestStatus = "pending"
+	SubjectAccessRequestStatusProcessing SubjectAccessRequestStatus = "processing"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestStatus enum.
+func (e SubjectAccessRequestStatus) Valid() bool {
+	switch e {
+	case SubjectAccessRequestStatusCompleted:
+		return true
+	case SubjectAccessRequestStatusFailure:
+		return true
+	case SubjectAccessRequestStatusPending:
+		return true
+	case SubjectAccessRequestStatusProcessing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestInternalDataSource.
+const (
+	SubjectAccessRequestInternalDataSourceAppBackend             SubjectAccessRequestInternalDataSource = "app_backend"
+	SubjectAccessRequestInternalDataSourceAppBackendInfra        SubjectAccessRequestInternalDataSource = "app_backend_infra"
+	SubjectAccessRequestInternalDataSourceBusinessSystems        SubjectAccessRequestInternalDataSource = "business_systems"
+	SubjectAccessRequestInternalDataSourceDataPlatform           SubjectAccessRequestInternalDataSource = "data_platform"
+	SubjectAccessRequestInternalDataSourceDatawarehouse          SubjectAccessRequestInternalDataSource = "datawarehouse"
+	SubjectAccessRequestInternalDataSourceExternalSystems        SubjectAccessRequestInternalDataSource = "external_systems"
+	SubjectAccessRequestInternalDataSourceMarketing              SubjectAccessRequestInternalDataSource = "marketing"
+	SubjectAccessRequestInternalDataSourceOptimizely             SubjectAccessRequestInternalDataSource = "optimizely"
+	SubjectAccessRequestInternalDataSourceOptimizelyOnOptimizely SubjectAccessRequestInternalDataSource = "optimizely_on_optimizely"
+	SubjectAccessRequestInternalDataSourceProgramManagement      SubjectAccessRequestInternalDataSource = "program_management"
+	SubjectAccessRequestInternalDataSourceSecurity               SubjectAccessRequestInternalDataSource = "security"
+	SubjectAccessRequestInternalDataSourceTse                    SubjectAccessRequestInternalDataSource = "tse"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestInternalDataSource enum.
+func (e SubjectAccessRequestInternalDataSource) Valid() bool {
+	switch e {
+	case SubjectAccessRequestInternalDataSourceAppBackend:
+		return true
+	case SubjectAccessRequestInternalDataSourceAppBackendInfra:
+		return true
+	case SubjectAccessRequestInternalDataSourceBusinessSystems:
+		return true
+	case SubjectAccessRequestInternalDataSourceDataPlatform:
+		return true
+	case SubjectAccessRequestInternalDataSourceDatawarehouse:
+		return true
+	case SubjectAccessRequestInternalDataSourceExternalSystems:
+		return true
+	case SubjectAccessRequestInternalDataSourceMarketing:
+		return true
+	case SubjectAccessRequestInternalDataSourceOptimizely:
+		return true
+	case SubjectAccessRequestInternalDataSourceOptimizelyOnOptimizely:
+		return true
+	case SubjectAccessRequestInternalDataSourceProgramManagement:
+		return true
+	case SubjectAccessRequestInternalDataSourceSecurity:
+		return true
+	case SubjectAccessRequestInternalDataSourceTse:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestInternalDataType.
+const (
+	SubjectAccessRequestInternalDataTypeUser    SubjectAccessRequestInternalDataType = "user"
+	SubjectAccessRequestInternalDataTypeVisitor SubjectAccessRequestInternalDataType = "visitor"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestInternalDataType enum.
+func (e SubjectAccessRequestInternalDataType) Valid() bool {
+	switch e {
+	case SubjectAccessRequestInternalDataTypeUser:
+		return true
+	case SubjectAccessRequestInternalDataTypeVisitor:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestInternalIdentifierType.
+const (
+	SubjectAccessRequestInternalIdentifierTypeDcpId               SubjectAccessRequestInternalIdentifierType = "dcp_id"
+	SubjectAccessRequestInternalIdentifierTypeEmail               SubjectAccessRequestInternalIdentifierType = "email"
+	SubjectAccessRequestInternalIdentifierTypeFullstackId         SubjectAccessRequestInternalIdentifierType = "fullstack_id"
+	SubjectAccessRequestInternalIdentifierTypeOptimizelyEndUserId SubjectAccessRequestInternalIdentifierType = "optimizely_end_user_id"
+	SubjectAccessRequestInternalIdentifierTypeOther               SubjectAccessRequestInternalIdentifierType = "other"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestInternalIdentifierType enum.
+func (e SubjectAccessRequestInternalIdentifierType) Valid() bool {
+	switch e {
+	case SubjectAccessRequestInternalIdentifierTypeDcpId:
+		return true
+	case SubjectAccessRequestInternalIdentifierTypeEmail:
+		return true
+	case SubjectAccessRequestInternalIdentifierTypeFullstackId:
+		return true
+	case SubjectAccessRequestInternalIdentifierTypeOptimizelyEndUserId:
+		return true
+	case SubjectAccessRequestInternalIdentifierTypeOther:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestInternalRequestType.
+const (
+	Access SubjectAccessRequestInternalRequestType = "access"
+	Delete SubjectAccessRequestInternalRequestType = "delete"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestInternalRequestType enum.
+func (e SubjectAccessRequestInternalRequestType) Valid() bool {
+	switch e {
+	case Access:
+		return true
+	case Delete:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestInternalStatus.
+const (
+	SubjectAccessRequestInternalStatusCompleted  SubjectAccessRequestInternalStatus = "completed"
+	SubjectAccessRequestInternalStatusFailure    SubjectAccessRequestInternalStatus = "failure"
+	SubjectAccessRequestInternalStatusPending    SubjectAccessRequestInternalStatus = "pending"
+	SubjectAccessRequestInternalStatusProcessing SubjectAccessRequestInternalStatus = "processing"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestInternalStatus enum.
+func (e SubjectAccessRequestInternalStatus) Valid() bool {
+	switch e {
+	case SubjectAccessRequestInternalStatusCompleted:
+		return true
+	case SubjectAccessRequestInternalStatusFailure:
+		return true
+	case SubjectAccessRequestInternalStatusPending:
+		return true
+	case SubjectAccessRequestInternalStatusProcessing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SubjectAccessRequestUpdateStatus.
+const (
+	SubjectAccessRequestUpdateStatusCompleted  SubjectAccessRequestUpdateStatus = "completed"
+	SubjectAccessRequestUpdateStatusFailure    SubjectAccessRequestUpdateStatus = "failure"
+	SubjectAccessRequestUpdateStatusPending    SubjectAccessRequestUpdateStatus = "pending"
+	SubjectAccessRequestUpdateStatusProcessing SubjectAccessRequestUpdateStatus = "processing"
+)
+
+// Valid indicates whether the value is a known member of the SubjectAccessRequestUpdateStatus enum.
+func (e SubjectAccessRequestUpdateStatus) Valid() bool {
+	switch e {
+	case SubjectAccessRequestUpdateStatusCompleted:
+		return true
+	case SubjectAccessRequestUpdateStatusFailure:
+		return true
+	case SubjectAccessRequestUpdateStatusPending:
+		return true
+	case SubjectAccessRequestUpdateStatusProcessing:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for URLTargetingActivationType.
+const (
+	Callback   URLTargetingActivationType = "callback"
+	DomChanged URLTargetingActivationType = "dom_changed"
+	Immediate  URLTargetingActivationType = "immediate"
+	Manual     URLTargetingActivationType = "manual"
+	Polling    URLTargetingActivationType = "polling"
+	UrlChanged URLTargetingActivationType = "url_changed"
+)
+
+// Valid indicates whether the value is a known member of the URLTargetingActivationType enum.
+func (e URLTargetingActivationType) Valid() bool {
+	switch e {
+	case Callback:
+		return true
+	case DomChanged:
+		return true
+	case Immediate:
+		return true
+	case Manual:
+		return true
+	case Polling:
+		return true
+	case UrlChanged:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UserProxyProxyType.
+const (
+	Emulator UserProxyProxyType = "emulator"
+	System   UserProxyProxyType = "system"
+)
+
+// Valid indicates whether the value is a known member of the UserProxyProxyType enum.
+func (e UserProxyProxyType) Valid() bool {
+	switch e {
+	case Emulator:
+		return true
+	case System:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for VariantResultsLevel.
+const (
+	VariantResultsLevelCampaign   VariantResultsLevel = "campaign"
+	VariantResultsLevelExperiment VariantResultsLevel = "experiment"
+	VariantResultsLevelVariation  VariantResultsLevel = "variation"
+)
+
+// Valid indicates whether the value is a known member of the VariantResultsLevel enum.
+func (e VariantResultsLevel) Valid() bool {
+	switch e {
+	case VariantResultsLevelCampaign:
+		return true
+	case VariantResultsLevelExperiment:
+		return true
+	case VariantResultsLevelVariation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for VariantTimeseriesLevel.
+const (
+	VariantTimeseriesLevelCampaign   VariantTimeseriesLevel = "campaign"
+	VariantTimeseriesLevelExperiment VariantTimeseriesLevel = "experiment"
+	VariantTimeseriesLevelVariation  VariantTimeseriesLevel = "variation"
+)
+
+// Valid indicates whether the value is a known member of the VariantTimeseriesLevel enum.
+func (e VariantTimeseriesLevel) Valid() bool {
+	switch e {
+	case VariantTimeseriesLevelCampaign:
+		return true
+	case VariantTimeseriesLevelExperiment:
+		return true
+	case VariantTimeseriesLevelVariation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for VariationStatus.
+const (
+	VariationStatusActive   VariationStatus = "active"
+	VariationStatusArchived VariationStatus = "archived"
+	VariationStatusPaused   VariationStatus = "paused"
+)
+
+// Valid indicates whether the value is a known member of the VariationStatus enum.
+func (e VariationStatus) Valid() bool {
+	switch e {
+	case VariationStatusActive:
+		return true
+	case VariationStatusArchived:
+		return true
+	case VariationStatusPaused:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for VariationUpdateStatus.
+const (
+	VariationUpdateStatusActive   VariationUpdateStatus = "active"
+	VariationUpdateStatusArchived VariationUpdateStatus = "archived"
+	VariationUpdateStatusPaused   VariationUpdateStatus = "paused"
+)
+
+// Valid indicates whether the value is a known member of the VariationUpdateStatus enum.
+func (e VariationUpdateStatus) Valid() bool {
+	switch e {
+	case VariationUpdateStatusActive:
+		return true
+	case VariationUpdateStatusArchived:
+		return true
+	case VariationUpdateStatusPaused:
 		return true
 	default:
 		return false
@@ -215,26 +2395,1998 @@ func (e WebSnippetUpdateLibrary) Valid() bool {
 
 // Defines values for WebSnippetUpdateVisitorIdLocatorType.
 const (
-	WebSnippetUpdateVisitorIdLocatorTypeCookie       WebSnippetUpdateVisitorIdLocatorType = "cookie"
-	WebSnippetUpdateVisitorIdLocatorTypeJs           WebSnippetUpdateVisitorIdLocatorType = "js"
-	WebSnippetUpdateVisitorIdLocatorTypeLocalStorage WebSnippetUpdateVisitorIdLocatorType = "localStorage"
-	WebSnippetUpdateVisitorIdLocatorTypeQuery        WebSnippetUpdateVisitorIdLocatorType = "query"
+	Cookie       WebSnippetUpdateVisitorIdLocatorType = "cookie"
+	Js           WebSnippetUpdateVisitorIdLocatorType = "js"
+	LocalStorage WebSnippetUpdateVisitorIdLocatorType = "localStorage"
+	Query        WebSnippetUpdateVisitorIdLocatorType = "query"
 )
 
 // Valid indicates whether the value is a known member of the WebSnippetUpdateVisitorIdLocatorType enum.
 func (e WebSnippetUpdateVisitorIdLocatorType) Valid() bool {
 	switch e {
-	case WebSnippetUpdateVisitorIdLocatorTypeCookie:
+	case Cookie:
 		return true
-	case WebSnippetUpdateVisitorIdLocatorTypeJs:
+	case Js:
 		return true
-	case WebSnippetUpdateVisitorIdLocatorTypeLocalStorage:
+	case LocalStorage:
 		return true
-	case WebSnippetUpdateVisitorIdLocatorTypeQuery:
+	case Query:
 		return true
 	default:
 		return false
 	}
+}
+
+// Defines values for WebhookEvents.
+const (
+	WebhookEventsProjectAttributeArchived     WebhookEvents = "project.attribute_archived"
+	WebhookEventsProjectAttributeCreated      WebhookEvents = "project.attribute_created"
+	WebhookEventsProjectAttributeDeleted      WebhookEvents = "project.attribute_deleted"
+	WebhookEventsProjectAttributeUpdated      WebhookEvents = "project.attribute_updated"
+	WebhookEventsProjectAudienceArchived      WebhookEvents = "project.audience_archived"
+	WebhookEventsProjectAudienceCreated       WebhookEvents = "project.audience_created"
+	WebhookEventsProjectAudienceUpdated       WebhookEvents = "project.audience_updated"
+	WebhookEventsProjectDatafileUpdated       WebhookEvents = "project.datafile_updated"
+	WebhookEventsProjectEnvironmentArchived   WebhookEvents = "project.environment_archived"
+	WebhookEventsProjectEnvironmentCreated    WebhookEvents = "project.environment_created"
+	WebhookEventsProjectEnvironmentUpdated    WebhookEvents = "project.environment_updated"
+	WebhookEventsProjectEventArchived         WebhookEvents = "project.event_archived"
+	WebhookEventsProjectEventCreated          WebhookEvents = "project.event_created"
+	WebhookEventsProjectEventDeleted          WebhookEvents = "project.event_deleted"
+	WebhookEventsProjectEventUpdated          WebhookEvents = "project.event_updated"
+	WebhookEventsProjectFlagArchived          WebhookEvents = "project.flag_archived"
+	WebhookEventsProjectFlagCreated           WebhookEvents = "project.flag_created"
+	WebhookEventsProjectFlagDeleted           WebhookEvents = "project.flag_deleted"
+	WebhookEventsProjectFlagUpdated           WebhookEvents = "project.flag_updated"
+	WebhookEventsProjectGroupArchived         WebhookEvents = "project.group_archived"
+	WebhookEventsProjectGroupCreated          WebhookEvents = "project.group_created"
+	WebhookEventsProjectGroupDeleted          WebhookEvents = "project.group_deleted"
+	WebhookEventsProjectGroupUpdated          WebhookEvents = "project.group_updated"
+	WebhookEventsProjectProjectSettingCreated WebhookEvents = "project.project_setting_created"
+	WebhookEventsProjectProjectSettingDeleted WebhookEvents = "project.project_setting_deleted"
+	WebhookEventsProjectProjectSettingUpdated WebhookEvents = "project.project_setting_updated"
+	WebhookEventsProjectRuleCreated           WebhookEvents = "project.rule_created"
+	WebhookEventsProjectRuleDeleted           WebhookEvents = "project.rule_deleted"
+	WebhookEventsProjectRuleUpdated           WebhookEvents = "project.rule_updated"
+	WebhookEventsProjectRulesetCreated        WebhookEvents = "project.ruleset_created"
+	WebhookEventsProjectRulesetDeleted        WebhookEvents = "project.ruleset_deleted"
+	WebhookEventsProjectRulesetUpdated        WebhookEvents = "project.ruleset_updated"
+	WebhookEventsProjectSnippetUpdated        WebhookEvents = "project.snippet_updated"
+	WebhookEventsProjectVariableCreated       WebhookEvents = "project.variable_created"
+	WebhookEventsProjectVariableDeleted       WebhookEvents = "project.variable_deleted"
+	WebhookEventsProjectVariableUpdated       WebhookEvents = "project.variable_updated"
+	WebhookEventsProjectVariationArchived     WebhookEvents = "project.variation_archived"
+	WebhookEventsProjectVariationCreated      WebhookEvents = "project.variation_created"
+	WebhookEventsProjectVariationDeleted      WebhookEvents = "project.variation_deleted"
+	WebhookEventsProjectVariationUpdated      WebhookEvents = "project.variation_updated"
+)
+
+// Valid indicates whether the value is a known member of the WebhookEvents enum.
+func (e WebhookEvents) Valid() bool {
+	switch e {
+	case WebhookEventsProjectAttributeArchived:
+		return true
+	case WebhookEventsProjectAttributeCreated:
+		return true
+	case WebhookEventsProjectAttributeDeleted:
+		return true
+	case WebhookEventsProjectAttributeUpdated:
+		return true
+	case WebhookEventsProjectAudienceArchived:
+		return true
+	case WebhookEventsProjectAudienceCreated:
+		return true
+	case WebhookEventsProjectAudienceUpdated:
+		return true
+	case WebhookEventsProjectDatafileUpdated:
+		return true
+	case WebhookEventsProjectEnvironmentArchived:
+		return true
+	case WebhookEventsProjectEnvironmentCreated:
+		return true
+	case WebhookEventsProjectEnvironmentUpdated:
+		return true
+	case WebhookEventsProjectEventArchived:
+		return true
+	case WebhookEventsProjectEventCreated:
+		return true
+	case WebhookEventsProjectEventDeleted:
+		return true
+	case WebhookEventsProjectEventUpdated:
+		return true
+	case WebhookEventsProjectFlagArchived:
+		return true
+	case WebhookEventsProjectFlagCreated:
+		return true
+	case WebhookEventsProjectFlagDeleted:
+		return true
+	case WebhookEventsProjectFlagUpdated:
+		return true
+	case WebhookEventsProjectGroupArchived:
+		return true
+	case WebhookEventsProjectGroupCreated:
+		return true
+	case WebhookEventsProjectGroupDeleted:
+		return true
+	case WebhookEventsProjectGroupUpdated:
+		return true
+	case WebhookEventsProjectProjectSettingCreated:
+		return true
+	case WebhookEventsProjectProjectSettingDeleted:
+		return true
+	case WebhookEventsProjectProjectSettingUpdated:
+		return true
+	case WebhookEventsProjectRuleCreated:
+		return true
+	case WebhookEventsProjectRuleDeleted:
+		return true
+	case WebhookEventsProjectRuleUpdated:
+		return true
+	case WebhookEventsProjectRulesetCreated:
+		return true
+	case WebhookEventsProjectRulesetDeleted:
+		return true
+	case WebhookEventsProjectRulesetUpdated:
+		return true
+	case WebhookEventsProjectSnippetUpdated:
+		return true
+	case WebhookEventsProjectVariableCreated:
+		return true
+	case WebhookEventsProjectVariableDeleted:
+		return true
+	case WebhookEventsProjectVariableUpdated:
+		return true
+	case WebhookEventsProjectVariationArchived:
+		return true
+	case WebhookEventsProjectVariationCreated:
+		return true
+	case WebhookEventsProjectVariationDeleted:
+		return true
+	case WebhookEventsProjectVariationUpdated:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for WebhookRequestBodyEvents.
+const (
+	WebhookRequestBodyEventsProjectAttributeArchived     WebhookRequestBodyEvents = "project.attribute_archived"
+	WebhookRequestBodyEventsProjectAttributeCreated      WebhookRequestBodyEvents = "project.attribute_created"
+	WebhookRequestBodyEventsProjectAttributeDeleted      WebhookRequestBodyEvents = "project.attribute_deleted"
+	WebhookRequestBodyEventsProjectAttributeUpdated      WebhookRequestBodyEvents = "project.attribute_updated"
+	WebhookRequestBodyEventsProjectAudienceArchived      WebhookRequestBodyEvents = "project.audience_archived"
+	WebhookRequestBodyEventsProjectAudienceCreated       WebhookRequestBodyEvents = "project.audience_created"
+	WebhookRequestBodyEventsProjectAudienceUpdated       WebhookRequestBodyEvents = "project.audience_updated"
+	WebhookRequestBodyEventsProjectDatafileUpdated       WebhookRequestBodyEvents = "project.datafile_updated"
+	WebhookRequestBodyEventsProjectEnvironmentArchived   WebhookRequestBodyEvents = "project.environment_archived"
+	WebhookRequestBodyEventsProjectEnvironmentCreated    WebhookRequestBodyEvents = "project.environment_created"
+	WebhookRequestBodyEventsProjectEnvironmentUpdated    WebhookRequestBodyEvents = "project.environment_updated"
+	WebhookRequestBodyEventsProjectEventArchived         WebhookRequestBodyEvents = "project.event_archived"
+	WebhookRequestBodyEventsProjectEventCreated          WebhookRequestBodyEvents = "project.event_created"
+	WebhookRequestBodyEventsProjectEventDeleted          WebhookRequestBodyEvents = "project.event_deleted"
+	WebhookRequestBodyEventsProjectEventUpdated          WebhookRequestBodyEvents = "project.event_updated"
+	WebhookRequestBodyEventsProjectFlagArchived          WebhookRequestBodyEvents = "project.flag_archived"
+	WebhookRequestBodyEventsProjectFlagCreated           WebhookRequestBodyEvents = "project.flag_created"
+	WebhookRequestBodyEventsProjectFlagDeleted           WebhookRequestBodyEvents = "project.flag_deleted"
+	WebhookRequestBodyEventsProjectFlagUpdated           WebhookRequestBodyEvents = "project.flag_updated"
+	WebhookRequestBodyEventsProjectGroupArchived         WebhookRequestBodyEvents = "project.group_archived"
+	WebhookRequestBodyEventsProjectGroupCreated          WebhookRequestBodyEvents = "project.group_created"
+	WebhookRequestBodyEventsProjectGroupDeleted          WebhookRequestBodyEvents = "project.group_deleted"
+	WebhookRequestBodyEventsProjectGroupUpdated          WebhookRequestBodyEvents = "project.group_updated"
+	WebhookRequestBodyEventsProjectProjectSettingCreated WebhookRequestBodyEvents = "project.project_setting_created"
+	WebhookRequestBodyEventsProjectProjectSettingDeleted WebhookRequestBodyEvents = "project.project_setting_deleted"
+	WebhookRequestBodyEventsProjectProjectSettingUpdated WebhookRequestBodyEvents = "project.project_setting_updated"
+	WebhookRequestBodyEventsProjectRuleCreated           WebhookRequestBodyEvents = "project.rule_created"
+	WebhookRequestBodyEventsProjectRuleDeleted           WebhookRequestBodyEvents = "project.rule_deleted"
+	WebhookRequestBodyEventsProjectRuleUpdated           WebhookRequestBodyEvents = "project.rule_updated"
+	WebhookRequestBodyEventsProjectRulesetCreated        WebhookRequestBodyEvents = "project.ruleset_created"
+	WebhookRequestBodyEventsProjectRulesetDeleted        WebhookRequestBodyEvents = "project.ruleset_deleted"
+	WebhookRequestBodyEventsProjectRulesetUpdated        WebhookRequestBodyEvents = "project.ruleset_updated"
+	WebhookRequestBodyEventsProjectSnippetUpdated        WebhookRequestBodyEvents = "project.snippet_updated"
+	WebhookRequestBodyEventsProjectVariableCreated       WebhookRequestBodyEvents = "project.variable_created"
+	WebhookRequestBodyEventsProjectVariableDeleted       WebhookRequestBodyEvents = "project.variable_deleted"
+	WebhookRequestBodyEventsProjectVariableUpdated       WebhookRequestBodyEvents = "project.variable_updated"
+	WebhookRequestBodyEventsProjectVariationArchived     WebhookRequestBodyEvents = "project.variation_archived"
+	WebhookRequestBodyEventsProjectVariationCreated      WebhookRequestBodyEvents = "project.variation_created"
+	WebhookRequestBodyEventsProjectVariationDeleted      WebhookRequestBodyEvents = "project.variation_deleted"
+	WebhookRequestBodyEventsProjectVariationUpdated      WebhookRequestBodyEvents = "project.variation_updated"
+)
+
+// Valid indicates whether the value is a known member of the WebhookRequestBodyEvents enum.
+func (e WebhookRequestBodyEvents) Valid() bool {
+	switch e {
+	case WebhookRequestBodyEventsProjectAttributeArchived:
+		return true
+	case WebhookRequestBodyEventsProjectAttributeCreated:
+		return true
+	case WebhookRequestBodyEventsProjectAttributeDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectAttributeUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectAudienceArchived:
+		return true
+	case WebhookRequestBodyEventsProjectAudienceCreated:
+		return true
+	case WebhookRequestBodyEventsProjectAudienceUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectDatafileUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectEnvironmentArchived:
+		return true
+	case WebhookRequestBodyEventsProjectEnvironmentCreated:
+		return true
+	case WebhookRequestBodyEventsProjectEnvironmentUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectEventArchived:
+		return true
+	case WebhookRequestBodyEventsProjectEventCreated:
+		return true
+	case WebhookRequestBodyEventsProjectEventDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectEventUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectFlagArchived:
+		return true
+	case WebhookRequestBodyEventsProjectFlagCreated:
+		return true
+	case WebhookRequestBodyEventsProjectFlagDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectFlagUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectGroupArchived:
+		return true
+	case WebhookRequestBodyEventsProjectGroupCreated:
+		return true
+	case WebhookRequestBodyEventsProjectGroupDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectGroupUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectProjectSettingCreated:
+		return true
+	case WebhookRequestBodyEventsProjectProjectSettingDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectProjectSettingUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectRuleCreated:
+		return true
+	case WebhookRequestBodyEventsProjectRuleDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectRuleUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectRulesetCreated:
+		return true
+	case WebhookRequestBodyEventsProjectRulesetDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectRulesetUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectSnippetUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectVariableCreated:
+		return true
+	case WebhookRequestBodyEventsProjectVariableDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectVariableUpdated:
+		return true
+	case WebhookRequestBodyEventsProjectVariationArchived:
+		return true
+	case WebhookRequestBodyEventsProjectVariationCreated:
+		return true
+	case WebhookRequestBodyEventsProjectVariationDeleted:
+		return true
+	case WebhookRequestBodyEventsProjectVariationUpdated:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for BrowserSegment.
+const (
+	BrowserSegmentChrome           BrowserSegment = "chrome"
+	BrowserSegmentFirefox          BrowserSegment = "firefox"
+	BrowserSegmentInternetExplorer BrowserSegment = "internet_explorer"
+	BrowserSegmentOpera            BrowserSegment = "opera"
+	BrowserSegmentSafari           BrowserSegment = "safari"
+)
+
+// Valid indicates whether the value is a known member of the BrowserSegment enum.
+func (e BrowserSegment) Valid() bool {
+	switch e {
+	case BrowserSegmentChrome:
+		return true
+	case BrowserSegmentFirefox:
+		return true
+	case BrowserSegmentInternetExplorer:
+		return true
+	case BrowserSegmentOpera:
+		return true
+	case BrowserSegmentSafari:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for DeviceSegment.
+const (
+	DeviceSegmentDesktop DeviceSegment = "desktop"
+	DeviceSegmentIpad    DeviceSegment = "ipad"
+	DeviceSegmentIphone  DeviceSegment = "iphone"
+	DeviceSegmentMobile  DeviceSegment = "mobile"
+	DeviceSegmentTablet  DeviceSegment = "tablet"
+)
+
+// Valid indicates whether the value is a known member of the DeviceSegment enum.
+func (e DeviceSegment) Valid() bool {
+	switch e {
+	case DeviceSegmentDesktop:
+		return true
+	case DeviceSegmentIpad:
+		return true
+	case DeviceSegmentIphone:
+		return true
+	case DeviceSegmentMobile:
+		return true
+	case DeviceSegmentTablet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SourceSegment.
+const (
+	SourceSegmentCampaign SourceSegment = "campaign"
+	SourceSegmentDirect   SourceSegment = "direct"
+	SourceSegmentReferral SourceSegment = "referral"
+	SourceSegmentSearch   SourceSegment = "search"
+)
+
+// Valid indicates whether the value is a known member of the SourceSegment enum.
+func (e SourceSegment) Valid() bool {
+	switch e {
+	case SourceSegmentCampaign:
+		return true
+	case SourceSegmentDirect:
+		return true
+	case SourceSegmentReferral:
+		return true
+	case SourceSegmentSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetImpressionsUsageRequestParamsPlatforms.
+const (
+	Edge      GetImpressionsUsageRequestParamsPlatforms = "edge"
+	Fullstack GetImpressionsUsageRequestParamsPlatforms = "fullstack"
+	Web       GetImpressionsUsageRequestParamsPlatforms = "web"
+)
+
+// Valid indicates whether the value is a known member of the GetImpressionsUsageRequestParamsPlatforms enum.
+func (e GetImpressionsUsageRequestParamsPlatforms) Valid() bool {
+	switch e {
+	case Edge:
+		return true
+	case Fullstack:
+		return true
+	case Web:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateCampaignParamsAction.
+const (
+	CreateCampaignParamsActionPublish CreateCampaignParamsAction = "publish"
+	CreateCampaignParamsActionStart   CreateCampaignParamsAction = "start"
+)
+
+// Valid indicates whether the value is a known member of the CreateCampaignParamsAction enum.
+func (e CreateCampaignParamsAction) Valid() bool {
+	switch e {
+	case CreateCampaignParamsActionPublish:
+		return true
+	case CreateCampaignParamsActionStart:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateCampaignParamsAction.
+const (
+	UpdateCampaignParamsActionPause     UpdateCampaignParamsAction = "pause"
+	UpdateCampaignParamsActionPublish   UpdateCampaignParamsAction = "publish"
+	UpdateCampaignParamsActionResume    UpdateCampaignParamsAction = "resume"
+	UpdateCampaignParamsActionStart     UpdateCampaignParamsAction = "start"
+	UpdateCampaignParamsActionUnarchive UpdateCampaignParamsAction = "unarchive"
+)
+
+// Valid indicates whether the value is a known member of the UpdateCampaignParamsAction enum.
+func (e UpdateCampaignParamsAction) Valid() bool {
+	switch e {
+	case UpdateCampaignParamsActionPause:
+		return true
+	case UpdateCampaignParamsActionPublish:
+		return true
+	case UpdateCampaignParamsActionResume:
+		return true
+	case UpdateCampaignParamsActionStart:
+		return true
+	case UpdateCampaignParamsActionUnarchive:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetCampaignResultsParamsBrowser.
+const (
+	GetCampaignResultsParamsBrowserChrome           GetCampaignResultsParamsBrowser = "chrome"
+	GetCampaignResultsParamsBrowserFirefox          GetCampaignResultsParamsBrowser = "firefox"
+	GetCampaignResultsParamsBrowserInternetExplorer GetCampaignResultsParamsBrowser = "internet_explorer"
+	GetCampaignResultsParamsBrowserOpera            GetCampaignResultsParamsBrowser = "opera"
+	GetCampaignResultsParamsBrowserSafari           GetCampaignResultsParamsBrowser = "safari"
+)
+
+// Valid indicates whether the value is a known member of the GetCampaignResultsParamsBrowser enum.
+func (e GetCampaignResultsParamsBrowser) Valid() bool {
+	switch e {
+	case GetCampaignResultsParamsBrowserChrome:
+		return true
+	case GetCampaignResultsParamsBrowserFirefox:
+		return true
+	case GetCampaignResultsParamsBrowserInternetExplorer:
+		return true
+	case GetCampaignResultsParamsBrowserOpera:
+		return true
+	case GetCampaignResultsParamsBrowserSafari:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetCampaignResultsParamsDevice.
+const (
+	GetCampaignResultsParamsDeviceDesktop GetCampaignResultsParamsDevice = "desktop"
+	GetCampaignResultsParamsDeviceIpad    GetCampaignResultsParamsDevice = "ipad"
+	GetCampaignResultsParamsDeviceIphone  GetCampaignResultsParamsDevice = "iphone"
+	GetCampaignResultsParamsDeviceMobile  GetCampaignResultsParamsDevice = "mobile"
+	GetCampaignResultsParamsDeviceTablet  GetCampaignResultsParamsDevice = "tablet"
+)
+
+// Valid indicates whether the value is a known member of the GetCampaignResultsParamsDevice enum.
+func (e GetCampaignResultsParamsDevice) Valid() bool {
+	switch e {
+	case GetCampaignResultsParamsDeviceDesktop:
+		return true
+	case GetCampaignResultsParamsDeviceIpad:
+		return true
+	case GetCampaignResultsParamsDeviceIphone:
+		return true
+	case GetCampaignResultsParamsDeviceMobile:
+		return true
+	case GetCampaignResultsParamsDeviceTablet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetCampaignResultsParamsSource.
+const (
+	GetCampaignResultsParamsSourceCampaign GetCampaignResultsParamsSource = "campaign"
+	GetCampaignResultsParamsSourceDirect   GetCampaignResultsParamsSource = "direct"
+	GetCampaignResultsParamsSourceReferral GetCampaignResultsParamsSource = "referral"
+	GetCampaignResultsParamsSourceSearch   GetCampaignResultsParamsSource = "search"
+)
+
+// Valid indicates whether the value is a known member of the GetCampaignResultsParamsSource enum.
+func (e GetCampaignResultsParamsSource) Valid() bool {
+	switch e {
+	case GetCampaignResultsParamsSourceCampaign:
+		return true
+	case GetCampaignResultsParamsSourceDirect:
+		return true
+	case GetCampaignResultsParamsSourceReferral:
+		return true
+	case GetCampaignResultsParamsSourceSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListChangeHistoryParamsEntityType.
+const (
+	ListChangeHistoryParamsEntityTypeAttribute     ListChangeHistoryParamsEntityType = "attribute"
+	ListChangeHistoryParamsEntityTypeAudience      ListChangeHistoryParamsEntityType = "audience"
+	ListChangeHistoryParamsEntityTypeCampaign      ListChangeHistoryParamsEntityType = "campaign"
+	ListChangeHistoryParamsEntityTypeEnvironment   ListChangeHistoryParamsEntityType = "environment"
+	ListChangeHistoryParamsEntityTypeEvent         ListChangeHistoryParamsEntityType = "event"
+	ListChangeHistoryParamsEntityTypeExperiment    ListChangeHistoryParamsEntityType = "experiment"
+	ListChangeHistoryParamsEntityTypeExtension     ListChangeHistoryParamsEntityType = "extension"
+	ListChangeHistoryParamsEntityTypeFeature       ListChangeHistoryParamsEntityType = "feature"
+	ListChangeHistoryParamsEntityTypeFlag          ListChangeHistoryParamsEntityType = "flag"
+	ListChangeHistoryParamsEntityTypeGroup         ListChangeHistoryParamsEntityType = "group"
+	ListChangeHistoryParamsEntityTypeListAttribute ListChangeHistoryParamsEntityType = "list_attribute"
+	ListChangeHistoryParamsEntityTypeMetrics       ListChangeHistoryParamsEntityType = "metrics"
+	ListChangeHistoryParamsEntityTypePage          ListChangeHistoryParamsEntityType = "page"
+	ListChangeHistoryParamsEntityTypePermission    ListChangeHistoryParamsEntityType = "permission"
+	ListChangeHistoryParamsEntityTypeProject       ListChangeHistoryParamsEntityType = "project"
+	ListChangeHistoryParamsEntityTypeReport        ListChangeHistoryParamsEntityType = "report"
+	ListChangeHistoryParamsEntityTypeRule          ListChangeHistoryParamsEntityType = "rule"
+	ListChangeHistoryParamsEntityTypeRuleset       ListChangeHistoryParamsEntityType = "ruleset"
+	ListChangeHistoryParamsEntityTypeSection       ListChangeHistoryParamsEntityType = "section"
+	ListChangeHistoryParamsEntityTypeTag           ListChangeHistoryParamsEntityType = "tag"
+	ListChangeHistoryParamsEntityTypeTeam          ListChangeHistoryParamsEntityType = "team"
+	ListChangeHistoryParamsEntityTypeVariable      ListChangeHistoryParamsEntityType = "variable"
+	ListChangeHistoryParamsEntityTypeVariation     ListChangeHistoryParamsEntityType = "variation"
+)
+
+// Valid indicates whether the value is a known member of the ListChangeHistoryParamsEntityType enum.
+func (e ListChangeHistoryParamsEntityType) Valid() bool {
+	switch e {
+	case ListChangeHistoryParamsEntityTypeAttribute:
+		return true
+	case ListChangeHistoryParamsEntityTypeAudience:
+		return true
+	case ListChangeHistoryParamsEntityTypeCampaign:
+		return true
+	case ListChangeHistoryParamsEntityTypeEnvironment:
+		return true
+	case ListChangeHistoryParamsEntityTypeEvent:
+		return true
+	case ListChangeHistoryParamsEntityTypeExperiment:
+		return true
+	case ListChangeHistoryParamsEntityTypeExtension:
+		return true
+	case ListChangeHistoryParamsEntityTypeFeature:
+		return true
+	case ListChangeHistoryParamsEntityTypeFlag:
+		return true
+	case ListChangeHistoryParamsEntityTypeGroup:
+		return true
+	case ListChangeHistoryParamsEntityTypeListAttribute:
+		return true
+	case ListChangeHistoryParamsEntityTypeMetrics:
+		return true
+	case ListChangeHistoryParamsEntityTypePage:
+		return true
+	case ListChangeHistoryParamsEntityTypePermission:
+		return true
+	case ListChangeHistoryParamsEntityTypeProject:
+		return true
+	case ListChangeHistoryParamsEntityTypeReport:
+		return true
+	case ListChangeHistoryParamsEntityTypeRule:
+		return true
+	case ListChangeHistoryParamsEntityTypeRuleset:
+		return true
+	case ListChangeHistoryParamsEntityTypeSection:
+		return true
+	case ListChangeHistoryParamsEntityTypeTag:
+		return true
+	case ListChangeHistoryParamsEntityTypeTeam:
+		return true
+	case ListChangeHistoryParamsEntityTypeVariable:
+		return true
+	case ListChangeHistoryParamsEntityTypeVariation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentSummariesParamsSort.
+const (
+	LastModified GetExperimentSummariesParamsSort = "last_modified"
+	Name         GetExperimentSummariesParamsSort = "name"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentSummariesParamsSort enum.
+func (e GetExperimentSummariesParamsSort) Valid() bool {
+	switch e {
+	case LastModified:
+		return true
+	case Name:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentSummariesParamsOrder.
+const (
+	Asc  GetExperimentSummariesParamsOrder = "asc"
+	Desc GetExperimentSummariesParamsOrder = "desc"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentSummariesParamsOrder enum.
+func (e GetExperimentSummariesParamsOrder) Valid() bool {
+	switch e {
+	case Asc:
+		return true
+	case Desc:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentSummariesParamsStatus.
+const (
+	GetExperimentSummariesParamsStatusArchived   GetExperimentSummariesParamsStatus = "archived"
+	GetExperimentSummariesParamsStatusNotStarted GetExperimentSummariesParamsStatus = "not_started"
+	GetExperimentSummariesParamsStatusPaused     GetExperimentSummariesParamsStatus = "paused"
+	GetExperimentSummariesParamsStatusRunning    GetExperimentSummariesParamsStatus = "running"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentSummariesParamsStatus enum.
+func (e GetExperimentSummariesParamsStatus) Valid() bool {
+	switch e {
+	case GetExperimentSummariesParamsStatusArchived:
+		return true
+	case GetExperimentSummariesParamsStatusNotStarted:
+		return true
+	case GetExperimentSummariesParamsStatusPaused:
+		return true
+	case GetExperimentSummariesParamsStatusRunning:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateExperimentParamsAction.
+const (
+	CreateExperimentParamsActionPause   CreateExperimentParamsAction = "pause"
+	CreateExperimentParamsActionPublish CreateExperimentParamsAction = "publish"
+	CreateExperimentParamsActionStart   CreateExperimentParamsAction = "start"
+)
+
+// Valid indicates whether the value is a known member of the CreateExperimentParamsAction enum.
+func (e CreateExperimentParamsAction) Valid() bool {
+	switch e {
+	case CreateExperimentParamsActionPause:
+		return true
+	case CreateExperimentParamsActionPublish:
+		return true
+	case CreateExperimentParamsActionStart:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateExperimentParamsAction.
+const (
+	UpdateExperimentParamsActionPause     UpdateExperimentParamsAction = "pause"
+	UpdateExperimentParamsActionPublish   UpdateExperimentParamsAction = "publish"
+	UpdateExperimentParamsActionResume    UpdateExperimentParamsAction = "resume"
+	UpdateExperimentParamsActionStart     UpdateExperimentParamsAction = "start"
+	UpdateExperimentParamsActionUnarchive UpdateExperimentParamsAction = "unarchive"
+)
+
+// Valid indicates whether the value is a known member of the UpdateExperimentParamsAction enum.
+func (e UpdateExperimentParamsAction) Valid() bool {
+	switch e {
+	case UpdateExperimentParamsActionPause:
+		return true
+	case UpdateExperimentParamsActionPublish:
+		return true
+	case UpdateExperimentParamsActionResume:
+		return true
+	case UpdateExperimentParamsActionStart:
+		return true
+	case UpdateExperimentParamsActionUnarchive:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentReportParamsBrowser.
+const (
+	GetExperimentReportParamsBrowserChrome           GetExperimentReportParamsBrowser = "chrome"
+	GetExperimentReportParamsBrowserFirefox          GetExperimentReportParamsBrowser = "firefox"
+	GetExperimentReportParamsBrowserInternetExplorer GetExperimentReportParamsBrowser = "internet_explorer"
+	GetExperimentReportParamsBrowserOpera            GetExperimentReportParamsBrowser = "opera"
+	GetExperimentReportParamsBrowserSafari           GetExperimentReportParamsBrowser = "safari"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentReportParamsBrowser enum.
+func (e GetExperimentReportParamsBrowser) Valid() bool {
+	switch e {
+	case GetExperimentReportParamsBrowserChrome:
+		return true
+	case GetExperimentReportParamsBrowserFirefox:
+		return true
+	case GetExperimentReportParamsBrowserInternetExplorer:
+		return true
+	case GetExperimentReportParamsBrowserOpera:
+		return true
+	case GetExperimentReportParamsBrowserSafari:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentReportParamsDevice.
+const (
+	GetExperimentReportParamsDeviceDesktop GetExperimentReportParamsDevice = "desktop"
+	GetExperimentReportParamsDeviceIpad    GetExperimentReportParamsDevice = "ipad"
+	GetExperimentReportParamsDeviceIphone  GetExperimentReportParamsDevice = "iphone"
+	GetExperimentReportParamsDeviceMobile  GetExperimentReportParamsDevice = "mobile"
+	GetExperimentReportParamsDeviceTablet  GetExperimentReportParamsDevice = "tablet"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentReportParamsDevice enum.
+func (e GetExperimentReportParamsDevice) Valid() bool {
+	switch e {
+	case GetExperimentReportParamsDeviceDesktop:
+		return true
+	case GetExperimentReportParamsDeviceIpad:
+		return true
+	case GetExperimentReportParamsDeviceIphone:
+		return true
+	case GetExperimentReportParamsDeviceMobile:
+		return true
+	case GetExperimentReportParamsDeviceTablet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentReportParamsSource.
+const (
+	GetExperimentReportParamsSourceCampaign GetExperimentReportParamsSource = "campaign"
+	GetExperimentReportParamsSourceDirect   GetExperimentReportParamsSource = "direct"
+	GetExperimentReportParamsSourceReferral GetExperimentReportParamsSource = "referral"
+	GetExperimentReportParamsSourceSearch   GetExperimentReportParamsSource = "search"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentReportParamsSource enum.
+func (e GetExperimentReportParamsSource) Valid() bool {
+	switch e {
+	case GetExperimentReportParamsSourceCampaign:
+		return true
+	case GetExperimentReportParamsSourceDirect:
+		return true
+	case GetExperimentReportParamsSourceReferral:
+		return true
+	case GetExperimentReportParamsSourceSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentResultsParamsBrowser.
+const (
+	GetExperimentResultsParamsBrowserChrome           GetExperimentResultsParamsBrowser = "chrome"
+	GetExperimentResultsParamsBrowserFirefox          GetExperimentResultsParamsBrowser = "firefox"
+	GetExperimentResultsParamsBrowserInternetExplorer GetExperimentResultsParamsBrowser = "internet_explorer"
+	GetExperimentResultsParamsBrowserOpera            GetExperimentResultsParamsBrowser = "opera"
+	GetExperimentResultsParamsBrowserSafari           GetExperimentResultsParamsBrowser = "safari"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentResultsParamsBrowser enum.
+func (e GetExperimentResultsParamsBrowser) Valid() bool {
+	switch e {
+	case GetExperimentResultsParamsBrowserChrome:
+		return true
+	case GetExperimentResultsParamsBrowserFirefox:
+		return true
+	case GetExperimentResultsParamsBrowserInternetExplorer:
+		return true
+	case GetExperimentResultsParamsBrowserOpera:
+		return true
+	case GetExperimentResultsParamsBrowserSafari:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentResultsParamsDevice.
+const (
+	GetExperimentResultsParamsDeviceDesktop GetExperimentResultsParamsDevice = "desktop"
+	GetExperimentResultsParamsDeviceIpad    GetExperimentResultsParamsDevice = "ipad"
+	GetExperimentResultsParamsDeviceIphone  GetExperimentResultsParamsDevice = "iphone"
+	GetExperimentResultsParamsDeviceMobile  GetExperimentResultsParamsDevice = "mobile"
+	GetExperimentResultsParamsDeviceTablet  GetExperimentResultsParamsDevice = "tablet"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentResultsParamsDevice enum.
+func (e GetExperimentResultsParamsDevice) Valid() bool {
+	switch e {
+	case GetExperimentResultsParamsDeviceDesktop:
+		return true
+	case GetExperimentResultsParamsDeviceIpad:
+		return true
+	case GetExperimentResultsParamsDeviceIphone:
+		return true
+	case GetExperimentResultsParamsDeviceMobile:
+		return true
+	case GetExperimentResultsParamsDeviceTablet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentResultsParamsSource.
+const (
+	GetExperimentResultsParamsSourceCampaign GetExperimentResultsParamsSource = "campaign"
+	GetExperimentResultsParamsSourceDirect   GetExperimentResultsParamsSource = "direct"
+	GetExperimentResultsParamsSourceReferral GetExperimentResultsParamsSource = "referral"
+	GetExperimentResultsParamsSourceSearch   GetExperimentResultsParamsSource = "search"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentResultsParamsSource enum.
+func (e GetExperimentResultsParamsSource) Valid() bool {
+	switch e {
+	case GetExperimentResultsParamsSourceCampaign:
+		return true
+	case GetExperimentResultsParamsSourceDirect:
+		return true
+	case GetExperimentResultsParamsSourceReferral:
+		return true
+	case GetExperimentResultsParamsSourceSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentTimeseriesParamsBrowser.
+const (
+	GetExperimentTimeseriesParamsBrowserChrome           GetExperimentTimeseriesParamsBrowser = "chrome"
+	GetExperimentTimeseriesParamsBrowserFirefox          GetExperimentTimeseriesParamsBrowser = "firefox"
+	GetExperimentTimeseriesParamsBrowserInternetExplorer GetExperimentTimeseriesParamsBrowser = "internet_explorer"
+	GetExperimentTimeseriesParamsBrowserOpera            GetExperimentTimeseriesParamsBrowser = "opera"
+	GetExperimentTimeseriesParamsBrowserSafari           GetExperimentTimeseriesParamsBrowser = "safari"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentTimeseriesParamsBrowser enum.
+func (e GetExperimentTimeseriesParamsBrowser) Valid() bool {
+	switch e {
+	case GetExperimentTimeseriesParamsBrowserChrome:
+		return true
+	case GetExperimentTimeseriesParamsBrowserFirefox:
+		return true
+	case GetExperimentTimeseriesParamsBrowserInternetExplorer:
+		return true
+	case GetExperimentTimeseriesParamsBrowserOpera:
+		return true
+	case GetExperimentTimeseriesParamsBrowserSafari:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentTimeseriesParamsDevice.
+const (
+	GetExperimentTimeseriesParamsDeviceDesktop GetExperimentTimeseriesParamsDevice = "desktop"
+	GetExperimentTimeseriesParamsDeviceIpad    GetExperimentTimeseriesParamsDevice = "ipad"
+	GetExperimentTimeseriesParamsDeviceIphone  GetExperimentTimeseriesParamsDevice = "iphone"
+	GetExperimentTimeseriesParamsDeviceMobile  GetExperimentTimeseriesParamsDevice = "mobile"
+	GetExperimentTimeseriesParamsDeviceTablet  GetExperimentTimeseriesParamsDevice = "tablet"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentTimeseriesParamsDevice enum.
+func (e GetExperimentTimeseriesParamsDevice) Valid() bool {
+	switch e {
+	case GetExperimentTimeseriesParamsDeviceDesktop:
+		return true
+	case GetExperimentTimeseriesParamsDeviceIpad:
+		return true
+	case GetExperimentTimeseriesParamsDeviceIphone:
+		return true
+	case GetExperimentTimeseriesParamsDeviceMobile:
+		return true
+	case GetExperimentTimeseriesParamsDeviceTablet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentTimeseriesParamsSource.
+const (
+	GetExperimentTimeseriesParamsSourceCampaign GetExperimentTimeseriesParamsSource = "campaign"
+	GetExperimentTimeseriesParamsSourceDirect   GetExperimentTimeseriesParamsSource = "direct"
+	GetExperimentTimeseriesParamsSourceReferral GetExperimentTimeseriesParamsSource = "referral"
+	GetExperimentTimeseriesParamsSourceSearch   GetExperimentTimeseriesParamsSource = "search"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentTimeseriesParamsSource enum.
+func (e GetExperimentTimeseriesParamsSource) Valid() bool {
+	switch e {
+	case GetExperimentTimeseriesParamsSourceCampaign:
+		return true
+	case GetExperimentTimeseriesParamsSourceDirect:
+		return true
+	case GetExperimentTimeseriesParamsSourceReferral:
+		return true
+	case GetExperimentTimeseriesParamsSourceSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetCampaignResultsCsvParamsBrowser.
+const (
+	GetCampaignResultsCsvParamsBrowserChrome           GetCampaignResultsCsvParamsBrowser = "chrome"
+	GetCampaignResultsCsvParamsBrowserFirefox          GetCampaignResultsCsvParamsBrowser = "firefox"
+	GetCampaignResultsCsvParamsBrowserInternetExplorer GetCampaignResultsCsvParamsBrowser = "internet_explorer"
+	GetCampaignResultsCsvParamsBrowserOpera            GetCampaignResultsCsvParamsBrowser = "opera"
+	GetCampaignResultsCsvParamsBrowserSafari           GetCampaignResultsCsvParamsBrowser = "safari"
+)
+
+// Valid indicates whether the value is a known member of the GetCampaignResultsCsvParamsBrowser enum.
+func (e GetCampaignResultsCsvParamsBrowser) Valid() bool {
+	switch e {
+	case GetCampaignResultsCsvParamsBrowserChrome:
+		return true
+	case GetCampaignResultsCsvParamsBrowserFirefox:
+		return true
+	case GetCampaignResultsCsvParamsBrowserInternetExplorer:
+		return true
+	case GetCampaignResultsCsvParamsBrowserOpera:
+		return true
+	case GetCampaignResultsCsvParamsBrowserSafari:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetCampaignResultsCsvParamsDevice.
+const (
+	GetCampaignResultsCsvParamsDeviceDesktop GetCampaignResultsCsvParamsDevice = "desktop"
+	GetCampaignResultsCsvParamsDeviceIpad    GetCampaignResultsCsvParamsDevice = "ipad"
+	GetCampaignResultsCsvParamsDeviceIphone  GetCampaignResultsCsvParamsDevice = "iphone"
+	GetCampaignResultsCsvParamsDeviceMobile  GetCampaignResultsCsvParamsDevice = "mobile"
+	GetCampaignResultsCsvParamsDeviceTablet  GetCampaignResultsCsvParamsDevice = "tablet"
+)
+
+// Valid indicates whether the value is a known member of the GetCampaignResultsCsvParamsDevice enum.
+func (e GetCampaignResultsCsvParamsDevice) Valid() bool {
+	switch e {
+	case GetCampaignResultsCsvParamsDeviceDesktop:
+		return true
+	case GetCampaignResultsCsvParamsDeviceIpad:
+		return true
+	case GetCampaignResultsCsvParamsDeviceIphone:
+		return true
+	case GetCampaignResultsCsvParamsDeviceMobile:
+		return true
+	case GetCampaignResultsCsvParamsDeviceTablet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetCampaignResultsCsvParamsSource.
+const (
+	GetCampaignResultsCsvParamsSourceCampaign GetCampaignResultsCsvParamsSource = "campaign"
+	GetCampaignResultsCsvParamsSourceDirect   GetCampaignResultsCsvParamsSource = "direct"
+	GetCampaignResultsCsvParamsSourceReferral GetCampaignResultsCsvParamsSource = "referral"
+	GetCampaignResultsCsvParamsSourceSearch   GetCampaignResultsCsvParamsSource = "search"
+)
+
+// Valid indicates whether the value is a known member of the GetCampaignResultsCsvParamsSource enum.
+func (e GetCampaignResultsCsvParamsSource) Valid() bool {
+	switch e {
+	case GetCampaignResultsCsvParamsSourceCampaign:
+		return true
+	case GetCampaignResultsCsvParamsSourceDirect:
+		return true
+	case GetCampaignResultsCsvParamsSourceReferral:
+		return true
+	case GetCampaignResultsCsvParamsSourceSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentResultsCsvParamsBrowser.
+const (
+	Chrome           GetExperimentResultsCsvParamsBrowser = "chrome"
+	Firefox          GetExperimentResultsCsvParamsBrowser = "firefox"
+	InternetExplorer GetExperimentResultsCsvParamsBrowser = "internet_explorer"
+	Opera            GetExperimentResultsCsvParamsBrowser = "opera"
+	Safari           GetExperimentResultsCsvParamsBrowser = "safari"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentResultsCsvParamsBrowser enum.
+func (e GetExperimentResultsCsvParamsBrowser) Valid() bool {
+	switch e {
+	case Chrome:
+		return true
+	case Firefox:
+		return true
+	case InternetExplorer:
+		return true
+	case Opera:
+		return true
+	case Safari:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentResultsCsvParamsDevice.
+const (
+	Desktop GetExperimentResultsCsvParamsDevice = "desktop"
+	Ipad    GetExperimentResultsCsvParamsDevice = "ipad"
+	Iphone  GetExperimentResultsCsvParamsDevice = "iphone"
+	Mobile  GetExperimentResultsCsvParamsDevice = "mobile"
+	Tablet  GetExperimentResultsCsvParamsDevice = "tablet"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentResultsCsvParamsDevice enum.
+func (e GetExperimentResultsCsvParamsDevice) Valid() bool {
+	switch e {
+	case Desktop:
+		return true
+	case Ipad:
+		return true
+	case Iphone:
+		return true
+	case Mobile:
+		return true
+	case Tablet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetExperimentResultsCsvParamsSource.
+const (
+	GetExperimentResultsCsvParamsSourceCampaign GetExperimentResultsCsvParamsSource = "campaign"
+	GetExperimentResultsCsvParamsSourceDirect   GetExperimentResultsCsvParamsSource = "direct"
+	GetExperimentResultsCsvParamsSourceReferral GetExperimentResultsCsvParamsSource = "referral"
+	GetExperimentResultsCsvParamsSourceSearch   GetExperimentResultsCsvParamsSource = "search"
+)
+
+// Valid indicates whether the value is a known member of the GetExperimentResultsCsvParamsSource enum.
+func (e GetExperimentResultsCsvParamsSource) Valid() bool {
+	switch e {
+	case GetExperimentResultsCsvParamsSourceCampaign:
+		return true
+	case GetExperimentResultsCsvParamsSourceDirect:
+		return true
+	case GetExperimentResultsCsvParamsSourceReferral:
+		return true
+	case GetExperimentResultsCsvParamsSourceSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListSarRequestsByTeamParamsDataSource.
+const (
+	ListSarRequestsByTeamParamsDataSourceAppBackend             ListSarRequestsByTeamParamsDataSource = "app_backend"
+	ListSarRequestsByTeamParamsDataSourceAppBackendInfra        ListSarRequestsByTeamParamsDataSource = "app_backend_infra"
+	ListSarRequestsByTeamParamsDataSourceBusinessSystems        ListSarRequestsByTeamParamsDataSource = "business_systems"
+	ListSarRequestsByTeamParamsDataSourceDataPlatform           ListSarRequestsByTeamParamsDataSource = "data_platform"
+	ListSarRequestsByTeamParamsDataSourceDatawarehouse          ListSarRequestsByTeamParamsDataSource = "datawarehouse"
+	ListSarRequestsByTeamParamsDataSourceExternalSystems        ListSarRequestsByTeamParamsDataSource = "external_systems"
+	ListSarRequestsByTeamParamsDataSourceMarketing              ListSarRequestsByTeamParamsDataSource = "marketing"
+	ListSarRequestsByTeamParamsDataSourceOptimizely             ListSarRequestsByTeamParamsDataSource = "optimizely"
+	ListSarRequestsByTeamParamsDataSourceOptimizelyOnOptimizely ListSarRequestsByTeamParamsDataSource = "optimizely_on_optimizely"
+	ListSarRequestsByTeamParamsDataSourceProgramManagement      ListSarRequestsByTeamParamsDataSource = "program_management"
+	ListSarRequestsByTeamParamsDataSourceSecurity               ListSarRequestsByTeamParamsDataSource = "security"
+	ListSarRequestsByTeamParamsDataSourceTse                    ListSarRequestsByTeamParamsDataSource = "tse"
+)
+
+// Valid indicates whether the value is a known member of the ListSarRequestsByTeamParamsDataSource enum.
+func (e ListSarRequestsByTeamParamsDataSource) Valid() bool {
+	switch e {
+	case ListSarRequestsByTeamParamsDataSourceAppBackend:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceAppBackendInfra:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceBusinessSystems:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceDataPlatform:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceDatawarehouse:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceExternalSystems:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceMarketing:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceOptimizely:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceOptimizelyOnOptimizely:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceProgramManagement:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceSecurity:
+		return true
+	case ListSarRequestsByTeamParamsDataSourceTse:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetSearchResultsParamsType.
+const (
+	GetSearchResultsParamsTypeAudience   GetSearchResultsParamsType = "audience"
+	GetSearchResultsParamsTypeCampaign   GetSearchResultsParamsType = "campaign"
+	GetSearchResultsParamsTypeEvent      GetSearchResultsParamsType = "event"
+	GetSearchResultsParamsTypeExperiment GetSearchResultsParamsType = "experiment"
+	GetSearchResultsParamsTypeFeature    GetSearchResultsParamsType = "feature"
+	GetSearchResultsParamsTypeFlag       GetSearchResultsParamsType = "flag"
+	GetSearchResultsParamsTypePage       GetSearchResultsParamsType = "page"
+	GetSearchResultsParamsTypeProject    GetSearchResultsParamsType = "project"
+	GetSearchResultsParamsTypeRule       GetSearchResultsParamsType = "rule"
+)
+
+// Valid indicates whether the value is a known member of the GetSearchResultsParamsType enum.
+func (e GetSearchResultsParamsType) Valid() bool {
+	switch e {
+	case GetSearchResultsParamsTypeAudience:
+		return true
+	case GetSearchResultsParamsTypeCampaign:
+		return true
+	case GetSearchResultsParamsTypeEvent:
+		return true
+	case GetSearchResultsParamsTypeExperiment:
+		return true
+	case GetSearchResultsParamsTypeFeature:
+		return true
+	case GetSearchResultsParamsTypeFlag:
+		return true
+	case GetSearchResultsParamsTypePage:
+		return true
+	case GetSearchResultsParamsTypeProject:
+		return true
+	case GetSearchResultsParamsTypeRule:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetSearchResultsParamsExpand.
+const (
+	ExperimentType GetSearchResultsParamsExpand = "experiment_type"
+	FeatureKey     GetSearchResultsParamsExpand = "feature_key"
+	FeatureName    GetSearchResultsParamsExpand = "feature_name"
+	ProjectName    GetSearchResultsParamsExpand = "project_name"
+)
+
+// Valid indicates whether the value is a known member of the GetSearchResultsParamsExpand enum.
+func (e GetSearchResultsParamsExpand) Valid() bool {
+	switch e {
+	case ExperimentType:
+		return true
+	case FeatureKey:
+		return true
+	case FeatureName:
+		return true
+	case ProjectName:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetSearchResultsParamsStatus.
+const (
+	Archived       GetSearchResultsParamsStatus = "archived"
+	CampaignPaused GetSearchResultsParamsStatus = "campaign_paused"
+	Concluded      GetSearchResultsParamsStatus = "concluded"
+	NotStarted     GetSearchResultsParamsStatus = "not_started"
+	Paused         GetSearchResultsParamsStatus = "paused"
+	Running        GetSearchResultsParamsStatus = "running"
+)
+
+// Valid indicates whether the value is a known member of the GetSearchResultsParamsStatus enum.
+func (e GetSearchResultsParamsStatus) Valid() bool {
+	switch e {
+	case Archived:
+		return true
+	case CampaignPaused:
+		return true
+	case Concluded:
+		return true
+	case NotStarted:
+		return true
+	case Paused:
+		return true
+	case Running:
+		return true
+	default:
+		return false
+	}
+}
+
+// Account defines model for Account.
+type Account struct {
+	// Id The unique identifier of the Account
+	Id *int64 `json:"id,omitempty"`
+
+	// Name The name of the Account
+	Name *string `json:"name,omitempty"`
+}
+
+// AccountFeature defines model for AccountFeature.
+type AccountFeature struct {
+	FeatureId *string                 `json:"feature_id,omitempty"`
+	Sources   *[]AccountFeatureSource `json:"sources,omitempty"`
+}
+
+// AccountFeatureSource defines model for AccountFeatureSource.
+type AccountFeatureSource struct {
+	Type  *string `json:"type,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+// Action defines model for Action.
+type Action struct {
+	// Changes The list of changes to apply to the Page. If 'dependencies' is supplied in a Change within 'changes', each ID in 'dependencies' must also be in 'changes'.
+	Changes *[]Change `json:"changes,omitempty"`
+
+	// PageId The ID of the Page to apply changes to
+	PageId int64 `json:"page_id"`
+
+	// ShareLink The share link for the provided Variation and Page combination
+	ShareLink *string `json:"share_link,omitempty"`
+}
+
+// Attribute defines model for Attribute.
+type Attribute struct {
+	// Archived Whether or not the Attribute has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// ConditionType Whether this Attribute is a custom dimension or custom attribute. If this is a custom dimension, it belongs to an Optimizely Classic experiment and is read-only.
+	ConditionType *AttributeConditionType `json:"condition_type,omitempty"`
+
+	// Description A short description of the Attribute
+	Description *string `json:"description,omitempty"`
+
+	// Id The unique identifier for the Attribute
+	Id *int64 `json:"id,omitempty"`
+
+	// Key Unique string identifier for this Attribute within the project
+	Key string `json:"key"`
+
+	// LastModified The last time the Attribute was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name The name of the Attribute. For Full Stack projects, the name will be set to the value of the key.
+	Name *string `json:"name,omitempty"`
+
+	// ProjectId The ID of the project the Attribute belongs to
+	ProjectId int64 `json:"project_id"`
+}
+
+// AttributeConditionType Whether this Attribute is a custom dimension or custom attribute. If this is a custom dimension, it belongs to an Optimizely Classic experiment and is read-only.
+type AttributeConditionType string
+
+// AttributeUpdate defines model for AttributeUpdate.
+type AttributeUpdate struct {
+	// Archived Whether or not the Attribute has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description A short description of the Attribute
+	Description *string `json:"description,omitempty"`
+
+	// Key Unique string identifier for this Attribute within the project
+	Key *string `json:"key,omitempty"`
+
+	// Name The name of the Attribute
+	Name *string `json:"name,omitempty"`
+}
+
+// Audience defines model for Audience.
+type Audience struct {
+	// Archived Whether the Audience has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Conditions A string defining the targeting rules for an Audience
+	Conditions *string `json:"conditions,omitempty"`
+
+	// Created The time the Audience was initially created
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description A short description of the Audience
+	Description *string `json:"description,omitempty"`
+
+	// ExperimentCount Number of experiments by audience_id
+	ExperimentCount *int64 `json:"experiment_count,omitempty"`
+
+	// ForJourney Whether the Audience has been part of journey or not
+	ForJourney *bool `json:"for_journey,omitempty"`
+
+	// Id The unique identifier for the Audience
+	Id *int64 `json:"id,omitempty"`
+
+	// IsClassic Whether or not Audience is a classic Audience. If true, the Audience is only compatible with classic Experiments. Otherwise, the Audience may be used in Optimizely X Campaigns.
+	IsClassic *bool `json:"is_classic,omitempty"`
+
+	// LastModified The last time the Audience was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name The name of the Audience
+	Name *string `json:"name,omitempty"`
+
+	// ProjectId The ID of the Project the Audience was created in
+	ProjectId int64 `json:"project_id"`
+
+	// Segmentation True if the Audience is available for segmentation on the results page (Audiences can only be used for segmentation in Optimizely Classic). Set to False if you intend to use this Audience only in Optimizely X. Note that a maximum of 10 Audiences can have segmentation set to True in any given Optimizely Classic project.
+	Segmentation *bool `json:"segmentation,omitempty"`
+}
+
+// AudienceUpdate defines model for AudienceUpdate.
+type AudienceUpdate struct {
+	// Archived True if the Audience has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Conditions A string defining the targeting rules for an Audience
+	Conditions *string `json:"conditions,omitempty"`
+
+	// Description A short description of the Audience
+	Description *string `json:"description,omitempty"`
+
+	// ForJourney Whether the Audience has been part of journey or not
+	ForJourney *bool `json:"for_journey,omitempty"`
+
+	// Name The name of the Audience
+	Name *string `json:"name,omitempty"`
+
+	// Segmentation True if the Audience is available for segmentation on the results page (Enterprise plans only)
+	Segmentation *bool `json:"segmentation,omitempty"`
+}
+
+// BucketingInformation defines model for BucketingInformation.
+type BucketingInformation struct {
+	// AccountId ID of the Account
+	AccountId *int64 `json:"account_id,omitempty"`
+
+	// BucketingHistory Array of bucketing information items
+	BucketingHistory *[]BucketingInformationItem `json:"bucketing_history,omitempty"`
+
+	// VisitorId The unique identifier of the visitor
+	VisitorId *openapi_types.UUID `json:"visitor_id,omitempty"`
+}
+
+// BucketingInformationItem defines model for BucketingInformationItem.
+type BucketingInformationItem struct {
+	// CampaignId The unique identifier of the Campaign
+	CampaignId *int64 `json:"campaign_id,omitempty"`
+
+	// ExperimentId The unique identifier of the Experiment
+	ExperimentId *int64 `json:"experiment_id,omitempty"`
+
+	// IsHoldback Is the visitor bucketed into a variation or a holdback
+	IsHoldback *bool `json:"is_holdback,omitempty"`
+
+	// Timestamp The timestamp of the bucketing decision on the client side
+	Timestamp *int64 `json:"timestamp,omitempty"`
+
+	// VariationId The unique identifier of the Variation
+	VariationId *int64 `json:"variation_id,omitempty"`
+}
+
+// CSSAttribute defines model for CSSAttribute.
+type CSSAttribute struct {
+	BackgroundColor *string `json:"background-color,omitempty"`
+	BackgroundImage *string `json:"background-image,omitempty"`
+	BorderColor     *string `json:"border-color,omitempty"`
+	BorderStyle     *string `json:"border-style,omitempty"`
+	BorderWidth     *string `json:"border-width,omitempty"`
+	Color           *string `json:"color,omitempty"`
+	FontFamily      *string `json:"font-family,omitempty"`
+	FontSize        *string `json:"font-size,omitempty"`
+	FontWeight      *string `json:"font-weight,omitempty"`
+	Height          *string `json:"height,omitempty"`
+	Position        *string `json:"position,omitempty"`
+	Width           *string `json:"width,omitempty"`
+}
+
+// Campaign defines model for Campaign.
+type Campaign struct {
+	// Archived Whether the Campaign has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Changes A list of changes to apply to the Campaign.  This corresponds to the Campaign's Shared Code in the application.  Only supports 'custom_css' or 'custom_code' type changes.
+	Changes *[]SharedCodeChange `json:"changes,omitempty"`
+
+	// Created The time the Campaign was initially created
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description The description or goal for a Campaign
+	Description *string `json:"description,omitempty"`
+
+	// Earliest The first time the Campaign was activated
+	Earliest *time.Time `json:"earliest,omitempty"`
+
+	// ExperimentPriorities A list of lists of Experiment IDs that indicate the relative priority of how to show those Experiments in the context of the Campaign. Each list inside of the list represents a group of Experiments of equal priority where groups that appear earlier in the list are of higher priority to be shown.
+	ExperimentPriorities *[][]int64 `json:"experiment_priorities,omitempty"`
+
+	// ForJourney Whether the Campaign has been part of journey or not
+	ForJourney *bool `json:"for_journey,omitempty"`
+
+	// Holdback Percentage of visitors to exclude from personalization, measured in basis points. 100 basis points = 1% traffic. For example, a value of 500 would mean that 95% of visitors will see a personalized experience and 5% will see the holdback.
+	Holdback *int `json:"holdback,omitempty"`
+
+	// Id The unique identifier for the Campaign
+	Id *int64 `json:"id,omitempty"`
+
+	// JourneyId The journey this campaign is associated with, or null if not set
+	JourneyId *string `json:"journey_id,omitempty"`
+
+	// LastModified The last time the Campaign was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Latest The last time the Campaign was paused (not present if the Campaign still running)
+	Latest *time.Time `json:"latest,omitempty"`
+
+	// Metrics An ordered list of metrics to track for the Campaign
+	Metrics *[]Metric `json:"metrics,omitempty"`
+
+	// Name The name of the Campaign
+	Name *string `json:"name,omitempty"`
+
+	// PageIds A list of Page IDs used in the Campaign
+	PageIds *[]int64 `json:"page_ids,omitempty"`
+
+	// ProjectId The Project ID the Campaign is in
+	ProjectId int64 `json:"project_id"`
+
+	// Status Current state of the Campaign. not_started means the Campaign has never been published to the world. running means the Campaign is currently live to the world. paused means the Campaign has been published, but is currently not running. archived means the Campaign is paused and not visible in the web UI.
+	Status *CampaignStatus `json:"status,omitempty"`
+
+	// Type Indicates the type of this campaign. Campaigns created or fetched via the API should currently all have a type of `personalization`, but if you get a campaign_id for an experiment and look it up, you may get an `other` value.
+	Type         *CampaignType `json:"type,omitempty"`
+	UrlTargeting *URLTargeting `json:"url_targeting,omitempty"`
+}
+
+// CampaignStatus Current state of the Campaign. not_started means the Campaign has never been published to the world. running means the Campaign is currently live to the world. paused means the Campaign has been published, but is currently not running. archived means the Campaign is paused and not visible in the web UI.
+type CampaignStatus string
+
+// CampaignType Indicates the type of this campaign. Campaigns created or fetched via the API should currently all have a type of `personalization`, but if you get a campaign_id for an experiment and look it up, you may get an `other` value.
+type CampaignType string
+
+// CampaignMetricResults Results specific to an Event
+type CampaignMetricResults struct {
+	// Aggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+	Aggregator *CampaignMetricResultsAggregator `json:"aggregator,omitempty"`
+
+	// EventId The ID for the Event to select data from. Omitted for global metrics that are not relative to a specific Event, i.e. "overall revenue"
+	EventId *int64 `json:"event_id,omitempty"`
+
+	// EventProperties The conditions used to filter the metric on specific event property values.
+	EventProperties *MetricEventProperties `json:"event_properties,omitempty"`
+
+	// Field The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+	Field *CampaignMetricResultsField `json:"field,omitempty"`
+
+	// Metrics A list of all metrics that will be used in the calculation of a ratio metric.
+	Metrics *[]CompoundSubMetric `json:"metrics,omitempty"`
+
+	// Name The name of the Metric
+	Name *string `json:"name,omitempty"`
+
+	// Results A map of results for the variants affected by the Campaign. Variants may represent aggregated results scoped to the Campaign and/or individual Experiment results scoped to just that Experiment. The special variant 'baseline' represents visitors that have been held back from any change in experience across all Experiments in the Campaign. The special variant 'campaign' represents the aggregated effect of all Experiments included in the Campaign.
+	Results *map[string]VariantResults `json:"results,omitempty"`
+
+	// Scope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+	Scope *CampaignMetricResultsScope `json:"scope,omitempty"`
+
+	// TimeWindow The maximum amount of time a numerator event can differ from a denominator event in order to be included in a ratio metric. This can be an integer, or an integer followed by a letter denoting the unit of time (d = days, h = hours, m = minutes). If no unit of time is supplied, hours is assumed. If no value is supplied, a time window of 48 hours is assumed.
+	TimeWindow *string `json:"time_window,omitempty"`
+
+	// WinningDirection The winning direction of this metric
+	WinningDirection *CampaignMetricResultsWinningDirection `json:"winning_direction,omitempty"`
+}
+
+// CampaignMetricResultsAggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+type CampaignMetricResultsAggregator string
+
+// CampaignMetricResultsField The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+type CampaignMetricResultsField string
+
+// CampaignMetricResultsScope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+type CampaignMetricResultsScope string
+
+// CampaignMetricResultsWinningDirection The winning direction of this metric
+type CampaignMetricResultsWinningDirection string
+
+// CampaignResults defines model for CampaignResults.
+type CampaignResults struct {
+	// CampaignId The unique identifier for the Campaign
+	CampaignId *int64 `json:"campaign_id,omitempty"`
+
+	// ConfidenceThreshold The significance level at which you would like to declare winning and losing variations. A lower number minimizes the time needed to declare a winning or losing variation, but increases the risk that your results aren't true winners and losers.
+	ConfidenceThreshold *float64 `json:"confidence_threshold,omitempty"`
+
+	// EndTime End of the time interval (exclusive) used to calculate the results. The time is formatted in ISO 8601.
+	EndTime *time.Time `json:"end_time,omitempty"`
+
+	// IsStale When true, indicates the results were delivered from a cache that is out of date.
+	IsStale *bool `json:"is_stale,omitempty"`
+
+	// Metrics The breakdown of Campaign results by metric. CampaignMetricResults object ordering in the array is consistent with the order that metrics are attached to the Experiment in the Optimizely UI and REST API (i.e. index 0 is the primary metric, indices 1-4 are secondary metrics, indices 5+ are monitoring metrics). See here for an explantion of the impact of metric ordering on results calculations.
+	Metrics *[]CampaignMetricResults `json:"metrics,omitempty"`
+
+	// StartTime Start of the time interval (inclusive) used to calculate the results. The time is formatted in ISO 8601.
+	StartTime *time.Time `json:"start_time,omitempty"`
+}
+
+// CampaignUpdate defines model for CampaignUpdate.
+type CampaignUpdate struct {
+	// Changes A list of changes to apply to the Campaign
+	Changes *[]SharedCodeChange `json:"changes,omitempty"`
+
+	// Description The description or goal for a Campaign
+	Description *string `json:"description,omitempty"`
+
+	// ExperimentPriorities A list of lists of Experiment IDs that indicate the relative priority of how to show those Experiments in the context of the Campaign. Each list inside of the list represents a group of Experiments of equal priority where groups that appear earlier in the list are of higher priority to be shown.
+	ExperimentPriorities *[][]int64 `json:"experiment_priorities,omitempty"`
+
+	// ForJourney Whether the Campaign has been part of journey or not
+	ForJourney *bool `json:"for_journey,omitempty"`
+
+	// Holdback Percentage of visitors to exclude from personalization, measured in basis points. 100 basis points = 1% traffic. For example, a value of 500 would mean that 95% of visitors will see a personalized experience and 5% will see the holdback.
+	Holdback *int `json:"holdback,omitempty"`
+
+	// JourneyId The journey this campaign is associated with, or null if not set
+	JourneyId *string `json:"journey_id,omitempty"`
+
+	// Metrics An ordered list of metrics to track for the Campaign
+	Metrics *[]Metric `json:"metrics,omitempty"`
+
+	// Name The name of the Campaign
+	Name *string `json:"name,omitempty"`
+
+	// PageIds A list of Page IDs used in the Campaign.  Only `url_targeting` or `page_ids` can be used when updating a Campaign, but not both.
+	PageIds      *[]int64      `json:"page_ids,omitempty"`
+	UrlTargeting *URLTargeting `json:"url_targeting,omitempty"`
+}
+
+// Change defines model for Change.
+type Change struct {
+	// AllowAdditionalRedirect Whether or not to allow additional redirects after redirecting to destination. Required for changes of type 'redirect'
+	AllowAdditionalRedirect *bool `json:"allow_additional_redirect,omitempty"`
+
+	// Async Indicates whether or not to execute the change asyncronously. If true, src will be returned in the response. Otherwise, it will be not included.
+	Async      *bool            `json:"async,omitempty"`
+	Attributes *ChangeAttribute `json:"attributes,omitempty"`
+
+	// Config Configuration properties for the extension
+	Config *map[string]interface{} `json:"config,omitempty"`
+	Css    *CSSAttribute           `json:"css,omitempty"`
+
+	// Dependencies A list of dependent change IDs that must happen before this change
+	Dependencies *[]openapi_types.UUID `json:"dependencies,omitempty"`
+
+	// Destination URL to redirect to. Required for changes of type 'redirect'. `destination` and `destination_function` cannot be used at the same time
+	Destination *string `json:"destination,omitempty"`
+
+	// DestinationFunction A function string to redirect to. Required for changes of type 'redirect'. `destination` and `destination_function` cannot be used at the same time
+	DestinationFunction *string `json:"destination_function,omitempty"`
+
+	// ExtensionId ID of the extension to insert. Required for changes of type 'extension'
+	ExtensionId *string `json:"extension_id,omitempty"`
+
+	// Id The ID of the change
+	Id *openapi_types.UUID `json:"id,omitempty"`
+
+	// Name Name of the change
+	Name *string `json:"name,omitempty"`
+
+	// Operator Where to instert HTML or image for types 'insert_html' and 'insert_image' with respect to the element(s) matched by 'selector'
+	Operator *string `json:"operator,omitempty"`
+
+	// PreserveParameters Whether or not to preserve parameters from original request when redirecting to new destination URL. Required for changes of type 'redirect'. For redirects using `destination_function`, `preserve_parameters` must be false.
+	PreserveParameters *bool `json:"preserve_parameters,omitempty"`
+
+	// Rearrange A directive to place the DOM element(s) matched by 'selector' to the position of the element matched by 'insertSelector', with the relation specified by 'operator'. The supplied example moves element matched by 'selector' above the element of class .greyBox
+	Rearrange *map[string]interface{} `json:"rearrange,omitempty"`
+
+	// Selector CSS selector to determine where changes are applied. Required for changes of type 'attribute', 'insert_html', and 'insert_image'
+	Selector *string `json:"selector,omitempty"`
+
+	// Src The path to the change payload on the CDN. Only present if 'async' is True.
+	Src *string `json:"src,omitempty"`
+
+	// Type The type of this change.
+	// - Changes of type 'attribute' have required fields 'selector' and 'attributes'
+	// - Changes of type 'custom_code' have required field 'value'
+	// - Changes of type 'custom_css' have required field 'value'
+	// - Changes of type 'extension' have required field 'extension_id'
+	// - Changes of type 'insert_html' have required field 'selector'
+	// - Changes of type 'insert_image' have required field 'selector'
+	// - Changes of type 'redirect' have required fields 'destination', 'preserve_parameters', and 'allow_additional_redirect'
+	Type ChangeType `json:"type"`
+
+	// Value The value for the change can be custom Javascript or CSS as a string. Required for changes of type 'custom_css' and 'custom_code'
+	Value *string `json:"value,omitempty"`
+}
+
+// ChangeType The type of this change.
+// - Changes of type 'attribute' have required fields 'selector' and 'attributes'
+// - Changes of type 'custom_code' have required field 'value'
+// - Changes of type 'custom_css' have required field 'value'
+// - Changes of type 'extension' have required field 'extension_id'
+// - Changes of type 'insert_html' have required field 'selector'
+// - Changes of type 'insert_image' have required field 'selector'
+// - Changes of type 'redirect' have required fields 'destination', 'preserve_parameters', and 'allow_additional_redirect'
+type ChangeType string
+
+// ChangeAttribute defines model for ChangeAttribute.
+type ChangeAttribute struct {
+	// Class Name of the class to set the element(s) matched by a selector to
+	Class *string `json:"class,omitempty"`
+
+	// Hide Whether or not to hide the element(s) matched by a selector
+	Hide *bool `json:"hide,omitempty"`
+
+	// Href Value of href attribute to add to element(s) matched by a selector
+	Href *string `json:"href,omitempty"`
+
+	// Html Value of HTML attribute to add to element(s) matched by a selector
+	Html *string `json:"html,omitempty"`
+
+	// Remove Whether or not to remove the element(s) matched by a selector
+	Remove *bool `json:"remove,omitempty"`
+
+	// Src Value of src attribute to add to element(s) matched by a selector
+	Src *string `json:"src,omitempty"`
+
+	// Style Value of style attribute to add to element(s) matched by a selector
+	Style *string `json:"style,omitempty"`
+
+	// Text Value of text attribute to add to the element(s) matched by a selector
+	Text *string `json:"text,omitempty"`
+}
+
+// ChangeDetail defines model for ChangeDetail.
+type ChangeDetail struct {
+	// After Value of the property after modification.
+	After interface{} `json:"after,omitempty"`
+
+	// Before Value of the property before modification.
+	Before interface{} `json:"before,omitempty"`
+
+	// Description Human readable description of the change.
+	Description *string `json:"description,omitempty"`
+
+	// Property The name of the property modified.
+	Property *string `json:"property,omitempty"`
+}
+
+// ChangeHistoryChange defines model for ChangeHistoryChange.
+type ChangeHistoryChange struct {
+	// ChangeType Action performed on the entity.
+	ChangeType *ChangeHistoryChangeChangeType `json:"change_type,omitempty"`
+
+	// Changes List of change details.
+	Changes *[]ChangeDetail `json:"changes,omitempty"`
+
+	// Created Created time of the current revision. Format is ISO 8601.
+	Created *time.Time `json:"created,omitempty"`
+	Entity  *Entity    `json:"entity,omitempty"`
+
+	// Id ID of the change.
+	Id *int64 `json:"id,omitempty"`
+
+	// ProjectId ID of the project related to the entity.
+	ProjectId int64           `json:"project_id"`
+	Revisions *ChangeRevision `json:"revisions,omitempty"`
+
+	// Source Origin of the current revision.
+	Source *ChangeHistoryChangeSource `json:"source,omitempty"`
+
+	// Summary Short human readable description of the change.
+	Summary *string `json:"summary,omitempty"`
+	User    *User   `json:"user,omitempty"`
+}
+
+// ChangeHistoryChangeChangeType Action performed on the entity.
+type ChangeHistoryChangeChangeType string
+
+// ChangeHistoryChangeSource Origin of the current revision.
+type ChangeHistoryChangeSource string
+
+// ChangeRevision defines model for ChangeRevision.
+type ChangeRevision struct {
+	Current  *Revision `json:"current,omitempty"`
+	Previous *Revision `json:"previous,omitempty"`
+}
+
+// Choices defines model for Choices.
+type Choices struct {
+	// Label label of the choice
+	Label *string `json:"label,omitempty"`
+
+	// Value value of the choice
+	Value *string `json:"value,omitempty"`
+}
+
+// CollaboratorEntry defines model for CollaboratorEntry.
+type CollaboratorEntry struct {
+	// Id The unique identifier of the user
+	Id           *openapi_types.UUID `json:"id,omitempty"`
+	Profile      *UserProfile        `json:"profile,omitempty"`
+	ProjectRoles *[]ProjectRole      `json:"project_roles,omitempty"`
+}
+
+// CompoundSubMetric A metric that is used only as part of the calculation for a ratio metric.
+type CompoundSubMetric struct {
+	// Aggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value.
+	Aggregator *CompoundSubMetricAggregator `json:"aggregator,omitempty"`
+
+	// EventId The ID for the Event to select data from.
+	EventId *int64 `json:"event_id,omitempty"`
+
+	// EventType The type of this Event.
+	EventType *CompoundSubMetricEventType `json:"event_type,omitempty"`
+
+	// Field The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted.
+	Field *CompoundSubMetricField `json:"field,omitempty"`
+
+	// Scope Specifies how Events should be grouped. Can also be thought of as the denominator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event.
+	Scope *CompoundSubMetricScope `json:"scope,omitempty"`
+}
+
+// CompoundSubMetricAggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value.
+type CompoundSubMetricAggregator string
+
+// CompoundSubMetricEventType The type of this Event.
+type CompoundSubMetricEventType string
+
+// CompoundSubMetricField The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted.
+type CompoundSubMetricField string
+
+// CompoundSubMetricScope Specifies how Events should be grouped. Can also be thought of as the denominator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event.
+type CompoundSubMetricScope string
+
+// CredentialsItem Credentials item containing information on access key and secrets
+type CredentialsItem struct {
+	// AccessKeyId AWS access key
+	AccessKeyId *string `json:"accessKeyId,omitempty"`
+
+	// Expiration expiration time of the token in epoch time
+	Expiration *int64 `json:"expiration,omitempty"`
+
+	// SecretAccessKey AWS secret access key
+	SecretAccessKey *string `json:"secretAccessKey,omitempty"`
+
+	// SessionToken AWS session token
+	SessionToken *string `json:"sessionToken,omitempty"`
+}
+
+// CurrentAccount defines model for CurrentAccount.
+type CurrentAccount struct {
+	// Features The available features for the Account
+	Features *map[string]AccountFeature `json:"features,omitempty"`
+
+	// Id The unique identifier of the Account
+	Id *int64 `json:"id,omitempty"`
+}
+
+// CustomEvent defines model for CustomEvent.
+type CustomEvent struct {
+	// Archived Whether or not to archive this Event
+	Archived *bool            `json:"archived,omitempty"`
+	Category *EventCategories `json:"category,omitempty"`
+
+	// Created Creation date for this Event
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description A description of this Event
+	Description *string `json:"description,omitempty"`
+
+	// EventProperties A set of user-defined data elements for the event. Metrics can filter on particular values of these properties.
+	EventProperties *[]EventProperty `json:"event_properties,omitempty"`
+
+	// EventType The type of this Event
+	EventType *CustomEventEventType `json:"event_type,omitempty"`
+
+	// Id The unique identifier of the Event
+	Id *int64 `json:"id,omitempty"`
+
+	// IsClassic Whether or not this Event is a classic Event. If true, this Event is read-only
+	IsClassic *bool `json:"is_classic,omitempty"`
+
+	// IsEditable Whether or not this Event may be edited
+	IsEditable *bool `json:"is_editable,omitempty"`
+
+	// Key Unique string identifier for this Event within the Project
+	Key string `json:"key"`
+
+	// Name A human readable name for this Event. If unspecified, defaults to the key
+	Name *string `json:"name,omitempty"`
+
+	// ProjectId The ID of this Event's parent Project
+	ProjectId *int64 `json:"project_id,omitempty"`
+}
+
+// CustomEventEventType The type of this Event
+type CustomEventEventType string
+
+// CustomEventUpdate defines model for CustomEventUpdate.
+type CustomEventUpdate struct {
+	// Archived Whether or not to archive this Event
+	Archived *bool            `json:"archived,omitempty"`
+	Category *EventCategories `json:"category,omitempty"`
+
+	// Description A description of this Event
+	Description *string `json:"description,omitempty"`
+
+	// Key Unique string identifier for this Event within the Project
+	Key *string `json:"key,omitempty"`
+
+	// Name A human readable name for this Event
+	Name *string `json:"name,omitempty"`
+}
+
+// Datafile defines model for Datafile.
+type Datafile struct {
+	// Id ID of Datafile.
+	Id *int `json:"id,omitempty"`
+
+	// LatestFileSize The current size in bytes of the Datafile.
+	LatestFileSize *int `json:"latest_file_size,omitempty"`
+
+	// OtherUrls List of other URLs where this Datafile is also available.
+	OtherUrls *[]string `json:"other_urls,omitempty"`
+
+	// Revision Current revision number.
+	Revision *int `json:"revision,omitempty"`
+
+	// SdkKey Unique key to identify this specific Environment and Datafile programmatically in our SDKs.
+	SdkKey *string `json:"sdk_key,omitempty"`
+
+	// Url URL where this Datafile is available.
+	Url *string `json:"url,omitempty"`
+}
+
+// Datapoint A value with statistical context
+type Datapoint struct {
+	// ConfidenceInterval The confidence interval measures the uncertainty around improvement. It starts out wide and shrinks as more data comes in. Significance means that the confidence interval is completely above or completely below 0. If the result is significant and positive, the confidence interval will be above 0. If the result is significant and negative, confidence interval will be below 0. If the result is inconclusive, confidence interval includes 0
+	ConfidenceInterval *[]float64 `json:"confidence_interval,omitempty"`
+
+	// ConfidenceIntervalScaled The confidence interval with bounds that are scaled by the baseline conversion rate.
+	ConfidenceIntervalScaled *[]float64 `json:"confidence_interval_scaled,omitempty"`
+	EndOfEpoch               *bool      `json:"end_of_epoch,omitempty"`
+
+	// IsMostConclusive Indicates that this is the best performing variant for this metric. Also referred to as the 'Winner'
+	IsMostConclusive *bool `json:"is_most_conclusive,omitempty"`
+
+	// IsSignificant Indicates if significance is above your confidence threshold
+	IsSignificant *bool `json:"is_significant,omitempty"`
+
+	// LiftStatus Indicates whether a variation is doing better/worse than the baseline after taking the metric's winning direction into account.
+	LiftStatus *DatapointLiftStatus `json:"lift_status,omitempty"`
+
+	// Significance The likelihood that the observed difference in conversion rate is not due to chance
+	Significance *float64 `json:"significance,omitempty"`
+
+	// Value The estimated improvement for this variant compared to the baseline
+	Value *float64 `json:"value,omitempty"`
+
+	// ValueScaled The estimated improvement scaled by the baseline conversion rate.
+	ValueScaled *float64 `json:"value_scaled,omitempty"`
+
+	// VisitorsRemaining The number of estimated visitors remaining before result becomes statistically significant. A value of 9223372036854775807 means the value is not available.
+	VisitorsRemaining *int64 `json:"visitors_remaining,omitempty"`
+}
+
+// DatapointLiftStatus Indicates whether a variation is doing better/worse than the baseline after taking the metric's winning direction into account.
+type DatapointLiftStatus string
+
+// E3Credentials defines model for E3Credentials.
+type E3Credentials struct {
+	// Credentials Credentials item containing information on access key and secrets
+	Credentials *CredentialsItem `json:"credentials,omitempty"`
+
+	// S3Path s3 path of the enriched events dataset of the account
+	S3Path *string `json:"s3Path,omitempty"`
+}
+
+// Entity defines model for Entity.
+type Entity struct {
+	// ApiUrl Generated URL to access the entity by using the public API.
+	ApiUrl *string `json:"api_url,omitempty"`
+
+	// Id ID of the entity.
+	Id *int64 `json:"id,omitempty"`
+
+	// Name Name of the entity.
+	Name *string `json:"name,omitempty"`
+
+	// SubType Optional field for entities that have sub_types (projects, experiments, extensions, pages, etc)
+	SubType *string `json:"sub_type,omitempty"`
+
+	// Type Type of the entity as defined by the public API.
+	Type *string `json:"type,omitempty"`
+
+	// UiUrl Generated URL to access the entity using Optimizely UI.
+	UiUrl *string `json:"ui_url,omitempty"`
+}
+
+// Environment defines model for Environment.
+type Environment struct {
+	// Archived Boolean representing whether the Environment is archived.
+	Archived *bool `json:"archived,omitempty"`
+
+	// Created Created time.
+	Created  *string   `json:"created,omitempty"`
+	Datafile *Datafile `json:"datafile,omitempty"`
+
+	// Description A short description of the Environment.
+	Description *string `json:"description,omitempty"`
+
+	// HasRestrictedPermissions Boolean representing whether starting experiments should be restricted to publishers and above in this Environment.
+	HasRestrictedPermissions *bool `json:"has_restricted_permissions,omitempty"`
+
+	// Id ID of this Environment.
+	Id *int `json:"id,omitempty"`
+
+	// IsPrimary Boolean representing if this is the primary (default) Environment.
+	IsPrimary *bool `json:"is_primary,omitempty"`
+
+	// Key Unique string identifier for this Environment within the Project.
+	Key string `json:"key"`
+
+	// LastModified Last modification time.
+	LastModified *string `json:"last_modified,omitempty"`
+
+	// Name Name of the Environment.
+	Name string `json:"name"`
+
+	// Priority Integer representing the priority of the Environment. This is used for ordering in the UI.
+	Priority *int `json:"priority,omitempty"`
+
+	// ProjectId ID of the project of the Environment.
+	ProjectId int `json:"project_id"`
+}
+
+// EnvironmentUpdate defines model for EnvironmentUpdate.
+type EnvironmentUpdate struct {
+	// Archived Boolean representing whether the Environment is archived.
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description Text description of the Environment.
+	Description *string `json:"description,omitempty"`
+
+	// HasRestrictedPermissions Boolean representing whether starting experiments should be restricted to publishers and above in this Environment.
+	HasRestrictedPermissions *bool `json:"has_restricted_permissions,omitempty"`
+
+	// Key Unique string identifier for this Environment within the Project.
+	Key *string `json:"key,omitempty"`
+
+	// Name Name of the Environment.
+	Name *string `json:"name,omitempty"`
+
+	// Priority Integer representing the priority of the Environment. This is used for ordering in the UI.
+	Priority *int `json:"priority,omitempty"`
 }
 
 // Error defines model for Error.
@@ -245,12 +4397,1315 @@ type Error struct {
 	Uuid     *openapi_types.UUID     `json:"uuid,omitempty"`
 }
 
+// Event defines model for Event.
+type Event struct {
+	// Archived Whether or not this Event is archived
+	Archived *bool              `json:"archived,omitempty"`
+	Category *EventCategories   `json:"category,omitempty"`
+	Config   *InPageEventConfig `json:"config,omitempty"`
+
+	// Created Creation date for this Event
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description A description for this Event
+	Description *string `json:"description,omitempty"`
+
+	// EventProperties A set of user-defined data elements for the event. Metrics can filter on particular values of these properties.
+	EventProperties *[]EventProperty `json:"event_properties,omitempty"`
+
+	// EventType The type of this Event
+	EventType *EventEventType `json:"event_type,omitempty"`
+
+	// Id The unique identifier of the Event
+	Id *int64 `json:"id,omitempty"`
+
+	// IsClassic Whether or not this Event is a classic Event. If true, this Event is read-only
+	IsClassic *bool `json:"is_classic,omitempty"`
+
+	// IsEditable Whether this Event may be edited
+	IsEditable *bool `json:"is_editable,omitempty"`
+
+	// Key Unique string identifier for this Event within the Project
+	Key *string `json:"key,omitempty"`
+
+	// LastModified The last time the Event was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name A human readable name for this Event
+	Name *string `json:"name,omitempty"`
+
+	// PageId The Page ID associated with this Event
+	PageId *int64 `json:"page_id,omitempty"`
+
+	// ProjectId The ID of this Event's parent Project
+	ProjectId *int64 `json:"project_id,omitempty"`
+}
+
+// EventEventType The type of this Event
+type EventEventType string
+
+// EventCategories defines model for EventCategories.
+type EventCategories string
+
+// EventProperty A user-defined data element giving additional detail about the event.
+type EventProperty struct {
+	// DataType The type of data that can be accepted for this property.
+	DataType *EventPropertyDataType `json:"data_type,omitempty"`
+
+	// Name The name of the property.
+	Name *string `json:"name,omitempty"`
+}
+
+// EventPropertyDataType The type of data that can be accepted for this property.
+type EventPropertyDataType string
+
+// Experiment defines model for Experiment.
+type Experiment struct {
+	// AllocationPolicy Traffic allocation policy across variations in this experiment
+	AllocationPolicy *string `json:"allocation_policy,omitempty"`
+
+	// AudienceConditions The audiences that should see this experiment. To target everyone, use the string "everyone" or omit this field. Multiple audiences can be combined with "and" or "or" using the same structure as audience conditions
+	AudienceConditions *string `json:"audience_conditions,omitempty"`
+
+	// CampaignId For Personalization experiences, this ID corresponds to the parent Campaign. For standalone experiments this campaign_id does not correspond to a campaign object.
+	CampaignId *int64 `json:"campaign_id,omitempty"`
+
+	// Changes Custom CSS or JavaScript that will run before all variations in the Experiment (for Experiments in Web Projects only)
+	Changes *[]SharedCodeChange `json:"changes,omitempty"`
+
+	// Created The time when the Experiment was initially created
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description The description or hypothesis for an Experiment
+	Description *string `json:"description,omitempty"`
+
+	// Earliest The first time the Experiment was activated
+	Earliest *time.Time `json:"earliest,omitempty"`
+
+	// Environments String identifier for the Experiment's status in each Environment based on the environment key.
+	Environments *map[string]ExperimentEnvironment `json:"environments,omitempty"`
+
+	// FeatureId The ID of a Feature to attach to the Experiment. This turns an Experiment into a Feature Test.
+	FeatureId *int64 `json:"feature_id,omitempty"`
+
+	// FeatureKey The key for the Feature attached to the Experiment. Applies to Feature Tests only. Valid keys contain alphanumeric characters, hyphens, and underscores, and are limited to 64 characters.
+	FeatureKey *string `json:"feature_key,omitempty"`
+
+	// FeatureName The feature flag name to display in the Optimizely app. Whitespaces and other non-alphanumeric characters allowed. Defaults to feature key if left empty.
+	FeatureName *string `json:"feature_name,omitempty"`
+
+	// Holdback Percent of traffic to exclude from the experiment, measured in basis points. 100 basis points = 1% traffic. For example, a value of 9900 would mean that 1% of visitors will be eligible for the experiment. This is only applicable for Web.
+	Holdback *int `json:"holdback,omitempty"`
+
+	// Id The unique identifier for the Experiment
+	Id *int64 `json:"id,omitempty"`
+
+	// IsClassic Whether or not the Experiment is a classic Experiment. If true, the Experiment is read-only
+	IsClassic *bool `json:"is_classic,omitempty"`
+
+	// Key Unique string identifier for this Experiment within the Project. Only applicable for Full Stack and Mobile projects.
+	Key *string `json:"key,omitempty"`
+
+	// LastModified The last time the Experiment was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Latest The last time the Experiment was paused (not present if the Experiment is still running). For campaign experiences, this field represents the last time the Campaign was paused.
+	Latest *time.Time `json:"latest,omitempty"`
+
+	// Metrics An ordered list of metrics to track for the Experiment. Required for Web, Full Stack, and Mobile Experimentation. Not applicable for Web Personalization Experiences.
+	Metrics *[]Metric `json:"metrics,omitempty"`
+
+	// MultivariateTrafficPolicy For Experiments of type `multivariate`, this specifies how the weights and statuses of combinations will be decided. In `full_factorial` mode, | combination weights are read-only, and are generated by multiplying together weights of section variations.
+	MultivariateTrafficPolicy *ExperimentMultivariateTrafficPolicy `json:"multivariate_traffic_policy,omitempty"`
+
+	// Name Name of the Experiment. Required for Web Experimentation. Optional for Web Personalization experiences and Full Stack experiments. Not applicable for Mobile Experiments.
+	Name *string `json:"name,omitempty"`
+
+	// PageIds A list of Page IDs used in the Experiment.  `url_targeting` or `page_ids`, but not both.
+	PageIds *[]int64 `json:"page_ids,omitempty"`
+
+	// ProjectId The Project the Experiment is in
+	ProjectId int64 `json:"project_id"`
+
+	// ResultsToken temporary token based on experiment id, used to access data platform services from other parts of the product
+	ResultsToken *string   `json:"results_token,omitempty"`
+	Schedule     *Schedule `json:"schedule,omitempty"`
+
+	// Status Current state of the Experiment.<br> In Full Stack, this is the Experiment's state in the primary (production) environment.
+	Status *ExperimentStatus `json:"status,omitempty"`
+
+	// TrafficAllocation Percent of traffic allocated for the experiment, measured in basis points. 100 basis points = 1% traffic. For example, a value of 5500 would mean that 55% of visitors will be eligible for the experiment. This is only applicable for Full Stack.
+	TrafficAllocation *int `json:"traffic_allocation,omitempty"`
+
+	// ExperimentEnvType Indicates whether this is an `a/b`, `multivariate`, `feature`, or `multiarmed_bandit` test or an experience within a `personalization` campaign. Note that the default for this field is `a/b`. If another test type is desired, populate this field with the appropriate string (from one of the possible values).
+	ExperimentEnvType *ExperimentEnvType `json:"type,omitempty"`
+	UrlTargeting      *URLTargeting      `json:"url_targeting,omitempty"`
+
+	// Variations A list of variations that each define an experience to show in the context of the Experiment for the purpose of comparison against each other
+	Variations *[]Variation `json:"variations,omitempty"`
+
+	// Whitelist A list containing the user IDs and variations of users who have been whitelisted
+	Whitelist *[]struct {
+		// UserId The ID of the user being whitelisted
+		UserId string `json:"user_id"`
+
+		// VariationId The unique identifier for the variation
+		VariationId int64 `json:"variation_id"`
+	} `json:"whitelist,omitempty"`
+}
+
+// ExperimentMultivariateTrafficPolicy For Experiments of type `multivariate`, this specifies how the weights and statuses of combinations will be decided. In `full_factorial` mode, | combination weights are read-only, and are generated by multiplying together weights of section variations.
+type ExperimentMultivariateTrafficPolicy string
+
+// ExperimentStatus Current state of the Experiment.<br> In Full Stack, this is the Experiment's state in the primary (production) environment.
+type ExperimentStatus string
+
+// ExperimentEnvType Indicates whether this is an `a/b`, `multivariate`, `feature`, or `multiarmed_bandit` test or an experience within a `personalization` campaign. Note that the default for this field is `a/b`. If another test type is desired, populate this field with the appropriate string (from one of the possible values).
+type ExperimentEnvType string
+
+// ExperimentEnvironment defines model for ExperimentEnvironment.
+type ExperimentEnvironment struct {
+	// Status The Experiment's status in different Environments based on the environment key.
+	Status ExperimentEnvironmentStatus `json:"status"`
+}
+
+// ExperimentEnvironmentStatus The Experiment's status in different Environments based on the environment key.
+type ExperimentEnvironmentStatus string
+
+// ExperimentEnvironmentUpdate defines model for ExperimentEnvironmentUpdate.
+type ExperimentEnvironmentUpdate struct {
+	// Status Update the Experiment's status in different Environments based on the environment key.
+	Status ExperimentEnvironmentUpdateStatus `json:"status"`
+}
+
+// ExperimentEnvironmentUpdateStatus Update the Experiment's status in different Environments based on the environment key.
+type ExperimentEnvironmentUpdateStatus string
+
+// ExperimentMetricConclusion defines model for ExperimentMetricConclusion.
+type ExperimentMetricConclusion struct {
+	// Loser ID of the variation that has reached statistical significance and has performed worse than all other variations.
+	Loser *string `json:"loser,omitempty"`
+
+	// Winner ID of the variation that has reached statistical significance and has performed better than all other variations.
+	Winner *string `json:"winner,omitempty"`
+}
+
+// ExperimentMetricResults Results specific to an Event
+type ExperimentMetricResults struct {
+	// Aggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value. 'exit' measures the ratio of sessions with last activation occurring on the target page to the sessions that activated the target page at least once during the session. 'bounce' measures the ratio of sessions that with first and last activation occurring on the target page to the sessions with first activation on the target page. For both 'exit' and 'bounce', the eventId must be the ID of a Page.
+	Aggregator *ExperimentMetricResultsAggregator `json:"aggregator,omitempty"`
+	Conclusion *ExperimentMetricConclusion        `json:"conclusion,omitempty"`
+
+	// EventId The ID for the Event to select data from. Omitted for global metrics that are not relative to a specific Event, i.e. "overall revenue"
+	EventId *int64 `json:"event_id,omitempty"`
+
+	// EventProperties The conditions used to filter the metric on specific event property values.
+	EventProperties *MetricEventProperties `json:"event_properties,omitempty"`
+
+	// Field The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+	Field *ExperimentMetricResultsField `json:"field,omitempty"`
+
+	// Metrics A list of all metrics that will be used in the calculation of a ratio metric.
+	Metrics *[]CompoundSubMetric `json:"metrics,omitempty"`
+
+	// Name The name of the Metric
+	Name *string `json:"name,omitempty"`
+
+	// Results A map of results for each variation in the Experiment keyed by variation ID. For Personalization Campaigns, the special variant 'baseline' represents visitors that have been held back from any change in experience for the Experiment
+	Results *map[string]VariantResults `json:"results,omitempty"`
+
+	// Scope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+	Scope *ExperimentMetricResultsScope `json:"scope,omitempty"`
+
+	// TimeWindow The maximum amount of time a numerator event can differ from a denominator event in order to be included in a ratio metric. This can be an integer, or an integer followed by a letter denoting the unit of time (d = days, h = hours, m = minutes). If no unit of time is supplied, hours is assumed. If no value is supplied, a time window of 48 hours is assumed.
+	TimeWindow *string `json:"time_window,omitempty"`
+
+	// WinningDirection The winning direction of this metric
+	WinningDirection *ExperimentMetricResultsWinningDirection `json:"winning_direction,omitempty"`
+}
+
+// ExperimentMetricResultsAggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value. 'exit' measures the ratio of sessions with last activation occurring on the target page to the sessions that activated the target page at least once during the session. 'bounce' measures the ratio of sessions that with first and last activation occurring on the target page to the sessions with first activation on the target page. For both 'exit' and 'bounce', the eventId must be the ID of a Page.
+type ExperimentMetricResultsAggregator string
+
+// ExperimentMetricResultsField The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+type ExperimentMetricResultsField string
+
+// ExperimentMetricResultsScope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+type ExperimentMetricResultsScope string
+
+// ExperimentMetricResultsWinningDirection The winning direction of this metric
+type ExperimentMetricResultsWinningDirection string
+
+// ExperimentMetricTimeseries Results time series specific to an Event
+type ExperimentMetricTimeseries struct {
+	// Aggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+	Aggregator *ExperimentMetricTimeseriesAggregator `json:"aggregator,omitempty"`
+
+	// EventId The ID for the Event to select data from. Omitted for global metrics that are not relative to a specific Event, i.e. "overall revenue"
+	EventId *int64 `json:"event_id,omitempty"`
+
+	// EventProperties The conditions used to filter the metric on specific event property values.
+	EventProperties *MetricEventProperties `json:"event_properties,omitempty"`
+
+	// Field The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+	Field *ExperimentMetricTimeseriesField `json:"field,omitempty"`
+
+	// Metrics A list of all metrics that will be used in the calculation of a ratio metric.
+	Metrics *[]CompoundSubMetric `json:"metrics,omitempty"`
+
+	// Name The name of the Metric
+	Name *string `json:"name,omitempty"`
+
+	// Results A map of results for each variation in the Experiment keyed by variation ID. For Personalization Campaigns, the special variant 'baseline' represents visitors that have been held back from any change in experience for the Experiment
+	Results *map[string]VariantTimeseries `json:"results,omitempty"`
+
+	// Scope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+	Scope *ExperimentMetricTimeseriesScope `json:"scope,omitempty"`
+
+	// TimeWindow The maximum amount of time a numerator event can differ from a denominator event in order to be included in a ratio metric. This can be an integer, or an integer followed by a letter denoting the unit of time (d = days, h = hours, m = minutes). If no unit of time is supplied, hours is assumed. If no value is supplied, a time window of 48 hours is assumed.
+	TimeWindow *string `json:"time_window,omitempty"`
+
+	// WinningDirection The winning direction of this metric
+	WinningDirection *ExperimentMetricTimeseriesWinningDirection `json:"winning_direction,omitempty"`
+}
+
+// ExperimentMetricTimeseriesAggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+type ExperimentMetricTimeseriesAggregator string
+
+// ExperimentMetricTimeseriesField The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+type ExperimentMetricTimeseriesField string
+
+// ExperimentMetricTimeseriesScope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+type ExperimentMetricTimeseriesScope string
+
+// ExperimentMetricTimeseriesWinningDirection The winning direction of this metric
+type ExperimentMetricTimeseriesWinningDirection string
+
+// ExperimentResults defines model for ExperimentResults.
+type ExperimentResults struct {
+	// ConfidenceThreshold The significance level at which you would like to declare winning and losing variations. A lower number minimizes the time needed to declare a winning or losing variation, but increases the risk that your results aren't true winners and losers.
+	ConfidenceThreshold *float64 `json:"confidence_threshold,omitempty"`
+
+	// EndTime End of the time interval (exclusive) used to calculated the results. The time is formatted in ISO 8601.
+	EndTime *time.Time `json:"end_time,omitempty"`
+
+	// ExperimentId The unique identifier for the Experiment
+	ExperimentId *int64 `json:"experiment_id,omitempty"`
+
+	// IsStale When true, indicates the results were delivered from a cache that is out of date.
+	IsStale *bool `json:"is_stale,omitempty"`
+
+	// Metrics The breakdown of Experiment results by metric. ExperimentMetricResults object ordering in the array is consistent with the order that metrics are attached to the Experiment in the Optimizely UI and REST API (i.e. index 0 is the primary metric, indices 1-4 are secondary metrics, indices 5+ are monitoring metrics). See here for an explantion of the impact of metric ordering on results calculations.
+	Metrics *[]ExperimentMetricResults `json:"metrics,omitempty"`
+	Reach   *ExperimentVariationReach  `json:"reach,omitempty"`
+
+	// StartTime Start of the time interval (inclusive) used to calculate the results. The time is formatted in ISO 8601.
+	StartTime *time.Time `json:"start_time,omitempty"`
+
+	// StatsConfig Stats Engine configuration settings
+	StatsConfig *StatsConfig `json:"stats_config,omitempty"`
+}
+
+// ExperimentResultsReport defines model for ExperimentResultsReport.
+type ExperimentResultsReport struct {
+	// EndTime End of the time interval (exclusive) used to generate the report. The time is formatted in ISO 8601.
+	EndTime *time.Time `json:"end_time,omitempty"`
+
+	// ExperimentId The unique identifier for the Experiment for which the report is to be generated.
+	ExperimentId *int64 `json:"experiment_id,omitempty"`
+
+	// InferredOutcome Outcome of the experiment as inferred by the Optimizely system upon the evaluation of variations that may or may not have reached statistical significance.
+	InferredOutcome *ExperimentResultsReportInferredOutcome `json:"inferred_outcome,omitempty"`
+
+	// StartTime Start of the time interval (inclusive) used to generate the reports. The time is formatted in ISO 8601.
+	StartTime *time.Time `json:"start_time,omitempty"`
+}
+
+// ExperimentResultsReportInferredOutcome Outcome of the experiment as inferred by the Optimizely system upon the evaluation of variations that may or may not have reached statistical significance.
+type ExperimentResultsReportInferredOutcome string
+
+// ExperimentSummary defines model for ExperimentSummary.
+type ExperimentSummary struct {
+	// Archived Whether or not the entity is archived.
+	Archived *bool `json:"archived,omitempty"`
+
+	// Created The time that the entity was created.
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description Description for the entity if it has one.
+	Description *string `json:"description,omitempty"`
+
+	// ExperimentType The type of experiment
+	ExperimentType *string `json:"experiment_type,omitempty"`
+
+	// Id ID of the entity
+	Id *int `json:"id,omitempty"`
+
+	// LastModified The time that the entity was last modified.
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name Name of the entity. This value will be the 'key' of the entity if there is no name.
+	Name *string `json:"name,omitempty"`
+
+	// ProjectId ID of the project that contains the entity (if applicable)
+	ProjectId *int `json:"project_id,omitempty"`
+
+	// ProjectName Name of the project that contains the entity (if applicable)
+	ProjectName *string `json:"project_name,omitempty"`
+
+	// Status The current status for the entity if it has one.
+	Status *string `json:"status,omitempty"`
+
+	// Type Type of the entity.
+	Type *ExperimentSummaryType `json:"type,omitempty"`
+}
+
+// ExperimentSummaryType Type of the entity.
+type ExperimentSummaryType string
+
+// ExperimentTimeseries defines model for ExperimentTimeseries.
+type ExperimentTimeseries struct {
+	// ConfidenceThreshold The significance level at which you would like to declare winning and losing variations. A lower number minimizes the time needed to declare a winning or losing variation, but increases the risk that your results aren't true winners and losers.
+	ConfidenceThreshold *float64 `json:"confidence_threshold,omitempty"`
+
+	// EndTime End of the time interval (exclusive) used to calculated the results. The time is formatted in ISO 8601.
+	EndTime *time.Time `json:"end_time,omitempty"`
+
+	// ExperimentId The unique identifier for the Experiment
+	ExperimentId *int64 `json:"experiment_id,omitempty"`
+
+	// IsStale When true, indicates the results were delivered from a cache that is out of date.
+	IsStale *bool `json:"is_stale,omitempty"`
+
+	// Metrics The breakdown of Experiment results time series by metric
+	Metrics *[]ExperimentMetricTimeseries `json:"metrics,omitempty"`
+
+	// StartTime Start of the time interval (inclusive) used to calculate the results. The time is formatted in ISO 8601.
+	StartTime *time.Time `json:"start_time,omitempty"`
+
+	// StatsConfig Stats Engine configuration settings
+	StatsConfig *StatsConfig `json:"stats_config,omitempty"`
+}
+
+// ExperimentUpdate defines model for ExperimentUpdate.
+type ExperimentUpdate struct {
+	// AudienceConditions The audiences that should see this experiment. To target everyone, use the string "everyone". Multiple audiences can be combined with "and" or "or" using the same structure as audience conditions
+	AudienceConditions *string `json:"audience_conditions,omitempty"`
+
+	// Changes Custom CSS or JavaScript that will run before all variations in the Experiment (for Experiments in Web Projects only)
+	Changes *[]SharedCodeChange `json:"changes,omitempty"`
+
+	// Description The description or hypothesis for an Experiment
+	Description *string `json:"description,omitempty"`
+
+	// Environments String identifier for the Experiment's status in each Environment based on the environment key.
+	Environments *map[string]ExperimentEnvironmentUpdate `json:"environments,omitempty"`
+
+	// FeatureId The ID of a Feature to attach to the Experiment. This turns an Experiment into a Feature Test.
+	FeatureId *int64 `json:"feature_id,omitempty"`
+
+	// Holdback Percent of traffic to exclude from the experiment, measured in basis points. 100 basis points = 1% traffic. For example, a value of 9900 would mean that 1% of visitors will be eligible for the experiment. This is only applicable for Web.
+	Holdback *int `json:"holdback,omitempty"`
+
+	// Key Unique string idz for this Experiment within the Project. Only applicable for Full Stack and Mobile projects.
+	Key *string `json:"key,omitempty"`
+
+	// Metrics An ordered list of metrics to track for the Experiment
+	Metrics *[]Metric `json:"metrics,omitempty"`
+
+	// Name Name of the Experiment
+	Name *string `json:"name,omitempty"`
+
+	// PageIds A list of Page IDs used in the Experiment.  Only `url_targeting` or `page_ids` can be used when updating an experiment, but not both.
+	PageIds  *[]int64        `json:"page_ids,omitempty"`
+	Schedule *ScheduleUpdate `json:"schedule,omitempty"`
+
+	// TrafficAllocation Percent of traffic allocated for the experiment, measured in basis points. 100 basis points = 1% traffic. For example, a value of 5500 would mean that 55% of visitors will be eligible for the experiment. This is only applicable for Full Stack.
+	TrafficAllocation *int          `json:"traffic_allocation,omitempty"`
+	UrlTargeting      *URLTargeting `json:"url_targeting,omitempty"`
+
+	// Variations List of IDs of all variations in the Experiment
+	Variations *[]VariationUpdate `json:"variations,omitempty"`
+
+	// Whitelist A list containing the user IDs and variations of users who have been whitelisted
+	Whitelist *[]struct {
+		// UserId The ID of the user being whitelisted
+		UserId string `json:"user_id"`
+
+		// VariationId The unique identifier for the variation
+		VariationId int64 `json:"variation_id"`
+	} `json:"whitelist,omitempty"`
+}
+
+// ExperimentVariationReach defines model for ExperimentVariationReach.
+type ExperimentVariationReach struct {
+	// BaselineCount Baseline count
+	BaselineCount *int64 `json:"baseline_count,omitempty"`
+
+	// BaselineReach Baseline reach
+	BaselineReach *float64 `json:"baseline_reach,omitempty"`
+
+	// TotalCount Total number of visitors exposed to the Experiment
+	TotalCount *int64 `json:"total_count,omitempty"`
+
+	// TreatmentCount Treatment count
+	TreatmentCount *int64 `json:"treatment_count,omitempty"`
+
+	// TreatmentReach Treatment reach
+	TreatmentReach *float64 `json:"treatment_reach,omitempty"`
+
+	// Variations A map of reach for each variation keyed by variation ID
+	Variations *map[string]VariationReach `json:"variations,omitempty"`
+}
+
+// Extension defines model for Extension.
+type Extension struct {
+	// Archived Whether the extension is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Created The time when the extension was initially created
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description The description for the extension
+	Description *string `json:"description,omitempty"`
+
+	// EditUrl The URL to load when editing the extension
+	EditUrl string `json:"edit_url"`
+
+	// Enabled Whether the extension is enabled. A disabled extension won't appear in the editor and won't be built into the snippet
+	Enabled *bool `json:"enabled,omitempty"`
+
+	// Fields Array of editable fields in the extension
+	Fields *[]Field `json:"fields,omitempty"`
+
+	// Id The unique identifier for the extension
+	Id             *int64         `json:"id,omitempty"`
+	Implementation Implementation `json:"implementation"`
+
+	// LastModified The last time when the extension was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name Name of the extension
+	Name string `json:"name"`
+
+	// ProjectId The project the extension is in
+	ProjectId int64 `json:"project_id"`
+}
+
+// ExtensionUpdate defines model for ExtensionUpdate.
+type ExtensionUpdate struct {
+	// Archived Whether the extension is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description The description for the extension
+	Description *string `json:"description,omitempty"`
+
+	// EditUrl The URL to load when editing the extension
+	EditUrl *string `json:"edit_url,omitempty"`
+
+	// Enabled Whether the extension is enabled
+	Enabled *bool `json:"enabled,omitempty"`
+
+	// Fields Array of editable fields in the extension
+	Fields         *[]Field        `json:"fields,omitempty"`
+	Implementation *Implementation `json:"implementation,omitempty"`
+
+	// Name Name of the extension
+	Name *string `json:"name,omitempty"`
+}
+
+// Feature defines model for Feature.
+type Feature struct {
+	// Archived Whether the Feature has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Created Time when the Feature was created
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description A short description of this Feature
+	Description *string `json:"description,omitempty"`
+
+	// Environments The configuration for this Feature's Rollout within each Environment, keyed by Environment key
+	Environments *map[string]FeatureEnvironment `json:"environments,omitempty"`
+
+	// Id The ID of this Feature
+	Id *int64 `json:"id,omitempty"`
+
+	// Key Unique string identifier for this Feature within the Project
+	Key string `json:"key"`
+
+	// LastModified Date last modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name Name of the Feature
+	Name *string `json:"name,omitempty"`
+
+	// ProjectId The ID of the Project this Feature belongs to
+	ProjectId int64 `json:"project_id"`
+
+	// Variables Variables define the dynamic configuration of a feature, and each variable can take on a different value on a per-variation basis within a feature test.
+	Variables *[]FeatureVariable `json:"variables,omitempty"`
+}
+
+// FeatureEnvironment defines model for FeatureEnvironment.
+type FeatureEnvironment struct {
+	// Id The ID of the Environment this set of Rollout Rules applies to
+	Id *int64 `json:"id,omitempty"`
+
+	// IsPrimary Whether the Environment this set of Rollout Rules applies to is the primary Environment
+	IsPrimary *bool `json:"is_primary,omitempty"`
+
+	// RolloutRules Rollout Rules allow you to define groups of users and a percentage of those users that will see a Feature by default. You are currently limited to a single rollout rule. Audience IDs sent in any environment must always match that of the primary environment.
+	RolloutRules []RolloutRule `json:"rollout_rules"`
+}
+
+// FeatureUpdate defines model for FeatureUpdate.
+type FeatureUpdate struct {
+	// Archived Whether the Feature has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description A short description of this Feature
+	Description *string `json:"description,omitempty"`
+
+	// Environments The configuration for this Feature's Rollout within each Environment, keyed by Environment key.
+	Environments *map[string]FeatureEnvironment `json:"environments,omitempty"`
+
+	// Key Unique string identifier for this Feature within the Project
+	Key *string `json:"key,omitempty"`
+
+	// Name Name of the Feature
+	Name *string `json:"name,omitempty"`
+
+	// Variables Variables define the dynamic configuration of a feature, and each variable can take on a different value on a per-variation basis within a feature test.
+	Variables *[]FeatureVariableUpdate `json:"variables,omitempty"`
+}
+
+// FeatureVariable defines model for FeatureVariable.
+type FeatureVariable struct {
+	// Archived Whether or not this Feature Variable is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// DefaultValue The stringified default value for this Feature Variable. The default value is the value Optimizely SDKs will return when this Feature Variable is accessed by getFeatureVariableValue unless the Feature Variable's value is a part of a feature test variation.
+	DefaultValue string `json:"default_value"`
+
+	// Id The ID of this Feature Variable
+	Id *int64 `json:"id,omitempty"`
+
+	// Key Unique string identifier for this Feature Variable within the Feature
+	Key string `json:"key"`
+
+	// Type The datatype for this Feature Variable
+	Type FeatureVariableType `json:"type"`
+}
+
+// FeatureVariableType The datatype for this Feature Variable
+type FeatureVariableType string
+
+// FeatureVariableUpdate defines model for FeatureVariableUpdate.
+type FeatureVariableUpdate struct {
+	// Archived Whether or not this Feature Variable is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// DefaultValue The stringified default value for this Feature Variable. The default value is the value Optimizely SDKs will return when this Feature Variable is accessed by getFeatureVariableValue unless the Feature Variable's value is a part of a feature test variation.
+	DefaultValue *string `json:"default_value,omitempty"`
+
+	// Description A short description of this Feature Variable
+	Description *string `json:"description,omitempty"`
+
+	// Id The ID of this Feature Variable
+	Id *int64 `json:"id,omitempty"`
+
+	// Key Unique string identifier for this Feature Variable within the Feature
+	Key *string `json:"key,omitempty"`
+
+	// Type The datatype for this Feature Variable
+	Type *FeatureVariableUpdateType `json:"type,omitempty"`
+}
+
+// FeatureVariableUpdateType The datatype for this Feature Variable
+type FeatureVariableUpdateType string
+
+// Field defines model for Field.
+type Field struct {
+	// ApiName The API name of the field
+	ApiName string `json:"api_name"`
+
+	// DefaultValue A string in JSON format that corresponds to the default_value of the field
+	DefaultValue string `json:"default_value"`
+
+	// FieldType The type of the field
+	FieldType FieldFieldType `json:"field_type"`
+
+	// Label The label of the field
+	Label   string   `json:"label"`
+	Options *Options `json:"options,omitempty"`
+}
+
+// FieldFieldType The type of the field
+type FieldFieldType string
+
+// Group defines model for Group.
+type Group struct {
+	// Archived Whether the group is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Created The time when the Exclusion Group was initially created
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description The description for an Exclusion Group
+	Description *string `json:"description,omitempty"`
+
+	// Entities Array of Group Entities in the Exclusion Group
+	Entities *[]GroupEntity `json:"entities,omitempty"`
+
+	// Id The unique identifier for the Exclusion Group
+	Id *int64 `json:"id,omitempty"`
+
+	// LastModified The last time the Exclusion Group was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name Name of the Exclusion Group
+	Name string `json:"name"`
+
+	// ProjectId The Project the Exclusion Group is in
+	ProjectId int64 `json:"project_id"`
+}
+
+// GroupEntity defines model for GroupEntity.
+type GroupEntity struct {
+	// Id The unique identifier for the Group Entity
+	Id int `json:"id"`
+
+	// Kind The kind of the Group Entity
+	Kind GroupEntityKind `json:"kind"`
+
+	// Weight The weight of the Group Entity. The weight is a value between 0 and 10000. An entity with weight 5000 will receive 50% of this group's traffic
+	Weight int `json:"weight"`
+}
+
+// GroupEntityKind The kind of the Group Entity
+type GroupEntityKind string
+
+// GroupUpdate defines model for GroupUpdate.
+type GroupUpdate struct {
+	// Archived Whether the Exclusion Group has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description The updated description of the Exclusion Group
+	Description *string `json:"description,omitempty"`
+
+	// Entities Array of experiments or campaigns in the Exclusion Group, represented as a GroupEntity object
+	Entities *[]GroupEntity `json:"entities,omitempty"`
+
+	// Name The updated name of the Exclusion Group
+	Name *string `json:"name,omitempty"`
+}
+
+// Implementation defines model for Implementation.
+type Implementation struct {
+	// ApplyJs The Apply JS code is used to inject the extension onto the page
+	ApplyJs *string `json:"apply_js,omitempty"`
+
+	// Css Some extensions may not need any CSS because they inherit styles from the page itself. However, you can add additional styling here. This will be injected on the page through a <style> tag
+	Css *string `json:"css,omitempty"`
+
+	// Html The html implementation of the field
+	Html *string `json:"html,omitempty"`
+
+	// ResetJs Reset JS is used to "clean up" after a extension. It's used in the editor, when changing field values or removing an existing extension. Reset JS should remove the element and any other side-effects
+	ResetJs *string `json:"reset_js,omitempty"`
+}
+
+// ImpressionsUsage defines model for ImpressionsUsage.
+type ImpressionsUsage struct {
+	// ExperimentId The ID for the experiment.
+	ExperimentId int64 `json:"experiment_id"`
+
+	// ExperimentName The Experiment name to display in the Optimizely app. Whitespaces and other non-alphanumeric characters allowed. Defaults to experiment key if left empty.
+	ExperimentName string `json:"experiment_name"`
+
+	// ExperimentStatus The status of the Experiment.
+	ExperimentStatus string `json:"experiment_status"`
+
+	// ImpressionCount The Impressions count at experiment level.
+	ImpressionCount int64 `json:"impression_count"`
+
+	// Platform The platform of the Project
+	Platform string `json:"platform"`
+
+	// ProjectId The ID for the project.
+	ProjectId int64 `json:"project_id"`
+
+	// ProjectName The name of the Project.
+	ProjectName string `json:"project_name"`
+}
+
+// ImpressionsUsageSummary defines model for ImpressionsUsageSummary.
+type ImpressionsUsageSummary struct {
+	// Allowance Total allowance purchased for the account.
+	Allowance int64 `json:"allowance"`
+
+	// EndDate Current subscription end date.
+	EndDate openapi_types.Date `json:"end_date"`
+
+	// LastUpdateDate Last impressions usage updated date.
+	LastUpdateDate openapi_types.Date `json:"last_update_date"`
+
+	// StartDate Current subscription start date.
+	StartDate openapi_types.Date `json:"start_date"`
+
+	// Usage Usage for the account.
+	Usage int64 `json:"usage"`
+
+	// UsagePercentage Utilised usage percentage.
+	UsagePercentage float32 `json:"usage_percentage"`
+}
+
+// InPageEvent An Event that can occur only within the context of a specific Page (allowed in Web Projects only)
+type InPageEvent struct {
+	// Archived Whether or not this Event is archived
+	Archived *bool              `json:"archived,omitempty"`
+	Category *EventCategories   `json:"category,omitempty"`
+	Config   *InPageEventConfig `json:"config,omitempty"`
+
+	// Created Creation date for this Event
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description A description of this Event
+	Description *string `json:"description,omitempty"`
+
+	// EventType The type of this Event
+	EventType InPageEventEventType `json:"event_type"`
+
+	// Id The unique identifier of the Event
+	Id *int64 `json:"id,omitempty"`
+
+	// IsClassic Whether or not this Event is a classic Event. If true, the Event is read-only
+	IsClassic *bool `json:"is_classic,omitempty"`
+
+	// IsEditable Whether or not this Event may be edited
+	IsEditable *bool `json:"is_editable,omitempty"`
+
+	// Key Unique string identifier for this Event within the Project
+	Key *string `json:"key,omitempty"`
+
+	// Name A human readable name for this Event
+	Name string `json:"name"`
+
+	// PageId The Page ID associated with this Event
+	PageId *int64 `json:"page_id,omitempty"`
+
+	// ProjectId The ID of this Event's parent Project
+	ProjectId *int64 `json:"project_id,omitempty"`
+}
+
+// InPageEventEventType The type of this Event
+type InPageEventEventType string
+
+// InPageEventConfig defines model for InPageEventConfig.
+type InPageEventConfig struct {
+	// Selector CSS selector for the page element(s) that trigger an Event
+	Selector string `json:"selector"`
+}
+
+// InPageEventUpdate defines model for InPageEventUpdate.
+type InPageEventUpdate struct {
+	// Archived Whether or not to archive this Event
+	Archived *bool              `json:"archived,omitempty"`
+	Category *EventCategories   `json:"category,omitempty"`
+	Config   *InPageEventConfig `json:"config,omitempty"`
+
+	// Description A description of this Event
+	Description *string `json:"description,omitempty"`
+
+	// Key Unique string identifier for this Event within the Project
+	Key *string `json:"key,omitempty"`
+
+	// Name A human readable name for this Event
+	Name *string `json:"name,omitempty"`
+
+	// PageId The Page ID associated with this Event
+	PageId *int64 `json:"page_id,omitempty"`
+}
+
+// ListAttribute defines model for ListAttribute.
+type ListAttribute struct {
+	// AccountId The unique identifier for the Optimizely account
+	AccountId *int64 `json:"account_id,omitempty"`
+
+	// Archived Whether or not the List Attribute has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// AwsAccessKey AWS access key to upload List Attribute source file to S3
+	AwsAccessKey *string `json:"aws_access_key,omitempty"`
+
+	// AwsSecretKey AWS secret key to upload List Attribute source file to S3
+	AwsSecretKey *string `json:"aws_secret_key,omitempty"`
+
+	// Created Time when the List Attribute was created
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description A short description of the List Attribute
+	Description *string `json:"description,omitempty"`
+
+	// Id The unique identifier for the List Attribute
+	Id *int64 `json:"id,omitempty"`
+
+	// KeyField The name of the object which holds targeting ids on your website
+	KeyField string `json:"key_field"`
+
+	// LastModified The last time the List Attribute was modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// ListContent A comma separated string of IDs or ZIP Codes. Items will be matched against the key_field to determine if an active visitor should be targeted by the list.  Note that if the list currently contains data, providing this value will overwrite the previous data.
+	ListContent *string `json:"list_content,omitempty"`
+
+	// ListType The type of data object which holds targeting ids on your website (cookies, query parameters, zip codes, Global JS variables)
+	ListType *ListAttributeListType `json:"list_type,omitempty"`
+
+	// Name A unique, human-readable name for the List Attribute
+	Name string `json:"name"`
+
+	// ProjectId The ID of the project the List Attribute belongs to
+	ProjectId int64 `json:"project_id"`
+
+	// S3Path S3 path containing files used to populate the List Attribute with data. Can be used with an S3 client or CLI to upload data.
+	S3Path *string `json:"s3_path,omitempty"`
+}
+
+// ListAttributeListType The type of data object which holds targeting ids on your website (cookies, query parameters, zip codes, Global JS variables)
+type ListAttributeListType string
+
+// ListAttributeUpdate defines model for ListAttributeUpdate.
+type ListAttributeUpdate struct {
+	// Archived Whether or not the List Attribute has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description A short description of the List Attribute
+	Description *string `json:"description,omitempty"`
+
+	// KeyField The name of the object which holds targeting ids on your website
+	KeyField *string `json:"key_field,omitempty"`
+
+	// ListContent A comma separated string of IDs or ZIP Codes. Items will be matched against the key_field to determine if an active visitor should be targeted by the list.  Note that if the list currently contains data, providing this value will overwrite the previous data.
+	ListContent *string `json:"list_content,omitempty"`
+
+	// ListType The type of data object which holds targeting ids on your website (cookies, query parameters, zip codes, Global JS variables)
+	ListType *ListAttributeUpdateListType `json:"list_type,omitempty"`
+
+	// Name A unique, human-readable name for the List Attribute
+	Name *string `json:"name,omitempty"`
+}
+
+// ListAttributeUpdateListType The type of data object which holds targeting ids on your website (cookies, query parameters, zip codes, Global JS variables)
+type ListAttributeUpdateListType string
+
+// Me defines model for Me.
+type Me struct {
+	// Accounts List of Accounts this user can access
+	Accounts       *[]Account      `json:"accounts,omitempty"`
+	CurrentAccount *CurrentAccount `json:"current_account,omitempty"`
+
+	// Id The unique identifier of the current User
+	Id      *openapi_types.UUID `json:"id,omitempty"`
+	Profile *UserProfile        `json:"profile,omitempty"`
+
+	// ProjectRoles List of Project IDs in the current Account with the current User's role information
+	ProjectRoles *[]ProjectRole `json:"project_roles,omitempty"`
+}
+
+// Metric defines model for Metric.
+type Metric struct {
+	// Aggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+	Aggregator *MetricAggregator `json:"aggregator,omitempty"`
+
+	// EventId The ID for the Event to select data from. Omitted for global metrics that are not relative to a specific Event, i.e. "overall revenue"
+	EventId *int64 `json:"event_id,omitempty"`
+
+	// EventProperties The conditions used to filter the metric on specific event property values.
+	EventProperties *MetricEventProperties `json:"event_properties,omitempty"`
+
+	// Field The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+	Field *MetricField `json:"field,omitempty"`
+
+	// Metrics A list of all metrics that will be used in the calculation of a ratio metric.
+	Metrics *[]CompoundSubMetric `json:"metrics,omitempty"`
+
+	// Scope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+	Scope *MetricScope `json:"scope,omitempty"`
+
+	// TimeWindow The maximum amount of time a numerator event can differ from a denominator event in order to be included in a ratio metric. This can be an integer, or an integer followed by a letter denoting the unit of time (d = days, h = hours, m = minutes). If no unit of time is supplied, hours is assumed. If no value is supplied, a time window of 48 hours is assumed.
+	TimeWindow *string `json:"time_window,omitempty"`
+
+	// WinningDirection The winning direction of this metric
+	WinningDirection *MetricWinningDirection `json:"winning_direction,omitempty"`
+}
+
+// MetricAggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+type MetricAggregator string
+
+// MetricField The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+type MetricField string
+
+// MetricScope Specifies how Events should be grouped together. Can also be thought of as the denonimator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+type MetricScope string
+
+// MetricWinningDirection The winning direction of this metric
+type MetricWinningDirection string
+
+// MetricEventProperties The conditions used to filter the metric on specific event property values.
+type MetricEventProperties struct {
+	// Filter The set of event property conditions a conversion must match to be counted toward the metric.
+	Filter *MetricFilter `json:"filter,omitempty"`
+}
+
+// MetricFilter The set of event property conditions a conversion must match to be counted toward the metric.
+type MetricFilter struct {
+	// CombineOperator Determines whether all conditions (and) or any condition (or) must be met.
+	CombineOperator *MetricFilterCombineOperator `json:"combine_operator,omitempty"`
+	Conditions      *[]MetricFilterCondition     `json:"conditions,omitempty"`
+}
+
+// MetricFilterCombineOperator Determines whether all conditions (and) or any condition (or) must be met.
+type MetricFilterCombineOperator string
+
+// MetricFilterCondition defines the event property values and operator used to check whether the conversion meets the condition.
+type MetricFilterCondition struct {
+	// Name The name of the event property to match to.
+	Name *string `json:"name,omitempty"`
+
+	// Operator The type of match to be performed. equal_to and not_equal_to are available for all property types. greater_than, greater_than_or_equal_to, less_than, and less_than_or_equal_to are only available for properties with type number. contains and does_not_contain are only available for properties with type string.
+	Operator *MetricFilterConditionOperator `json:"operator,omitempty"`
+
+	// Type The data type of the event property.
+	Type *MetricFilterConditionType `json:"type,omitempty"`
+
+	// Value The value the conversion's property should match, according to the operator.
+	Value *string `json:"value,omitempty"`
+}
+
+// MetricFilterConditionOperator The type of match to be performed. equal_to and not_equal_to are available for all property types. greater_than, greater_than_or_equal_to, less_than, and less_than_or_equal_to are only available for properties with type number. contains and does_not_contain are only available for properties with type string.
+type MetricFilterConditionOperator string
+
+// MetricFilterConditionType The data type of the event property.
+type MetricFilterConditionType string
+
+// Metrics defines model for Metrics.
+type Metrics struct {
+	// AccountId account_id
+	AccountId *int64 `json:"account_id,omitempty"`
+
+	// Aggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+	Aggregator MetricsAggregator `json:"aggregator"`
+
+	// Archived Whether the metric is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description description
+	Description *string `json:"description,omitempty"`
+
+	// DisplayTitle display title
+	DisplayTitle *string `json:"display_title,omitempty"`
+
+	// DisplayUnit display unit
+	DisplayUnit *string `json:"display_unit,omitempty"`
+
+	// EventId The ID for the Event to select data from. Omitted for global metrics that are not relative to a specific Event, i.e. "overall revenue"
+	EventId *int64 `json:"event_id,omitempty"`
+
+	// EventProperties The conditions used to filter the metric on specific event property values.
+	EventProperties *MetricEventProperties `json:"event_properties,omitempty"`
+
+	// EventType The type of this Event
+	EventType *MetricsEventType `json:"event_type,omitempty"`
+
+	// Field The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+	Field *MetricsField `json:"field,omitempty"`
+
+	// Metrics A list of all metrics that will be used in the calculation of a ratio metric.
+	Metrics *[]CompoundSubMetric `json:"metrics,omitempty"`
+
+	// Name name
+	Name string `json:"name"`
+
+	// ProjectId project_id
+	ProjectId int64 `json:"project_id"`
+
+	// Scope Specifies how Events should be grouped. Can also be thought of as the denominator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+	Scope MetricsScope `json:"scope"`
+
+	// TimeWindow The maximum amount of time a numerator event can differ from a denominator event in order to be included in a ratio metric. This can be an integer, or an integer followed by a letter denoting the unit of time (d = days, h = hours, m = minutes). If no unit of time is supplied, hours is assumed. If no value is supplied, a time window of 48 hours is assumed.
+	TimeWindow *string `json:"time_window,omitempty"`
+
+	// WinningDirection The winning direction of this metric
+	WinningDirection MetricsWinningDirection `json:"winning_direction"`
+}
+
+// MetricsAggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+type MetricsAggregator string
+
+// MetricsEventType The type of this Event
+type MetricsEventType string
+
+// MetricsField The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+type MetricsField string
+
+// MetricsScope Specifies how Events should be grouped. Can also be thought of as the denominator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+type MetricsScope string
+
+// MetricsWinningDirection The winning direction of this metric
+type MetricsWinningDirection string
+
+// MetricsUpdate defines model for MetricsUpdate.
+type MetricsUpdate struct {
+	// Aggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+	Aggregator *MetricsUpdateAggregator `json:"aggregator,omitempty"`
+
+	// Archived Whether the metric is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description description
+	Description *string `json:"description,omitempty"`
+
+	// DisplayTitle display title
+	DisplayTitle *string `json:"display_title,omitempty"`
+
+	// DisplayUnit displayt unit
+	DisplayUnit *string `json:"display_unit,omitempty"`
+
+	// EventProperties The conditions used to filter the metric on specific event property values.
+	EventProperties *MetricEventProperties `json:"event_properties,omitempty"`
+
+	// EventType The type of this Event
+	EventType *MetricsUpdateEventType `json:"event_type,omitempty"`
+
+	// Field The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+	Field *MetricsUpdateField `json:"field,omitempty"`
+
+	// Metrics A list of all metrics that will be used in the calculation of a ratio metric.
+	Metrics *[]CompoundSubMetric `json:"metrics,omitempty"`
+
+	// Name name
+	Name *string `json:"name,omitempty"`
+
+	// Scope Specifies how Events should be grouped. Can also be thought of as the denominator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+	Scope *MetricsUpdateScope `json:"scope,omitempty"`
+
+	// TimeWindow The maximum amount of time a numerator event can differ from a denominator event in order to be included in a ratio metric. This can be an integer, or an integer followed by a letter denoting the unit of time (d = days, h = hours, m = minutes). If no unit of time is supplied, hours is assumed. If no value is supplied, a time window of 48 hours is assumed.
+	TimeWindow *string `json:"time_window,omitempty"`
+
+	// WinningDirection The winning direction of this metric
+	WinningDirection *MetricsUpdateWinningDirection `json:"winning_direction,omitempty"`
+}
+
+// MetricsUpdateAggregator The aggregation function for the numerator of the metric. 'unique' measures the number of unique visitors/sessions that include the specified Event. 'count' measures the total number of occurrences of Event for the scope (visitor/session). 'sum' is the sum of the 'field' value
+type MetricsUpdateAggregator string
+
+// MetricsUpdateEventType The type of this Event
+type MetricsUpdateEventType string
+
+// MetricsUpdateField The field to aggregate for the numerator of the metric. Required when 'aggregator' = 'sum', otherwise omitted
+type MetricsUpdateField string
+
+// MetricsUpdateScope Specifies how Events should be grouped. Can also be thought of as the denominator of the metric. 'session' divides by the number of sessions. "Influenced sessions", or sessions that do not contain a decision Event but carry a decision from a previous session are not included in counts for numerator or denominator. 'visitor' divides by the number of visitors. 'event' divides by the total occurrences (impressions) of the specified Event
+type MetricsUpdateScope string
+
+// MetricsUpdateWinningDirection The winning direction of this metric
+type MetricsUpdateWinningDirection string
+
+// Options defines model for Options.
+type Options struct {
+	// Choices The choices for a field
+	Choices *[]Choices `json:"choices,omitempty"`
+}
+
+// PageObject defines model for Page.
+type PageObject struct {
+	// ActivationCode Stringified Javascript function that determines when the Page is activated. Only required when activation_type is 'polling' or 'callback'.
+	ActivationCode *string `json:"activation_code,omitempty"`
+
+	// ActivationType Page activation type is a trigger that determines when the page is activated. Triggers tell Optimizely when to start checking whether certain conditions are true
+	// 'Immediate' activation mode activates the page as soon as the snippet loads.
+	// 'Polling' activation mode polls every 50ms until 'activation_code' evaluates to True, then activates the page.
+	// 'Callback' activation mode activates the page when the event defined by 'activation_code' is triggered.
+	// 'Manual' activation mode requires code within the subject app to explicitly trigger page activation.
+	// 'DOM Changed' sets the page to trigger when the DOM changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+	// 'URL Changed' sets the page to trigger when the URL changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+	ActivationType *PageActivationType `json:"activation_type,omitempty"`
+
+	// Archived Whether the Page has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Category The category this Page is grouped under
+	Category *PageCategory `json:"category,omitempty"`
+
+	// Conditions Stringified array of the conditions that activate the Page. The array contains Page Condition JSON dicts joined by "and" and "or".
+	// Each individual Page Condition dict has format {"type": "url", "match_type": <match_type>, "value": <value>} where match_types are:
+	// "simple" match type will match if "value" matches the hostname and path of the Page URL.
+	// "exact" match type will match only an exact string match between "value" and the Page URL.
+	// "substring" match type will match if "value" is a substring of the Page URL.
+	// "regex" match type will match if "value" is a regular expression match for the Page URL.
+	Conditions *string `json:"conditions,omitempty"`
+
+	// Created Date created
+	Created *time.Time `json:"created,omitempty"`
+
+	// EditUrl URL of the Page
+	EditUrl string `json:"edit_url"`
+
+	// Id The unique identifier of the Page
+	Id *int64 `json:"id,omitempty"`
+
+	// Key Unique string identifier for this Page within the Project
+	Key *string `json:"key,omitempty"`
+
+	// LastModified Date last modified
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name Name of the Page
+	Name string `json:"name"`
+
+	// PageType Type of Page
+	PageType *PagePageType `json:"page_type,omitempty"`
+
+	// ProjectId ID of the Page's Project
+	ProjectId int64 `json:"project_id"`
+}
+
+// PageActivationType Page activation type is a trigger that determines when the page is activated. Triggers tell Optimizely when to start checking whether certain conditions are true
+// 'Immediate' activation mode activates the page as soon as the snippet loads.
+// 'Polling' activation mode polls every 50ms until 'activation_code' evaluates to True, then activates the page.
+// 'Callback' activation mode activates the page when the event defined by 'activation_code' is triggered.
+// 'Manual' activation mode requires code within the subject app to explicitly trigger page activation.
+// 'DOM Changed' sets the page to trigger when the DOM changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+// 'URL Changed' sets the page to trigger when the URL changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+type PageActivationType string
+
+// PageCategory The category this Page is grouped under
+type PageCategory string
+
+// PagePageType Type of Page
+type PagePageType string
+
+// PageUpdate defines model for PageUpdate.
+type PageUpdate struct {
+	// ActivationCode Stringified Javascript function that determines when the Page is activated. Only required when activation_type is 'polling' or 'callback'.
+	ActivationCode *string `json:"activation_code,omitempty"`
+
+	// ActivationType Page activation type is a trigger that determines when the page is activated. Triggers tell Optimizely when to start checking whether certain conditions are true
+	// 'Immediate' activation mode activates the page as soon as the snippet loads.
+	// 'Polling' activation mode polls every 50ms until 'activation_code' evaluates to True, then activates the page.
+	// 'Callback' activation mode activates the page when the event defined by 'activation_code' is triggered.
+	// 'Manual' activation mode requires code within the subject app to explicitly trigger page activation.
+	// 'DOM Changed' sets the page to trigger when the DOM changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+	// 'URL Changed' sets the page to trigger when the URL changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+	ActivationType *PageUpdateActivationType `json:"activation_type,omitempty"`
+
+	// Archived Whether the Page is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Category The category this Page is grouped under
+	Category *PageUpdateCategory `json:"category,omitempty"`
+
+	// Conditions Stringified array of the conditions that activate the Page. The array contains Page Condition JSON dicts joined by "and" and "or".
+	// Each individual Page Condition dict has format {"type": "url", "match_type": <match_type>, "value": <value>} where match_types are:
+	// "simple" match type will match if "value" matches the hostname and path of the Page URL.
+	// "exact" match type will match only an exact string match between "value" and the Page URL.
+	// "substring" match type will match if "value" is a substring of the Page URL.
+	// "regex" match type will match if "value" is a regular expression match for the Page URL.
+	Conditions *string `json:"conditions,omitempty"`
+
+	// EditUrl URL of the Page
+	EditUrl *string `json:"edit_url,omitempty"`
+
+	// Key Unique string identifier for this Page within the Project
+	Key *string `json:"key,omitempty"`
+
+	// Name Page Name
+	Name *string `json:"name,omitempty"`
+
+	// PageType Type of Page
+	PageType *PageUpdatePageType `json:"page_type,omitempty"`
+}
+
+// PageUpdateActivationType Page activation type is a trigger that determines when the page is activated. Triggers tell Optimizely when to start checking whether certain conditions are true
+// 'Immediate' activation mode activates the page as soon as the snippet loads.
+// 'Polling' activation mode polls every 50ms until 'activation_code' evaluates to True, then activates the page.
+// 'Callback' activation mode activates the page when the event defined by 'activation_code' is triggered.
+// 'Manual' activation mode requires code within the subject app to explicitly trigger page activation.
+// 'DOM Changed' sets the page to trigger when the DOM changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+// 'URL Changed' sets the page to trigger when the URL changes [Learn more](https://help.optimizely.com/Build_Campaigns_and_Experiments/Support_for_dynamic_websites%3A_Use_Optimizely_on_single_page_applications#Triggers).
+type PageUpdateActivationType string
+
+// PageUpdateCategory The category this Page is grouped under
+type PageUpdateCategory string
+
+// PageUpdatePageType Type of Page
+type PageUpdatePageType string
+
+// Plan defines model for Plan.
+type Plan struct {
+	// AccountId The account ID of the account that this Plan & Usage information is associated with
+	AccountId *int64 `json:"account_id,omitempty"`
+
+	// PlanName The name of the plan for the current account
+	PlanName *string `json:"plan_name,omitempty"`
+
+	// ProductUsages Array of products under this account
+	ProductUsages *[]ProductUsage `json:"product_usages,omitempty"`
+
+	// Status The status of the plan for the current account
+	Status *PlanStatus `json:"status,omitempty"`
+
+	// UnitOfMeasurement The unit by which we measure the `usage` of this account
+	UnitOfMeasurement *PlanUnitOfMeasurement `json:"unit_of_measurement,omitempty"`
+}
+
+// PlanStatus The status of the plan for the current account
+type PlanStatus string
+
+// PlanUnitOfMeasurement The unit by which we measure the `usage` of this account
+type PlanUnitOfMeasurement string
+
+// ProductUsage defines model for ProductUsage.
+type ProductUsage struct {
+	// AllocationTermInMonths The current allocation term length in months. The allocation term is the time between the `start_time` and the `end_time`. For example the `usage` for an account with an `allocation_term_in_months` of 6 has started accumulating on the `start_time` and will reset to 0 at `end_time` (6 months later)
+	AllocationTermInMonths *int64 `json:"allocation_term_in_months,omitempty"`
+
+	// EndTime The end date of the current allocation term period. For monthly paying accounts, the current allocation term period means the current billing month
+	EndTime *time.Time `json:"end_time,omitempty"`
+
+	// LastUpdateTime The last time that the `unit_of_measurement` count was updated
+	LastUpdateTime *time.Time `json:"last_update_time,omitempty"`
+
+	// OverageCentsPerVisitor (optional) The cost in cents for every visitor when the number of `unit_of_measurement` has exceeded the `usage_allowance`. This value is only set for accounts with a limited `usage_allowance`
+	OverageCentsPerVisitor *float32 `json:"overage_cents_per_visitor,omitempty"`
+
+	// ProductName The product name
+	ProductName *ProductUsageProductName `json:"product_name,omitempty"`
+
+	// Projects Key-value map of `usage` per project under this account and this product. Keys are project IDs, values are `usage` numbers. Only available for the Impressions metrics, otherwise omitted.
+	Projects *map[string]int `json:"projects,omitempty"`
+
+	// StartTime The start date of the current allocation term period. For monthly paying accounts, the current allocation term period means the current billing month
+	StartTime *time.Time `json:"start_time,omitempty"`
+
+	// Usage The total `usage` in the `unit_of_measurement` within the current allocation term
+	Usage *int64 `json:"usage,omitempty"`
+
+	// UsageAllowance (optional) The total `usage` allowed in the `unit_of_measurement` for the current allocation term. This value is only set for accounts with a limited `usage_allowance`
+	UsageAllowance *int64 `json:"usage_allowance,omitempty"`
+}
+
+// ProductUsageProductName The product name
+type ProductUsageProductName string
+
 // Project defines model for Project.
 type Project struct {
 	// AccountId The account the Project is associated with
 	AccountId *int64 `json:"account_id,omitempty"`
 
-	// ConfidenceThreshold The significance level...
+	// ConfidenceThreshold The significance level at which you would like to declare winning and losing variations. A lower number minimizes the time needed to declare a winning or losing variation, but increases the risk that your results aren't true winners and losers. The precision for this number is up to 4 decimal places
 	ConfidenceThreshold *float64 `json:"confidence_threshold,omitempty"`
 
 	// Created The time that the Project was originally created
@@ -265,10 +5720,10 @@ type Project struct {
 	// Id The unique identifier for the Project
 	Id *int64 `json:"id,omitempty"`
 
-	// IsClassic If is_classic is true it means that the project doesn't have Optimizely X enabled.
+	// IsClassic If `is_classic` is true it means that the project doesn't have Optimizely X enabled. In other words: this project is Optimizely Classic only. The v2 REST API can only be used for Optimizely X objects (with the exception of Audiences and Projects, which can be shared between Optimizely X and Classic), so when `is_classic` is set to true you will need to use the v1 API
 	IsClassic *bool `json:"is_classic,omitempty"`
 
-	// IsFlagsEnabled If is_flags_enabled is true, this project uses the new Flags-First user experience.
+	// IsFlagsEnabled If is_flags_enabled is true, this project uses the new Flags-First user experience and will use the [Flags API](https://library.optimizely.com/docs/api/flags/v1/index.html) to make changes to entities.
 	IsFlagsEnabled *bool `json:"is_flags_enabled,omitempty"`
 
 	// LastModified The time the Project was last modified
@@ -289,7 +5744,7 @@ type Project struct {
 	// Status The current status of the Project
 	Status *ProjectStatus `json:"status,omitempty"`
 
-	// ThirdPartyPlatform The third party platform with which the project is intended to be used.
+	// ThirdPartyPlatform The third party platform with which the project is intended to be used. When this is set, a project might have special restrictions. This can have a value of "salesforce" but defaults to null. In order to set this field, an account must have the third party platforms feature and be a fullstack project.
 	ThirdPartyPlatform *ProjectThirdPartyPlatform `json:"third_party_platform,omitempty"`
 	WebSnippet         *WebSnippet                `json:"web_snippet,omitempty"`
 }
@@ -303,15 +5758,30 @@ type ProjectSdks string
 // ProjectStatus The current status of the Project
 type ProjectStatus string
 
-// ProjectThirdPartyPlatform The third party platform with which the project is intended to be used.
+// ProjectThirdPartyPlatform The third party platform with which the project is intended to be used. When this is set, a project might have special restrictions. This can have a value of "salesforce" but defaults to null. In order to set this field, an account must have the third party platforms feature and be a fullstack project.
 type ProjectThirdPartyPlatform string
+
+// ProjectRole defines model for ProjectRole.
+type ProjectRole struct {
+	InvitationStatus *ProjectRoleInvitationStatus `json:"invitation_status,omitempty"`
+
+	// ProjectId The unique identifier of the Project
+	ProjectId *int64           `json:"project_id,omitempty"`
+	Role      *ProjectRoleRole `json:"role,omitempty"`
+}
+
+// ProjectRoleInvitationStatus defines model for ProjectRole.InvitationStatus.
+type ProjectRoleInvitationStatus string
+
+// ProjectRoleRole defines model for ProjectRole.Role.
+type ProjectRoleRole string
 
 // ProjectUpdate defines model for ProjectUpdate.
 type ProjectUpdate struct {
 	// AccountId The ID of the account the Project is associated with
 	AccountId *int64 `json:"account_id,omitempty"`
 
-	// ConfidenceThreshold The significance level...
+	// ConfidenceThreshold The significance level at which you would like to declare winning and losing variations. A lower number minimizes the time needed to declare a winning or losing variation, but increases the risk that your results aren't true winners and losers. The precision for this number is up to 4 decimal places.
 	ConfidenceThreshold *float64 `json:"confidence_threshold,omitempty"`
 
 	// DcpServiceId The ID of a Dynamic Customer Profile Service associated with this Project
@@ -330,6 +5800,714 @@ type ProjectUpdate struct {
 
 // ProjectUpdateStatus The current status of the Project
 type ProjectUpdateStatus string
+
+// ResultsShareLink defines model for ResultsShareLink.
+type ResultsShareLink struct {
+	// Url The share link for the results of this Campaign
+	Url *string `json:"url,omitempty"`
+}
+
+// Revision defines model for Revision.
+type Revision struct {
+	// Id Reference to a revision of the entity.
+	Id *int `json:"id,omitempty"`
+}
+
+// RolloutRule defines model for RolloutRule.
+type RolloutRule struct {
+	// AudienceConditions The audiences that should see this feature. To target everyone, use the string "everyone". Multiple audiences can be combined with "and" or "or" using the same structure as audience conditions. <code>audience_conditions</code> sent in any environment must always match those of the primary environment.
+	AudienceConditions *string `json:"audience_conditions,omitempty"`
+
+	// Enabled Whether or not the Rollout Rule is applied in this Environment. You can toggle this on and off by sending True or False.
+	Enabled *bool `json:"enabled,omitempty"`
+
+	// PercentageIncluded The percentage of the designated audiences that should get this Feature, measured in basis points. 100 basis points = 1% traffic.
+	PercentageIncluded *int `json:"percentage_included,omitempty"`
+
+	// VariableValues The configuration for this Variable's within each Feature Environment, keyed by Variable Key
+	VariableValues *map[string]string `json:"variable_values,omitempty"`
+}
+
+// Schedule defines model for Schedule.
+type Schedule struct {
+	// StartTime The start time for the Experiment, in date-time or date format (as defined by ISO 8601), and rounded to the nearest minute. If only date is supplied without time, the start time defaults to 00:00 on the specified start date.
+	StartTime *string `json:"start_time,omitempty"`
+
+	// StopTime The stop time for the Experiment, in date-time or full-date format (as defined by ISO 8601), and rounded to the nearest minute. If only date is supplied without time, the stop time defaults to 00:00 on the specified
+	//  stop date.
+	StopTime *string `json:"stop_time,omitempty"`
+
+	// TimeZone The time zone to use for Experiment start and stop times with respect to an IANA time zone (ex. "America/New_York"). The time zones expressed by GMT (e.g. "GMT-08:00") are no longer supported.
+	TimeZone *string `json:"time_zone,omitempty"`
+}
+
+// ScheduleUpdate defines model for ScheduleUpdate.
+type ScheduleUpdate struct {
+	// StartTime The start time for the Experiment, in date-time or date format (as defined by ISO 8601), and rounded to the nearest minute. If only date is supplied without time, the start time defaults to 00:00 on the specified start date.
+	StartTime *string `json:"start_time,omitempty"`
+
+	// StopTime The stop time for the Experiment, in date-time or full-date format (as defined by ISO 8601), and rounded to the nearest minute. If only date is supplied without time, the stop time defaults to 00:00 on the specified
+	//  stop date.
+	StopTime *string `json:"stop_time,omitempty"`
+
+	// TimeZone The time zone to use for Experiment start and stop times with respect to an IANA time zone (ex. "America/New_York"). The time zones expressed by GMT (e.g. "GMT-08:00") are no longer supported.
+	TimeZone *string `json:"time_zone,omitempty"`
+}
+
+// ScheduledJob defines model for ScheduledJob.
+type ScheduledJob struct {
+	// AccountId The account that the job is associated with
+	AccountId *int64 `json:"account_id,omitempty"`
+
+	// Archived Whether the Scheduled Job is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// CampaignIds A list of campaign_ids that should be considered during the job
+	CampaignIds *[]int64 `json:"campaign_ids,omitempty"`
+
+	// ExperimentIds A list of experiment_ids that should be considered during the job
+	ExperimentIds *[]int64 `json:"experiment_ids,omitempty"`
+
+	// Frequency How often the job should be performed
+	Frequency ScheduledJobFrequency `json:"frequency"`
+
+	// Id The unique identifier of the Scheduled Job
+	Id *int64 `json:"id,omitempty"`
+
+	// JobType The type of job to be performed
+	JobType ScheduledJobJobType `json:"job_type"`
+
+	// OutputChannels An object describing how the output of the job should be communicated
+	OutputChannels *map[string]interface{} `json:"output_channels,omitempty"`
+
+	// ProjectId The project that the job is associated with
+	ProjectId int64 `json:"project_id"`
+}
+
+// ScheduledJobFrequency How often the job should be performed
+type ScheduledJobFrequency string
+
+// ScheduledJobJobType The type of job to be performed
+type ScheduledJobJobType string
+
+// ScheduledJobUpdate defines model for ScheduledJobUpdate.
+type ScheduledJobUpdate struct {
+	// Archived Whether the Scheduled Job is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// CampaignIds A list of campaign_ids that should be considered during the job
+	CampaignIds *[]int64 `json:"campaign_ids,omitempty"`
+
+	// ExperimentIds A list of experiment_ids that should be considered during the job
+	ExperimentIds *[]int64                     `json:"experiment_ids,omitempty"`
+	Frequency     *ScheduledJobUpdateFrequency `json:"frequency,omitempty"`
+
+	// JobType The type of job to be performed
+	JobType *ScheduledJobUpdateJobType `json:"job_type,omitempty"`
+
+	// OutputChannels An object describing how the output of the job should be communicated
+	OutputChannels *map[string]interface{} `json:"output_channels,omitempty"`
+
+	// ProjectId The project that the job is associated with
+	ProjectId *int64 `json:"project_id,omitempty"`
+}
+
+// ScheduledJobUpdateFrequency defines model for ScheduledJobUpdate.Frequency.
+type ScheduledJobUpdateFrequency string
+
+// ScheduledJobUpdateJobType The type of job to be performed
+type ScheduledJobUpdateJobType string
+
+// SearchResult defines model for SearchResult.
+type SearchResult struct {
+	// Archived Whether or not the entity is archived.
+	Archived *bool `json:"archived,omitempty"`
+
+	// AudienceIds A list of Audience IDs used in the Experiment
+	AudienceIds *[]int64 `json:"audience_ids,omitempty"`
+
+	// CampaignType Type of campaing.
+	CampaignType *string `json:"campaign_type,omitempty"`
+
+	// Created The time that the entity was created.
+	Created *time.Time `json:"created,omitempty"`
+
+	// Description Description for the entity if it has one.
+	Description *string `json:"description,omitempty"`
+
+	// Enabled Wheter or not the environment is enabled or not
+	Enabled *bool `json:"enabled,omitempty"`
+
+	// EnvironmentKey The environment key of a given rule
+	EnvironmentKey *string `json:"environment_key,omitempty"`
+
+	// ExperimentCount Number of experiments by audience_id
+	ExperimentCount *int `json:"experiment_count,omitempty"`
+
+	// ExperimentType The type of experiment
+	ExperimentType *string `json:"experiment_type,omitempty"`
+
+	// FeatureKey The feature flag key
+	FeatureKey *string `json:"feature_key,omitempty"`
+
+	// FeatureName The feature flag name to display in the Optimizely app. Whitespaces and other non-alphanumeric characters allowed. Defaults to feature key if left empty.
+	FeatureName *string `json:"feature_name,omitempty"`
+
+	// FlagKey The Flag key
+	FlagKey *string `json:"flag_key,omitempty"`
+
+	// GroupId The id of the group that the rule belongs to.
+	GroupId *int `json:"group_id,omitempty"`
+
+	// Id ID of the entity
+	Id *int `json:"id,omitempty"`
+
+	// Key Key of the entity.
+	Key *string `json:"key,omitempty"`
+
+	// LastModified The time that the entity was last modified.
+	LastModified *time.Time `json:"last_modified,omitempty"`
+
+	// Name Name of the entity. This value will be the 'key' of the entity if there is no name.
+	Name *string `json:"name,omitempty"`
+
+	// ProjectId ID of the project that contains the entity (if applicable)
+	ProjectId *int `json:"project_id,omitempty"`
+
+	// ProjectName Name of the project that contains the entity (if applicable)
+	ProjectName *string `json:"project_name,omitempty"`
+
+	// RuleType Type of rule.
+	RuleType *string `json:"rule_type,omitempty"`
+
+	// RulesetEnabled Wheter or not the a rule is enabled in a ruleset
+	RulesetEnabled *bool `json:"ruleset_enabled,omitempty"`
+
+	// Status The current status for the entity if it has one.
+	Status *string `json:"status,omitempty"`
+
+	// Type Type of the entity.
+	Type *SearchResultType `json:"type,omitempty"`
+}
+
+// SearchResultType Type of the entity.
+type SearchResultType string
+
+// Section defines model for Section.
+type Section struct {
+	// Archived Whether or not the Section has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description A short description of this Section
+	Description *string `json:"description,omitempty"`
+
+	// ExperimentId The ID of the Multivariate Test this Section belongs to
+	ExperimentId *int `json:"experiment_id,omitempty"`
+
+	// Id The ID of this Section
+	Id *int `json:"id,omitempty"`
+
+	// Name The name of this Section
+	Name *string `json:"name,omitempty"`
+
+	// ProjectId The ID of the project that this Section belongs to
+	ProjectId  *int        `json:"project_id,omitempty"`
+	Variations []Variation `json:"variations"`
+}
+
+// SectionUpdate defines model for SectionUpdate.
+type SectionUpdate struct {
+	// Archived Whether or not the Section has been archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description A short description of this Section
+	Description *string `json:"description,omitempty"`
+
+	// Name The name of this Section
+	Name       *string      `json:"name,omitempty"`
+	Variations *[]Variation `json:"variations,omitempty"`
+}
+
+// SharedCodeChange defines model for SharedCodeChange.
+type SharedCodeChange struct {
+	// Async Indicates whether or not to execute the change asyncronously. If true, src will be returned in the response. Otherwise, it will be not included.
+	Async *bool `json:"async,omitempty"`
+
+	// Dependencies A list of dependent change IDs that must happen before this change
+	Dependencies *[]openapi_types.UUID `json:"dependencies,omitempty"`
+
+	// Id The ID of the change
+	Id *openapi_types.UUID `json:"id,omitempty"`
+
+	// Name Name of the change
+	Name *string `json:"name,omitempty"`
+
+	// Selector CSS selector to determine where changes are applied. Required for changes of type 'custom_css'.
+	Selector *string `json:"selector,omitempty"`
+
+	// Src The path to the change payload on the CDN. Only present if 'async' is True.
+	Src *string `json:"src,omitempty"`
+
+	// Type The type of this change.
+	Type SharedCodeChangeType `json:"type"`
+
+	// Value The value for the change can be JavaScript or CSS as a string.
+	Value string `json:"value"`
+}
+
+// SharedCodeChangeType The type of this change.
+type SharedCodeChangeType string
+
+// StatsConfig Stats Engine configuration settings
+type StatsConfig struct {
+	ConfidenceLevel *float32 `json:"confidence_level,omitempty"`
+
+	// DifferenceType The type of test to compare the variant to baseline
+	DifferenceType *StatsConfigDifferenceType `json:"difference_type,omitempty"`
+
+	// EpochEnabled Indicates if epoch-based statistics were used
+	EpochEnabled *bool `json:"epoch_enabled,omitempty"`
+}
+
+// StatsConfigDifferenceType The type of test to compare the variant to baseline
+type StatsConfigDifferenceType string
+
+// SubjectAccessRequest defines model for SubjectAccessRequest.
+type SubjectAccessRequest struct {
+	// AccountId The Account ID for the account the Subject Access Request will be executed.
+	AccountId *int64 `json:"account_id,omitempty"`
+
+	// CompletedAtTime The time when the request was completed.
+	CompletedAtTime *time.Time `json:"completed_at_time,omitempty"`
+
+	// DataType <p>The type of data to be accessed or deleted. The two options are:</p>
+	//
+	// <ul>
+	//     <li><code>user</code> - End users (also known as <em>Collaborators</em>) that are added to the accounts of our customers. A user can be a <a href="https://help.optimizely.com/Set_Up_Optimizely/Manage_collaborators_in_Optimizely_X" rel="internal"><u>collaborator</u></a> on multiple accounts.</li>
+	//     <li><code>visitor</code> - Visitors who visit or use our customers’ websites, apps and other digital products. Optimizely stores visitor data to calculate experiment results and to tailor content.</li>
+	// </ul>
+	DataType SubjectAccessRequestDataType `json:"data_type"`
+
+	// ExpiredAtTime Time when the url expires (7 days from the completed_at_time)
+	ExpiredAtTime *time.Time `json:"expired_at_time,omitempty"`
+
+	// ExportLocation The location to which the data will be exported. The data will be made accessible in a AWS S3 bucket.
+	ExportLocation *string `json:"export_location,omitempty"`
+
+	// Id The Subject Access Request ID.
+	Id *int64 `json:"id,omitempty"`
+
+	// Identifier The identifier value that you would like us to use when searching. If <code>user</code> was selected in the previous step, the identifier will be the email address for the User.
+	Identifier string `json:"identifier"`
+
+	// IdentifierType <p>User data is identified by the email address used to create the end user account. The endpoint only accepts the <code>email</code> datatype if you selected <code>user</code> for <strong>Datatype</strong>.<br>
+	// <br>
+	// If you selected <code>visitor</code> for <strong>data_type</strong>, you can select 5 options for personal identifier types:</p>
+	//
+	// <ul>
+	//     <li>
+	//     <p><code>dcp_id</code> - Any ID used to identify targeting records in Optimizely.</p>
+	//     </li>
+	//     <li>
+	//     <p><code>email</code> - The email address of a visitor.</p>
+	//     </li>
+	//     <li>
+	//     <p><code>fullstack_id</code> - The unique identifier used for Full Stack experiments.</p>
+	//     </li>
+	//     <li>
+	//     <p><code>optimizely_end_user_id</code> - An Optimizely generated user cookie.</p>
+	//     </li>
+	//     <li>
+	//     <p><code>other</code> -&nbsp;Any other identifier that was uploaded to Optimizely.</p>
+	//     </li>
+	// </ul>
+	IdentifierType SubjectAccessRequestIdentifierType `json:"identifier_type"`
+
+	// ProcessingStartedTime The time when the processing of the Subject Access Request started.
+	ProcessingStartedTime *time.Time `json:"processing_started_time,omitempty"`
+
+	// RequestType <code>delete</code> - Removes all data within an account that is associated to the identifier defined in the identifier field.
+	// <br>
+	// <code>access</code> - Finds all data stored in Optimizely systems associated to the identifier defined in the identifier field and exports it to an AWS S3 bucket for you to access.
+	RequestType SubjectAccessRequestRequestType `json:"request_type"`
+
+	// RequestedAtTime The time when the Subject Access Request was submitted.
+	RequestedAtTime *time.Time `json:"requested_at_time,omitempty"`
+
+	// SlaDeadlineTime The time by which the Subject Access Request must be completed.
+	SlaDeadlineTime *time.Time `json:"sla_deadline_time,omitempty"`
+
+	// Status The status of the Subject Access Request.
+	Status *SubjectAccessRequestStatus `json:"status,omitempty"`
+}
+
+// SubjectAccessRequestDataType <p>The type of data to be accessed or deleted. The two options are:</p>
+//
+// <ul>
+//
+//	<li><code>user</code> - End users (also known as <em>Collaborators</em>) that are added to the accounts of our customers. A user can be a <a href="https://help.optimizely.com/Set_Up_Optimizely/Manage_collaborators_in_Optimizely_X" rel="internal"><u>collaborator</u></a> on multiple accounts.</li>
+//	<li><code>visitor</code> - Visitors who visit or use our customers’ websites, apps and other digital products. Optimizely stores visitor data to calculate experiment results and to tailor content.</li>
+//
+// </ul>
+type SubjectAccessRequestDataType string
+
+// SubjectAccessRequestIdentifierType <p>User data is identified by the email address used to create the end user account. The endpoint only accepts the <code>email</code> datatype if you selected <code>user</code> for <strong>Datatype</strong>.<br>
+// <br>
+// If you selected <code>visitor</code> for <strong>data_type</strong>, you can select 5 options for personal identifier types:</p>
+//
+// <ul>
+//
+//	<li>
+//	<p><code>dcp_id</code> - Any ID used to identify targeting records in Optimizely.</p>
+//	</li>
+//	<li>
+//	<p><code>email</code> - The email address of a visitor.</p>
+//	</li>
+//	<li>
+//	<p><code>fullstack_id</code> - The unique identifier used for Full Stack experiments.</p>
+//	</li>
+//	<li>
+//	<p><code>optimizely_end_user_id</code> - An Optimizely generated user cookie.</p>
+//	</li>
+//	<li>
+//	<p><code>other</code> -&nbsp;Any other identifier that was uploaded to Optimizely.</p>
+//	</li>
+//
+// </ul>
+type SubjectAccessRequestIdentifierType string
+
+// SubjectAccessRequestRequestType <code>delete</code> - Removes all data within an account that is associated to the identifier defined in the identifier field.
+// <br>
+// <code>access</code> - Finds all data stored in Optimizely systems associated to the identifier defined in the identifier field and exports it to an AWS S3 bucket for you to access.
+type SubjectAccessRequestRequestType string
+
+// SubjectAccessRequestStatus The status of the Subject Access Request.
+type SubjectAccessRequestStatus string
+
+// SubjectAccessRequestInternal defines model for SubjectAccessRequestInternal.
+type SubjectAccessRequestInternal struct {
+	// AccountId Admin account id
+	AccountId *int64 `json:"account_id,omitempty"`
+
+	// CompletedAtTime Time when the request was completed
+	CompletedAtTime *time.Time `json:"completed_at_time,omitempty"`
+
+	// DataSource Subject Access Request Data Source
+	DataSource SubjectAccessRequestInternalDataSource `json:"data_source"`
+
+	// DataType Subject Access Request Data Type
+	DataType SubjectAccessRequestInternalDataType `json:"data_type"`
+
+	// ExpiredAtTime Time when the url expires (7 days from the completed_at_time)
+	ExpiredAtTime *time.Time `json:"expired_at_time,omitempty"`
+
+	// ExportLocation The location to which the data will be exported.
+	ExportLocation *string `json:"export_location,omitempty"`
+
+	// Id Subject Access Request ID
+	Id *int64 `json:"id,omitempty"`
+
+	// Identifier Subject Access Request Identifier
+	Identifier string `json:"identifier"`
+
+	// IdentifierType Subject Access Request Identifier Type
+	IdentifierType SubjectAccessRequestInternalIdentifierType `json:"identifier_type"`
+
+	// ParentRequestId Parent Subject Access Request id
+	ParentRequestId *int64 `json:"parent_request_id,omitempty"`
+
+	// ProcessingStartedTime Time when the processing of the request started
+	ProcessingStartedTime *time.Time `json:"processing_started_time,omitempty"`
+
+	// RequestType Subject Access Request Request Type
+	RequestType SubjectAccessRequestInternalRequestType `json:"request_type"`
+
+	// RequestedAtTime Time when the request was submitted
+	RequestedAtTime *time.Time `json:"requested_at_time,omitempty"`
+
+	// SlaDeadlineTime Time by which the request must be deleted
+	SlaDeadlineTime *time.Time `json:"sla_deadline_time,omitempty"`
+
+	// Status Status of the Subject Access Request
+	Status *SubjectAccessRequestInternalStatus `json:"status,omitempty"`
+}
+
+// SubjectAccessRequestInternalDataSource Subject Access Request Data Source
+type SubjectAccessRequestInternalDataSource string
+
+// SubjectAccessRequestInternalDataType Subject Access Request Data Type
+type SubjectAccessRequestInternalDataType string
+
+// SubjectAccessRequestInternalIdentifierType Subject Access Request Identifier Type
+type SubjectAccessRequestInternalIdentifierType string
+
+// SubjectAccessRequestInternalRequestType Subject Access Request Request Type
+type SubjectAccessRequestInternalRequestType string
+
+// SubjectAccessRequestInternalStatus Status of the Subject Access Request
+type SubjectAccessRequestInternalStatus string
+
+// SubjectAccessRequestUpdate defines model for SubjectAccessRequestUpdate.
+type SubjectAccessRequestUpdate struct {
+	// CompletedAtTime Time when the request was completed
+	CompletedAtTime *time.Time `json:"completed_at_time,omitempty"`
+
+	// ExportLocation s3 path to the Subject Access Request's ZIP file in the optimizely-sar-prod bucket
+	ExportLocation *string `json:"export_location,omitempty"`
+
+	// ProcessingStartedTime Time when the processing of the request started
+	ProcessingStartedTime *time.Time `json:"processing_started_time,omitempty"`
+
+	// Status Status of the Subject Access Request
+	Status SubjectAccessRequestUpdateStatus `json:"status"`
+}
+
+// SubjectAccessRequestUpdateStatus Status of the Subject Access Request
+type SubjectAccessRequestUpdateStatus string
+
+// TimeseriesDatapoint defines model for TimeseriesDatapoint.
+type TimeseriesDatapoint struct {
+	// Lift A value with statistical context
+	Lift *Datapoint `json:"lift,omitempty"`
+
+	// Rate The value of the metric after dividing the numerator value over the denominator value
+	Rate *float64 `json:"rate,omitempty"`
+
+	// Samples The value of the denominator
+	Samples *float32 `json:"samples,omitempty"`
+
+	// Time Time of this data point formatted in ISO 8601
+	Time *time.Time `json:"time,omitempty"`
+
+	// Value The value of the numerator
+	Value *float32 `json:"value,omitempty"`
+
+	// Variance The variance of the metric value
+	Variance *float64 `json:"variance,omitempty"`
+}
+
+// URLTargeting defines model for URLTargeting.
+type URLTargeting struct {
+	// ActivationCode Stringified Javascript function that determines when the Page is activated. Only required when activation_type is 'polling' or 'callback'.
+	ActivationCode *string `json:"activation_code,omitempty"`
+
+	// ActivationType How this page is activated.  See the full documentation on the Page object.
+	ActivationType *URLTargetingActivationType `json:"activation_type,omitempty"`
+
+	// Conditions Conditions to activate the experiment; our knowledge base article on Activation Types is the best guide for how to set up this data.
+	Conditions *string `json:"conditions,omitempty"`
+
+	// EditUrl URL to load in the editor for this page
+	EditUrl string `json:"edit_url"`
+
+	// Key Unique string identifier for this Page within the Project
+	Key *string `json:"key,omitempty"`
+
+	// PageId The unique identifier of the Page that represents the experiment or campaign's URL Targeting.
+	PageId *int64 `json:"page_id,omitempty"`
+}
+
+// URLTargetingActivationType How this page is activated.  See the full documentation on the Page object.
+type URLTargetingActivationType string
+
+// User defines model for User.
+type User struct {
+	// DisplayName Display name of the user, most commonly the Optimizely user's email.
+	DisplayName *string `json:"display_name,omitempty"`
+
+	// Email Email of the user.
+	Email string `json:"email"`
+
+	// FirstName First name of the user.
+	FirstName *string `json:"first_name,omitempty"`
+
+	// Id ID of the user.
+	Id string `json:"id"`
+
+	// LastName Last name of the user.
+	LastName *string `json:"last_name,omitempty"`
+
+	// ProfileImageUrl URL to the user profile image.
+	ProfileImageUrl *string `json:"profile_image_url,omitempty"`
+}
+
+// UserProfile defines model for UserProfile.
+type UserProfile struct {
+	// Email User's email
+	Email *openapi_types.Email `json:"email,omitempty"`
+
+	// FirstName User's first name
+	FirstName *string `json:"first_name,omitempty"`
+
+	// LastName User's last name
+	LastName *string `json:"last_name,omitempty"`
+
+	// ProfileImage User's profile image URL
+	ProfileImage *string `json:"profile_image,omitempty"`
+}
+
+// UserProxy defines model for UserProxy.
+type UserProxy struct {
+	// Email Email of the user proxy.
+	Email *string `json:"email,omitempty"`
+
+	// Id ID of the user proxy.
+	Id string `json:"id"`
+
+	// ProxyType Type of user proxy.
+	ProxyType UserProxyProxyType `json:"proxy_type"`
+}
+
+// UserProxyProxyType Type of user proxy.
+type UserProxyProxyType string
+
+// VariantResults defines model for VariantResults.
+type VariantResults struct {
+	// ExperimentId The unique identifier for the Experiment this entity contains results for (if applicable)
+	ExperimentId *int64 `json:"experiment_id,omitempty"`
+
+	// IsBaseline Indicates that this variant is the baseline that all other entities will be compared against. Also referred to as the 'Control' or 'Control Group'
+	IsBaseline *bool `json:"is_baseline,omitempty"`
+
+	// Level The level of entity that this variant represents
+	Level *VariantResultsLevel `json:"level,omitempty"`
+
+	// Lift A value with statistical context
+	Lift *Datapoint `json:"lift,omitempty"`
+
+	// Name The name of the variant
+	Name *string `json:"name,omitempty"`
+
+	// Rate The value of the metric after dividing the numerator value over the denominator value
+	Rate *float64 `json:"rate,omitempty"`
+
+	// Samples The value of the denominator
+	Samples *float32 `json:"samples,omitempty"`
+
+	// TotalIncrease A value with statistical context
+	TotalIncrease *Datapoint `json:"total_increase,omitempty"`
+
+	// Value The value of the numerator
+	Value *float32 `json:"value,omitempty"`
+
+	// Variance The variance of the metric value
+	Variance *float64 `json:"variance,omitempty"`
+
+	// VariationId The unique identifier for the variation this entity contains results for (if applicable)
+	VariationId *string `json:"variation_id,omitempty"`
+}
+
+// VariantResultsLevel The level of entity that this variant represents
+type VariantResultsLevel string
+
+// VariantTimeseries defines model for VariantTimeseries.
+type VariantTimeseries struct {
+	// ExperimentId The unique identifier for the Experiment this entity contains results for (if applicable)
+	ExperimentId *int64 `json:"experiment_id,omitempty"`
+
+	// IsBaseline Indicates that this variant is the baseline that all other entities will be compared against. Also referred to as the 'Control' or 'Control Group'
+	IsBaseline *bool `json:"is_baseline,omitempty"`
+
+	// Level The level of entity that this variant represents
+	Level *VariantTimeseriesLevel `json:"level,omitempty"`
+
+	// Name The name of the variant
+	Name *string `json:"name,omitempty"`
+
+	// Timeseries The results time series data points
+	Timeseries *[]TimeseriesDatapoint `json:"timeseries,omitempty"`
+
+	// VariationId The unique identifier for the variation this entity contains results for (if applicable)
+	VariationId *string `json:"variation_id,omitempty"`
+}
+
+// VariantTimeseriesLevel The level of entity that this variant represents
+type VariantTimeseriesLevel string
+
+// Variation defines model for Variation.
+type Variation struct {
+	// Actions A collection of changes to run for each page in an experiment. Only applicable to Optimizely X Web.
+	Actions *[]Action `json:"actions,omitempty"`
+
+	// Archived Whether the variation is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description A description of the variation.
+	Description *string `json:"description,omitempty"`
+
+	// FeatureEnabled For Feature Tests, indicates if the feature should be enabled for the variation
+	FeatureEnabled *bool `json:"feature_enabled,omitempty"`
+
+	// Key Unique string identifier for this variation within the Experiment. Only applicable for Full Stack and Mobile projects.
+	Key *string `json:"key,omitempty"`
+
+	// Name The name of the variation. Required for Web Experiments and Personalization experiences. Not required for Full Stack Experiments.
+	Name *string `json:"name,omitempty"`
+
+	// Status Current status of the variation
+	Status *VariationStatus `json:"status,omitempty"`
+
+	// VariableValues For Feature Tests, the variable values for the variation represented as a map of Variable keys to their values.
+	VariableValues *map[string]string `json:"variable_values,omitempty"`
+
+	// VariationId The unique identifier for the variation
+	VariationId *int64 `json:"variation_id,omitempty"`
+
+	// Weight The percentage of your visitors that should see this variation, measured in basis points. 100 basis points = 1% traffic. Variation weights must add up to 10000.
+	Weight int `json:"weight"`
+}
+
+// VariationStatus Current status of the variation
+type VariationStatus string
+
+// VariationReach defines model for VariationReach.
+type VariationReach struct {
+	// Count Total number of visitors exposed to this particular variation
+	Count *int64 `json:"count,omitempty"`
+
+	// Name The name of the variation
+	Name *string `json:"name,omitempty"`
+
+	// VariationId The unique identifier for the variation
+	VariationId    *string  `json:"variation_id,omitempty"`
+	VariationReach *float64 `json:"variation_reach,omitempty"`
+}
+
+// VariationUpdate defines model for VariationUpdate.
+type VariationUpdate struct {
+	// Actions A collection of changes to run for each page in an experiment. Only applicable to Optimizely X Web.
+	Actions *[]Action `json:"actions,omitempty"`
+
+	// Archived Whether the variation is archived
+	Archived *bool `json:"archived,omitempty"`
+
+	// Description A description for the variation.
+	Description *string `json:"description,omitempty"`
+
+	// FeatureEnabled For Feature Tests, indicates if the feature should be enabled for the variation
+	FeatureEnabled *bool `json:"feature_enabled,omitempty"`
+
+	// Key Unique string identifier for this variation within the Experiment. Only applicable for Full Stack and Mobile projects.
+	Key *string `json:"key,omitempty"`
+
+	// Name The name of the variation. Required for Web Experiments and Personalization experiences. Not required for Full Stack Experiments.
+	Name *string `json:"name,omitempty"`
+
+	// Status Current status of the variation
+	Status *VariationUpdateStatus `json:"status,omitempty"`
+
+	// VariableValues For Feature Tests, the variable values for the variation represented as a map of Variable keys to their values.
+	VariableValues *map[string]string `json:"variable_values,omitempty"`
+
+	// VariationId An immutable unique identifier for the variation. Required to update an existing variation.
+	VariationId *int64 `json:"variation_id,omitempty"`
+
+	// Weight The percentage of your visitors that should see this variation, measured in basis points. 100 basis points = 1% traffic. Variation weights must add up to 10000.
+	Weight int `json:"weight"`
+}
+
+// VariationUpdateStatus Current status of the variation
+type VariationUpdateStatus string
 
 // WebSnippet defines model for WebSnippet.
 type WebSnippet struct {
@@ -351,29 +6529,29 @@ type WebSnippet struct {
 	// IpAnonymization Set to true to change the last octet of IP addresses to 0 prior to logging
 	IpAnonymization *bool `json:"ip_anonymization,omitempty"`
 
-	// IpFilter A regular expression matching ip addresses for filtering out visitors.
+	// IpFilter A regular expression (max 1500 characters) matching ip addresses for filtering out visitors. Matching visitors will still see the Experiment, but they won't be counted in results.
 	IpFilter *string `json:"ip_filter,omitempty"`
 
 	// JsFileSize The current size in bytes of the Project snippet
 	JsFileSize *int `json:"js_file_size,omitempty"`
 
-	// Library The prefered jQuery library version you would like to use with your snippet.
+	// Library The prefered jQuery library version you would like to use with your snippet. If you do not want to include jQuery, set include_jquery to false
 	Library *WebSnippetLibrary `json:"library,omitempty"`
 
-	// ProjectJavascript The javascript code which runs before Optimizely on all pages
+	// ProjectJavascript The javascript code which runs before Optimizely on all pages, regardless of whether or not there is a running Experiment
 	ProjectJavascript *string `json:"project_javascript,omitempty"`
 
 	// VisitorIdLocatorName (BETA) The name of said identifier that locates the visitor id
 	VisitorIdLocatorName *string `json:"visitor_id_locator_name,omitempty"`
 
-	// VisitorIdLocatorType (BETA) The type of identifer where the visitor id is located
+	// VisitorIdLocatorType (BETA) The type of identifer where the visitor id is located (e.g. cookies, query param)
 	VisitorIdLocatorType *WebSnippetVisitorIdLocatorType `json:"visitor_id_locator_type,omitempty"`
 }
 
-// WebSnippetLibrary The prefered jQuery library version you would like to use with your snippet.
+// WebSnippetLibrary The prefered jQuery library version you would like to use with your snippet. If you do not want to include jQuery, set include_jquery to false
 type WebSnippetLibrary string
 
-// WebSnippetVisitorIdLocatorType (BETA) The type of identifer where the visitor id is located
+// WebSnippetVisitorIdLocatorType (BETA) The type of identifer where the visitor id is located (e.g. cookies, query param)
 type WebSnippetVisitorIdLocatorType string
 
 // WebSnippetUpdate defines model for WebSnippetUpdate.
@@ -393,48 +6571,930 @@ type WebSnippetUpdate struct {
 	// IpAnonymization Set to true to change the last octet of IP addresses to 0 prior to logging
 	IpAnonymization *bool `json:"ip_anonymization,omitempty"`
 
-	// IpFilter A regular expression matching ip addresses for filtering out visitors.
+	// IpFilter A regular expression (max 1500 characters) matching ip addresses for filtering out visitors. Matching visitors will still see the Experiment, but they won't be counted in results.
 	IpFilter *string `json:"ip_filter,omitempty"`
 
-	// Library The prefered jQuery library version you would like to use with your snippet.
+	// Library The prefered jQuery library version you would like to use with your snippet. If you do not want to include jQuery, set include_jquery to false
 	Library *WebSnippetUpdateLibrary `json:"library,omitempty"`
 
-	// ProjectJavascript The javascript code which runs before Optimizely on all pages
+	// ProjectJavascript The javascript code which runs before Optimizely on all pages, regardless of whether or not there is a running Experiment
 	ProjectJavascript *string `json:"project_javascript,omitempty"`
 
 	// VisitorIdLocatorName (BETA) The name of said identifier that locates the visitor id
 	VisitorIdLocatorName *string `json:"visitor_id_locator_name,omitempty"`
 
-	// VisitorIdLocatorType (BETA) The type of identifer where the visitor id is located
+	// VisitorIdLocatorType (BETA) The type of identifer where the visitor id is located (e.g. cookies, query param)
 	VisitorIdLocatorType *WebSnippetUpdateVisitorIdLocatorType `json:"visitor_id_locator_type,omitempty"`
 }
 
-// WebSnippetUpdateLibrary The prefered jQuery library version you would like to use with your snippet.
+// WebSnippetUpdateLibrary The prefered jQuery library version you would like to use with your snippet. If you do not want to include jQuery, set include_jquery to false
 type WebSnippetUpdateLibrary string
 
-// WebSnippetUpdateVisitorIdLocatorType (BETA) The type of identifer where the visitor id is located
+// WebSnippetUpdateVisitorIdLocatorType (BETA) The type of identifer where the visitor id is located (e.g. cookies, query param)
 type WebSnippetUpdateVisitorIdLocatorType string
+
+// Webhook defines model for Webhook.
+type Webhook struct {
+	// Active Is Webhook active.
+	Active *bool `json:"active,omitempty"`
+
+	// Created Created time.
+	Created *string `json:"created,omitempty"`
+
+	// Description A short description of the Webhook.
+	Description *string `json:"description,omitempty"`
+
+	// Events List of events subscribed to the webhook.
+	Events *[]WebhookEvents `json:"events,omitempty"`
+
+	// Id ID of this Webhook
+	Id *string `json:"id,omitempty"`
+
+	// LastModified Last modification time.
+	LastModified *string `json:"last_modified,omitempty"`
+
+	// Name Name of the Webhook.
+	Name string `json:"name"`
+
+	// ProjectId ID of the project of the Environment.
+	ProjectId int `json:"project_id"`
+
+	// Url Webhook URL
+	Url string `json:"url"`
+}
+
+// WebhookEvents defines model for Webhook.Events.
+type WebhookEvents string
+
+// WebhookRequestBody Webhook request body
+type WebhookRequestBody struct {
+	// Description A short description of the Webhook.
+	Description string `json:"description"`
+
+	// Events List of events subscribed to the webhook.
+	Events []WebhookRequestBodyEvents `json:"events"`
+
+	// Name Name of the Webhook.
+	Name string `json:"name"`
+
+	// Url Webhook URL
+	Url string `json:"url"`
+}
+
+// WebhookRequestBodyEvents defines model for WebhookRequestBody.Events.
+type WebhookRequestBodyEvents string
+
+// Webhooks List of webhooks.
+type Webhooks = []Webhook
+
+// AttributeIdSegment defines model for attribute_id_segment.
+type AttributeIdSegment = int64
+
+// AttributeValueSegment defines model for attribute_value_segment.
+type AttributeValueSegment = string
+
+// BrowserSegment defines model for browser_segment.
+type BrowserSegment string
+
+// DeviceSegment defines model for device_segment.
+type DeviceSegment string
 
 // Page defines model for page.
 type Page = int
 
+// PageToken defines model for page_token.
+type PageToken = string
+
+// PageWindow defines model for page_window.
+type PageWindow = int
+
 // PerPage defines model for per_page.
 type PerPage = int
+
+// ProjectId defines model for project_id.
+type ProjectId = int
+
+// SegmentConditions defines model for segment_conditions.
+type SegmentConditions = string
+
+// SourceSegment defines model for source_segment.
+type SourceSegment string
+
+// WebhookId defines model for webhookId.
+type WebhookId = int
+
+// WebhookRequest Webhook request body
+type WebhookRequest = WebhookRequestBody
+
+// ListAttributesParams defines parameters for ListAttributes.
+type ListAttributesParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The ID of the Project you would like to list all Attributes for
+	ProjectId int64 `form:"project_id" json:"project_id"`
+}
+
+// GetBucketingHistoryParams defines parameters for GetBucketingHistory.
+type GetBucketingHistoryParams struct {
+	// StartTime Start of the time interval (inclusive) used to filter the bucketing decisions. The time is formatted in ISO 8601.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime End of the time interval (inclusive) used to filter the bucketing decisions. The time is formatted in ISO 8601.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+}
+
+// ListAudiencesParams defines parameters for ListAudiences.
+type ListAudiencesParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The Project ID of the Project you would like to list all Audiences for
+	ProjectId int64 `form:"project_id" json:"project_id"`
+
+	// ForJourney Filter audiences by journey status
+	ForJourney *bool `form:"for_journey,omitempty" json:"for_journey,omitempty"`
+
+	// Archived Filter audiences by archived status
+	Archived *bool `form:"archived,omitempty" json:"archived,omitempty"`
+}
+
+// GetImpressionsUsageRequestParams defines parameters for GetImpressionsUsageRequest.
+type GetImpressionsUsageRequestParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// UsageDateFrom Start date of date range
+	UsageDateFrom string `form:"usage_date_from" json:"usage_date_from"`
+
+	// UsageDateTo End date of date range
+	UsageDateTo string `form:"usage_date_to" json:"usage_date_to"`
+
+	// Platforms The platform of the Project
+	Platforms *[]GetImpressionsUsageRequestParamsPlatforms `form:"platforms,omitempty" json:"platforms,omitempty"`
+
+	// Query Search by experiment_id, project_id.
+	Query *string `form:"query,omitempty" json:"query,omitempty"`
+
+	// Sort The property to sort by.
+	Sort *string `form:"sort,omitempty" json:"sort,omitempty"`
+
+	// Order The property to sort by.
+	Order *string `form:"order,omitempty" json:"order,omitempty"`
+}
+
+// GetImpressionsUsageRequestParamsPlatforms defines parameters for GetImpressionsUsageRequest.
+type GetImpressionsUsageRequestParamsPlatforms string
+
+// ListCampaignsParams defines parameters for ListCampaigns.
+type ListCampaignsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The Project ID of the Project you would like to list all Campaigns for
+	ProjectId int64 `form:"project_id" json:"project_id"`
+
+	// ForJourney Filter campaigns by journey status
+	ForJourney *bool `form:"for_journey,omitempty" json:"for_journey,omitempty"`
+
+	// Archived Filter campaigns by archived status
+	Archived *bool `form:"archived,omitempty" json:"archived,omitempty"`
+}
+
+// CreateCampaignParams defines parameters for CreateCampaign.
+type CreateCampaignParams struct {
+	// Action Action to change the state of the Campaign. 'publish' publishes your campaign, making any changes live to the world. Status will be 'paused'. 'start' publishes your campaign, making any changes live to the world. Status will be 'running'.
+	Action *CreateCampaignParamsAction `form:"action,omitempty" json:"action,omitempty"`
+}
+
+// CreateCampaignParamsAction defines parameters for CreateCampaign.
+type CreateCampaignParamsAction string
+
+// UpdateCampaignParams defines parameters for UpdateCampaign.
+type UpdateCampaignParams struct {
+	// Action Action to change the state of the Campaign. 'publish' publishes your campaign, making any changes live to the world without changing the status of the campaign. 'start' publishes your campaign, making any changes live to the world. Status will be 'running'. 'pause' stops the campaign. Status will be 'paused'. No new visitors will see the campaign until it is resumed. 'resume' resumes the campaign from a paused status without publishing any new changes. Status will be 'running'. 'unarchive' unarchives an archived campaign. Status will be 'paused'.
+	Action *UpdateCampaignParamsAction `form:"action,omitempty" json:"action,omitempty"`
+}
+
+// UpdateCampaignParamsAction defines parameters for UpdateCampaign.
+type UpdateCampaignParamsAction string
+
+// GetCampaignResultsParams defines parameters for GetCampaignResults.
+type GetCampaignResultsParams struct {
+	// StartTime The start time of the time interval (beginning time included) used to calculate the results over. If unspecified, defaults to the time that the Campaign was first activated. The start time will be rounded the smallest time modulo 5 minutes larger or equal to start_time.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime The end of the time interval (end time excluded) used to calculate results over. If unspecified, defaults to the current time if the Experiment is still running, otherwise defaults to the time the experiment was last active. The end time will be rounded to the largest time modulo 5 minutes smaller or equal to end_time. The end_time in the response may be earlier than requested if fresher results are not available yet. In this case, the results will continue to calculate in the background and subsequent requests will eventually return the full results.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+
+	// Browser Browser to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [device, source, attribute_id, attribute_value].
+	Browser *GetCampaignResultsParamsBrowser `form:"browser,omitempty" json:"browser,omitempty"`
+
+	// Device Device to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, source, attribute_id, attribute_value].
+	Device *GetCampaignResultsParamsDevice `form:"device,omitempty" json:"device,omitempty"`
+
+	// Source Source to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, device, attribute_id, attribute_value].
+	// Campaign: Contains users that arrive on a URL containing a 'utm_campaign,' 'utm_source,' 'gclid,' or 'otm_source' query parameter. If the URL contains one of these parameters, the visitor will count as "Campaign" traffic even if they arrived through search.
+	// Direct:  Includes all users who do not have any external referrer in their URL.
+	// Referral: Includes all users that come from another URL that doesn't count as Campaign.
+	Source *GetCampaignResultsParamsSource `form:"source,omitempty" json:"source,omitempty"`
+
+	// AttributeId ID of the attribute to segment results by. Requests containing attribute_id will return the results for all visitors that have attribute_value for the attribute represented by attribute_id. If present, the attribute_value parameter must also be present, and it cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeId *AttributeIdSegment `form:"attribute_id,omitempty" json:"attribute_id,omitempty"`
+
+	// AttributeValue UTF-8 encoded value correlating to attribute_id. If present, the attribute_id parameter must also be present. This parameter also requires attribute_id to be set, and cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeValue *AttributeValueSegment `form:"attribute_value,omitempty" json:"attribute_value,omitempty"`
+
+	// SegmentConditions (BETA) A string representation of a JSON Segment Conditions Expression. This parameter can be either URL-escaped stringified JSON or Base64-encoded stringified JSON using URL-safe alphabet (preferred).
+	// Segment Conditions Expressions consist of Logical Expressions and Match Expressions.
+	// Logical Expressions are represented as an array of the format [<operator>, <expression>...], where the supported operators are "and", "or" and "not".
+	// Match Expressions are represented as an object of the format {"attribute_id": <attribute_id>, "attribute_value": <value>[, "match_type": <match_type>]}, where supported values for match_type are "exact" match type will match only an exact string match between "value" string and the attribute value. "substring" match type will match if "value" is a substring of the attribute value. "prefix" match type will match if "value" is a string prefix of the attribute value. "regex" match type will match if "value" is a regular expression match for the attribute value. The default match_type is "exact".
+	SegmentConditions *SegmentConditions `form:"segment_conditions,omitempty" json:"segment_conditions,omitempty"`
+}
+
+// GetCampaignResultsParamsBrowser defines parameters for GetCampaignResults.
+type GetCampaignResultsParamsBrowser string
+
+// GetCampaignResultsParamsDevice defines parameters for GetCampaignResults.
+type GetCampaignResultsParamsDevice string
+
+// GetCampaignResultsParamsSource defines parameters for GetCampaignResults.
+type GetCampaignResultsParamsSource string
+
+// ListChangeHistoryParams defines parameters for ListChangeHistory.
+type ListChangeHistoryParams struct {
+	// ProjectId ID of the Project you want to list changes for.
+	ProjectId int64 `form:"project_id" json:"project_id"`
+
+	// Id A specific Change ID to filter by. Can be specified multiple times to include multiple specific changes.
+	Id *[]int64 `form:"id,omitempty" json:"id,omitempty"`
+
+	// StartTime Start of the time interval (inclusive) to list changes. The time is formatted in ISO 8601.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime End of the time interval (exclusive) to look for changes. The time is formatted in ISO 8601.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+
+	// User Email of the user who made the change. Can be specified multiple times to include changes from multiple users.
+	User *[]string `form:"user,omitempty" json:"user,omitempty"`
+
+	// EntityType The type of the entity. The entity_type must be one of the following : attribute, audience, campaign, environment, event, experiment, extension, feature, flag, group, list_attribute, metrics, page, project, report, rule, ruleset, section, tag, variation, variable, permission, team. Can be specified multiple times to include changes for multiple entity types.
+	EntityType *[]ListChangeHistoryParamsEntityType `form:"entity_type,omitempty" json:"entity_type,omitempty"`
+
+	// Source The source of the change (UI or API)
+	Source *string `form:"source,omitempty" json:"source,omitempty"`
+
+	// Entity Colon (:) delimited string containing the entity_type and entity_id of the entity wanted. The entity_type must be one of the following : attribute, audience, campaign, environment, event, experiment, extension, feature, flag, group, list_attribute, metrics, page, project, report, rule, ruleset, section, tag, variation, variable, permission e.g. ruleset:123, experiment:123. Can be specified multiple times to filter changes to a specific set of entities.
+	Entity *[]string `form:"entity,omitempty" json:"entity,omitempty"`
+
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+}
+
+// ListChangeHistoryParamsEntityType defines parameters for ListChangeHistory.
+type ListChangeHistoryParamsEntityType string
+
+// ListCollaboratorsParams defines parameters for ListCollaborators.
+type ListCollaboratorsParams struct {
+	// ProjectId Return Collaborators who have permissions on all specified projects.
+	ProjectId *[]int64 `form:"project_id,omitempty" json:"project_id,omitempty"`
+}
+
+// CreateCollaboratorsJSONBody defines parameters for CreateCollaborators.
+type CreateCollaboratorsJSONBody = []CollaboratorEntry
+
+// ListEnvironmentsParams defines parameters for ListEnvironments.
+type ListEnvironmentsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The ID of the project for which you would like to get Environments
+	ProjectId int64 `form:"project_id" json:"project_id"`
+}
+
+// ListEventsParams defines parameters for ListEvents.
+type ListEventsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The ID of the Project you would like to list all Events for
+	ProjectId int64 `form:"project_id" json:"project_id"`
+
+	// IncludeClassic Whether or not to include classic Events in the list of Events. If this parameter is not provided it will default to false
+	IncludeClassic *bool `form:"include_classic,omitempty" json:"include_classic,omitempty"`
+}
+
+// GetEventParams defines parameters for GetEvent.
+type GetEventParams struct {
+	// IncludeClassic Whether or not to return a classic Event if the specified event_id belongs to a classic Event. If this parameter is not provided it will default to false
+	IncludeClassic *bool `form:"include_classic,omitempty" json:"include_classic,omitempty"`
+}
+
+// GetExperimentSummariesParams defines parameters for GetExperimentSummaries.
+type GetExperimentSummariesParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// Sort The column to sort by.
+	Sort *GetExperimentSummariesParamsSort `form:"sort,omitempty" json:"sort,omitempty"`
+
+	// Order The order to sort with.
+	Order *GetExperimentSummariesParamsOrder `form:"order,omitempty" json:"order,omitempty"`
+
+	// ProjectId Return Experiments and Campaigns for specified project.
+	ProjectId int64 `form:"project_id" json:"project_id"`
+
+	// Archived Whether or not to include archived entities. If this parameter is not provided it will default to false and no archived entities will be included. Supersedes status filter.
+	Archived *bool `form:"archived,omitempty" json:"archived,omitempty"`
+
+	// Status Filters search results by the current status of the entity. Specifying multiple statuses will search for entities with ANY of those statuses.
+	Status *GetExperimentSummariesParamsStatus `form:"status,omitempty" json:"status,omitempty"`
+}
+
+// GetExperimentSummariesParamsSort defines parameters for GetExperimentSummaries.
+type GetExperimentSummariesParamsSort string
+
+// GetExperimentSummariesParamsOrder defines parameters for GetExperimentSummaries.
+type GetExperimentSummariesParamsOrder string
+
+// GetExperimentSummariesParamsStatus defines parameters for GetExperimentSummaries.
+type GetExperimentSummariesParamsStatus string
+
+// ListExperimentsParams defines parameters for ListExperiments.
+type ListExperimentsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The Project ID of the Project you would like to list all Experiments for. You have to either use this argument or the campaign_id argument
+	ProjectId *int64 `form:"project_id,omitempty" json:"project_id,omitempty"`
+
+	// CampaignId The Campaign ID of the Campaign you would like to list all Experiments for. You have to either use this argument or the project_id argument
+	CampaignId *int64 `form:"campaign_id,omitempty" json:"campaign_id,omitempty"`
+}
+
+// CreateExperimentParams defines parameters for CreateExperiment.
+type CreateExperimentParams struct {
+	// Action Action to change the state of the experiment. `publish` saves and stages your experiment. If you have not started your experiment or the experiment is paused, your changes will not be visible to visitors when you publish. `start` makes your experiment live to all visitors who are in your targeted audience and changes the status to `running`. `pause` stops the experiment and changes the status to `paused`. No new visitors will see a `paused` experiment until you restart it. See [Differences among publish, start, and pause](https://help.optimizely.com/Get_Started/Differences_among_publish%2C_start%2C_and_pause) for details.
+	Action *CreateExperimentParamsAction `form:"action,omitempty" json:"action,omitempty"`
+}
+
+// CreateExperimentParamsAction defines parameters for CreateExperiment.
+type CreateExperimentParamsAction string
+
+// UpdateExperimentParams defines parameters for UpdateExperiment.
+type UpdateExperimentParams struct {
+	// Action Action to change the state of the experiment. `publish` saves and stages your experiment. If you have not started your experiment or the experiment is paused, your changes will not be visible to visitors when you publish. `start` makes your experiment live to all visitors who are in your targeted audience and changes the status to `running`. `pause` stops the experiment and changes the status to `paused`. No new visitors will see a `paused` experiment until you restart it. See [Differences among publish, start, and pause](https://help.optimizely.com/Get_Started/Differences_among_publish%2C_start%2C_and_pause) for details. `resume` resumes the experiment from a paused status without publishing any new changes. Status will be `running`. `unarchive` unarchives an archived experiment. Status will be `paused`.
+	Action *UpdateExperimentParamsAction `form:"action,omitempty" json:"action,omitempty"`
+}
+
+// UpdateExperimentParamsAction defines parameters for UpdateExperiment.
+type UpdateExperimentParamsAction string
+
+// GetExperimentReportParams defines parameters for GetExperimentReport.
+type GetExperimentReportParams struct {
+	// BaselineVariationId The ID of the variation to use as the baseline to compare against other variations. Defaults to the first variation if not provided. For an experience in a personalization campaign, the value can also be the string 'holdback'.
+	BaselineVariationId *string `form:"baseline_variation_id,omitempty" json:"baseline_variation_id,omitempty"`
+
+	// StartTime The start time of the time interval (beginning time included) used to calculate the results over. If unspecified, defaults to the time that the Experiment was first activated. The start time will be rounded the smallest time modulo 5 minutes larger or equal to start_time.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime The end of the time interval (end time excluded) used to calculate results over. If unspecified, defaults to the current time if the Experiment is still running, otherwise defaults to the time the experiment was last active. The end time will be rounded to the largest time modulo 5 minutes smaller or equal to end_time. The end_time in the response may be earlier than requested if fresher results are not available yet. In this case, the results will continue to calculate in the background and subsequent requests will eventually return the full results.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+
+	// Browser Browser to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [device, source, attribute_id, attribute_value].
+	Browser *GetExperimentReportParamsBrowser `form:"browser,omitempty" json:"browser,omitempty"`
+
+	// Device Device to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, source, attribute_id, attribute_value].
+	Device *GetExperimentReportParamsDevice `form:"device,omitempty" json:"device,omitempty"`
+
+	// Source Source to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, device, attribute_id, attribute_value].
+	// Campaign: Contains users that arrive on a URL containing a 'utm_campaign,' 'utm_source,' 'gclid,' or 'otm_source' query parameter. If the URL contains one of these parameters, the visitor will count as "Campaign" traffic even if they arrived through search.
+	// Direct:  Includes all users who do not have any external referrer in their URL.
+	// Referral: Includes all users that come from another URL that doesn't count as Campaign.
+	Source *GetExperimentReportParamsSource `form:"source,omitempty" json:"source,omitempty"`
+
+	// AttributeId ID of the attribute to segment results by. Requests containing attribute_id will return the results for all visitors that have attribute_value for the attribute represented by attribute_id. If present, the attribute_value parameter must also be present, and it cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeId *AttributeIdSegment `form:"attribute_id,omitempty" json:"attribute_id,omitempty"`
+
+	// AttributeValue UTF-8 encoded value correlating to attribute_id. If present, the attribute_id parameter must also be present. This parameter also requires attribute_id to be set, and cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeValue *AttributeValueSegment `form:"attribute_value,omitempty" json:"attribute_value,omitempty"`
+
+	// SegmentConditions (BETA) A string representation of a JSON Segment Conditions Expression. This parameter can be either URL-escaped stringified JSON or Base64-encoded stringified JSON using URL-safe alphabet (preferred).
+	// Segment Conditions Expressions consist of Logical Expressions and Match Expressions.
+	// Logical Expressions are represented as an array of the format [<operator>, <expression>...], where the supported operators are "and", "or" and "not".
+	// Match Expressions are represented as an object of the format {"attribute_id": <attribute_id>, "attribute_value": <value>[, "match_type": <match_type>]}, where supported values for match_type are "exact" match type will match only an exact string match between "value" string and the attribute value. "substring" match type will match if "value" is a substring of the attribute value. "prefix" match type will match if "value" is a string prefix of the attribute value. "regex" match type will match if "value" is a regular expression match for the attribute value. The default match_type is "exact".
+	SegmentConditions *SegmentConditions `form:"segment_conditions,omitempty" json:"segment_conditions,omitempty"`
+}
+
+// GetExperimentReportParamsBrowser defines parameters for GetExperimentReport.
+type GetExperimentReportParamsBrowser string
+
+// GetExperimentReportParamsDevice defines parameters for GetExperimentReport.
+type GetExperimentReportParamsDevice string
+
+// GetExperimentReportParamsSource defines parameters for GetExperimentReport.
+type GetExperimentReportParamsSource string
+
+// GetExperimentResultsParams defines parameters for GetExperimentResults.
+type GetExperimentResultsParams struct {
+	// BaselineVariationId The ID of the variation to use as the baseline to compare against other variations. Defaults to the first variation if not provided. For an experience in a personalization campaign, the value can also be the string 'holdback'.
+	BaselineVariationId *string `form:"baseline_variation_id,omitempty" json:"baseline_variation_id,omitempty"`
+
+	// StartTime The start time of the time interval (beginning time included) used to calculate the results over. If unspecified, defaults to the time that the Experiment was first activated. The start time will be rounded the smallest time modulo 5 minutes larger or equal to start_time.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime The end of the time interval (end time excluded) used to calculate results over. If unspecified, defaults to the current time if the Experiment is still running, otherwise defaults to the time the experiment was last active. The end time will be rounded to the largest time modulo 5 minutes smaller or equal to end_time. The end_time in the response may be earlier than requested if fresher results are not available yet. In this case, the results will continue to calculate in the background and subsequent requests will eventually return the full results.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+
+	// Browser Browser to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [device, source, attribute_id, attribute_value].
+	Browser *GetExperimentResultsParamsBrowser `form:"browser,omitempty" json:"browser,omitempty"`
+
+	// Device Device to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, source, attribute_id, attribute_value].
+	Device *GetExperimentResultsParamsDevice `form:"device,omitempty" json:"device,omitempty"`
+
+	// Source Source to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, device, attribute_id, attribute_value].
+	// Campaign: Contains users that arrive on a URL containing a 'utm_campaign,' 'utm_source,' 'gclid,' or 'otm_source' query parameter. If the URL contains one of these parameters, the visitor will count as "Campaign" traffic even if they arrived through search.
+	// Direct:  Includes all users who do not have any external referrer in their URL.
+	// Referral: Includes all users that come from another URL that doesn't count as Campaign.
+	Source *GetExperimentResultsParamsSource `form:"source,omitempty" json:"source,omitempty"`
+
+	// AttributeId ID of the attribute to segment results by. Requests containing attribute_id will return the results for all visitors that have attribute_value for the attribute represented by attribute_id. If present, the attribute_value parameter must also be present, and it cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeId *AttributeIdSegment `form:"attribute_id,omitempty" json:"attribute_id,omitempty"`
+
+	// AttributeValue UTF-8 encoded value correlating to attribute_id. If present, the attribute_id parameter must also be present. This parameter also requires attribute_id to be set, and cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeValue *AttributeValueSegment `form:"attribute_value,omitempty" json:"attribute_value,omitempty"`
+
+	// SegmentConditions (BETA) A string representation of a JSON Segment Conditions Expression. This parameter can be either URL-escaped stringified JSON or Base64-encoded stringified JSON using URL-safe alphabet (preferred).
+	// Segment Conditions Expressions consist of Logical Expressions and Match Expressions.
+	// Logical Expressions are represented as an array of the format [<operator>, <expression>...], where the supported operators are "and", "or" and "not".
+	// Match Expressions are represented as an object of the format {"attribute_id": <attribute_id>, "attribute_value": <value>[, "match_type": <match_type>]}, where supported values for match_type are "exact" match type will match only an exact string match between "value" string and the attribute value. "substring" match type will match if "value" is a substring of the attribute value. "prefix" match type will match if "value" is a string prefix of the attribute value. "regex" match type will match if "value" is a regular expression match for the attribute value. The default match_type is "exact".
+	SegmentConditions *SegmentConditions `form:"segment_conditions,omitempty" json:"segment_conditions,omitempty"`
+}
+
+// GetExperimentResultsParamsBrowser defines parameters for GetExperimentResults.
+type GetExperimentResultsParamsBrowser string
+
+// GetExperimentResultsParamsDevice defines parameters for GetExperimentResults.
+type GetExperimentResultsParamsDevice string
+
+// GetExperimentResultsParamsSource defines parameters for GetExperimentResults.
+type GetExperimentResultsParamsSource string
+
+// GetExperimentSectionsParams defines parameters for GetExperimentSections.
+type GetExperimentSectionsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+}
+
+// GetExperimentTimeseriesParams defines parameters for GetExperimentTimeseries.
+type GetExperimentTimeseriesParams struct {
+	// BaselineVariationId The ID of the variation to use as the baseline to compare against other variations. Defaults to the first variation if not provided. For an experience in a personalization campaign, the value can also be the string 'holdback'.
+	BaselineVariationId *string `form:"baseline_variation_id,omitempty" json:"baseline_variation_id,omitempty"`
+
+	// StartTime The start time of the time interval (beginning time included) used to calculate the results over. If unspecified, defaults to the time that the Experiment was first activated. The start time will be rounded the smallest time modulo 5 minutes larger or equal to start_time.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime The end of the time interval (end time excluded) used to calculate results over. If unspecified, defaults to the current time if the Experiment is still running, otherwise defaults to the time the experiment was last active. The end time will be rounded to the largest time modulo 5 minutes smaller or equal to end_time. The end_time in the response may be earlier than requested if fresher results are not available yet. In this case, the results will continue to calculate in the background and subsequent requests will eventually return the full results.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+
+	// Browser Browser to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [device, source, attribute_id, attribute_value].
+	Browser *GetExperimentTimeseriesParamsBrowser `form:"browser,omitempty" json:"browser,omitempty"`
+
+	// Device Device to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, source, attribute_id, attribute_value].
+	Device *GetExperimentTimeseriesParamsDevice `form:"device,omitempty" json:"device,omitempty"`
+
+	// Source Source to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, device, attribute_id, attribute_value].
+	// Campaign: Contains users that arrive on a URL containing a 'utm_campaign,' 'utm_source,' 'gclid,' or 'otm_source' query parameter. If the URL contains one of these parameters, the visitor will count as "Campaign" traffic even if they arrived through search.
+	// Direct:  Includes all users who do not have any external referrer in their URL.
+	// Referral: Includes all users that come from another URL that doesn't count as Campaign.
+	Source *GetExperimentTimeseriesParamsSource `form:"source,omitempty" json:"source,omitempty"`
+
+	// AttributeId ID of the attribute to segment results by. Requests containing attribute_id will return the results for all visitors that have attribute_value for the attribute represented by attribute_id. If present, the attribute_value parameter must also be present, and it cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeId *AttributeIdSegment `form:"attribute_id,omitempty" json:"attribute_id,omitempty"`
+
+	// AttributeValue UTF-8 encoded value correlating to attribute_id. If present, the attribute_id parameter must also be present. This parameter also requires attribute_id to be set, and cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeValue *AttributeValueSegment `form:"attribute_value,omitempty" json:"attribute_value,omitempty"`
+
+	// SegmentConditions (BETA) A string representation of a JSON Segment Conditions Expression. This parameter can be either URL-escaped stringified JSON or Base64-encoded stringified JSON using URL-safe alphabet (preferred).
+	// Segment Conditions Expressions consist of Logical Expressions and Match Expressions.
+	// Logical Expressions are represented as an array of the format [<operator>, <expression>...], where the supported operators are "and", "or" and "not".
+	// Match Expressions are represented as an object of the format {"attribute_id": <attribute_id>, "attribute_value": <value>[, "match_type": <match_type>]}, where supported values for match_type are "exact" match type will match only an exact string match between "value" string and the attribute value. "substring" match type will match if "value" is a substring of the attribute value. "prefix" match type will match if "value" is a string prefix of the attribute value. "regex" match type will match if "value" is a regular expression match for the attribute value. The default match_type is "exact".
+	SegmentConditions *SegmentConditions `form:"segment_conditions,omitempty" json:"segment_conditions,omitempty"`
+}
+
+// GetExperimentTimeseriesParamsBrowser defines parameters for GetExperimentTimeseries.
+type GetExperimentTimeseriesParamsBrowser string
+
+// GetExperimentTimeseriesParamsDevice defines parameters for GetExperimentTimeseries.
+type GetExperimentTimeseriesParamsDevice string
+
+// GetExperimentTimeseriesParamsSource defines parameters for GetExperimentTimeseries.
+type GetExperimentTimeseriesParamsSource string
+
+// GetCampaignResultsCsvParams defines parameters for GetCampaignResultsCsv.
+type GetCampaignResultsCsvParams struct {
+	// StartTime The start time of the time interval (beginning time included) used to calculate the results over. If unspecified, defaults to the time that the Campaign was first activated. The start time will be rounded the smallest time modulo 5 minutes larger or equal to start_time.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime The end of the time interval (end time excluded) used to calculate results over. If unspecified, defaults to the current time if the Experiment is still running, otherwise defaults to the time the experiment was last active. The end time will be rounded to the largest time modulo 5 minutes smaller or equal to end_time. The end_time in the response may be earlier than requested if fresher results are not available yet. In this case, the results will continue to calculate in the background and subsequent requests will eventually return the full results.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+
+	// Browser Browser to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [device, source, attribute_id, attribute_value].
+	Browser *GetCampaignResultsCsvParamsBrowser `form:"browser,omitempty" json:"browser,omitempty"`
+
+	// Device Device to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, source, attribute_id, attribute_value].
+	Device *GetCampaignResultsCsvParamsDevice `form:"device,omitempty" json:"device,omitempty"`
+
+	// Source Source to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, device, attribute_id, attribute_value].
+	// Campaign: Contains users that arrive on a URL containing a 'utm_campaign,' 'utm_source,' 'gclid,' or 'otm_source' query parameter. If the URL contains one of these parameters, the visitor will count as "Campaign" traffic even if they arrived through search.
+	// Direct:  Includes all users who do not have any external referrer in their URL.
+	// Referral: Includes all users that come from another URL that doesn't count as Campaign.
+	Source *GetCampaignResultsCsvParamsSource `form:"source,omitempty" json:"source,omitempty"`
+
+	// AttributeId ID of the attribute to segment results by. Requests containing attribute_id will return the results for all visitors that have attribute_value for the attribute represented by attribute_id. If present, the attribute_value parameter must also be present, and it cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeId *AttributeIdSegment `form:"attribute_id,omitempty" json:"attribute_id,omitempty"`
+
+	// AttributeValue UTF-8 encoded value correlating to attribute_id. If present, the attribute_id parameter must also be present. This parameter also requires attribute_id to be set, and cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeValue *AttributeValueSegment `form:"attribute_value,omitempty" json:"attribute_value,omitempty"`
+
+	// SegmentConditions (BETA) A string representation of a JSON Segment Conditions Expression. This parameter can be either URL-escaped stringified JSON or Base64-encoded stringified JSON using URL-safe alphabet (preferred).
+	// Segment Conditions Expressions consist of Logical Expressions and Match Expressions.
+	// Logical Expressions are represented as an array of the format [<operator>, <expression>...], where the supported operators are "and", "or" and "not".
+	// Match Expressions are represented as an object of the format {"attribute_id": <attribute_id>, "attribute_value": <value>[, "match_type": <match_type>]}, where supported values for match_type are "exact" match type will match only an exact string match between "value" string and the attribute value. "substring" match type will match if "value" is a substring of the attribute value. "prefix" match type will match if "value" is a string prefix of the attribute value. "regex" match type will match if "value" is a regular expression match for the attribute value. The default match_type is "exact".
+	SegmentConditions *SegmentConditions `form:"segment_conditions,omitempty" json:"segment_conditions,omitempty"`
+}
+
+// GetCampaignResultsCsvParamsBrowser defines parameters for GetCampaignResultsCsv.
+type GetCampaignResultsCsvParamsBrowser string
+
+// GetCampaignResultsCsvParamsDevice defines parameters for GetCampaignResultsCsv.
+type GetCampaignResultsCsvParamsDevice string
+
+// GetCampaignResultsCsvParamsSource defines parameters for GetCampaignResultsCsv.
+type GetCampaignResultsCsvParamsSource string
+
+// GetEnrichedEventsExportCredentialsParams defines parameters for GetEnrichedEventsExportCredentials.
+type GetEnrichedEventsExportCredentialsParams struct {
+	// Duration Duration of the aws credentials token. Please use [H,h] for hours or [M,m] for minutes. Minimum is 15m and Maximum is 1h. Usage 1h.
+	Duration *string `form:"duration,omitempty" json:"duration,omitempty"`
+}
+
+// GetExperimentResultsCsvParams defines parameters for GetExperimentResultsCsv.
+type GetExperimentResultsCsvParams struct {
+	// BaselineVariationId The ID of the variation to use as the baseline to compare against other variations. Defaults to the first variation if not provided. For an experience in a personalization campaign, the value can also be the string 'holdback'.
+	BaselineVariationId *string `form:"baseline_variation_id,omitempty" json:"baseline_variation_id,omitempty"`
+
+	// StartTime The start time of the time interval (beginning time included) used to calculate the results over. If unspecified, defaults to the time that the Experiment was first activated. The start time will be rounded the smallest time modulo 5 minutes larger or equal to start_time.
+	StartTime *time.Time `form:"start_time,omitempty" json:"start_time,omitempty"`
+
+	// EndTime The end of the time interval (end time excluded) used to calculate results over. If unspecified, defaults to the current time if the Experiment is still running, otherwise defaults to the time the experiment was last active. The end time will be rounded to the largest time modulo 5 minutes smaller or equal to end_time. The end_time in the response may be earlier than requested if fresher results are not available yet. In this case, the results will continue to calculate in the background and subsequent requests will eventually return the full results.
+	EndTime *time.Time `form:"end_time,omitempty" json:"end_time,omitempty"`
+
+	// Browser Browser to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [device, source, attribute_id, attribute_value].
+	Browser *GetExperimentResultsCsvParamsBrowser `form:"browser,omitempty" json:"browser,omitempty"`
+
+	// Device Device to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, source, attribute_id, attribute_value].
+	Device *GetExperimentResultsCsvParamsDevice `form:"device,omitempty" json:"device,omitempty"`
+
+	// Source Source to segment results by. This parameter must not be sent with any other segmentation parameters, i.e. any parameters in [browser, device, attribute_id, attribute_value].
+	// Campaign: Contains users that arrive on a URL containing a 'utm_campaign,' 'utm_source,' 'gclid,' or 'otm_source' query parameter. If the URL contains one of these parameters, the visitor will count as "Campaign" traffic even if they arrived through search.
+	// Direct:  Includes all users who do not have any external referrer in their URL.
+	// Referral: Includes all users that come from another URL that doesn't count as Campaign.
+	Source *GetExperimentResultsCsvParamsSource `form:"source,omitempty" json:"source,omitempty"`
+
+	// AttributeId ID of the attribute to segment results by. Requests containing attribute_id will return the results for all visitors that have attribute_value for the attribute represented by attribute_id. If present, the attribute_value parameter must also be present, and it cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeId *AttributeIdSegment `form:"attribute_id,omitempty" json:"attribute_id,omitempty"`
+
+	// AttributeValue UTF-8 encoded value correlating to attribute_id. If present, the attribute_id parameter must also be present. This parameter also requires attribute_id to be set, and cannot be sent with any other segmentation parameters, i.e. any parameters in [browser, device, source].
+	AttributeValue *AttributeValueSegment `form:"attribute_value,omitempty" json:"attribute_value,omitempty"`
+
+	// SegmentConditions (BETA) A string representation of a JSON Segment Conditions Expression. This parameter can be either URL-escaped stringified JSON or Base64-encoded stringified JSON using URL-safe alphabet (preferred).
+	// Segment Conditions Expressions consist of Logical Expressions and Match Expressions.
+	// Logical Expressions are represented as an array of the format [<operator>, <expression>...], where the supported operators are "and", "or" and "not".
+	// Match Expressions are represented as an object of the format {"attribute_id": <attribute_id>, "attribute_value": <value>[, "match_type": <match_type>]}, where supported values for match_type are "exact" match type will match only an exact string match between "value" string and the attribute value. "substring" match type will match if "value" is a substring of the attribute value. "prefix" match type will match if "value" is a string prefix of the attribute value. "regex" match type will match if "value" is a regular expression match for the attribute value. The default match_type is "exact".
+	SegmentConditions *SegmentConditions `form:"segment_conditions,omitempty" json:"segment_conditions,omitempty"`
+}
+
+// GetExperimentResultsCsvParamsBrowser defines parameters for GetExperimentResultsCsv.
+type GetExperimentResultsCsvParamsBrowser string
+
+// GetExperimentResultsCsvParamsDevice defines parameters for GetExperimentResultsCsv.
+type GetExperimentResultsCsvParamsDevice string
+
+// GetExperimentResultsCsvParamsSource defines parameters for GetExperimentResultsCsv.
+type GetExperimentResultsCsvParamsSource string
+
+// ListExtensionsParams defines parameters for ListExtensions.
+type ListExtensionsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The ID of the project you would like to list all extensions for
+	ProjectId int64 `form:"project_id" json:"project_id"`
+}
+
+// ListFeaturesParams defines parameters for ListFeatures.
+type ListFeaturesParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The ID of the project for which you would like to get Features
+	ProjectId int64 `form:"project_id" json:"project_id"`
+}
+
+// ListGroupsParams defines parameters for ListGroups.
+type ListGroupsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The ID of the Project you would like to list all Exclusion Groups for
+	ProjectId int64 `form:"project_id" json:"project_id"`
+}
+
+// ListSarRequestsByTeamParams defines parameters for ListSarRequestsByTeam.
+type ListSarRequestsByTeamParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// DataSource Name of the source for which to retrieve the Subject Access Requests
+	DataSource ListSarRequestsByTeamParamsDataSource `form:"data_source" json:"data_source"`
+
+	// Status Filter request by status
+	Status string `form:"status" json:"status"`
+}
+
+// ListSarRequestsByTeamParamsDataSource defines parameters for ListSarRequestsByTeam.
+type ListSarRequestsByTeamParamsDataSource string
+
+// ListInvitationsParams defines parameters for ListInvitations.
+type ListInvitationsParams struct {
+	// ProjectId Return users who have been invited to the specified set of projects.
+	ProjectId *[]int64 `form:"project_id,omitempty" json:"project_id,omitempty"`
+}
+
+// ListListAttributesParams defines parameters for ListListAttributes.
+type ListListAttributesParams struct {
+	// ProjectId The ID of the project for which you would like to get List Attributes
+	ProjectId int64 `form:"project_id" json:"project_id"`
+}
+
+// GetMeParams defines parameters for GetMe.
+type GetMeParams struct {
+	// IncludeFeatures Flag indicator to request features enabled for this user
+	IncludeFeatures *bool `form:"include_features,omitempty" json:"include_features,omitempty"`
+
+	// Expand Expand the response to include any of current_account.features, accounts, or project_roles by providing a comma-delimited string or multiple expand paramters.
+	Expand *[]string `form:"expand,omitempty" json:"expand,omitempty"`
+}
+
+// ListPagesParams defines parameters for ListPages.
+type ListPagesParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// ProjectId The Project ID of the Project you would like to list all Pages for
+	ProjectId int64 `form:"project_id" json:"project_id"`
+}
 
 // ListProjectsParams defines parameters for ListProjects.
 type ListProjectsParams struct {
 	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
 	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
 
-	// Page Optional pagination argument that specifies the page to return. The default value is 1.
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
 	Page *Page `form:"page,omitempty" json:"page,omitempty"`
 }
+
+// ListWebhooksParams defines parameters for ListWebhooks.
+type ListWebhooksParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// PageWindow Number of previous and next page links to supply for the request (defaults to 1).
+	PageWindow *PageWindow `form:"page_window,omitempty" json:"page_window,omitempty"`
+
+	// PageToken Pagination page token. Implements prev, next, last, first
+	PageToken *PageToken `form:"page_token,omitempty" json:"page_token,omitempty"`
+}
+
+// GetSearchResultsParams defines parameters for GetSearchResults.
+type GetSearchResultsParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+
+	// Query The text to search for.
+	Query string `form:"query" json:"query"`
+
+	// ProjectId Filters search results by Project ID. Specifying multiple Project IDs will search across all specified projects.
+	ProjectId *[]int64 `form:"project_id,omitempty" json:"project_id,omitempty"`
+
+	// Type Filters search results by entity type. Specifying multiple types will search across all types specified.
+	Type *[]GetSearchResultsParamsType `form:"type,omitempty" json:"type,omitempty"`
+
+	// TypeExpand Filters search results by experiment, rule or campaign types. Specifying multiple types will search across all types specified.
+	TypeExpand *[]string `form:"type_expand,omitempty" json:"type_expand,omitempty"`
+
+	// ProjectType Filters search results by project type. Specifying multiple types will search across all types specified.
+	ProjectType *[]string `form:"project_type,omitempty" json:"project_type,omitempty"`
+
+	// Expand Include the project name with the search result
+	Expand *[]GetSearchResultsParamsExpand `form:"expand,omitempty" json:"expand,omitempty"`
+
+	// Archived Whether or not to include archived entities in the search results. If this parameter is not provided it will default to false and no archived entities will be included.
+	Archived *bool `form:"archived,omitempty" json:"archived,omitempty"`
+
+	// Fullsearch Whether or not to perform full document search for the given search keyword. If this parameter is not provided it will default to false.
+	Fullsearch *bool `form:"fullsearch,omitempty" json:"fullsearch,omitempty"`
+
+	// Status Filters search results by the current status of the entity if it has one. Works for Experiments and Campaigns, and it may work for others. Specifying multiple statuses will search for entities with ANY of those statuses.
+	Status *[]GetSearchResultsParamsStatus `form:"status,omitempty" json:"status,omitempty"`
+
+	// Sort The property to sort by.
+	Sort *string `form:"sort,omitempty" json:"sort,omitempty"`
+
+	// Order The property to sort by.
+	Order *string `form:"order,omitempty" json:"order,omitempty"`
+
+	// EnvironmentKey Filters search result by environment_key when applicable
+	EnvironmentKey *string `form:"environment_key,omitempty" json:"environment_key,omitempty"`
+
+	// AudienceId Filters search result by audience_id when applicable
+	AudienceId *[]int64 `form:"audience_id,omitempty" json:"audience_id,omitempty"`
+}
+
+// GetSearchResultsParamsType defines parameters for GetSearchResults.
+type GetSearchResultsParamsType string
+
+// GetSearchResultsParamsExpand defines parameters for GetSearchResults.
+type GetSearchResultsParamsExpand string
+
+// GetSearchResultsParamsStatus defines parameters for GetSearchResults.
+type GetSearchResultsParamsStatus string
+
+// ListSarRequestsByAccountParams defines parameters for ListSarRequestsByAccount.
+type ListSarRequestsByAccountParams struct {
+	// PerPage Optional pagination argument that specifies the maximum number of objects to return per request
+	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+
+	// Page Optional pagination argument that specifies the page to return. If you have 140 objects and you choose to return 100 objects per page you will be able to access the last 40 objects on page 2. The default value is 1.
+	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+}
+
+// CreateAttributeJSONRequestBody defines body for CreateAttribute for application/json ContentType.
+type CreateAttributeJSONRequestBody = Attribute
+
+// UpdateAttributeJSONRequestBody defines body for UpdateAttribute for application/json ContentType.
+type UpdateAttributeJSONRequestBody = AttributeUpdate
+
+// CreateAudienceJSONRequestBody defines body for CreateAudience for application/json ContentType.
+type CreateAudienceJSONRequestBody = Audience
+
+// UpdateAudienceJSONRequestBody defines body for UpdateAudience for application/json ContentType.
+type UpdateAudienceJSONRequestBody = AudienceUpdate
+
+// CreateCampaignJSONRequestBody defines body for CreateCampaign for application/json ContentType.
+type CreateCampaignJSONRequestBody = Campaign
+
+// UpdateCampaignJSONRequestBody defines body for UpdateCampaign for application/json ContentType.
+type UpdateCampaignJSONRequestBody = CampaignUpdate
+
+// CreateCollaboratorsJSONRequestBody defines body for CreateCollaborators for application/json ContentType.
+type CreateCollaboratorsJSONRequestBody = CreateCollaboratorsJSONBody
+
+// CreateEnvironmentJSONRequestBody defines body for CreateEnvironment for application/json ContentType.
+type CreateEnvironmentJSONRequestBody = Environment
+
+// UpdateEnvironmentJSONRequestBody defines body for UpdateEnvironment for application/json ContentType.
+type UpdateEnvironmentJSONRequestBody = EnvironmentUpdate
+
+// CreateExperimentJSONRequestBody defines body for CreateExperiment for application/json ContentType.
+type CreateExperimentJSONRequestBody = Experiment
+
+// UpdateExperimentJSONRequestBody defines body for UpdateExperiment for application/json ContentType.
+type UpdateExperimentJSONRequestBody = ExperimentUpdate
+
+// CreateSectionJSONRequestBody defines body for CreateSection for application/json ContentType.
+type CreateSectionJSONRequestBody = Section
+
+// UpdateSectionJSONRequestBody defines body for UpdateSection for application/json ContentType.
+type UpdateSectionJSONRequestBody = SectionUpdate
+
+// CreateExtensionJSONRequestBody defines body for CreateExtension for application/json ContentType.
+type CreateExtensionJSONRequestBody = Extension
+
+// UpdateExtensionJSONRequestBody defines body for UpdateExtension for application/json ContentType.
+type UpdateExtensionJSONRequestBody = ExtensionUpdate
+
+// CreateFeatureJSONRequestBody defines body for CreateFeature for application/json ContentType.
+type CreateFeatureJSONRequestBody = Feature
+
+// UpdateFeatureJSONRequestBody defines body for UpdateFeature for application/json ContentType.
+type UpdateFeatureJSONRequestBody = FeatureUpdate
+
+// CreateGroupJSONRequestBody defines body for CreateGroup for application/json ContentType.
+type CreateGroupJSONRequestBody = Group
+
+// UpdateGroupJSONRequestBody defines body for UpdateGroup for application/json ContentType.
+type UpdateGroupJSONRequestBody = GroupUpdate
+
+// UpdateSarRequestJSONRequestBody defines body for UpdateSarRequest for application/json ContentType.
+type UpdateSarRequestJSONRequestBody = SubjectAccessRequestUpdate
+
+// UpdateSarRequestByPostJSONRequestBody defines body for UpdateSarRequestByPost for application/json ContentType.
+type UpdateSarRequestByPostJSONRequestBody = SubjectAccessRequestUpdate
+
+// CreateListAttributeJSONRequestBody defines body for CreateListAttribute for application/json ContentType.
+type CreateListAttributeJSONRequestBody = ListAttribute
+
+// UpdateListAttributeJSONRequestBody defines body for UpdateListAttribute for application/json ContentType.
+type UpdateListAttributeJSONRequestBody = ListAttributeUpdate
+
+// CreatePageJSONRequestBody defines body for CreatePage for application/json ContentType.
+type CreatePageJSONRequestBody = PageObject
+
+// UpdatePageJSONRequestBody defines body for UpdatePage for application/json ContentType.
+type UpdatePageJSONRequestBody = PageUpdate
+
+// CreateInPageEventJSONRequestBody defines body for CreateInPageEvent for application/json ContentType.
+type CreateInPageEventJSONRequestBody = InPageEvent
+
+// UpdateInPageEventJSONRequestBody defines body for UpdateInPageEvent for application/json ContentType.
+type UpdateInPageEventJSONRequestBody = InPageEventUpdate
 
 // CreateProjectJSONRequestBody defines body for CreateProject for application/json ContentType.
 type CreateProjectJSONRequestBody = Project
 
 // UpdateProjectJSONRequestBody defines body for UpdateProject for application/json ContentType.
 type UpdateProjectJSONRequestBody = ProjectUpdate
+
+// CreateCustomEventJSONRequestBody defines body for CreateCustomEvent for application/json ContentType.
+type CreateCustomEventJSONRequestBody = CustomEvent
+
+// UpdateCustomEventJSONRequestBody defines body for UpdateCustomEvent for application/json ContentType.
+type UpdateCustomEventJSONRequestBody = CustomEventUpdate
+
+// CreateWebhookJSONRequestBody defines body for CreateWebhook for application/json ContentType.
+type CreateWebhookJSONRequestBody = WebhookRequestBody
+
+// CreateScheduledJobJSONRequestBody defines body for CreateScheduledJob for application/json ContentType.
+type CreateScheduledJobJSONRequestBody = ScheduledJob
+
+// UpdateScheduledJobJSONRequestBody defines body for UpdateScheduledJob for application/json ContentType.
+type UpdateScheduledJobJSONRequestBody = ScheduledJobUpdate
+
+// CreateSarRequestJSONRequestBody defines body for CreateSarRequest for application/json ContentType.
+type CreateSarRequestJSONRequestBody = SubjectAccessRequest
+
+// UpdateWebhookJSONRequestBody defines body for UpdateWebhook for application/json ContentType.
+type UpdateWebhookJSONRequestBody = WebhookRequestBody
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -509,6 +7569,306 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// ListAttributes request
+	ListAttributes(ctx context.Context, params *ListAttributesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateAttributeWithBody request with any body
+	CreateAttributeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateAttribute(ctx context.Context, body CreateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteAttribute request
+	DeleteAttribute(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetAttribute request
+	GetAttribute(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateAttributeWithBody request with any body
+	UpdateAttributeWithBody(ctx context.Context, attributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateAttribute(ctx context.Context, attributeId int64, body UpdateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetBucketingHistory request
+	GetBucketingHistory(ctx context.Context, accountId int64, visitorId string, params *GetBucketingHistoryParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListAudiences request
+	ListAudiences(ctx context.Context, params *ListAudiencesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateAudienceWithBody request with any body
+	CreateAudienceWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateAudience(ctx context.Context, body CreateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetAudience request
+	GetAudience(ctx context.Context, audienceId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateAudienceWithBody request with any body
+	UpdateAudienceWithBody(ctx context.Context, audienceId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateAudience(ctx context.Context, audienceId int64, body UpdateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetImpressionsUsageRequest request
+	GetImpressionsUsageRequest(ctx context.Context, accountId int64, params *GetImpressionsUsageRequestParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetImpressionsUsageSummaryRequest request
+	GetImpressionsUsageSummaryRequest(ctx context.Context, accountId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListCampaigns request
+	ListCampaigns(ctx context.Context, params *ListCampaignsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCampaignWithBody request with any body
+	CreateCampaignWithBody(ctx context.Context, params *CreateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateCampaign(ctx context.Context, params *CreateCampaignParams, body CreateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteCampaign request
+	DeleteCampaign(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetCampaign request
+	GetCampaign(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateCampaignWithBody request with any body
+	UpdateCampaignWithBody(ctx context.Context, campaignId int64, params *UpdateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateCampaign(ctx context.Context, campaignId int64, params *UpdateCampaignParams, body UpdateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetCampaignResults request
+	GetCampaignResults(ctx context.Context, campaignId int64, params *GetCampaignResultsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetCampaignResultsShareLink request
+	GetCampaignResultsShareLink(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListChangeHistory request
+	ListChangeHistory(ctx context.Context, params *ListChangeHistoryParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListCollaborators request
+	ListCollaborators(ctx context.Context, params *ListCollaboratorsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCollaboratorsWithBody request with any body
+	CreateCollaboratorsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateCollaborators(ctx context.Context, body CreateCollaboratorsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListEnvironments request
+	ListEnvironments(ctx context.Context, params *ListEnvironmentsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateEnvironmentWithBody request with any body
+	CreateEnvironmentWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateEnvironment(ctx context.Context, body CreateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteEnvironment request
+	DeleteEnvironment(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetEnvironment request
+	GetEnvironment(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateEnvironmentWithBody request with any body
+	UpdateEnvironmentWithBody(ctx context.Context, environmentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateEnvironment(ctx context.Context, environmentId int64, body UpdateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetDatafile request
+	GetDatafile(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListEvents request
+	ListEvents(ctx context.Context, params *ListEventsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetEvent request
+	GetEvent(ctx context.Context, eventId int64, params *GetEventParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperimentSummaries request
+	GetExperimentSummaries(ctx context.Context, params *GetExperimentSummariesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListExperiments request
+	ListExperiments(ctx context.Context, params *ListExperimentsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateExperimentWithBody request with any body
+	CreateExperimentWithBody(ctx context.Context, params *CreateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateExperiment(ctx context.Context, params *CreateExperimentParams, body CreateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteExperiment request
+	DeleteExperiment(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperiment request
+	GetExperiment(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateExperimentWithBody request with any body
+	UpdateExperimentWithBody(ctx context.Context, experimentId int64, params *UpdateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateExperiment(ctx context.Context, experimentId int64, params *UpdateExperimentParams, body UpdateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperimentReport request
+	GetExperimentReport(ctx context.Context, experimentId int64, params *GetExperimentReportParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperimentResults request
+	GetExperimentResults(ctx context.Context, experimentId int64, params *GetExperimentResultsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperimentResultsShareLink request
+	GetExperimentResultsShareLink(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperimentSections request
+	GetExperimentSections(ctx context.Context, experimentId int64, params *GetExperimentSectionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateSectionWithBody request with any body
+	CreateSectionWithBody(ctx context.Context, experimentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateSection(ctx context.Context, experimentId int64, body CreateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteSection request
+	DeleteSection(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSection request
+	GetSection(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateSectionWithBody request with any body
+	UpdateSectionWithBody(ctx context.Context, experimentId int, sectionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateSection(ctx context.Context, experimentId int, sectionId int64, body UpdateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperimentTimeseries request
+	GetExperimentTimeseries(ctx context.Context, experimentId int64, params *GetExperimentTimeseriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetCampaignResultsCsv request
+	GetCampaignResultsCsv(ctx context.Context, campaignId int64, params *GetCampaignResultsCsvParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetEnrichedEventsExportCredentials request
+	GetEnrichedEventsExportCredentials(ctx context.Context, params *GetEnrichedEventsExportCredentialsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExperimentResultsCsv request
+	GetExperimentResultsCsv(ctx context.Context, experimentId int64, params *GetExperimentResultsCsvParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListExtensions request
+	ListExtensions(ctx context.Context, params *ListExtensionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateExtensionWithBody request with any body
+	CreateExtensionWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateExtension(ctx context.Context, body CreateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteExtension request
+	DeleteExtension(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExtension request
+	GetExtension(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateExtensionWithBody request with any body
+	UpdateExtensionWithBody(ctx context.Context, extensionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateExtension(ctx context.Context, extensionId int64, body UpdateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListFeatures request
+	ListFeatures(ctx context.Context, params *ListFeaturesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateFeatureWithBody request with any body
+	CreateFeatureWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateFeature(ctx context.Context, body CreateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteFeature request
+	DeleteFeature(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetFeature request
+	GetFeature(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateFeatureWithBody request with any body
+	UpdateFeatureWithBody(ctx context.Context, featureId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateFeature(ctx context.Context, featureId int64, body UpdateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListGroups request
+	ListGroups(ctx context.Context, params *ListGroupsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateGroupWithBody request with any body
+	CreateGroupWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateGroup(ctx context.Context, body CreateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteGroup request
+	DeleteGroup(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetGroup request
+	GetGroup(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateGroupWithBody request with any body
+	UpdateGroupWithBody(ctx context.Context, groupId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateGroup(ctx context.Context, groupId int64, body UpdateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListSarRequestsByTeam request
+	ListSarRequestsByTeam(ctx context.Context, params *ListSarRequestsByTeamParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateSarRequestWithBody request with any body
+	UpdateSarRequestWithBody(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateSarRequest(ctx context.Context, requestId int64, body UpdateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateSarRequestByPostWithBody request with any body
+	UpdateSarRequestByPostWithBody(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateSarRequestByPost(ctx context.Context, requestId int64, body UpdateSarRequestByPostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListInvitations request
+	ListInvitations(ctx context.Context, params *ListInvitationsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListListAttributes request
+	ListListAttributes(ctx context.Context, params *ListListAttributesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateListAttributeWithBody request with any body
+	CreateListAttributeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateListAttribute(ctx context.Context, body CreateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ArchiveListAttribute request
+	ArchiveListAttribute(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetListAttribute request
+	GetListAttribute(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateListAttributeWithBody request with any body
+	UpdateListAttributeWithBody(ctx context.Context, listAttributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateListAttribute(ctx context.Context, listAttributeId int64, body UpdateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetMe request
+	GetMe(ctx context.Context, params *GetMeParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListPages request
+	ListPages(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePageWithBody request with any body
+	CreatePageWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreatePage(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeletePage request
+	DeletePage(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetPage request
+	GetPage(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdatePageWithBody request with any body
+	UpdatePageWithBody(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdatePage(ctx context.Context, pageId int64, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateInPageEventWithBody request with any body
+	CreateInPageEventWithBody(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateInPageEvent(ctx context.Context, pageId int64, body CreateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteInPageEvent request
+	DeleteInPageEvent(ctx context.Context, pageId int64, eventId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateInPageEventWithBody request with any body
+	UpdateInPageEventWithBody(ctx context.Context, pageId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateInPageEvent(ctx context.Context, pageId int64, eventId int64, body UpdateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetPlan request
+	GetPlan(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListProjects request
 	ListProjects(ctx context.Context, params *ListProjectsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -524,6 +7884,1388 @@ type ClientInterface interface {
 	UpdateProjectWithBody(ctx context.Context, projectId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	UpdateProject(ctx context.Context, projectId int64, body UpdateProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCustomEventWithBody request with any body
+	CreateCustomEventWithBody(ctx context.Context, projectId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateCustomEvent(ctx context.Context, projectId int64, body CreateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteCustomEvent request
+	DeleteCustomEvent(ctx context.Context, projectId int64, eventId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateCustomEventWithBody request with any body
+	UpdateCustomEventWithBody(ctx context.Context, projectId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateCustomEvent(ctx context.Context, projectId int64, eventId int64, body UpdateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListWebhooks request
+	ListWebhooks(ctx context.Context, projectId ProjectId, params *ListWebhooksParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateWebhookWithBody request with any body
+	CreateWebhookWithBody(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateWebhook(ctx context.Context, projectId ProjectId, body CreateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetRecsCatalogCsv request
+	GetRecsCatalogCsv(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetRecsOutputCsv request
+	GetRecsOutputCsv(ctx context.Context, catalogId string, recommenderId string, date string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetRecsStatsCsv request
+	GetRecsStatsCsv(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListScheduledJobs request
+	ListScheduledJobs(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateScheduledJobWithBody request with any body
+	CreateScheduledJobWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateScheduledJob(ctx context.Context, body CreateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteScheduledJob request
+	DeleteScheduledJob(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetScheduledJob request
+	GetScheduledJob(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateScheduledJobWithBody request with any body
+	UpdateScheduledJobWithBody(ctx context.Context, jobId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateScheduledJob(ctx context.Context, jobId int64, body UpdateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSearchResults request
+	GetSearchResults(ctx context.Context, params *GetSearchResultsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListSarRequestsByAccount request
+	ListSarRequestsByAccount(ctx context.Context, params *ListSarRequestsByAccountParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateSarRequestWithBody request with any body
+	CreateSarRequestWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateSarRequest(ctx context.Context, body CreateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSarRequest request
+	GetSarRequest(ctx context.Context, requestId int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteWebhook request
+	DeleteWebhook(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetWebhook request
+	GetWebhook(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateWebhookWithBody request with any body
+	UpdateWebhookWithBody(ctx context.Context, webhookId WebhookId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateWebhook(ctx context.Context, webhookId WebhookId, body UpdateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+func (c *Client) ListAttributes(ctx context.Context, params *ListAttributesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListAttributesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateAttributeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateAttributeRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateAttribute(ctx context.Context, body CreateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateAttributeRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteAttribute(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteAttributeRequest(c.Server, attributeId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetAttribute(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetAttributeRequest(c.Server, attributeId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateAttributeWithBody(ctx context.Context, attributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateAttributeRequestWithBody(c.Server, attributeId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateAttribute(ctx context.Context, attributeId int64, body UpdateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateAttributeRequest(c.Server, attributeId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetBucketingHistory(ctx context.Context, accountId int64, visitorId string, params *GetBucketingHistoryParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetBucketingHistoryRequest(c.Server, accountId, visitorId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListAudiences(ctx context.Context, params *ListAudiencesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListAudiencesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateAudienceWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateAudienceRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateAudience(ctx context.Context, body CreateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateAudienceRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetAudience(ctx context.Context, audienceId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetAudienceRequest(c.Server, audienceId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateAudienceWithBody(ctx context.Context, audienceId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateAudienceRequestWithBody(c.Server, audienceId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateAudience(ctx context.Context, audienceId int64, body UpdateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateAudienceRequest(c.Server, audienceId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetImpressionsUsageRequest(ctx context.Context, accountId int64, params *GetImpressionsUsageRequestParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetImpressionsUsageRequestRequest(c.Server, accountId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetImpressionsUsageSummaryRequest(ctx context.Context, accountId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetImpressionsUsageSummaryRequestRequest(c.Server, accountId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListCampaigns(ctx context.Context, params *ListCampaignsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListCampaignsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCampaignWithBody(ctx context.Context, params *CreateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCampaignRequestWithBody(c.Server, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCampaign(ctx context.Context, params *CreateCampaignParams, body CreateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCampaignRequest(c.Server, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteCampaign(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteCampaignRequest(c.Server, campaignId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetCampaign(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCampaignRequest(c.Server, campaignId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateCampaignWithBody(ctx context.Context, campaignId int64, params *UpdateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCampaignRequestWithBody(c.Server, campaignId, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateCampaign(ctx context.Context, campaignId int64, params *UpdateCampaignParams, body UpdateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCampaignRequest(c.Server, campaignId, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetCampaignResults(ctx context.Context, campaignId int64, params *GetCampaignResultsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCampaignResultsRequest(c.Server, campaignId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetCampaignResultsShareLink(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCampaignResultsShareLinkRequest(c.Server, campaignId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListChangeHistory(ctx context.Context, params *ListChangeHistoryParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListChangeHistoryRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListCollaborators(ctx context.Context, params *ListCollaboratorsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListCollaboratorsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCollaboratorsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCollaboratorsRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCollaborators(ctx context.Context, body CreateCollaboratorsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCollaboratorsRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListEnvironments(ctx context.Context, params *ListEnvironmentsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListEnvironmentsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateEnvironmentWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateEnvironmentRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateEnvironment(ctx context.Context, body CreateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateEnvironmentRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteEnvironment(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteEnvironmentRequest(c.Server, environmentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetEnvironment(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetEnvironmentRequest(c.Server, environmentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateEnvironmentWithBody(ctx context.Context, environmentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateEnvironmentRequestWithBody(c.Server, environmentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateEnvironment(ctx context.Context, environmentId int64, body UpdateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateEnvironmentRequest(c.Server, environmentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetDatafile(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetDatafileRequest(c.Server, environmentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListEvents(ctx context.Context, params *ListEventsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListEventsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetEvent(ctx context.Context, eventId int64, params *GetEventParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetEventRequest(c.Server, eventId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperimentSummaries(ctx context.Context, params *GetExperimentSummariesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentSummariesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListExperiments(ctx context.Context, params *ListExperimentsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListExperimentsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateExperimentWithBody(ctx context.Context, params *CreateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateExperimentRequestWithBody(c.Server, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateExperiment(ctx context.Context, params *CreateExperimentParams, body CreateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateExperimentRequest(c.Server, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteExperiment(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteExperimentRequest(c.Server, experimentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperiment(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentRequest(c.Server, experimentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateExperimentWithBody(ctx context.Context, experimentId int64, params *UpdateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateExperimentRequestWithBody(c.Server, experimentId, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateExperiment(ctx context.Context, experimentId int64, params *UpdateExperimentParams, body UpdateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateExperimentRequest(c.Server, experimentId, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperimentReport(ctx context.Context, experimentId int64, params *GetExperimentReportParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentReportRequest(c.Server, experimentId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperimentResults(ctx context.Context, experimentId int64, params *GetExperimentResultsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentResultsRequest(c.Server, experimentId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperimentResultsShareLink(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentResultsShareLinkRequest(c.Server, experimentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperimentSections(ctx context.Context, experimentId int64, params *GetExperimentSectionsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentSectionsRequest(c.Server, experimentId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateSectionWithBody(ctx context.Context, experimentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateSectionRequestWithBody(c.Server, experimentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateSection(ctx context.Context, experimentId int64, body CreateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateSectionRequest(c.Server, experimentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteSection(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteSectionRequest(c.Server, experimentId, sectionId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetSection(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSectionRequest(c.Server, experimentId, sectionId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateSectionWithBody(ctx context.Context, experimentId int, sectionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateSectionRequestWithBody(c.Server, experimentId, sectionId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateSection(ctx context.Context, experimentId int, sectionId int64, body UpdateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateSectionRequest(c.Server, experimentId, sectionId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperimentTimeseries(ctx context.Context, experimentId int64, params *GetExperimentTimeseriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentTimeseriesRequest(c.Server, experimentId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetCampaignResultsCsv(ctx context.Context, campaignId int64, params *GetCampaignResultsCsvParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCampaignResultsCsvRequest(c.Server, campaignId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetEnrichedEventsExportCredentials(ctx context.Context, params *GetEnrichedEventsExportCredentialsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetEnrichedEventsExportCredentialsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExperimentResultsCsv(ctx context.Context, experimentId int64, params *GetExperimentResultsCsvParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExperimentResultsCsvRequest(c.Server, experimentId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListExtensions(ctx context.Context, params *ListExtensionsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListExtensionsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateExtensionWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateExtensionRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateExtension(ctx context.Context, body CreateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateExtensionRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteExtension(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteExtensionRequest(c.Server, extensionId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExtension(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExtensionRequest(c.Server, extensionId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateExtensionWithBody(ctx context.Context, extensionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateExtensionRequestWithBody(c.Server, extensionId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateExtension(ctx context.Context, extensionId int64, body UpdateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateExtensionRequest(c.Server, extensionId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListFeatures(ctx context.Context, params *ListFeaturesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListFeaturesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateFeatureWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateFeatureRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateFeature(ctx context.Context, body CreateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateFeatureRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteFeature(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteFeatureRequest(c.Server, featureId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetFeature(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetFeatureRequest(c.Server, featureId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateFeatureWithBody(ctx context.Context, featureId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateFeatureRequestWithBody(c.Server, featureId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateFeature(ctx context.Context, featureId int64, body UpdateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateFeatureRequest(c.Server, featureId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListGroups(ctx context.Context, params *ListGroupsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListGroupsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateGroupWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateGroupRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateGroup(ctx context.Context, body CreateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateGroupRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteGroup(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteGroupRequest(c.Server, groupId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetGroup(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetGroupRequest(c.Server, groupId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateGroupWithBody(ctx context.Context, groupId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateGroupRequestWithBody(c.Server, groupId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateGroup(ctx context.Context, groupId int64, body UpdateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateGroupRequest(c.Server, groupId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListSarRequestsByTeam(ctx context.Context, params *ListSarRequestsByTeamParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListSarRequestsByTeamRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateSarRequestWithBody(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateSarRequestRequestWithBody(c.Server, requestId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateSarRequest(ctx context.Context, requestId int64, body UpdateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateSarRequestRequest(c.Server, requestId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateSarRequestByPostWithBody(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateSarRequestByPostRequestWithBody(c.Server, requestId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateSarRequestByPost(ctx context.Context, requestId int64, body UpdateSarRequestByPostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateSarRequestByPostRequest(c.Server, requestId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListInvitations(ctx context.Context, params *ListInvitationsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListInvitationsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListListAttributes(ctx context.Context, params *ListListAttributesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListListAttributesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateListAttributeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateListAttributeRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateListAttribute(ctx context.Context, body CreateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateListAttributeRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ArchiveListAttribute(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewArchiveListAttributeRequest(c.Server, listAttributeId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetListAttribute(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetListAttributeRequest(c.Server, listAttributeId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateListAttributeWithBody(ctx context.Context, listAttributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateListAttributeRequestWithBody(c.Server, listAttributeId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateListAttribute(ctx context.Context, listAttributeId int64, body UpdateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateListAttributeRequest(c.Server, listAttributeId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetMe(ctx context.Context, params *GetMeParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetMeRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListPages(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListPagesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreatePageWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePageRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreatePage(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePageRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeletePage(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeletePageRequest(c.Server, pageId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetPage(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetPageRequest(c.Server, pageId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdatePageWithBody(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdatePageRequestWithBody(c.Server, pageId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdatePage(ctx context.Context, pageId int64, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdatePageRequest(c.Server, pageId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateInPageEventWithBody(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateInPageEventRequestWithBody(c.Server, pageId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateInPageEvent(ctx context.Context, pageId int64, body CreateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateInPageEventRequest(c.Server, pageId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteInPageEvent(ctx context.Context, pageId int64, eventId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteInPageEventRequest(c.Server, pageId, eventId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateInPageEventWithBody(ctx context.Context, pageId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateInPageEventRequestWithBody(c.Server, pageId, eventId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateInPageEvent(ctx context.Context, pageId int64, eventId int64, body UpdateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateInPageEventRequest(c.Server, pageId, eventId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetPlan(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetPlanRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 func (c *Client) ListProjects(ctx context.Context, params *ListProjectsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -596,6 +9338,5541 @@ func (c *Client) UpdateProject(ctx context.Context, projectId int64, body Update
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCustomEventWithBody(ctx context.Context, projectId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomEventRequestWithBody(c.Server, projectId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCustomEvent(ctx context.Context, projectId int64, body CreateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomEventRequest(c.Server, projectId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteCustomEvent(ctx context.Context, projectId int64, eventId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteCustomEventRequest(c.Server, projectId, eventId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateCustomEventWithBody(ctx context.Context, projectId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCustomEventRequestWithBody(c.Server, projectId, eventId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateCustomEvent(ctx context.Context, projectId int64, eventId int64, body UpdateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCustomEventRequest(c.Server, projectId, eventId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListWebhooks(ctx context.Context, projectId ProjectId, params *ListWebhooksParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListWebhooksRequest(c.Server, projectId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateWebhookWithBody(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateWebhookRequestWithBody(c.Server, projectId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateWebhook(ctx context.Context, projectId ProjectId, body CreateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateWebhookRequest(c.Server, projectId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetRecsCatalogCsv(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRecsCatalogCsvRequest(c.Server, catalogId, date)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetRecsOutputCsv(ctx context.Context, catalogId string, recommenderId string, date string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRecsOutputCsvRequest(c.Server, catalogId, recommenderId, date)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetRecsStatsCsv(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRecsStatsCsvRequest(c.Server, catalogId, date)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListScheduledJobs(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListScheduledJobsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateScheduledJobWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateScheduledJobRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateScheduledJob(ctx context.Context, body CreateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateScheduledJobRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteScheduledJob(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteScheduledJobRequest(c.Server, jobId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetScheduledJob(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetScheduledJobRequest(c.Server, jobId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateScheduledJobWithBody(ctx context.Context, jobId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateScheduledJobRequestWithBody(c.Server, jobId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateScheduledJob(ctx context.Context, jobId int64, body UpdateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateScheduledJobRequest(c.Server, jobId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetSearchResults(ctx context.Context, params *GetSearchResultsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSearchResultsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListSarRequestsByAccount(ctx context.Context, params *ListSarRequestsByAccountParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListSarRequestsByAccountRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateSarRequestWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateSarRequestRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateSarRequest(ctx context.Context, body CreateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateSarRequestRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetSarRequest(ctx context.Context, requestId int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSarRequestRequest(c.Server, requestId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteWebhook(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteWebhookRequest(c.Server, webhookId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetWebhook(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetWebhookRequest(c.Server, webhookId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateWebhookWithBody(ctx context.Context, webhookId WebhookId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateWebhookRequestWithBody(c.Server, webhookId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateWebhook(ctx context.Context, webhookId WebhookId, body UpdateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateWebhookRequest(c.Server, webhookId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// NewListAttributesRequest generates requests for ListAttributes
+func NewListAttributesRequest(server string, params *ListAttributesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/attributes")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateAttributeRequest calls the generic CreateAttribute builder with application/json body
+func NewCreateAttributeRequest(server string, body CreateAttributeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateAttributeRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateAttributeRequestWithBody generates requests for CreateAttribute with any type of body
+func NewCreateAttributeRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/attributes")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteAttributeRequest generates requests for DeleteAttribute
+func NewDeleteAttributeRequest(server string, attributeId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "attribute_id", attributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/attributes/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetAttributeRequest generates requests for GetAttribute
+func NewGetAttributeRequest(server string, attributeId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "attribute_id", attributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/attributes/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateAttributeRequest calls the generic UpdateAttribute builder with application/json body
+func NewUpdateAttributeRequest(server string, attributeId int64, body UpdateAttributeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateAttributeRequestWithBody(server, attributeId, "application/json", bodyReader)
+}
+
+// NewUpdateAttributeRequestWithBody generates requests for UpdateAttribute with any type of body
+func NewUpdateAttributeRequestWithBody(server string, attributeId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "attribute_id", attributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/attributes/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetBucketingHistoryRequest generates requests for GetBucketingHistory
+func NewGetBucketingHistoryRequest(server string, accountId int64, visitorId string, params *GetBucketingHistoryParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "account_id", accountId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "visitor_id", visitorId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/attribution/%s/visitor/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListAudiencesRequest generates requests for ListAudiences
+func NewListAudiencesRequest(server string, params *ListAudiencesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/audiences")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.ForJourney != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "for_journey", *params.ForJourney, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Archived != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "archived", *params.Archived, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateAudienceRequest calls the generic CreateAudience builder with application/json body
+func NewCreateAudienceRequest(server string, body CreateAudienceJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateAudienceRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateAudienceRequestWithBody generates requests for CreateAudience with any type of body
+func NewCreateAudienceRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/audiences")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetAudienceRequest generates requests for GetAudience
+func NewGetAudienceRequest(server string, audienceId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "audience_id", audienceId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/audiences/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateAudienceRequest calls the generic UpdateAudience builder with application/json body
+func NewUpdateAudienceRequest(server string, audienceId int64, body UpdateAudienceJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateAudienceRequestWithBody(server, audienceId, "application/json", bodyReader)
+}
+
+// NewUpdateAudienceRequestWithBody generates requests for UpdateAudience with any type of body
+func NewUpdateAudienceRequestWithBody(server string, audienceId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "audience_id", audienceId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/audiences/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetImpressionsUsageRequestRequest generates requests for GetImpressionsUsageRequest
+func NewGetImpressionsUsageRequestRequest(server string, accountId int64, params *GetImpressionsUsageRequestParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "account_id", accountId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/billing/usage/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "usage_date_from", params.UsageDateFrom, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "usage_date_to", params.UsageDateTo, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.Platforms != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "platforms", *params.Platforms, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Query != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "query", *params.Query, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Sort != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "sort", *params.Sort, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Order != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "order", *params.Order, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetImpressionsUsageSummaryRequestRequest generates requests for GetImpressionsUsageSummaryRequest
+func NewGetImpressionsUsageSummaryRequestRequest(server string, accountId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "account_id", accountId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/billing/usage/%s/summary", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListCampaignsRequest generates requests for ListCampaigns
+func NewListCampaignsRequest(server string, params *ListCampaignsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/campaigns")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.ForJourney != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "for_journey", *params.ForJourney, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Archived != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "archived", *params.Archived, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateCampaignRequest calls the generic CreateCampaign builder with application/json body
+func NewCreateCampaignRequest(server string, params *CreateCampaignParams, body CreateCampaignJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCampaignRequestWithBody(server, params, "application/json", bodyReader)
+}
+
+// NewCreateCampaignRequestWithBody generates requests for CreateCampaign with any type of body
+func NewCreateCampaignRequestWithBody(server string, params *CreateCampaignParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/campaigns")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Action != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "action", *params.Action, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteCampaignRequest generates requests for DeleteCampaign
+func NewDeleteCampaignRequest(server string, campaignId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "campaign_id", campaignId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/campaigns/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetCampaignRequest generates requests for GetCampaign
+func NewGetCampaignRequest(server string, campaignId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "campaign_id", campaignId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/campaigns/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateCampaignRequest calls the generic UpdateCampaign builder with application/json body
+func NewUpdateCampaignRequest(server string, campaignId int64, params *UpdateCampaignParams, body UpdateCampaignJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateCampaignRequestWithBody(server, campaignId, params, "application/json", bodyReader)
+}
+
+// NewUpdateCampaignRequestWithBody generates requests for UpdateCampaign with any type of body
+func NewUpdateCampaignRequestWithBody(server string, campaignId int64, params *UpdateCampaignParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "campaign_id", campaignId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/campaigns/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Action != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "action", *params.Action, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetCampaignResultsRequest generates requests for GetCampaignResults
+func NewGetCampaignResultsRequest(server string, campaignId int64, params *GetCampaignResultsParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "campaign_id", campaignId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/campaigns/%s/results", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Browser != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "browser", *params.Browser, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Device != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "device", *params.Device, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_id", *params.AttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeValue != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_value", *params.AttributeValue, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.SegmentConditions != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "segment_conditions", *params.SegmentConditions, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetCampaignResultsShareLinkRequest generates requests for GetCampaignResultsShareLink
+func NewGetCampaignResultsShareLinkRequest(server string, campaignId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "campaign_id", campaignId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/campaigns/%s/results/share", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListChangeHistoryRequest generates requests for ListChangeHistory
+func NewListChangeHistoryRequest(server string, params *ListChangeHistoryParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/changes")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.Id != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "id", *params.Id, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.User != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "user", *params.User, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EntityType != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "entity_type", *params.EntityType, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Entity != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "entity", *params.Entity, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListCollaboratorsRequest generates requests for ListCollaborators
+func NewListCollaboratorsRequest(server string, params *ListCollaboratorsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/collaborators")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.ProjectId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", *params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateCollaboratorsRequest calls the generic CreateCollaborators builder with application/json body
+func NewCreateCollaboratorsRequest(server string, body CreateCollaboratorsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCollaboratorsRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateCollaboratorsRequestWithBody generates requests for CreateCollaborators with any type of body
+func NewCreateCollaboratorsRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/collaborators")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListEnvironmentsRequest generates requests for ListEnvironments
+func NewListEnvironmentsRequest(server string, params *ListEnvironmentsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/environments")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateEnvironmentRequest calls the generic CreateEnvironment builder with application/json body
+func NewCreateEnvironmentRequest(server string, body CreateEnvironmentJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateEnvironmentRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateEnvironmentRequestWithBody generates requests for CreateEnvironment with any type of body
+func NewCreateEnvironmentRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/environments")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteEnvironmentRequest generates requests for DeleteEnvironment
+func NewDeleteEnvironmentRequest(server string, environmentId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "environment_id", environmentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/environments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetEnvironmentRequest generates requests for GetEnvironment
+func NewGetEnvironmentRequest(server string, environmentId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "environment_id", environmentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/environments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateEnvironmentRequest calls the generic UpdateEnvironment builder with application/json body
+func NewUpdateEnvironmentRequest(server string, environmentId int64, body UpdateEnvironmentJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateEnvironmentRequestWithBody(server, environmentId, "application/json", bodyReader)
+}
+
+// NewUpdateEnvironmentRequestWithBody generates requests for UpdateEnvironment with any type of body
+func NewUpdateEnvironmentRequestWithBody(server string, environmentId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "environment_id", environmentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/environments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetDatafileRequest generates requests for GetDatafile
+func NewGetDatafileRequest(server string, environmentId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "environment_id", environmentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/environments/%s/datafile", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListEventsRequest generates requests for ListEvents
+func NewListEventsRequest(server string, params *ListEventsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/events")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.IncludeClassic != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "include_classic", *params.IncludeClassic, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetEventRequest generates requests for GetEvent
+func NewGetEventRequest(server string, eventId int64, params *GetEventParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "event_id", eventId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/events/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.IncludeClassic != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "include_classic", *params.IncludeClassic, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExperimentSummariesRequest generates requests for GetExperimentSummaries
+func NewGetExperimentSummariesRequest(server string, params *GetExperimentSummariesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiment_summaries")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Sort != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "sort", *params.Sort, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Order != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "order", *params.Order, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.Archived != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "archived", *params.Archived, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Status != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "status", *params.Status, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListExperimentsRequest generates requests for ListExperiments
+func NewListExperimentsRequest(server string, params *ListExperimentsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.ProjectId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", *params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.CampaignId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "campaign_id", *params.CampaignId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateExperimentRequest calls the generic CreateExperiment builder with application/json body
+func NewCreateExperimentRequest(server string, params *CreateExperimentParams, body CreateExperimentJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateExperimentRequestWithBody(server, params, "application/json", bodyReader)
+}
+
+// NewCreateExperimentRequestWithBody generates requests for CreateExperiment with any type of body
+func NewCreateExperimentRequestWithBody(server string, params *CreateExperimentParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Action != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "action", *params.Action, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteExperimentRequest generates requests for DeleteExperiment
+func NewDeleteExperimentRequest(server string, experimentId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExperimentRequest generates requests for GetExperiment
+func NewGetExperimentRequest(server string, experimentId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateExperimentRequest calls the generic UpdateExperiment builder with application/json body
+func NewUpdateExperimentRequest(server string, experimentId int64, params *UpdateExperimentParams, body UpdateExperimentJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateExperimentRequestWithBody(server, experimentId, params, "application/json", bodyReader)
+}
+
+// NewUpdateExperimentRequestWithBody generates requests for UpdateExperiment with any type of body
+func NewUpdateExperimentRequestWithBody(server string, experimentId int64, params *UpdateExperimentParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Action != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "action", *params.Action, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetExperimentReportRequest generates requests for GetExperimentReport
+func NewGetExperimentReportRequest(server string, experimentId int64, params *GetExperimentReportParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/report", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.BaselineVariationId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "baseline_variation_id", *params.BaselineVariationId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Browser != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "browser", *params.Browser, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Device != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "device", *params.Device, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_id", *params.AttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeValue != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_value", *params.AttributeValue, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.SegmentConditions != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "segment_conditions", *params.SegmentConditions, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExperimentResultsRequest generates requests for GetExperimentResults
+func NewGetExperimentResultsRequest(server string, experimentId int64, params *GetExperimentResultsParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/results", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.BaselineVariationId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "baseline_variation_id", *params.BaselineVariationId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Browser != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "browser", *params.Browser, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Device != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "device", *params.Device, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_id", *params.AttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeValue != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_value", *params.AttributeValue, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.SegmentConditions != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "segment_conditions", *params.SegmentConditions, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExperimentResultsShareLinkRequest generates requests for GetExperimentResultsShareLink
+func NewGetExperimentResultsShareLinkRequest(server string, experimentId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/results/share", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExperimentSectionsRequest generates requests for GetExperimentSections
+func NewGetExperimentSectionsRequest(server string, experimentId int64, params *GetExperimentSectionsParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/sections", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateSectionRequest calls the generic CreateSection builder with application/json body
+func NewCreateSectionRequest(server string, experimentId int64, body CreateSectionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateSectionRequestWithBody(server, experimentId, "application/json", bodyReader)
+}
+
+// NewCreateSectionRequestWithBody generates requests for CreateSection with any type of body
+func NewCreateSectionRequestWithBody(server string, experimentId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/sections", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteSectionRequest generates requests for DeleteSection
+func NewDeleteSectionRequest(server string, experimentId int, sectionId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "section_id", sectionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/sections/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetSectionRequest generates requests for GetSection
+func NewGetSectionRequest(server string, experimentId int, sectionId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "section_id", sectionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/sections/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateSectionRequest calls the generic UpdateSection builder with application/json body
+func NewUpdateSectionRequest(server string, experimentId int, sectionId int64, body UpdateSectionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateSectionRequestWithBody(server, experimentId, sectionId, "application/json", bodyReader)
+}
+
+// NewUpdateSectionRequestWithBody generates requests for UpdateSection with any type of body
+func NewUpdateSectionRequestWithBody(server string, experimentId int, sectionId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "section_id", sectionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/sections/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetExperimentTimeseriesRequest generates requests for GetExperimentTimeseries
+func NewGetExperimentTimeseriesRequest(server string, experimentId int64, params *GetExperimentTimeseriesParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/experiments/%s/timeseries", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.BaselineVariationId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "baseline_variation_id", *params.BaselineVariationId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Browser != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "browser", *params.Browser, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Device != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "device", *params.Device, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_id", *params.AttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeValue != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_value", *params.AttributeValue, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.SegmentConditions != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "segment_conditions", *params.SegmentConditions, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetCampaignResultsCsvRequest generates requests for GetCampaignResultsCsv
+func NewGetCampaignResultsCsvRequest(server string, campaignId int64, params *GetCampaignResultsCsvParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "campaign_id", campaignId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/export/campaigns/%s/results/csv", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Browser != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "browser", *params.Browser, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Device != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "device", *params.Device, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_id", *params.AttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeValue != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_value", *params.AttributeValue, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.SegmentConditions != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "segment_conditions", *params.SegmentConditions, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetEnrichedEventsExportCredentialsRequest generates requests for GetEnrichedEventsExportCredentials
+func NewGetEnrichedEventsExportCredentialsRequest(server string, params *GetEnrichedEventsExportCredentialsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/export/credentials")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Duration != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "duration", *params.Duration, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExperimentResultsCsvRequest generates requests for GetExperimentResultsCsv
+func NewGetExperimentResultsCsvRequest(server string, experimentId int64, params *GetExperimentResultsCsvParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "experiment_id", experimentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/export/experiments/%s/results/csv", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.BaselineVariationId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "baseline_variation_id", *params.BaselineVariationId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.StartTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start_time", *params.StartTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EndTime != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end_time", *params.EndTime, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Browser != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "browser", *params.Browser, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Device != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "device", *params.Device, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_id", *params.AttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AttributeValue != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "attribute_value", *params.AttributeValue, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.SegmentConditions != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "segment_conditions", *params.SegmentConditions, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListExtensionsRequest generates requests for ListExtensions
+func NewListExtensionsRequest(server string, params *ListExtensionsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/extensions")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateExtensionRequest calls the generic CreateExtension builder with application/json body
+func NewCreateExtensionRequest(server string, body CreateExtensionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateExtensionRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateExtensionRequestWithBody generates requests for CreateExtension with any type of body
+func NewCreateExtensionRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/extensions")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteExtensionRequest generates requests for DeleteExtension
+func NewDeleteExtensionRequest(server string, extensionId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "extension_id", extensionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/extensions/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExtensionRequest generates requests for GetExtension
+func NewGetExtensionRequest(server string, extensionId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "extension_id", extensionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/extensions/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateExtensionRequest calls the generic UpdateExtension builder with application/json body
+func NewUpdateExtensionRequest(server string, extensionId int64, body UpdateExtensionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateExtensionRequestWithBody(server, extensionId, "application/json", bodyReader)
+}
+
+// NewUpdateExtensionRequestWithBody generates requests for UpdateExtension with any type of body
+func NewUpdateExtensionRequestWithBody(server string, extensionId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "extension_id", extensionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/extensions/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListFeaturesRequest generates requests for ListFeatures
+func NewListFeaturesRequest(server string, params *ListFeaturesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/features")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateFeatureRequest calls the generic CreateFeature builder with application/json body
+func NewCreateFeatureRequest(server string, body CreateFeatureJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateFeatureRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateFeatureRequestWithBody generates requests for CreateFeature with any type of body
+func NewCreateFeatureRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/features")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteFeatureRequest generates requests for DeleteFeature
+func NewDeleteFeatureRequest(server string, featureId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "feature_id", featureId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/features/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetFeatureRequest generates requests for GetFeature
+func NewGetFeatureRequest(server string, featureId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "feature_id", featureId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/features/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateFeatureRequest calls the generic UpdateFeature builder with application/json body
+func NewUpdateFeatureRequest(server string, featureId int64, body UpdateFeatureJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateFeatureRequestWithBody(server, featureId, "application/json", bodyReader)
+}
+
+// NewUpdateFeatureRequestWithBody generates requests for UpdateFeature with any type of body
+func NewUpdateFeatureRequestWithBody(server string, featureId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "feature_id", featureId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/features/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListGroupsRequest generates requests for ListGroups
+func NewListGroupsRequest(server string, params *ListGroupsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/groups")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateGroupRequest calls the generic CreateGroup builder with application/json body
+func NewCreateGroupRequest(server string, body CreateGroupJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateGroupRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateGroupRequestWithBody generates requests for CreateGroup with any type of body
+func NewCreateGroupRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/groups")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteGroupRequest generates requests for DeleteGroup
+func NewDeleteGroupRequest(server string, groupId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "group_id", groupId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/groups/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetGroupRequest generates requests for GetGroup
+func NewGetGroupRequest(server string, groupId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "group_id", groupId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/groups/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateGroupRequest calls the generic UpdateGroup builder with application/json body
+func NewUpdateGroupRequest(server string, groupId int64, body UpdateGroupJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateGroupRequestWithBody(server, groupId, "application/json", bodyReader)
+}
+
+// NewUpdateGroupRequestWithBody generates requests for UpdateGroup with any type of body
+func NewUpdateGroupRequestWithBody(server string, groupId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "group_id", groupId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/groups/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListSarRequestsByTeamRequest generates requests for ListSarRequestsByTeam
+func NewListSarRequestsByTeamRequest(server string, params *ListSarRequestsByTeamParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/internal-subject-access-requests")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "data_source", params.DataSource, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "status", params.Status, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateSarRequestRequest calls the generic UpdateSarRequest builder with application/json body
+func NewUpdateSarRequestRequest(server string, requestId int64, body UpdateSarRequestJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateSarRequestRequestWithBody(server, requestId, "application/json", bodyReader)
+}
+
+// NewUpdateSarRequestRequestWithBody generates requests for UpdateSarRequest with any type of body
+func NewUpdateSarRequestRequestWithBody(server string, requestId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "request_id", requestId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/internal-subject-access-requests/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewUpdateSarRequestByPostRequest calls the generic UpdateSarRequestByPost builder with application/json body
+func NewUpdateSarRequestByPostRequest(server string, requestId int64, body UpdateSarRequestByPostJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateSarRequestByPostRequestWithBody(server, requestId, "application/json", bodyReader)
+}
+
+// NewUpdateSarRequestByPostRequestWithBody generates requests for UpdateSarRequestByPost with any type of body
+func NewUpdateSarRequestByPostRequestWithBody(server string, requestId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "request_id", requestId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/internal-subject-access-requests/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListInvitationsRequest generates requests for ListInvitations
+func NewListInvitationsRequest(server string, params *ListInvitationsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/invitations")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.ProjectId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", *params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListListAttributesRequest generates requests for ListListAttributes
+func NewListListAttributesRequest(server string, params *ListListAttributesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/list_attributes")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateListAttributeRequest calls the generic CreateListAttribute builder with application/json body
+func NewCreateListAttributeRequest(server string, body CreateListAttributeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateListAttributeRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateListAttributeRequestWithBody generates requests for CreateListAttribute with any type of body
+func NewCreateListAttributeRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/list_attributes")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewArchiveListAttributeRequest generates requests for ArchiveListAttribute
+func NewArchiveListAttributeRequest(server string, listAttributeId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "list_attribute_id", listAttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/list_attributes/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetListAttributeRequest generates requests for GetListAttribute
+func NewGetListAttributeRequest(server string, listAttributeId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "list_attribute_id", listAttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/list_attributes/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateListAttributeRequest calls the generic UpdateListAttribute builder with application/json body
+func NewUpdateListAttributeRequest(server string, listAttributeId int64, body UpdateListAttributeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateListAttributeRequestWithBody(server, listAttributeId, "application/json", bodyReader)
+}
+
+// NewUpdateListAttributeRequestWithBody generates requests for UpdateListAttribute with any type of body
+func NewUpdateListAttributeRequestWithBody(server string, listAttributeId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "list_attribute_id", listAttributeId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/list_attributes/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetMeRequest generates requests for GetMe
+func NewGetMeRequest(server string, params *GetMeParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/me")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.IncludeFeatures != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "include_features", *params.IncludeFeatures, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Expand != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", false, "expand", *params.Expand, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListPagesRequest generates requests for ListPages
+func NewListPagesRequest(server string, params *ListPagesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreatePageRequest calls the generic CreatePage builder with application/json body
+func NewCreatePageRequest(server string, body CreatePageJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreatePageRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreatePageRequestWithBody generates requests for CreatePage with any type of body
+func NewCreatePageRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeletePageRequest generates requests for DeletePage
+func NewDeletePageRequest(server string, pageId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "page_id", pageId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetPageRequest generates requests for GetPage
+func NewGetPageRequest(server string, pageId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "page_id", pageId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdatePageRequest calls the generic UpdatePage builder with application/json body
+func NewUpdatePageRequest(server string, pageId int64, body UpdatePageJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdatePageRequestWithBody(server, pageId, "application/json", bodyReader)
+}
+
+// NewUpdatePageRequestWithBody generates requests for UpdatePage with any type of body
+func NewUpdatePageRequestWithBody(server string, pageId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "page_id", pageId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewCreateInPageEventRequest calls the generic CreateInPageEvent builder with application/json body
+func NewCreateInPageEventRequest(server string, pageId int64, body CreateInPageEventJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateInPageEventRequestWithBody(server, pageId, "application/json", bodyReader)
+}
+
+// NewCreateInPageEventRequestWithBody generates requests for CreateInPageEvent with any type of body
+func NewCreateInPageEventRequestWithBody(server string, pageId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "page_id", pageId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages/%s/events", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteInPageEventRequest generates requests for DeleteInPageEvent
+func NewDeleteInPageEventRequest(server string, pageId int64, eventId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "page_id", pageId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "event_id", eventId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages/%s/events/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateInPageEventRequest calls the generic UpdateInPageEvent builder with application/json body
+func NewUpdateInPageEventRequest(server string, pageId int64, eventId int64, body UpdateInPageEventJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateInPageEventRequestWithBody(server, pageId, eventId, "application/json", bodyReader)
+}
+
+// NewUpdateInPageEventRequestWithBody generates requests for UpdateInPageEvent with any type of body
+func NewUpdateInPageEventRequestWithBody(server string, pageId int64, eventId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "page_id", pageId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "event_id", eventId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pages/%s/events/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetPlanRequest generates requests for GetPlan
+func NewGetPlanRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/plan")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 // NewListProjectsRequest generates requests for ListProjects
@@ -784,6 +15061,1118 @@ func NewUpdateProjectRequestWithBody(server string, projectId int64, contentType
 	return req, nil
 }
 
+// NewCreateCustomEventRequest calls the generic CreateCustomEvent builder with application/json body
+func NewCreateCustomEventRequest(server string, projectId int64, body CreateCustomEventJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCustomEventRequestWithBody(server, projectId, "application/json", bodyReader)
+}
+
+// NewCreateCustomEventRequestWithBody generates requests for CreateCustomEvent with any type of body
+func NewCreateCustomEventRequestWithBody(server string, projectId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "project_id", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/custom_events", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteCustomEventRequest generates requests for DeleteCustomEvent
+func NewDeleteCustomEventRequest(server string, projectId int64, eventId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "project_id", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "event_id", eventId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/custom_events/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateCustomEventRequest calls the generic UpdateCustomEvent builder with application/json body
+func NewUpdateCustomEventRequest(server string, projectId int64, eventId int64, body UpdateCustomEventJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateCustomEventRequestWithBody(server, projectId, eventId, "application/json", bodyReader)
+}
+
+// NewUpdateCustomEventRequestWithBody generates requests for UpdateCustomEvent with any type of body
+func NewUpdateCustomEventRequestWithBody(server string, projectId int64, eventId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "project_id", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "event_id", eventId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/custom_events/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListWebhooksRequest generates requests for ListWebhooks
+func NewListWebhooksRequest(server string, projectId ProjectId, params *ListWebhooksParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "project_id", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/webhooks", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PageWindow != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page_window", *params.PageWindow, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PageToken != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page_token", *params.PageToken, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateWebhookRequest calls the generic CreateWebhook builder with application/json body
+func NewCreateWebhookRequest(server string, projectId ProjectId, body CreateWebhookJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateWebhookRequestWithBody(server, projectId, "application/json", bodyReader)
+}
+
+// NewCreateWebhookRequestWithBody generates requests for CreateWebhook with any type of body
+func NewCreateWebhookRequestWithBody(server string, projectId ProjectId, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "project_id", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/webhooks", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetRecsCatalogCsvRequest generates requests for GetRecsCatalogCsv
+func NewGetRecsCatalogCsvRequest(server string, catalogId string, date string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "catalog_id", catalogId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "date", date, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/recommendations/catalogs/%s/catalog/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetRecsOutputCsvRequest generates requests for GetRecsOutputCsv
+func NewGetRecsOutputCsvRequest(server string, catalogId string, recommenderId string, date string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "catalog_id", catalogId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "recommender_id", recommenderId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam2 string
+
+	pathParam2, err = runtime.StyleParamWithOptions("simple", false, "date", date, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/recommendations/catalogs/%s/recommenders/%s/%s", pathParam0, pathParam1, pathParam2)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetRecsStatsCsvRequest generates requests for GetRecsStatsCsv
+func NewGetRecsStatsCsvRequest(server string, catalogId string, date string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "catalog_id", catalogId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "date", date, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/recommendations/catalogs/%s/stats/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListScheduledJobsRequest generates requests for ListScheduledJobs
+func NewListScheduledJobsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/scheduled-jobs")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateScheduledJobRequest calls the generic CreateScheduledJob builder with application/json body
+func NewCreateScheduledJobRequest(server string, body CreateScheduledJobJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateScheduledJobRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateScheduledJobRequestWithBody generates requests for CreateScheduledJob with any type of body
+func NewCreateScheduledJobRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/scheduled-jobs")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteScheduledJobRequest generates requests for DeleteScheduledJob
+func NewDeleteScheduledJobRequest(server string, jobId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "job_id", jobId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/scheduled-jobs/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetScheduledJobRequest generates requests for GetScheduledJob
+func NewGetScheduledJobRequest(server string, jobId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "job_id", jobId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/scheduled-jobs/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateScheduledJobRequest calls the generic UpdateScheduledJob builder with application/json body
+func NewUpdateScheduledJobRequest(server string, jobId int64, body UpdateScheduledJobJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateScheduledJobRequestWithBody(server, jobId, "application/json", bodyReader)
+}
+
+// NewUpdateScheduledJobRequestWithBody generates requests for UpdateScheduledJob with any type of body
+func NewUpdateScheduledJobRequestWithBody(server string, jobId int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "job_id", jobId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/scheduled-jobs/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetSearchResultsRequest generates requests for GetSearchResults
+func NewGetSearchResultsRequest(server string, params *GetSearchResultsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/search")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "query", params.Query, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.ProjectId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_id", *params.ProjectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Type != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "type", *params.Type, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.TypeExpand != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "type_expand", *params.TypeExpand, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.ProjectType != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_type", *params.ProjectType, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Expand != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", false, "expand", *params.Expand, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Archived != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "archived", *params.Archived, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Fullsearch != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "fullsearch", *params.Fullsearch, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Status != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", false, "status", *params.Status, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Sort != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "sort", *params.Sort, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Order != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "order", *params.Order, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.EnvironmentKey != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "environment_key", *params.EnvironmentKey, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.AudienceId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "audience_id", *params.AudienceId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewListSarRequestsByAccountRequest generates requests for ListSarRequestsByAccount
+func NewListSarRequestsByAccountRequest(server string, params *ListSarRequestsByAccountParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/subject-access-requests")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "per_page", *params.PerPage, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "page", *params.Page, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateSarRequestRequest calls the generic CreateSarRequest builder with application/json body
+func NewCreateSarRequestRequest(server string, body CreateSarRequestJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateSarRequestRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateSarRequestRequestWithBody generates requests for CreateSarRequest with any type of body
+func NewCreateSarRequestRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/subject-access-requests")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetSarRequestRequest generates requests for GetSarRequest
+func NewGetSarRequestRequest(server string, requestId int64) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "request_id", requestId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/subject-access-requests/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDeleteWebhookRequest generates requests for DeleteWebhook
+func NewDeleteWebhookRequest(server string, webhookId WebhookId) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "webhook_id", webhookId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/webhooks/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetWebhookRequest generates requests for GetWebhook
+func NewGetWebhookRequest(server string, webhookId WebhookId) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "webhook_id", webhookId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/webhooks/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateWebhookRequest calls the generic UpdateWebhook builder with application/json body
+func NewUpdateWebhookRequest(server string, webhookId WebhookId, body UpdateWebhookJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateWebhookRequestWithBody(server, webhookId, "application/json", bodyReader)
+}
+
+// NewUpdateWebhookRequestWithBody generates requests for UpdateWebhook with any type of body
+func NewUpdateWebhookRequestWithBody(server string, webhookId WebhookId, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "webhook_id", webhookId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/webhooks/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -827,6 +16216,306 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
+	// ListAttributesWithResponse request
+	ListAttributesWithResponse(ctx context.Context, params *ListAttributesParams, reqEditors ...RequestEditorFn) (*ListAttributesResponse, error)
+
+	// CreateAttributeWithBodyWithResponse request with any body
+	CreateAttributeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAttributeResponse, error)
+
+	CreateAttributeWithResponse(ctx context.Context, body CreateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAttributeResponse, error)
+
+	// DeleteAttributeWithResponse request
+	DeleteAttributeWithResponse(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*DeleteAttributeResponse, error)
+
+	// GetAttributeWithResponse request
+	GetAttributeWithResponse(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*GetAttributeResponse, error)
+
+	// UpdateAttributeWithBodyWithResponse request with any body
+	UpdateAttributeWithBodyWithResponse(ctx context.Context, attributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateAttributeResponse, error)
+
+	UpdateAttributeWithResponse(ctx context.Context, attributeId int64, body UpdateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateAttributeResponse, error)
+
+	// GetBucketingHistoryWithResponse request
+	GetBucketingHistoryWithResponse(ctx context.Context, accountId int64, visitorId string, params *GetBucketingHistoryParams, reqEditors ...RequestEditorFn) (*GetBucketingHistoryResponse, error)
+
+	// ListAudiencesWithResponse request
+	ListAudiencesWithResponse(ctx context.Context, params *ListAudiencesParams, reqEditors ...RequestEditorFn) (*ListAudiencesResponse, error)
+
+	// CreateAudienceWithBodyWithResponse request with any body
+	CreateAudienceWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAudienceResponse, error)
+
+	CreateAudienceWithResponse(ctx context.Context, body CreateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAudienceResponse, error)
+
+	// GetAudienceWithResponse request
+	GetAudienceWithResponse(ctx context.Context, audienceId int64, reqEditors ...RequestEditorFn) (*GetAudienceResponse, error)
+
+	// UpdateAudienceWithBodyWithResponse request with any body
+	UpdateAudienceWithBodyWithResponse(ctx context.Context, audienceId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateAudienceResponse, error)
+
+	UpdateAudienceWithResponse(ctx context.Context, audienceId int64, body UpdateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateAudienceResponse, error)
+
+	// GetImpressionsUsageRequestWithResponse request
+	GetImpressionsUsageRequestWithResponse(ctx context.Context, accountId int64, params *GetImpressionsUsageRequestParams, reqEditors ...RequestEditorFn) (*GetImpressionsUsageRequestResponse, error)
+
+	// GetImpressionsUsageSummaryRequestWithResponse request
+	GetImpressionsUsageSummaryRequestWithResponse(ctx context.Context, accountId int64, reqEditors ...RequestEditorFn) (*GetImpressionsUsageSummaryRequestResponse, error)
+
+	// ListCampaignsWithResponse request
+	ListCampaignsWithResponse(ctx context.Context, params *ListCampaignsParams, reqEditors ...RequestEditorFn) (*ListCampaignsResponse, error)
+
+	// CreateCampaignWithBodyWithResponse request with any body
+	CreateCampaignWithBodyWithResponse(ctx context.Context, params *CreateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCampaignResponse, error)
+
+	CreateCampaignWithResponse(ctx context.Context, params *CreateCampaignParams, body CreateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCampaignResponse, error)
+
+	// DeleteCampaignWithResponse request
+	DeleteCampaignWithResponse(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*DeleteCampaignResponse, error)
+
+	// GetCampaignWithResponse request
+	GetCampaignWithResponse(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*GetCampaignResponse, error)
+
+	// UpdateCampaignWithBodyWithResponse request with any body
+	UpdateCampaignWithBodyWithResponse(ctx context.Context, campaignId int64, params *UpdateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCampaignResponse, error)
+
+	UpdateCampaignWithResponse(ctx context.Context, campaignId int64, params *UpdateCampaignParams, body UpdateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCampaignResponse, error)
+
+	// GetCampaignResultsWithResponse request
+	GetCampaignResultsWithResponse(ctx context.Context, campaignId int64, params *GetCampaignResultsParams, reqEditors ...RequestEditorFn) (*GetCampaignResultsResponse, error)
+
+	// GetCampaignResultsShareLinkWithResponse request
+	GetCampaignResultsShareLinkWithResponse(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*GetCampaignResultsShareLinkResponse, error)
+
+	// ListChangeHistoryWithResponse request
+	ListChangeHistoryWithResponse(ctx context.Context, params *ListChangeHistoryParams, reqEditors ...RequestEditorFn) (*ListChangeHistoryResponse, error)
+
+	// ListCollaboratorsWithResponse request
+	ListCollaboratorsWithResponse(ctx context.Context, params *ListCollaboratorsParams, reqEditors ...RequestEditorFn) (*ListCollaboratorsResponse, error)
+
+	// CreateCollaboratorsWithBodyWithResponse request with any body
+	CreateCollaboratorsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCollaboratorsResponse, error)
+
+	CreateCollaboratorsWithResponse(ctx context.Context, body CreateCollaboratorsJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCollaboratorsResponse, error)
+
+	// ListEnvironmentsWithResponse request
+	ListEnvironmentsWithResponse(ctx context.Context, params *ListEnvironmentsParams, reqEditors ...RequestEditorFn) (*ListEnvironmentsResponse, error)
+
+	// CreateEnvironmentWithBodyWithResponse request with any body
+	CreateEnvironmentWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateEnvironmentResponse, error)
+
+	CreateEnvironmentWithResponse(ctx context.Context, body CreateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateEnvironmentResponse, error)
+
+	// DeleteEnvironmentWithResponse request
+	DeleteEnvironmentWithResponse(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*DeleteEnvironmentResponse, error)
+
+	// GetEnvironmentWithResponse request
+	GetEnvironmentWithResponse(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*GetEnvironmentResponse, error)
+
+	// UpdateEnvironmentWithBodyWithResponse request with any body
+	UpdateEnvironmentWithBodyWithResponse(ctx context.Context, environmentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateEnvironmentResponse, error)
+
+	UpdateEnvironmentWithResponse(ctx context.Context, environmentId int64, body UpdateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateEnvironmentResponse, error)
+
+	// GetDatafileWithResponse request
+	GetDatafileWithResponse(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*GetDatafileResponse, error)
+
+	// ListEventsWithResponse request
+	ListEventsWithResponse(ctx context.Context, params *ListEventsParams, reqEditors ...RequestEditorFn) (*ListEventsResponse, error)
+
+	// GetEventWithResponse request
+	GetEventWithResponse(ctx context.Context, eventId int64, params *GetEventParams, reqEditors ...RequestEditorFn) (*GetEventResponse, error)
+
+	// GetExperimentSummariesWithResponse request
+	GetExperimentSummariesWithResponse(ctx context.Context, params *GetExperimentSummariesParams, reqEditors ...RequestEditorFn) (*GetExperimentSummariesResponse, error)
+
+	// ListExperimentsWithResponse request
+	ListExperimentsWithResponse(ctx context.Context, params *ListExperimentsParams, reqEditors ...RequestEditorFn) (*ListExperimentsResponse, error)
+
+	// CreateExperimentWithBodyWithResponse request with any body
+	CreateExperimentWithBodyWithResponse(ctx context.Context, params *CreateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateExperimentResponse, error)
+
+	CreateExperimentWithResponse(ctx context.Context, params *CreateExperimentParams, body CreateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateExperimentResponse, error)
+
+	// DeleteExperimentWithResponse request
+	DeleteExperimentWithResponse(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*DeleteExperimentResponse, error)
+
+	// GetExperimentWithResponse request
+	GetExperimentWithResponse(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*GetExperimentResponse, error)
+
+	// UpdateExperimentWithBodyWithResponse request with any body
+	UpdateExperimentWithBodyWithResponse(ctx context.Context, experimentId int64, params *UpdateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateExperimentResponse, error)
+
+	UpdateExperimentWithResponse(ctx context.Context, experimentId int64, params *UpdateExperimentParams, body UpdateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateExperimentResponse, error)
+
+	// GetExperimentReportWithResponse request
+	GetExperimentReportWithResponse(ctx context.Context, experimentId int64, params *GetExperimentReportParams, reqEditors ...RequestEditorFn) (*GetExperimentReportResponse, error)
+
+	// GetExperimentResultsWithResponse request
+	GetExperimentResultsWithResponse(ctx context.Context, experimentId int64, params *GetExperimentResultsParams, reqEditors ...RequestEditorFn) (*GetExperimentResultsResponse, error)
+
+	// GetExperimentResultsShareLinkWithResponse request
+	GetExperimentResultsShareLinkWithResponse(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*GetExperimentResultsShareLinkResponse, error)
+
+	// GetExperimentSectionsWithResponse request
+	GetExperimentSectionsWithResponse(ctx context.Context, experimentId int64, params *GetExperimentSectionsParams, reqEditors ...RequestEditorFn) (*GetExperimentSectionsResponse, error)
+
+	// CreateSectionWithBodyWithResponse request with any body
+	CreateSectionWithBodyWithResponse(ctx context.Context, experimentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateSectionResponse, error)
+
+	CreateSectionWithResponse(ctx context.Context, experimentId int64, body CreateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSectionResponse, error)
+
+	// DeleteSectionWithResponse request
+	DeleteSectionWithResponse(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*DeleteSectionResponse, error)
+
+	// GetSectionWithResponse request
+	GetSectionWithResponse(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*GetSectionResponse, error)
+
+	// UpdateSectionWithBodyWithResponse request with any body
+	UpdateSectionWithBodyWithResponse(ctx context.Context, experimentId int, sectionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateSectionResponse, error)
+
+	UpdateSectionWithResponse(ctx context.Context, experimentId int, sectionId int64, body UpdateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateSectionResponse, error)
+
+	// GetExperimentTimeseriesWithResponse request
+	GetExperimentTimeseriesWithResponse(ctx context.Context, experimentId int64, params *GetExperimentTimeseriesParams, reqEditors ...RequestEditorFn) (*GetExperimentTimeseriesResponse, error)
+
+	// GetCampaignResultsCsvWithResponse request
+	GetCampaignResultsCsvWithResponse(ctx context.Context, campaignId int64, params *GetCampaignResultsCsvParams, reqEditors ...RequestEditorFn) (*GetCampaignResultsCsvResponse, error)
+
+	// GetEnrichedEventsExportCredentialsWithResponse request
+	GetEnrichedEventsExportCredentialsWithResponse(ctx context.Context, params *GetEnrichedEventsExportCredentialsParams, reqEditors ...RequestEditorFn) (*GetEnrichedEventsExportCredentialsResponse, error)
+
+	// GetExperimentResultsCsvWithResponse request
+	GetExperimentResultsCsvWithResponse(ctx context.Context, experimentId int64, params *GetExperimentResultsCsvParams, reqEditors ...RequestEditorFn) (*GetExperimentResultsCsvResponse, error)
+
+	// ListExtensionsWithResponse request
+	ListExtensionsWithResponse(ctx context.Context, params *ListExtensionsParams, reqEditors ...RequestEditorFn) (*ListExtensionsResponse, error)
+
+	// CreateExtensionWithBodyWithResponse request with any body
+	CreateExtensionWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateExtensionResponse, error)
+
+	CreateExtensionWithResponse(ctx context.Context, body CreateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateExtensionResponse, error)
+
+	// DeleteExtensionWithResponse request
+	DeleteExtensionWithResponse(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*DeleteExtensionResponse, error)
+
+	// GetExtensionWithResponse request
+	GetExtensionWithResponse(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*GetExtensionResponse, error)
+
+	// UpdateExtensionWithBodyWithResponse request with any body
+	UpdateExtensionWithBodyWithResponse(ctx context.Context, extensionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateExtensionResponse, error)
+
+	UpdateExtensionWithResponse(ctx context.Context, extensionId int64, body UpdateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateExtensionResponse, error)
+
+	// ListFeaturesWithResponse request
+	ListFeaturesWithResponse(ctx context.Context, params *ListFeaturesParams, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error)
+
+	// CreateFeatureWithBodyWithResponse request with any body
+	CreateFeatureWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateFeatureResponse, error)
+
+	CreateFeatureWithResponse(ctx context.Context, body CreateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateFeatureResponse, error)
+
+	// DeleteFeatureWithResponse request
+	DeleteFeatureWithResponse(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*DeleteFeatureResponse, error)
+
+	// GetFeatureWithResponse request
+	GetFeatureWithResponse(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*GetFeatureResponse, error)
+
+	// UpdateFeatureWithBodyWithResponse request with any body
+	UpdateFeatureWithBodyWithResponse(ctx context.Context, featureId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateFeatureResponse, error)
+
+	UpdateFeatureWithResponse(ctx context.Context, featureId int64, body UpdateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateFeatureResponse, error)
+
+	// ListGroupsWithResponse request
+	ListGroupsWithResponse(ctx context.Context, params *ListGroupsParams, reqEditors ...RequestEditorFn) (*ListGroupsResponse, error)
+
+	// CreateGroupWithBodyWithResponse request with any body
+	CreateGroupWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateGroupResponse, error)
+
+	CreateGroupWithResponse(ctx context.Context, body CreateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateGroupResponse, error)
+
+	// DeleteGroupWithResponse request
+	DeleteGroupWithResponse(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*DeleteGroupResponse, error)
+
+	// GetGroupWithResponse request
+	GetGroupWithResponse(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*GetGroupResponse, error)
+
+	// UpdateGroupWithBodyWithResponse request with any body
+	UpdateGroupWithBodyWithResponse(ctx context.Context, groupId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateGroupResponse, error)
+
+	UpdateGroupWithResponse(ctx context.Context, groupId int64, body UpdateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateGroupResponse, error)
+
+	// ListSarRequestsByTeamWithResponse request
+	ListSarRequestsByTeamWithResponse(ctx context.Context, params *ListSarRequestsByTeamParams, reqEditors ...RequestEditorFn) (*ListSarRequestsByTeamResponse, error)
+
+	// UpdateSarRequestWithBodyWithResponse request with any body
+	UpdateSarRequestWithBodyWithResponse(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateSarRequestResponse, error)
+
+	UpdateSarRequestWithResponse(ctx context.Context, requestId int64, body UpdateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateSarRequestResponse, error)
+
+	// UpdateSarRequestByPostWithBodyWithResponse request with any body
+	UpdateSarRequestByPostWithBodyWithResponse(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateSarRequestByPostResponse, error)
+
+	UpdateSarRequestByPostWithResponse(ctx context.Context, requestId int64, body UpdateSarRequestByPostJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateSarRequestByPostResponse, error)
+
+	// ListInvitationsWithResponse request
+	ListInvitationsWithResponse(ctx context.Context, params *ListInvitationsParams, reqEditors ...RequestEditorFn) (*ListInvitationsResponse, error)
+
+	// ListListAttributesWithResponse request
+	ListListAttributesWithResponse(ctx context.Context, params *ListListAttributesParams, reqEditors ...RequestEditorFn) (*ListListAttributesResponse, error)
+
+	// CreateListAttributeWithBodyWithResponse request with any body
+	CreateListAttributeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateListAttributeResponse, error)
+
+	CreateListAttributeWithResponse(ctx context.Context, body CreateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateListAttributeResponse, error)
+
+	// ArchiveListAttributeWithResponse request
+	ArchiveListAttributeWithResponse(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*ArchiveListAttributeResponse, error)
+
+	// GetListAttributeWithResponse request
+	GetListAttributeWithResponse(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*GetListAttributeResponse, error)
+
+	// UpdateListAttributeWithBodyWithResponse request with any body
+	UpdateListAttributeWithBodyWithResponse(ctx context.Context, listAttributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateListAttributeResponse, error)
+
+	UpdateListAttributeWithResponse(ctx context.Context, listAttributeId int64, body UpdateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateListAttributeResponse, error)
+
+	// GetMeWithResponse request
+	GetMeWithResponse(ctx context.Context, params *GetMeParams, reqEditors ...RequestEditorFn) (*GetMeResponse, error)
+
+	// ListPagesWithResponse request
+	ListPagesWithResponse(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*ListPagesResponse, error)
+
+	// CreatePageWithBodyWithResponse request with any body
+	CreatePageWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePageResponse, error)
+
+	CreatePageWithResponse(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePageResponse, error)
+
+	// DeletePageWithResponse request
+	DeletePageWithResponse(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*DeletePageResponse, error)
+
+	// GetPageWithResponse request
+	GetPageWithResponse(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*GetPageResponse, error)
+
+	// UpdatePageWithBodyWithResponse request with any body
+	UpdatePageWithBodyWithResponse(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdatePageResponse, error)
+
+	UpdatePageWithResponse(ctx context.Context, pageId int64, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdatePageResponse, error)
+
+	// CreateInPageEventWithBodyWithResponse request with any body
+	CreateInPageEventWithBodyWithResponse(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateInPageEventResponse, error)
+
+	CreateInPageEventWithResponse(ctx context.Context, pageId int64, body CreateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateInPageEventResponse, error)
+
+	// DeleteInPageEventWithResponse request
+	DeleteInPageEventWithResponse(ctx context.Context, pageId int64, eventId int64, reqEditors ...RequestEditorFn) (*DeleteInPageEventResponse, error)
+
+	// UpdateInPageEventWithBodyWithResponse request with any body
+	UpdateInPageEventWithBodyWithResponse(ctx context.Context, pageId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateInPageEventResponse, error)
+
+	UpdateInPageEventWithResponse(ctx context.Context, pageId int64, eventId int64, body UpdateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateInPageEventResponse, error)
+
+	// GetPlanWithResponse request
+	GetPlanWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetPlanResponse, error)
+
 	// ListProjectsWithResponse request
 	ListProjectsWithResponse(ctx context.Context, params *ListProjectsParams, reqEditors ...RequestEditorFn) (*ListProjectsResponse, error)
 
@@ -842,6 +16531,2158 @@ type ClientWithResponsesInterface interface {
 	UpdateProjectWithBodyWithResponse(ctx context.Context, projectId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateProjectResponse, error)
 
 	UpdateProjectWithResponse(ctx context.Context, projectId int64, body UpdateProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateProjectResponse, error)
+
+	// CreateCustomEventWithBodyWithResponse request with any body
+	CreateCustomEventWithBodyWithResponse(ctx context.Context, projectId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCustomEventResponse, error)
+
+	CreateCustomEventWithResponse(ctx context.Context, projectId int64, body CreateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCustomEventResponse, error)
+
+	// DeleteCustomEventWithResponse request
+	DeleteCustomEventWithResponse(ctx context.Context, projectId int64, eventId int64, reqEditors ...RequestEditorFn) (*DeleteCustomEventResponse, error)
+
+	// UpdateCustomEventWithBodyWithResponse request with any body
+	UpdateCustomEventWithBodyWithResponse(ctx context.Context, projectId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCustomEventResponse, error)
+
+	UpdateCustomEventWithResponse(ctx context.Context, projectId int64, eventId int64, body UpdateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCustomEventResponse, error)
+
+	// ListWebhooksWithResponse request
+	ListWebhooksWithResponse(ctx context.Context, projectId ProjectId, params *ListWebhooksParams, reqEditors ...RequestEditorFn) (*ListWebhooksResponse, error)
+
+	// CreateWebhookWithBodyWithResponse request with any body
+	CreateWebhookWithBodyWithResponse(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateWebhookResponse, error)
+
+	CreateWebhookWithResponse(ctx context.Context, projectId ProjectId, body CreateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateWebhookResponse, error)
+
+	// GetRecsCatalogCsvWithResponse request
+	GetRecsCatalogCsvWithResponse(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*GetRecsCatalogCsvResponse, error)
+
+	// GetRecsOutputCsvWithResponse request
+	GetRecsOutputCsvWithResponse(ctx context.Context, catalogId string, recommenderId string, date string, reqEditors ...RequestEditorFn) (*GetRecsOutputCsvResponse, error)
+
+	// GetRecsStatsCsvWithResponse request
+	GetRecsStatsCsvWithResponse(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*GetRecsStatsCsvResponse, error)
+
+	// ListScheduledJobsWithResponse request
+	ListScheduledJobsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListScheduledJobsResponse, error)
+
+	// CreateScheduledJobWithBodyWithResponse request with any body
+	CreateScheduledJobWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateScheduledJobResponse, error)
+
+	CreateScheduledJobWithResponse(ctx context.Context, body CreateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateScheduledJobResponse, error)
+
+	// DeleteScheduledJobWithResponse request
+	DeleteScheduledJobWithResponse(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*DeleteScheduledJobResponse, error)
+
+	// GetScheduledJobWithResponse request
+	GetScheduledJobWithResponse(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*GetScheduledJobResponse, error)
+
+	// UpdateScheduledJobWithBodyWithResponse request with any body
+	UpdateScheduledJobWithBodyWithResponse(ctx context.Context, jobId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateScheduledJobResponse, error)
+
+	UpdateScheduledJobWithResponse(ctx context.Context, jobId int64, body UpdateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateScheduledJobResponse, error)
+
+	// GetSearchResultsWithResponse request
+	GetSearchResultsWithResponse(ctx context.Context, params *GetSearchResultsParams, reqEditors ...RequestEditorFn) (*GetSearchResultsResponse, error)
+
+	// ListSarRequestsByAccountWithResponse request
+	ListSarRequestsByAccountWithResponse(ctx context.Context, params *ListSarRequestsByAccountParams, reqEditors ...RequestEditorFn) (*ListSarRequestsByAccountResponse, error)
+
+	// CreateSarRequestWithBodyWithResponse request with any body
+	CreateSarRequestWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateSarRequestResponse, error)
+
+	CreateSarRequestWithResponse(ctx context.Context, body CreateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSarRequestResponse, error)
+
+	// GetSarRequestWithResponse request
+	GetSarRequestWithResponse(ctx context.Context, requestId int64, reqEditors ...RequestEditorFn) (*GetSarRequestResponse, error)
+
+	// DeleteWebhookWithResponse request
+	DeleteWebhookWithResponse(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*DeleteWebhookResponse, error)
+
+	// GetWebhookWithResponse request
+	GetWebhookWithResponse(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*GetWebhookResponse, error)
+
+	// UpdateWebhookWithBodyWithResponse request with any body
+	UpdateWebhookWithBodyWithResponse(ctx context.Context, webhookId WebhookId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateWebhookResponse, error)
+
+	UpdateWebhookWithResponse(ctx context.Context, webhookId WebhookId, body UpdateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateWebhookResponse, error)
+}
+
+type ListAttributesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Attribute
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListAttributesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListAttributesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Attribute
+	JSON400      *Error
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Attribute
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Attribute
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetBucketingHistoryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *BucketingInformation
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetBucketingHistoryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetBucketingHistoryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListAudiencesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Audience
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListAudiencesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListAudiencesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateAudienceResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Audience
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateAudienceResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateAudienceResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetAudienceResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Audience
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetAudienceResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetAudienceResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateAudienceResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Audience
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateAudienceResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateAudienceResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetImpressionsUsageRequestResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]ImpressionsUsage
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetImpressionsUsageRequestResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetImpressionsUsageRequestResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetImpressionsUsageSummaryRequestResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ImpressionsUsageSummary
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetImpressionsUsageSummaryRequestResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetImpressionsUsageSummaryRequestResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListCampaignsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Campaign
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListCampaignsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListCampaignsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateCampaignResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Campaign
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateCampaignResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateCampaignResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteCampaignResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON404      *Error
+	JSON410      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteCampaignResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteCampaignResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetCampaignResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Campaign
+	JSON400      *Error
+	JSON403      *Error
+	JSON404      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCampaignResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCampaignResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateCampaignResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Campaign
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateCampaignResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateCampaignResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetCampaignResultsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *CampaignResults
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCampaignResultsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCampaignResultsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetCampaignResultsShareLinkResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ResultsShareLink
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCampaignResultsShareLinkResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCampaignResultsShareLinkResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListChangeHistoryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]ChangeHistoryChange
+}
+
+// Status returns HTTPResponse.Status
+func (r ListChangeHistoryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListChangeHistoryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListCollaboratorsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]CollaboratorEntry
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListCollaboratorsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListCollaboratorsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateCollaboratorsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]CollaboratorEntry
+	JSON400      *Error
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateCollaboratorsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateCollaboratorsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListEnvironmentsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Environment
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListEnvironmentsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListEnvironmentsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateEnvironmentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Environment
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateEnvironmentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateEnvironmentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteEnvironmentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteEnvironmentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteEnvironmentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetEnvironmentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Environment
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetEnvironmentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetEnvironmentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateEnvironmentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Environment
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateEnvironmentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateEnvironmentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetDatafileResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *map[string]interface{}
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetDatafileResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetDatafileResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListEventsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Event
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListEventsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListEventsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetEventResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Event
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetEventResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetEventResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentSummariesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]ExperimentSummary
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentSummariesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentSummariesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListExperimentsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Experiment
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListExperimentsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListExperimentsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateExperimentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Experiment
+	JSON400      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateExperimentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateExperimentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteExperimentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSON410      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteExperimentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteExperimentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Experiment
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateExperimentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Experiment
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSON409      *Error
+	JSON500      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateExperimentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateExperimentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentReportResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ExperimentResultsReport
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentReportResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentReportResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentResultsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ExperimentResults
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentResultsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentResultsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentResultsShareLinkResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ResultsShareLink
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentResultsShareLinkResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentResultsShareLinkResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentSectionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Section
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentSectionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentSectionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateSectionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Section
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateSectionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateSectionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteSectionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteSectionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteSectionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetSectionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Section
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSectionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSectionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateSectionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Section
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateSectionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateSectionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentTimeseriesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ExperimentTimeseries
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentTimeseriesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentTimeseriesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetCampaignResultsCsvResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCampaignResultsCsvResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCampaignResultsCsvResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetEnrichedEventsExportCredentialsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *E3Credentials
+	JSON400      *Error
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetEnrichedEventsExportCredentialsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetEnrichedEventsExportCredentialsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExperimentResultsCsvResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExperimentResultsCsvResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExperimentResultsCsvResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListExtensionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Extension
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListExtensionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListExtensionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateExtensionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Extension
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateExtensionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateExtensionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteExtensionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteExtensionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteExtensionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExtensionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Extension
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExtensionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExtensionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateExtensionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Extension
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateExtensionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateExtensionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListFeaturesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Feature
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListFeaturesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListFeaturesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateFeatureResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Feature
+	JSON400      *Error
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateFeatureResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateFeatureResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteFeatureResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteFeatureResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteFeatureResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetFeatureResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Feature
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetFeatureResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetFeatureResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateFeatureResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Feature
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateFeatureResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateFeatureResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListGroupsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Group
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListGroupsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListGroupsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateGroupResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Group
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateGroupResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateGroupResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteGroupResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteGroupResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteGroupResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetGroupResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Group
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetGroupResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetGroupResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateGroupResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Group
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateGroupResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateGroupResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListSarRequestsByTeamResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]SubjectAccessRequestInternal
+	JSON400      *Error
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListSarRequestsByTeamResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListSarRequestsByTeamResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateSarRequestResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SubjectAccessRequestInternal
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateSarRequestResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateSarRequestResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateSarRequestByPostResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SubjectAccessRequestInternal
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateSarRequestByPostResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateSarRequestByPostResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListInvitationsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]CollaboratorEntry
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListInvitationsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListInvitationsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListListAttributesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]ListAttribute
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListListAttributesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListListAttributesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateListAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *ListAttribute
+	JSON400      *Error
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateListAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateListAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ArchiveListAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ArchiveListAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ArchiveListAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetListAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ListAttribute
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetListAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetListAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateListAttributeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ListAttribute
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateListAttributeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateListAttributeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetMeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Me
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetMeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetMeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListPagesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]PageObject
+	JSON400      *Error
+	JSON403      *Error
+	JSON404      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListPagesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListPagesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreatePageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *PageObject
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreatePageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreatePageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeletePageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSON410      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeletePageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeletePageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetPageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PageObject
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetPageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetPageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdatePageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PageObject
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdatePageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdatePageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateInPageEventResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *InPageEvent
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateInPageEventResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateInPageEventResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteInPageEventResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteInPageEventResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteInPageEventResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateInPageEventResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *InPageEvent
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateInPageEventResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateInPageEventResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetPlanResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Plan
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetPlanResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetPlanResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
 }
 
 type ListProjectsResponse struct {
@@ -943,6 +18784,1472 @@ func (r UpdateProjectResponse) StatusCode() int {
 	return 0
 }
 
+type CreateCustomEventResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *CustomEvent
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateCustomEventResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateCustomEventResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteCustomEventResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteCustomEventResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteCustomEventResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateCustomEventResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *CustomEvent
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateCustomEventResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateCustomEventResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListWebhooksResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Webhooks
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListWebhooksResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListWebhooksResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateWebhookResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Webhook
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateWebhookResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateWebhookResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetRecsCatalogCsvResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRecsCatalogCsvResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRecsCatalogCsvResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetRecsOutputCsvResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRecsOutputCsvResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRecsOutputCsvResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetRecsStatsCsvResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRecsStatsCsvResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRecsStatsCsvResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListScheduledJobsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]ScheduledJob
+	JSON401      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListScheduledJobsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListScheduledJobsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateScheduledJobResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *ScheduledJob
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateScheduledJobResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateScheduledJobResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteScheduledJobResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteScheduledJobResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteScheduledJobResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetScheduledJobResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ScheduledJob
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetScheduledJobResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetScheduledJobResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateScheduledJobResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ScheduledJob
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateScheduledJobResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateScheduledJobResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetSearchResultsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]SearchResult
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSearchResultsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSearchResultsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ListSarRequestsByAccountResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]SubjectAccessRequest
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ListSarRequestsByAccountResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListSarRequestsByAccountResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CreateSarRequestResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *SubjectAccessRequest
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateSarRequestResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateSarRequestResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetSarRequestResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SubjectAccessRequest
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSarRequestResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSarRequestResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteWebhookResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+	JSON404      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteWebhookResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteWebhookResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetWebhookResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Webhook
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetWebhookResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetWebhookResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type UpdateWebhookResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Webhook
+	JSON400      *Error
+	JSON401      *Error
+	JSON403      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateWebhookResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateWebhookResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ListAttributesWithResponse request returning *ListAttributesResponse
+func (c *ClientWithResponses) ListAttributesWithResponse(ctx context.Context, params *ListAttributesParams, reqEditors ...RequestEditorFn) (*ListAttributesResponse, error) {
+	rsp, err := c.ListAttributes(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListAttributesResponse(rsp)
+}
+
+// CreateAttributeWithBodyWithResponse request with arbitrary body returning *CreateAttributeResponse
+func (c *ClientWithResponses) CreateAttributeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAttributeResponse, error) {
+	rsp, err := c.CreateAttributeWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateAttributeResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateAttributeWithResponse(ctx context.Context, body CreateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAttributeResponse, error) {
+	rsp, err := c.CreateAttribute(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateAttributeResponse(rsp)
+}
+
+// DeleteAttributeWithResponse request returning *DeleteAttributeResponse
+func (c *ClientWithResponses) DeleteAttributeWithResponse(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*DeleteAttributeResponse, error) {
+	rsp, err := c.DeleteAttribute(ctx, attributeId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteAttributeResponse(rsp)
+}
+
+// GetAttributeWithResponse request returning *GetAttributeResponse
+func (c *ClientWithResponses) GetAttributeWithResponse(ctx context.Context, attributeId int64, reqEditors ...RequestEditorFn) (*GetAttributeResponse, error) {
+	rsp, err := c.GetAttribute(ctx, attributeId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetAttributeResponse(rsp)
+}
+
+// UpdateAttributeWithBodyWithResponse request with arbitrary body returning *UpdateAttributeResponse
+func (c *ClientWithResponses) UpdateAttributeWithBodyWithResponse(ctx context.Context, attributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateAttributeResponse, error) {
+	rsp, err := c.UpdateAttributeWithBody(ctx, attributeId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateAttributeResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateAttributeWithResponse(ctx context.Context, attributeId int64, body UpdateAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateAttributeResponse, error) {
+	rsp, err := c.UpdateAttribute(ctx, attributeId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateAttributeResponse(rsp)
+}
+
+// GetBucketingHistoryWithResponse request returning *GetBucketingHistoryResponse
+func (c *ClientWithResponses) GetBucketingHistoryWithResponse(ctx context.Context, accountId int64, visitorId string, params *GetBucketingHistoryParams, reqEditors ...RequestEditorFn) (*GetBucketingHistoryResponse, error) {
+	rsp, err := c.GetBucketingHistory(ctx, accountId, visitorId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetBucketingHistoryResponse(rsp)
+}
+
+// ListAudiencesWithResponse request returning *ListAudiencesResponse
+func (c *ClientWithResponses) ListAudiencesWithResponse(ctx context.Context, params *ListAudiencesParams, reqEditors ...RequestEditorFn) (*ListAudiencesResponse, error) {
+	rsp, err := c.ListAudiences(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListAudiencesResponse(rsp)
+}
+
+// CreateAudienceWithBodyWithResponse request with arbitrary body returning *CreateAudienceResponse
+func (c *ClientWithResponses) CreateAudienceWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAudienceResponse, error) {
+	rsp, err := c.CreateAudienceWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateAudienceResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateAudienceWithResponse(ctx context.Context, body CreateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAudienceResponse, error) {
+	rsp, err := c.CreateAudience(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateAudienceResponse(rsp)
+}
+
+// GetAudienceWithResponse request returning *GetAudienceResponse
+func (c *ClientWithResponses) GetAudienceWithResponse(ctx context.Context, audienceId int64, reqEditors ...RequestEditorFn) (*GetAudienceResponse, error) {
+	rsp, err := c.GetAudience(ctx, audienceId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetAudienceResponse(rsp)
+}
+
+// UpdateAudienceWithBodyWithResponse request with arbitrary body returning *UpdateAudienceResponse
+func (c *ClientWithResponses) UpdateAudienceWithBodyWithResponse(ctx context.Context, audienceId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateAudienceResponse, error) {
+	rsp, err := c.UpdateAudienceWithBody(ctx, audienceId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateAudienceResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateAudienceWithResponse(ctx context.Context, audienceId int64, body UpdateAudienceJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateAudienceResponse, error) {
+	rsp, err := c.UpdateAudience(ctx, audienceId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateAudienceResponse(rsp)
+}
+
+// GetImpressionsUsageRequestWithResponse request returning *GetImpressionsUsageRequestResponse
+func (c *ClientWithResponses) GetImpressionsUsageRequestWithResponse(ctx context.Context, accountId int64, params *GetImpressionsUsageRequestParams, reqEditors ...RequestEditorFn) (*GetImpressionsUsageRequestResponse, error) {
+	rsp, err := c.GetImpressionsUsageRequest(ctx, accountId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetImpressionsUsageRequestResponse(rsp)
+}
+
+// GetImpressionsUsageSummaryRequestWithResponse request returning *GetImpressionsUsageSummaryRequestResponse
+func (c *ClientWithResponses) GetImpressionsUsageSummaryRequestWithResponse(ctx context.Context, accountId int64, reqEditors ...RequestEditorFn) (*GetImpressionsUsageSummaryRequestResponse, error) {
+	rsp, err := c.GetImpressionsUsageSummaryRequest(ctx, accountId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetImpressionsUsageSummaryRequestResponse(rsp)
+}
+
+// ListCampaignsWithResponse request returning *ListCampaignsResponse
+func (c *ClientWithResponses) ListCampaignsWithResponse(ctx context.Context, params *ListCampaignsParams, reqEditors ...RequestEditorFn) (*ListCampaignsResponse, error) {
+	rsp, err := c.ListCampaigns(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListCampaignsResponse(rsp)
+}
+
+// CreateCampaignWithBodyWithResponse request with arbitrary body returning *CreateCampaignResponse
+func (c *ClientWithResponses) CreateCampaignWithBodyWithResponse(ctx context.Context, params *CreateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCampaignResponse, error) {
+	rsp, err := c.CreateCampaignWithBody(ctx, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCampaignResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateCampaignWithResponse(ctx context.Context, params *CreateCampaignParams, body CreateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCampaignResponse, error) {
+	rsp, err := c.CreateCampaign(ctx, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCampaignResponse(rsp)
+}
+
+// DeleteCampaignWithResponse request returning *DeleteCampaignResponse
+func (c *ClientWithResponses) DeleteCampaignWithResponse(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*DeleteCampaignResponse, error) {
+	rsp, err := c.DeleteCampaign(ctx, campaignId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteCampaignResponse(rsp)
+}
+
+// GetCampaignWithResponse request returning *GetCampaignResponse
+func (c *ClientWithResponses) GetCampaignWithResponse(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*GetCampaignResponse, error) {
+	rsp, err := c.GetCampaign(ctx, campaignId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCampaignResponse(rsp)
+}
+
+// UpdateCampaignWithBodyWithResponse request with arbitrary body returning *UpdateCampaignResponse
+func (c *ClientWithResponses) UpdateCampaignWithBodyWithResponse(ctx context.Context, campaignId int64, params *UpdateCampaignParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCampaignResponse, error) {
+	rsp, err := c.UpdateCampaignWithBody(ctx, campaignId, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCampaignResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateCampaignWithResponse(ctx context.Context, campaignId int64, params *UpdateCampaignParams, body UpdateCampaignJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCampaignResponse, error) {
+	rsp, err := c.UpdateCampaign(ctx, campaignId, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCampaignResponse(rsp)
+}
+
+// GetCampaignResultsWithResponse request returning *GetCampaignResultsResponse
+func (c *ClientWithResponses) GetCampaignResultsWithResponse(ctx context.Context, campaignId int64, params *GetCampaignResultsParams, reqEditors ...RequestEditorFn) (*GetCampaignResultsResponse, error) {
+	rsp, err := c.GetCampaignResults(ctx, campaignId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCampaignResultsResponse(rsp)
+}
+
+// GetCampaignResultsShareLinkWithResponse request returning *GetCampaignResultsShareLinkResponse
+func (c *ClientWithResponses) GetCampaignResultsShareLinkWithResponse(ctx context.Context, campaignId int64, reqEditors ...RequestEditorFn) (*GetCampaignResultsShareLinkResponse, error) {
+	rsp, err := c.GetCampaignResultsShareLink(ctx, campaignId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCampaignResultsShareLinkResponse(rsp)
+}
+
+// ListChangeHistoryWithResponse request returning *ListChangeHistoryResponse
+func (c *ClientWithResponses) ListChangeHistoryWithResponse(ctx context.Context, params *ListChangeHistoryParams, reqEditors ...RequestEditorFn) (*ListChangeHistoryResponse, error) {
+	rsp, err := c.ListChangeHistory(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListChangeHistoryResponse(rsp)
+}
+
+// ListCollaboratorsWithResponse request returning *ListCollaboratorsResponse
+func (c *ClientWithResponses) ListCollaboratorsWithResponse(ctx context.Context, params *ListCollaboratorsParams, reqEditors ...RequestEditorFn) (*ListCollaboratorsResponse, error) {
+	rsp, err := c.ListCollaborators(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListCollaboratorsResponse(rsp)
+}
+
+// CreateCollaboratorsWithBodyWithResponse request with arbitrary body returning *CreateCollaboratorsResponse
+func (c *ClientWithResponses) CreateCollaboratorsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCollaboratorsResponse, error) {
+	rsp, err := c.CreateCollaboratorsWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCollaboratorsResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateCollaboratorsWithResponse(ctx context.Context, body CreateCollaboratorsJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCollaboratorsResponse, error) {
+	rsp, err := c.CreateCollaborators(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCollaboratorsResponse(rsp)
+}
+
+// ListEnvironmentsWithResponse request returning *ListEnvironmentsResponse
+func (c *ClientWithResponses) ListEnvironmentsWithResponse(ctx context.Context, params *ListEnvironmentsParams, reqEditors ...RequestEditorFn) (*ListEnvironmentsResponse, error) {
+	rsp, err := c.ListEnvironments(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListEnvironmentsResponse(rsp)
+}
+
+// CreateEnvironmentWithBodyWithResponse request with arbitrary body returning *CreateEnvironmentResponse
+func (c *ClientWithResponses) CreateEnvironmentWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateEnvironmentResponse, error) {
+	rsp, err := c.CreateEnvironmentWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateEnvironmentResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateEnvironmentWithResponse(ctx context.Context, body CreateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateEnvironmentResponse, error) {
+	rsp, err := c.CreateEnvironment(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateEnvironmentResponse(rsp)
+}
+
+// DeleteEnvironmentWithResponse request returning *DeleteEnvironmentResponse
+func (c *ClientWithResponses) DeleteEnvironmentWithResponse(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*DeleteEnvironmentResponse, error) {
+	rsp, err := c.DeleteEnvironment(ctx, environmentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteEnvironmentResponse(rsp)
+}
+
+// GetEnvironmentWithResponse request returning *GetEnvironmentResponse
+func (c *ClientWithResponses) GetEnvironmentWithResponse(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*GetEnvironmentResponse, error) {
+	rsp, err := c.GetEnvironment(ctx, environmentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetEnvironmentResponse(rsp)
+}
+
+// UpdateEnvironmentWithBodyWithResponse request with arbitrary body returning *UpdateEnvironmentResponse
+func (c *ClientWithResponses) UpdateEnvironmentWithBodyWithResponse(ctx context.Context, environmentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateEnvironmentResponse, error) {
+	rsp, err := c.UpdateEnvironmentWithBody(ctx, environmentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateEnvironmentResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateEnvironmentWithResponse(ctx context.Context, environmentId int64, body UpdateEnvironmentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateEnvironmentResponse, error) {
+	rsp, err := c.UpdateEnvironment(ctx, environmentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateEnvironmentResponse(rsp)
+}
+
+// GetDatafileWithResponse request returning *GetDatafileResponse
+func (c *ClientWithResponses) GetDatafileWithResponse(ctx context.Context, environmentId int64, reqEditors ...RequestEditorFn) (*GetDatafileResponse, error) {
+	rsp, err := c.GetDatafile(ctx, environmentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetDatafileResponse(rsp)
+}
+
+// ListEventsWithResponse request returning *ListEventsResponse
+func (c *ClientWithResponses) ListEventsWithResponse(ctx context.Context, params *ListEventsParams, reqEditors ...RequestEditorFn) (*ListEventsResponse, error) {
+	rsp, err := c.ListEvents(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListEventsResponse(rsp)
+}
+
+// GetEventWithResponse request returning *GetEventResponse
+func (c *ClientWithResponses) GetEventWithResponse(ctx context.Context, eventId int64, params *GetEventParams, reqEditors ...RequestEditorFn) (*GetEventResponse, error) {
+	rsp, err := c.GetEvent(ctx, eventId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetEventResponse(rsp)
+}
+
+// GetExperimentSummariesWithResponse request returning *GetExperimentSummariesResponse
+func (c *ClientWithResponses) GetExperimentSummariesWithResponse(ctx context.Context, params *GetExperimentSummariesParams, reqEditors ...RequestEditorFn) (*GetExperimentSummariesResponse, error) {
+	rsp, err := c.GetExperimentSummaries(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentSummariesResponse(rsp)
+}
+
+// ListExperimentsWithResponse request returning *ListExperimentsResponse
+func (c *ClientWithResponses) ListExperimentsWithResponse(ctx context.Context, params *ListExperimentsParams, reqEditors ...RequestEditorFn) (*ListExperimentsResponse, error) {
+	rsp, err := c.ListExperiments(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListExperimentsResponse(rsp)
+}
+
+// CreateExperimentWithBodyWithResponse request with arbitrary body returning *CreateExperimentResponse
+func (c *ClientWithResponses) CreateExperimentWithBodyWithResponse(ctx context.Context, params *CreateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateExperimentResponse, error) {
+	rsp, err := c.CreateExperimentWithBody(ctx, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateExperimentResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateExperimentWithResponse(ctx context.Context, params *CreateExperimentParams, body CreateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateExperimentResponse, error) {
+	rsp, err := c.CreateExperiment(ctx, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateExperimentResponse(rsp)
+}
+
+// DeleteExperimentWithResponse request returning *DeleteExperimentResponse
+func (c *ClientWithResponses) DeleteExperimentWithResponse(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*DeleteExperimentResponse, error) {
+	rsp, err := c.DeleteExperiment(ctx, experimentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteExperimentResponse(rsp)
+}
+
+// GetExperimentWithResponse request returning *GetExperimentResponse
+func (c *ClientWithResponses) GetExperimentWithResponse(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*GetExperimentResponse, error) {
+	rsp, err := c.GetExperiment(ctx, experimentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentResponse(rsp)
+}
+
+// UpdateExperimentWithBodyWithResponse request with arbitrary body returning *UpdateExperimentResponse
+func (c *ClientWithResponses) UpdateExperimentWithBodyWithResponse(ctx context.Context, experimentId int64, params *UpdateExperimentParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateExperimentResponse, error) {
+	rsp, err := c.UpdateExperimentWithBody(ctx, experimentId, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateExperimentResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateExperimentWithResponse(ctx context.Context, experimentId int64, params *UpdateExperimentParams, body UpdateExperimentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateExperimentResponse, error) {
+	rsp, err := c.UpdateExperiment(ctx, experimentId, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateExperimentResponse(rsp)
+}
+
+// GetExperimentReportWithResponse request returning *GetExperimentReportResponse
+func (c *ClientWithResponses) GetExperimentReportWithResponse(ctx context.Context, experimentId int64, params *GetExperimentReportParams, reqEditors ...RequestEditorFn) (*GetExperimentReportResponse, error) {
+	rsp, err := c.GetExperimentReport(ctx, experimentId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentReportResponse(rsp)
+}
+
+// GetExperimentResultsWithResponse request returning *GetExperimentResultsResponse
+func (c *ClientWithResponses) GetExperimentResultsWithResponse(ctx context.Context, experimentId int64, params *GetExperimentResultsParams, reqEditors ...RequestEditorFn) (*GetExperimentResultsResponse, error) {
+	rsp, err := c.GetExperimentResults(ctx, experimentId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentResultsResponse(rsp)
+}
+
+// GetExperimentResultsShareLinkWithResponse request returning *GetExperimentResultsShareLinkResponse
+func (c *ClientWithResponses) GetExperimentResultsShareLinkWithResponse(ctx context.Context, experimentId int64, reqEditors ...RequestEditorFn) (*GetExperimentResultsShareLinkResponse, error) {
+	rsp, err := c.GetExperimentResultsShareLink(ctx, experimentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentResultsShareLinkResponse(rsp)
+}
+
+// GetExperimentSectionsWithResponse request returning *GetExperimentSectionsResponse
+func (c *ClientWithResponses) GetExperimentSectionsWithResponse(ctx context.Context, experimentId int64, params *GetExperimentSectionsParams, reqEditors ...RequestEditorFn) (*GetExperimentSectionsResponse, error) {
+	rsp, err := c.GetExperimentSections(ctx, experimentId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentSectionsResponse(rsp)
+}
+
+// CreateSectionWithBodyWithResponse request with arbitrary body returning *CreateSectionResponse
+func (c *ClientWithResponses) CreateSectionWithBodyWithResponse(ctx context.Context, experimentId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateSectionResponse, error) {
+	rsp, err := c.CreateSectionWithBody(ctx, experimentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateSectionResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateSectionWithResponse(ctx context.Context, experimentId int64, body CreateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSectionResponse, error) {
+	rsp, err := c.CreateSection(ctx, experimentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateSectionResponse(rsp)
+}
+
+// DeleteSectionWithResponse request returning *DeleteSectionResponse
+func (c *ClientWithResponses) DeleteSectionWithResponse(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*DeleteSectionResponse, error) {
+	rsp, err := c.DeleteSection(ctx, experimentId, sectionId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteSectionResponse(rsp)
+}
+
+// GetSectionWithResponse request returning *GetSectionResponse
+func (c *ClientWithResponses) GetSectionWithResponse(ctx context.Context, experimentId int, sectionId int64, reqEditors ...RequestEditorFn) (*GetSectionResponse, error) {
+	rsp, err := c.GetSection(ctx, experimentId, sectionId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSectionResponse(rsp)
+}
+
+// UpdateSectionWithBodyWithResponse request with arbitrary body returning *UpdateSectionResponse
+func (c *ClientWithResponses) UpdateSectionWithBodyWithResponse(ctx context.Context, experimentId int, sectionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateSectionResponse, error) {
+	rsp, err := c.UpdateSectionWithBody(ctx, experimentId, sectionId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateSectionResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateSectionWithResponse(ctx context.Context, experimentId int, sectionId int64, body UpdateSectionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateSectionResponse, error) {
+	rsp, err := c.UpdateSection(ctx, experimentId, sectionId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateSectionResponse(rsp)
+}
+
+// GetExperimentTimeseriesWithResponse request returning *GetExperimentTimeseriesResponse
+func (c *ClientWithResponses) GetExperimentTimeseriesWithResponse(ctx context.Context, experimentId int64, params *GetExperimentTimeseriesParams, reqEditors ...RequestEditorFn) (*GetExperimentTimeseriesResponse, error) {
+	rsp, err := c.GetExperimentTimeseries(ctx, experimentId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentTimeseriesResponse(rsp)
+}
+
+// GetCampaignResultsCsvWithResponse request returning *GetCampaignResultsCsvResponse
+func (c *ClientWithResponses) GetCampaignResultsCsvWithResponse(ctx context.Context, campaignId int64, params *GetCampaignResultsCsvParams, reqEditors ...RequestEditorFn) (*GetCampaignResultsCsvResponse, error) {
+	rsp, err := c.GetCampaignResultsCsv(ctx, campaignId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCampaignResultsCsvResponse(rsp)
+}
+
+// GetEnrichedEventsExportCredentialsWithResponse request returning *GetEnrichedEventsExportCredentialsResponse
+func (c *ClientWithResponses) GetEnrichedEventsExportCredentialsWithResponse(ctx context.Context, params *GetEnrichedEventsExportCredentialsParams, reqEditors ...RequestEditorFn) (*GetEnrichedEventsExportCredentialsResponse, error) {
+	rsp, err := c.GetEnrichedEventsExportCredentials(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetEnrichedEventsExportCredentialsResponse(rsp)
+}
+
+// GetExperimentResultsCsvWithResponse request returning *GetExperimentResultsCsvResponse
+func (c *ClientWithResponses) GetExperimentResultsCsvWithResponse(ctx context.Context, experimentId int64, params *GetExperimentResultsCsvParams, reqEditors ...RequestEditorFn) (*GetExperimentResultsCsvResponse, error) {
+	rsp, err := c.GetExperimentResultsCsv(ctx, experimentId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExperimentResultsCsvResponse(rsp)
+}
+
+// ListExtensionsWithResponse request returning *ListExtensionsResponse
+func (c *ClientWithResponses) ListExtensionsWithResponse(ctx context.Context, params *ListExtensionsParams, reqEditors ...RequestEditorFn) (*ListExtensionsResponse, error) {
+	rsp, err := c.ListExtensions(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListExtensionsResponse(rsp)
+}
+
+// CreateExtensionWithBodyWithResponse request with arbitrary body returning *CreateExtensionResponse
+func (c *ClientWithResponses) CreateExtensionWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateExtensionResponse, error) {
+	rsp, err := c.CreateExtensionWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateExtensionResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateExtensionWithResponse(ctx context.Context, body CreateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateExtensionResponse, error) {
+	rsp, err := c.CreateExtension(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateExtensionResponse(rsp)
+}
+
+// DeleteExtensionWithResponse request returning *DeleteExtensionResponse
+func (c *ClientWithResponses) DeleteExtensionWithResponse(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*DeleteExtensionResponse, error) {
+	rsp, err := c.DeleteExtension(ctx, extensionId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteExtensionResponse(rsp)
+}
+
+// GetExtensionWithResponse request returning *GetExtensionResponse
+func (c *ClientWithResponses) GetExtensionWithResponse(ctx context.Context, extensionId int64, reqEditors ...RequestEditorFn) (*GetExtensionResponse, error) {
+	rsp, err := c.GetExtension(ctx, extensionId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExtensionResponse(rsp)
+}
+
+// UpdateExtensionWithBodyWithResponse request with arbitrary body returning *UpdateExtensionResponse
+func (c *ClientWithResponses) UpdateExtensionWithBodyWithResponse(ctx context.Context, extensionId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateExtensionResponse, error) {
+	rsp, err := c.UpdateExtensionWithBody(ctx, extensionId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateExtensionResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateExtensionWithResponse(ctx context.Context, extensionId int64, body UpdateExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateExtensionResponse, error) {
+	rsp, err := c.UpdateExtension(ctx, extensionId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateExtensionResponse(rsp)
+}
+
+// ListFeaturesWithResponse request returning *ListFeaturesResponse
+func (c *ClientWithResponses) ListFeaturesWithResponse(ctx context.Context, params *ListFeaturesParams, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error) {
+	rsp, err := c.ListFeatures(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListFeaturesResponse(rsp)
+}
+
+// CreateFeatureWithBodyWithResponse request with arbitrary body returning *CreateFeatureResponse
+func (c *ClientWithResponses) CreateFeatureWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateFeatureResponse, error) {
+	rsp, err := c.CreateFeatureWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateFeatureResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateFeatureWithResponse(ctx context.Context, body CreateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateFeatureResponse, error) {
+	rsp, err := c.CreateFeature(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateFeatureResponse(rsp)
+}
+
+// DeleteFeatureWithResponse request returning *DeleteFeatureResponse
+func (c *ClientWithResponses) DeleteFeatureWithResponse(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*DeleteFeatureResponse, error) {
+	rsp, err := c.DeleteFeature(ctx, featureId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteFeatureResponse(rsp)
+}
+
+// GetFeatureWithResponse request returning *GetFeatureResponse
+func (c *ClientWithResponses) GetFeatureWithResponse(ctx context.Context, featureId int64, reqEditors ...RequestEditorFn) (*GetFeatureResponse, error) {
+	rsp, err := c.GetFeature(ctx, featureId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetFeatureResponse(rsp)
+}
+
+// UpdateFeatureWithBodyWithResponse request with arbitrary body returning *UpdateFeatureResponse
+func (c *ClientWithResponses) UpdateFeatureWithBodyWithResponse(ctx context.Context, featureId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateFeatureResponse, error) {
+	rsp, err := c.UpdateFeatureWithBody(ctx, featureId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateFeatureResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateFeatureWithResponse(ctx context.Context, featureId int64, body UpdateFeatureJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateFeatureResponse, error) {
+	rsp, err := c.UpdateFeature(ctx, featureId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateFeatureResponse(rsp)
+}
+
+// ListGroupsWithResponse request returning *ListGroupsResponse
+func (c *ClientWithResponses) ListGroupsWithResponse(ctx context.Context, params *ListGroupsParams, reqEditors ...RequestEditorFn) (*ListGroupsResponse, error) {
+	rsp, err := c.ListGroups(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListGroupsResponse(rsp)
+}
+
+// CreateGroupWithBodyWithResponse request with arbitrary body returning *CreateGroupResponse
+func (c *ClientWithResponses) CreateGroupWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateGroupResponse, error) {
+	rsp, err := c.CreateGroupWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateGroupResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateGroupWithResponse(ctx context.Context, body CreateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateGroupResponse, error) {
+	rsp, err := c.CreateGroup(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateGroupResponse(rsp)
+}
+
+// DeleteGroupWithResponse request returning *DeleteGroupResponse
+func (c *ClientWithResponses) DeleteGroupWithResponse(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*DeleteGroupResponse, error) {
+	rsp, err := c.DeleteGroup(ctx, groupId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteGroupResponse(rsp)
+}
+
+// GetGroupWithResponse request returning *GetGroupResponse
+func (c *ClientWithResponses) GetGroupWithResponse(ctx context.Context, groupId int64, reqEditors ...RequestEditorFn) (*GetGroupResponse, error) {
+	rsp, err := c.GetGroup(ctx, groupId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetGroupResponse(rsp)
+}
+
+// UpdateGroupWithBodyWithResponse request with arbitrary body returning *UpdateGroupResponse
+func (c *ClientWithResponses) UpdateGroupWithBodyWithResponse(ctx context.Context, groupId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateGroupResponse, error) {
+	rsp, err := c.UpdateGroupWithBody(ctx, groupId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateGroupResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateGroupWithResponse(ctx context.Context, groupId int64, body UpdateGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateGroupResponse, error) {
+	rsp, err := c.UpdateGroup(ctx, groupId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateGroupResponse(rsp)
+}
+
+// ListSarRequestsByTeamWithResponse request returning *ListSarRequestsByTeamResponse
+func (c *ClientWithResponses) ListSarRequestsByTeamWithResponse(ctx context.Context, params *ListSarRequestsByTeamParams, reqEditors ...RequestEditorFn) (*ListSarRequestsByTeamResponse, error) {
+	rsp, err := c.ListSarRequestsByTeam(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListSarRequestsByTeamResponse(rsp)
+}
+
+// UpdateSarRequestWithBodyWithResponse request with arbitrary body returning *UpdateSarRequestResponse
+func (c *ClientWithResponses) UpdateSarRequestWithBodyWithResponse(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateSarRequestResponse, error) {
+	rsp, err := c.UpdateSarRequestWithBody(ctx, requestId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateSarRequestResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateSarRequestWithResponse(ctx context.Context, requestId int64, body UpdateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateSarRequestResponse, error) {
+	rsp, err := c.UpdateSarRequest(ctx, requestId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateSarRequestResponse(rsp)
+}
+
+// UpdateSarRequestByPostWithBodyWithResponse request with arbitrary body returning *UpdateSarRequestByPostResponse
+func (c *ClientWithResponses) UpdateSarRequestByPostWithBodyWithResponse(ctx context.Context, requestId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateSarRequestByPostResponse, error) {
+	rsp, err := c.UpdateSarRequestByPostWithBody(ctx, requestId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateSarRequestByPostResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateSarRequestByPostWithResponse(ctx context.Context, requestId int64, body UpdateSarRequestByPostJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateSarRequestByPostResponse, error) {
+	rsp, err := c.UpdateSarRequestByPost(ctx, requestId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateSarRequestByPostResponse(rsp)
+}
+
+// ListInvitationsWithResponse request returning *ListInvitationsResponse
+func (c *ClientWithResponses) ListInvitationsWithResponse(ctx context.Context, params *ListInvitationsParams, reqEditors ...RequestEditorFn) (*ListInvitationsResponse, error) {
+	rsp, err := c.ListInvitations(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListInvitationsResponse(rsp)
+}
+
+// ListListAttributesWithResponse request returning *ListListAttributesResponse
+func (c *ClientWithResponses) ListListAttributesWithResponse(ctx context.Context, params *ListListAttributesParams, reqEditors ...RequestEditorFn) (*ListListAttributesResponse, error) {
+	rsp, err := c.ListListAttributes(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListListAttributesResponse(rsp)
+}
+
+// CreateListAttributeWithBodyWithResponse request with arbitrary body returning *CreateListAttributeResponse
+func (c *ClientWithResponses) CreateListAttributeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateListAttributeResponse, error) {
+	rsp, err := c.CreateListAttributeWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateListAttributeResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateListAttributeWithResponse(ctx context.Context, body CreateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateListAttributeResponse, error) {
+	rsp, err := c.CreateListAttribute(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateListAttributeResponse(rsp)
+}
+
+// ArchiveListAttributeWithResponse request returning *ArchiveListAttributeResponse
+func (c *ClientWithResponses) ArchiveListAttributeWithResponse(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*ArchiveListAttributeResponse, error) {
+	rsp, err := c.ArchiveListAttribute(ctx, listAttributeId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseArchiveListAttributeResponse(rsp)
+}
+
+// GetListAttributeWithResponse request returning *GetListAttributeResponse
+func (c *ClientWithResponses) GetListAttributeWithResponse(ctx context.Context, listAttributeId int64, reqEditors ...RequestEditorFn) (*GetListAttributeResponse, error) {
+	rsp, err := c.GetListAttribute(ctx, listAttributeId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetListAttributeResponse(rsp)
+}
+
+// UpdateListAttributeWithBodyWithResponse request with arbitrary body returning *UpdateListAttributeResponse
+func (c *ClientWithResponses) UpdateListAttributeWithBodyWithResponse(ctx context.Context, listAttributeId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateListAttributeResponse, error) {
+	rsp, err := c.UpdateListAttributeWithBody(ctx, listAttributeId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateListAttributeResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateListAttributeWithResponse(ctx context.Context, listAttributeId int64, body UpdateListAttributeJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateListAttributeResponse, error) {
+	rsp, err := c.UpdateListAttribute(ctx, listAttributeId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateListAttributeResponse(rsp)
+}
+
+// GetMeWithResponse request returning *GetMeResponse
+func (c *ClientWithResponses) GetMeWithResponse(ctx context.Context, params *GetMeParams, reqEditors ...RequestEditorFn) (*GetMeResponse, error) {
+	rsp, err := c.GetMe(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetMeResponse(rsp)
+}
+
+// ListPagesWithResponse request returning *ListPagesResponse
+func (c *ClientWithResponses) ListPagesWithResponse(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*ListPagesResponse, error) {
+	rsp, err := c.ListPages(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListPagesResponse(rsp)
+}
+
+// CreatePageWithBodyWithResponse request with arbitrary body returning *CreatePageResponse
+func (c *ClientWithResponses) CreatePageWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePageResponse, error) {
+	rsp, err := c.CreatePageWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePageResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreatePageWithResponse(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePageResponse, error) {
+	rsp, err := c.CreatePage(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePageResponse(rsp)
+}
+
+// DeletePageWithResponse request returning *DeletePageResponse
+func (c *ClientWithResponses) DeletePageWithResponse(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*DeletePageResponse, error) {
+	rsp, err := c.DeletePage(ctx, pageId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeletePageResponse(rsp)
+}
+
+// GetPageWithResponse request returning *GetPageResponse
+func (c *ClientWithResponses) GetPageWithResponse(ctx context.Context, pageId int64, reqEditors ...RequestEditorFn) (*GetPageResponse, error) {
+	rsp, err := c.GetPage(ctx, pageId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetPageResponse(rsp)
+}
+
+// UpdatePageWithBodyWithResponse request with arbitrary body returning *UpdatePageResponse
+func (c *ClientWithResponses) UpdatePageWithBodyWithResponse(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdatePageResponse, error) {
+	rsp, err := c.UpdatePageWithBody(ctx, pageId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdatePageResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdatePageWithResponse(ctx context.Context, pageId int64, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdatePageResponse, error) {
+	rsp, err := c.UpdatePage(ctx, pageId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdatePageResponse(rsp)
+}
+
+// CreateInPageEventWithBodyWithResponse request with arbitrary body returning *CreateInPageEventResponse
+func (c *ClientWithResponses) CreateInPageEventWithBodyWithResponse(ctx context.Context, pageId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateInPageEventResponse, error) {
+	rsp, err := c.CreateInPageEventWithBody(ctx, pageId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateInPageEventResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateInPageEventWithResponse(ctx context.Context, pageId int64, body CreateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateInPageEventResponse, error) {
+	rsp, err := c.CreateInPageEvent(ctx, pageId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateInPageEventResponse(rsp)
+}
+
+// DeleteInPageEventWithResponse request returning *DeleteInPageEventResponse
+func (c *ClientWithResponses) DeleteInPageEventWithResponse(ctx context.Context, pageId int64, eventId int64, reqEditors ...RequestEditorFn) (*DeleteInPageEventResponse, error) {
+	rsp, err := c.DeleteInPageEvent(ctx, pageId, eventId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteInPageEventResponse(rsp)
+}
+
+// UpdateInPageEventWithBodyWithResponse request with arbitrary body returning *UpdateInPageEventResponse
+func (c *ClientWithResponses) UpdateInPageEventWithBodyWithResponse(ctx context.Context, pageId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateInPageEventResponse, error) {
+	rsp, err := c.UpdateInPageEventWithBody(ctx, pageId, eventId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateInPageEventResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateInPageEventWithResponse(ctx context.Context, pageId int64, eventId int64, body UpdateInPageEventJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateInPageEventResponse, error) {
+	rsp, err := c.UpdateInPageEvent(ctx, pageId, eventId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateInPageEventResponse(rsp)
+}
+
+// GetPlanWithResponse request returning *GetPlanResponse
+func (c *ClientWithResponses) GetPlanWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetPlanResponse, error) {
+	rsp, err := c.GetPlan(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetPlanResponse(rsp)
+}
+
 // ListProjectsWithResponse request returning *ListProjectsResponse
 func (c *ClientWithResponses) ListProjectsWithResponse(ctx context.Context, params *ListProjectsParams, reqEditors ...RequestEditorFn) (*ListProjectsResponse, error) {
 	rsp, err := c.ListProjects(ctx, params, reqEditors...)
@@ -993,6 +20300,4286 @@ func (c *ClientWithResponses) UpdateProjectWithResponse(ctx context.Context, pro
 		return nil, err
 	}
 	return ParseUpdateProjectResponse(rsp)
+}
+
+// CreateCustomEventWithBodyWithResponse request with arbitrary body returning *CreateCustomEventResponse
+func (c *ClientWithResponses) CreateCustomEventWithBodyWithResponse(ctx context.Context, projectId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCustomEventResponse, error) {
+	rsp, err := c.CreateCustomEventWithBody(ctx, projectId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCustomEventResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateCustomEventWithResponse(ctx context.Context, projectId int64, body CreateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCustomEventResponse, error) {
+	rsp, err := c.CreateCustomEvent(ctx, projectId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCustomEventResponse(rsp)
+}
+
+// DeleteCustomEventWithResponse request returning *DeleteCustomEventResponse
+func (c *ClientWithResponses) DeleteCustomEventWithResponse(ctx context.Context, projectId int64, eventId int64, reqEditors ...RequestEditorFn) (*DeleteCustomEventResponse, error) {
+	rsp, err := c.DeleteCustomEvent(ctx, projectId, eventId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteCustomEventResponse(rsp)
+}
+
+// UpdateCustomEventWithBodyWithResponse request with arbitrary body returning *UpdateCustomEventResponse
+func (c *ClientWithResponses) UpdateCustomEventWithBodyWithResponse(ctx context.Context, projectId int64, eventId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCustomEventResponse, error) {
+	rsp, err := c.UpdateCustomEventWithBody(ctx, projectId, eventId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCustomEventResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateCustomEventWithResponse(ctx context.Context, projectId int64, eventId int64, body UpdateCustomEventJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCustomEventResponse, error) {
+	rsp, err := c.UpdateCustomEvent(ctx, projectId, eventId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCustomEventResponse(rsp)
+}
+
+// ListWebhooksWithResponse request returning *ListWebhooksResponse
+func (c *ClientWithResponses) ListWebhooksWithResponse(ctx context.Context, projectId ProjectId, params *ListWebhooksParams, reqEditors ...RequestEditorFn) (*ListWebhooksResponse, error) {
+	rsp, err := c.ListWebhooks(ctx, projectId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListWebhooksResponse(rsp)
+}
+
+// CreateWebhookWithBodyWithResponse request with arbitrary body returning *CreateWebhookResponse
+func (c *ClientWithResponses) CreateWebhookWithBodyWithResponse(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateWebhookResponse, error) {
+	rsp, err := c.CreateWebhookWithBody(ctx, projectId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateWebhookResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateWebhookWithResponse(ctx context.Context, projectId ProjectId, body CreateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateWebhookResponse, error) {
+	rsp, err := c.CreateWebhook(ctx, projectId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateWebhookResponse(rsp)
+}
+
+// GetRecsCatalogCsvWithResponse request returning *GetRecsCatalogCsvResponse
+func (c *ClientWithResponses) GetRecsCatalogCsvWithResponse(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*GetRecsCatalogCsvResponse, error) {
+	rsp, err := c.GetRecsCatalogCsv(ctx, catalogId, date, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRecsCatalogCsvResponse(rsp)
+}
+
+// GetRecsOutputCsvWithResponse request returning *GetRecsOutputCsvResponse
+func (c *ClientWithResponses) GetRecsOutputCsvWithResponse(ctx context.Context, catalogId string, recommenderId string, date string, reqEditors ...RequestEditorFn) (*GetRecsOutputCsvResponse, error) {
+	rsp, err := c.GetRecsOutputCsv(ctx, catalogId, recommenderId, date, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRecsOutputCsvResponse(rsp)
+}
+
+// GetRecsStatsCsvWithResponse request returning *GetRecsStatsCsvResponse
+func (c *ClientWithResponses) GetRecsStatsCsvWithResponse(ctx context.Context, catalogId string, date string, reqEditors ...RequestEditorFn) (*GetRecsStatsCsvResponse, error) {
+	rsp, err := c.GetRecsStatsCsv(ctx, catalogId, date, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRecsStatsCsvResponse(rsp)
+}
+
+// ListScheduledJobsWithResponse request returning *ListScheduledJobsResponse
+func (c *ClientWithResponses) ListScheduledJobsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListScheduledJobsResponse, error) {
+	rsp, err := c.ListScheduledJobs(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListScheduledJobsResponse(rsp)
+}
+
+// CreateScheduledJobWithBodyWithResponse request with arbitrary body returning *CreateScheduledJobResponse
+func (c *ClientWithResponses) CreateScheduledJobWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateScheduledJobResponse, error) {
+	rsp, err := c.CreateScheduledJobWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateScheduledJobResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateScheduledJobWithResponse(ctx context.Context, body CreateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateScheduledJobResponse, error) {
+	rsp, err := c.CreateScheduledJob(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateScheduledJobResponse(rsp)
+}
+
+// DeleteScheduledJobWithResponse request returning *DeleteScheduledJobResponse
+func (c *ClientWithResponses) DeleteScheduledJobWithResponse(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*DeleteScheduledJobResponse, error) {
+	rsp, err := c.DeleteScheduledJob(ctx, jobId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteScheduledJobResponse(rsp)
+}
+
+// GetScheduledJobWithResponse request returning *GetScheduledJobResponse
+func (c *ClientWithResponses) GetScheduledJobWithResponse(ctx context.Context, jobId int64, reqEditors ...RequestEditorFn) (*GetScheduledJobResponse, error) {
+	rsp, err := c.GetScheduledJob(ctx, jobId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetScheduledJobResponse(rsp)
+}
+
+// UpdateScheduledJobWithBodyWithResponse request with arbitrary body returning *UpdateScheduledJobResponse
+func (c *ClientWithResponses) UpdateScheduledJobWithBodyWithResponse(ctx context.Context, jobId int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateScheduledJobResponse, error) {
+	rsp, err := c.UpdateScheduledJobWithBody(ctx, jobId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateScheduledJobResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateScheduledJobWithResponse(ctx context.Context, jobId int64, body UpdateScheduledJobJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateScheduledJobResponse, error) {
+	rsp, err := c.UpdateScheduledJob(ctx, jobId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateScheduledJobResponse(rsp)
+}
+
+// GetSearchResultsWithResponse request returning *GetSearchResultsResponse
+func (c *ClientWithResponses) GetSearchResultsWithResponse(ctx context.Context, params *GetSearchResultsParams, reqEditors ...RequestEditorFn) (*GetSearchResultsResponse, error) {
+	rsp, err := c.GetSearchResults(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSearchResultsResponse(rsp)
+}
+
+// ListSarRequestsByAccountWithResponse request returning *ListSarRequestsByAccountResponse
+func (c *ClientWithResponses) ListSarRequestsByAccountWithResponse(ctx context.Context, params *ListSarRequestsByAccountParams, reqEditors ...RequestEditorFn) (*ListSarRequestsByAccountResponse, error) {
+	rsp, err := c.ListSarRequestsByAccount(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListSarRequestsByAccountResponse(rsp)
+}
+
+// CreateSarRequestWithBodyWithResponse request with arbitrary body returning *CreateSarRequestResponse
+func (c *ClientWithResponses) CreateSarRequestWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateSarRequestResponse, error) {
+	rsp, err := c.CreateSarRequestWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateSarRequestResponse(rsp)
+}
+
+func (c *ClientWithResponses) CreateSarRequestWithResponse(ctx context.Context, body CreateSarRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSarRequestResponse, error) {
+	rsp, err := c.CreateSarRequest(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateSarRequestResponse(rsp)
+}
+
+// GetSarRequestWithResponse request returning *GetSarRequestResponse
+func (c *ClientWithResponses) GetSarRequestWithResponse(ctx context.Context, requestId int64, reqEditors ...RequestEditorFn) (*GetSarRequestResponse, error) {
+	rsp, err := c.GetSarRequest(ctx, requestId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSarRequestResponse(rsp)
+}
+
+// DeleteWebhookWithResponse request returning *DeleteWebhookResponse
+func (c *ClientWithResponses) DeleteWebhookWithResponse(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*DeleteWebhookResponse, error) {
+	rsp, err := c.DeleteWebhook(ctx, webhookId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteWebhookResponse(rsp)
+}
+
+// GetWebhookWithResponse request returning *GetWebhookResponse
+func (c *ClientWithResponses) GetWebhookWithResponse(ctx context.Context, webhookId WebhookId, reqEditors ...RequestEditorFn) (*GetWebhookResponse, error) {
+	rsp, err := c.GetWebhook(ctx, webhookId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetWebhookResponse(rsp)
+}
+
+// UpdateWebhookWithBodyWithResponse request with arbitrary body returning *UpdateWebhookResponse
+func (c *ClientWithResponses) UpdateWebhookWithBodyWithResponse(ctx context.Context, webhookId WebhookId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateWebhookResponse, error) {
+	rsp, err := c.UpdateWebhookWithBody(ctx, webhookId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateWebhookResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateWebhookWithResponse(ctx context.Context, webhookId WebhookId, body UpdateWebhookJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateWebhookResponse, error) {
+	rsp, err := c.UpdateWebhook(ctx, webhookId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateWebhookResponse(rsp)
+}
+
+// ParseListAttributesResponse parses an HTTP response from a ListAttributesWithResponse call
+func ParseListAttributesResponse(rsp *http.Response) (*ListAttributesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListAttributesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Attribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateAttributeResponse parses an HTTP response from a CreateAttributeWithResponse call
+func ParseCreateAttributeResponse(rsp *http.Response) (*CreateAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Attribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteAttributeResponse parses an HTTP response from a DeleteAttributeWithResponse call
+func ParseDeleteAttributeResponse(rsp *http.Response) (*DeleteAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetAttributeResponse parses an HTTP response from a GetAttributeWithResponse call
+func ParseGetAttributeResponse(rsp *http.Response) (*GetAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Attribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateAttributeResponse parses an HTTP response from a UpdateAttributeWithResponse call
+func ParseUpdateAttributeResponse(rsp *http.Response) (*UpdateAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Attribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetBucketingHistoryResponse parses an HTTP response from a GetBucketingHistoryWithResponse call
+func ParseGetBucketingHistoryResponse(rsp *http.Response) (*GetBucketingHistoryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetBucketingHistoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest BucketingInformation
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListAudiencesResponse parses an HTTP response from a ListAudiencesWithResponse call
+func ParseListAudiencesResponse(rsp *http.Response) (*ListAudiencesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListAudiencesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Audience
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateAudienceResponse parses an HTTP response from a CreateAudienceWithResponse call
+func ParseCreateAudienceResponse(rsp *http.Response) (*CreateAudienceResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateAudienceResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Audience
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetAudienceResponse parses an HTTP response from a GetAudienceWithResponse call
+func ParseGetAudienceResponse(rsp *http.Response) (*GetAudienceResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetAudienceResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Audience
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateAudienceResponse parses an HTTP response from a UpdateAudienceWithResponse call
+func ParseUpdateAudienceResponse(rsp *http.Response) (*UpdateAudienceResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateAudienceResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Audience
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetImpressionsUsageRequestResponse parses an HTTP response from a GetImpressionsUsageRequestWithResponse call
+func ParseGetImpressionsUsageRequestResponse(rsp *http.Response) (*GetImpressionsUsageRequestResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetImpressionsUsageRequestResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ImpressionsUsage
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetImpressionsUsageSummaryRequestResponse parses an HTTP response from a GetImpressionsUsageSummaryRequestWithResponse call
+func ParseGetImpressionsUsageSummaryRequestResponse(rsp *http.Response) (*GetImpressionsUsageSummaryRequestResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetImpressionsUsageSummaryRequestResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ImpressionsUsageSummary
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListCampaignsResponse parses an HTTP response from a ListCampaignsWithResponse call
+func ParseListCampaignsResponse(rsp *http.Response) (*ListCampaignsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListCampaignsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Campaign
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateCampaignResponse parses an HTTP response from a CreateCampaignWithResponse call
+func ParseCreateCampaignResponse(rsp *http.Response) (*CreateCampaignResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateCampaignResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Campaign
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteCampaignResponse parses an HTTP response from a DeleteCampaignWithResponse call
+func ParseDeleteCampaignResponse(rsp *http.Response) (*DeleteCampaignResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteCampaignResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 410:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON410 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetCampaignResponse parses an HTTP response from a GetCampaignWithResponse call
+func ParseGetCampaignResponse(rsp *http.Response) (*GetCampaignResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCampaignResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Campaign
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateCampaignResponse parses an HTTP response from a UpdateCampaignWithResponse call
+func ParseUpdateCampaignResponse(rsp *http.Response) (*UpdateCampaignResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateCampaignResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Campaign
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetCampaignResultsResponse parses an HTTP response from a GetCampaignResultsWithResponse call
+func ParseGetCampaignResultsResponse(rsp *http.Response) (*GetCampaignResultsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCampaignResultsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CampaignResults
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetCampaignResultsShareLinkResponse parses an HTTP response from a GetCampaignResultsShareLinkWithResponse call
+func ParseGetCampaignResultsShareLinkResponse(rsp *http.Response) (*GetCampaignResultsShareLinkResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCampaignResultsShareLinkResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ResultsShareLink
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListChangeHistoryResponse parses an HTTP response from a ListChangeHistoryWithResponse call
+func ParseListChangeHistoryResponse(rsp *http.Response) (*ListChangeHistoryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListChangeHistoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ChangeHistoryChange
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListCollaboratorsResponse parses an HTTP response from a ListCollaboratorsWithResponse call
+func ParseListCollaboratorsResponse(rsp *http.Response) (*ListCollaboratorsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListCollaboratorsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []CollaboratorEntry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateCollaboratorsResponse parses an HTTP response from a CreateCollaboratorsWithResponse call
+func ParseCreateCollaboratorsResponse(rsp *http.Response) (*CreateCollaboratorsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateCollaboratorsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []CollaboratorEntry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListEnvironmentsResponse parses an HTTP response from a ListEnvironmentsWithResponse call
+func ParseListEnvironmentsResponse(rsp *http.Response) (*ListEnvironmentsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListEnvironmentsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Environment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateEnvironmentResponse parses an HTTP response from a CreateEnvironmentWithResponse call
+func ParseCreateEnvironmentResponse(rsp *http.Response) (*CreateEnvironmentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateEnvironmentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Environment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteEnvironmentResponse parses an HTTP response from a DeleteEnvironmentWithResponse call
+func ParseDeleteEnvironmentResponse(rsp *http.Response) (*DeleteEnvironmentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteEnvironmentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetEnvironmentResponse parses an HTTP response from a GetEnvironmentWithResponse call
+func ParseGetEnvironmentResponse(rsp *http.Response) (*GetEnvironmentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetEnvironmentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Environment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateEnvironmentResponse parses an HTTP response from a UpdateEnvironmentWithResponse call
+func ParseUpdateEnvironmentResponse(rsp *http.Response) (*UpdateEnvironmentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateEnvironmentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Environment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetDatafileResponse parses an HTTP response from a GetDatafileWithResponse call
+func ParseGetDatafileResponse(rsp *http.Response) (*GetDatafileResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetDatafileResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest map[string]interface{}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListEventsResponse parses an HTTP response from a ListEventsWithResponse call
+func ParseListEventsResponse(rsp *http.Response) (*ListEventsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListEventsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Event
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetEventResponse parses an HTTP response from a GetEventWithResponse call
+func ParseGetEventResponse(rsp *http.Response) (*GetEventResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetEventResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Event
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentSummariesResponse parses an HTTP response from a GetExperimentSummariesWithResponse call
+func ParseGetExperimentSummariesResponse(rsp *http.Response) (*GetExperimentSummariesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentSummariesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ExperimentSummary
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListExperimentsResponse parses an HTTP response from a ListExperimentsWithResponse call
+func ParseListExperimentsResponse(rsp *http.Response) (*ListExperimentsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListExperimentsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Experiment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateExperimentResponse parses an HTTP response from a CreateExperimentWithResponse call
+func ParseCreateExperimentResponse(rsp *http.Response) (*CreateExperimentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateExperimentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Experiment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteExperimentResponse parses an HTTP response from a DeleteExperimentWithResponse call
+func ParseDeleteExperimentResponse(rsp *http.Response) (*DeleteExperimentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteExperimentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 410:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON410 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentResponse parses an HTTP response from a GetExperimentWithResponse call
+func ParseGetExperimentResponse(rsp *http.Response) (*GetExperimentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Experiment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateExperimentResponse parses an HTTP response from a UpdateExperimentWithResponse call
+func ParseUpdateExperimentResponse(rsp *http.Response) (*UpdateExperimentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateExperimentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Experiment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentReportResponse parses an HTTP response from a GetExperimentReportWithResponse call
+func ParseGetExperimentReportResponse(rsp *http.Response) (*GetExperimentReportResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentReportResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ExperimentResultsReport
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentResultsResponse parses an HTTP response from a GetExperimentResultsWithResponse call
+func ParseGetExperimentResultsResponse(rsp *http.Response) (*GetExperimentResultsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentResultsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ExperimentResults
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentResultsShareLinkResponse parses an HTTP response from a GetExperimentResultsShareLinkWithResponse call
+func ParseGetExperimentResultsShareLinkResponse(rsp *http.Response) (*GetExperimentResultsShareLinkResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentResultsShareLinkResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ResultsShareLink
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentSectionsResponse parses an HTTP response from a GetExperimentSectionsWithResponse call
+func ParseGetExperimentSectionsResponse(rsp *http.Response) (*GetExperimentSectionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentSectionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Section
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateSectionResponse parses an HTTP response from a CreateSectionWithResponse call
+func ParseCreateSectionResponse(rsp *http.Response) (*CreateSectionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateSectionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Section
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteSectionResponse parses an HTTP response from a DeleteSectionWithResponse call
+func ParseDeleteSectionResponse(rsp *http.Response) (*DeleteSectionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteSectionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetSectionResponse parses an HTTP response from a GetSectionWithResponse call
+func ParseGetSectionResponse(rsp *http.Response) (*GetSectionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSectionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Section
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateSectionResponse parses an HTTP response from a UpdateSectionWithResponse call
+func ParseUpdateSectionResponse(rsp *http.Response) (*UpdateSectionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateSectionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Section
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentTimeseriesResponse parses an HTTP response from a GetExperimentTimeseriesWithResponse call
+func ParseGetExperimentTimeseriesResponse(rsp *http.Response) (*GetExperimentTimeseriesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentTimeseriesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ExperimentTimeseries
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetCampaignResultsCsvResponse parses an HTTP response from a GetCampaignResultsCsvWithResponse call
+func ParseGetCampaignResultsCsvResponse(rsp *http.Response) (*GetCampaignResultsCsvResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCampaignResultsCsvResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseGetEnrichedEventsExportCredentialsResponse parses an HTTP response from a GetEnrichedEventsExportCredentialsWithResponse call
+func ParseGetEnrichedEventsExportCredentialsResponse(rsp *http.Response) (*GetEnrichedEventsExportCredentialsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetEnrichedEventsExportCredentialsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest E3Credentials
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExperimentResultsCsvResponse parses an HTTP response from a GetExperimentResultsCsvWithResponse call
+func ParseGetExperimentResultsCsvResponse(rsp *http.Response) (*GetExperimentResultsCsvResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExperimentResultsCsvResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseListExtensionsResponse parses an HTTP response from a ListExtensionsWithResponse call
+func ParseListExtensionsResponse(rsp *http.Response) (*ListExtensionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListExtensionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Extension
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateExtensionResponse parses an HTTP response from a CreateExtensionWithResponse call
+func ParseCreateExtensionResponse(rsp *http.Response) (*CreateExtensionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateExtensionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Extension
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteExtensionResponse parses an HTTP response from a DeleteExtensionWithResponse call
+func ParseDeleteExtensionResponse(rsp *http.Response) (*DeleteExtensionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteExtensionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExtensionResponse parses an HTTP response from a GetExtensionWithResponse call
+func ParseGetExtensionResponse(rsp *http.Response) (*GetExtensionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExtensionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Extension
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateExtensionResponse parses an HTTP response from a UpdateExtensionWithResponse call
+func ParseUpdateExtensionResponse(rsp *http.Response) (*UpdateExtensionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateExtensionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Extension
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListFeaturesResponse parses an HTTP response from a ListFeaturesWithResponse call
+func ParseListFeaturesResponse(rsp *http.Response) (*ListFeaturesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListFeaturesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Feature
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateFeatureResponse parses an HTTP response from a CreateFeatureWithResponse call
+func ParseCreateFeatureResponse(rsp *http.Response) (*CreateFeatureResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateFeatureResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Feature
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteFeatureResponse parses an HTTP response from a DeleteFeatureWithResponse call
+func ParseDeleteFeatureResponse(rsp *http.Response) (*DeleteFeatureResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteFeatureResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetFeatureResponse parses an HTTP response from a GetFeatureWithResponse call
+func ParseGetFeatureResponse(rsp *http.Response) (*GetFeatureResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetFeatureResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Feature
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateFeatureResponse parses an HTTP response from a UpdateFeatureWithResponse call
+func ParseUpdateFeatureResponse(rsp *http.Response) (*UpdateFeatureResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateFeatureResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Feature
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListGroupsResponse parses an HTTP response from a ListGroupsWithResponse call
+func ParseListGroupsResponse(rsp *http.Response) (*ListGroupsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListGroupsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Group
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateGroupResponse parses an HTTP response from a CreateGroupWithResponse call
+func ParseCreateGroupResponse(rsp *http.Response) (*CreateGroupResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateGroupResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Group
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteGroupResponse parses an HTTP response from a DeleteGroupWithResponse call
+func ParseDeleteGroupResponse(rsp *http.Response) (*DeleteGroupResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteGroupResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetGroupResponse parses an HTTP response from a GetGroupWithResponse call
+func ParseGetGroupResponse(rsp *http.Response) (*GetGroupResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetGroupResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Group
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateGroupResponse parses an HTTP response from a UpdateGroupWithResponse call
+func ParseUpdateGroupResponse(rsp *http.Response) (*UpdateGroupResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateGroupResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Group
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListSarRequestsByTeamResponse parses an HTTP response from a ListSarRequestsByTeamWithResponse call
+func ParseListSarRequestsByTeamResponse(rsp *http.Response) (*ListSarRequestsByTeamResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListSarRequestsByTeamResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []SubjectAccessRequestInternal
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateSarRequestResponse parses an HTTP response from a UpdateSarRequestWithResponse call
+func ParseUpdateSarRequestResponse(rsp *http.Response) (*UpdateSarRequestResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateSarRequestResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SubjectAccessRequestInternal
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateSarRequestByPostResponse parses an HTTP response from a UpdateSarRequestByPostWithResponse call
+func ParseUpdateSarRequestByPostResponse(rsp *http.Response) (*UpdateSarRequestByPostResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateSarRequestByPostResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SubjectAccessRequestInternal
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListInvitationsResponse parses an HTTP response from a ListInvitationsWithResponse call
+func ParseListInvitationsResponse(rsp *http.Response) (*ListInvitationsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListInvitationsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []CollaboratorEntry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListListAttributesResponse parses an HTTP response from a ListListAttributesWithResponse call
+func ParseListListAttributesResponse(rsp *http.Response) (*ListListAttributesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListListAttributesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ListAttribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateListAttributeResponse parses an HTTP response from a CreateListAttributeWithResponse call
+func ParseCreateListAttributeResponse(rsp *http.Response) (*CreateListAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateListAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest ListAttribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseArchiveListAttributeResponse parses an HTTP response from a ArchiveListAttributeWithResponse call
+func ParseArchiveListAttributeResponse(rsp *http.Response) (*ArchiveListAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ArchiveListAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetListAttributeResponse parses an HTTP response from a GetListAttributeWithResponse call
+func ParseGetListAttributeResponse(rsp *http.Response) (*GetListAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetListAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ListAttribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateListAttributeResponse parses an HTTP response from a UpdateListAttributeWithResponse call
+func ParseUpdateListAttributeResponse(rsp *http.Response) (*UpdateListAttributeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateListAttributeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ListAttribute
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetMeResponse parses an HTTP response from a GetMeWithResponse call
+func ParseGetMeResponse(rsp *http.Response) (*GetMeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetMeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Me
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListPagesResponse parses an HTTP response from a ListPagesWithResponse call
+func ParseListPagesResponse(rsp *http.Response) (*ListPagesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListPagesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []PageObject
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreatePageResponse parses an HTTP response from a CreatePageWithResponse call
+func ParseCreatePageResponse(rsp *http.Response) (*CreatePageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreatePageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest PageObject
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeletePageResponse parses an HTTP response from a DeletePageWithResponse call
+func ParseDeletePageResponse(rsp *http.Response) (*DeletePageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeletePageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 410:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON410 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetPageResponse parses an HTTP response from a GetPageWithResponse call
+func ParseGetPageResponse(rsp *http.Response) (*GetPageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetPageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PageObject
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdatePageResponse parses an HTTP response from a UpdatePageWithResponse call
+func ParseUpdatePageResponse(rsp *http.Response) (*UpdatePageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdatePageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PageObject
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateInPageEventResponse parses an HTTP response from a CreateInPageEventWithResponse call
+func ParseCreateInPageEventResponse(rsp *http.Response) (*CreateInPageEventResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateInPageEventResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest InPageEvent
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteInPageEventResponse parses an HTTP response from a DeleteInPageEventWithResponse call
+func ParseDeleteInPageEventResponse(rsp *http.Response) (*DeleteInPageEventResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteInPageEventResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateInPageEventResponse parses an HTTP response from a UpdateInPageEventWithResponse call
+func ParseUpdateInPageEventResponse(rsp *http.Response) (*UpdateInPageEventResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateInPageEventResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest InPageEvent
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetPlanResponse parses an HTTP response from a GetPlanWithResponse call
+func ParseGetPlanResponse(rsp *http.Response) (*GetPlanResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetPlanResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Plan
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseListProjectsResponse parses an HTTP response from a ListProjectsWithResponse call
@@ -1170,6 +24757,1030 @@ func ParseUpdateProjectResponse(rsp *http.Response) (*UpdateProjectResponse, err
 			return nil, err
 		}
 		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateCustomEventResponse parses an HTTP response from a CreateCustomEventWithResponse call
+func ParseCreateCustomEventResponse(rsp *http.Response) (*CreateCustomEventResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateCustomEventResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest CustomEvent
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteCustomEventResponse parses an HTTP response from a DeleteCustomEventWithResponse call
+func ParseDeleteCustomEventResponse(rsp *http.Response) (*DeleteCustomEventResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteCustomEventResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateCustomEventResponse parses an HTTP response from a UpdateCustomEventWithResponse call
+func ParseUpdateCustomEventResponse(rsp *http.Response) (*UpdateCustomEventResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateCustomEventResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CustomEvent
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListWebhooksResponse parses an HTTP response from a ListWebhooksWithResponse call
+func ParseListWebhooksResponse(rsp *http.Response) (*ListWebhooksResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListWebhooksResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Webhooks
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateWebhookResponse parses an HTTP response from a CreateWebhookWithResponse call
+func ParseCreateWebhookResponse(rsp *http.Response) (*CreateWebhookResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateWebhookResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Webhook
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRecsCatalogCsvResponse parses an HTTP response from a GetRecsCatalogCsvWithResponse call
+func ParseGetRecsCatalogCsvResponse(rsp *http.Response) (*GetRecsCatalogCsvResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRecsCatalogCsvResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRecsOutputCsvResponse parses an HTTP response from a GetRecsOutputCsvWithResponse call
+func ParseGetRecsOutputCsvResponse(rsp *http.Response) (*GetRecsOutputCsvResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRecsOutputCsvResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRecsStatsCsvResponse parses an HTTP response from a GetRecsStatsCsvWithResponse call
+func ParseGetRecsStatsCsvResponse(rsp *http.Response) (*GetRecsStatsCsvResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRecsStatsCsvResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListScheduledJobsResponse parses an HTTP response from a ListScheduledJobsWithResponse call
+func ParseListScheduledJobsResponse(rsp *http.Response) (*ListScheduledJobsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListScheduledJobsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ScheduledJob
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateScheduledJobResponse parses an HTTP response from a CreateScheduledJobWithResponse call
+func ParseCreateScheduledJobResponse(rsp *http.Response) (*CreateScheduledJobResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateScheduledJobResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest ScheduledJob
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteScheduledJobResponse parses an HTTP response from a DeleteScheduledJobWithResponse call
+func ParseDeleteScheduledJobResponse(rsp *http.Response) (*DeleteScheduledJobResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteScheduledJobResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetScheduledJobResponse parses an HTTP response from a GetScheduledJobWithResponse call
+func ParseGetScheduledJobResponse(rsp *http.Response) (*GetScheduledJobResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetScheduledJobResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ScheduledJob
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateScheduledJobResponse parses an HTTP response from a UpdateScheduledJobWithResponse call
+func ParseUpdateScheduledJobResponse(rsp *http.Response) (*UpdateScheduledJobResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateScheduledJobResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ScheduledJob
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetSearchResultsResponse parses an HTTP response from a GetSearchResultsWithResponse call
+func ParseGetSearchResultsResponse(rsp *http.Response) (*GetSearchResultsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSearchResultsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []SearchResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListSarRequestsByAccountResponse parses an HTTP response from a ListSarRequestsByAccountWithResponse call
+func ParseListSarRequestsByAccountResponse(rsp *http.Response) (*ListSarRequestsByAccountResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListSarRequestsByAccountResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []SubjectAccessRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateSarRequestResponse parses an HTTP response from a CreateSarRequestWithResponse call
+func ParseCreateSarRequestResponse(rsp *http.Response) (*CreateSarRequestResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateSarRequestResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest SubjectAccessRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetSarRequestResponse parses an HTTP response from a GetSarRequestWithResponse call
+func ParseGetSarRequestResponse(rsp *http.Response) (*GetSarRequestResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSarRequestResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SubjectAccessRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteWebhookResponse parses an HTTP response from a DeleteWebhookWithResponse call
+func ParseDeleteWebhookResponse(rsp *http.Response) (*DeleteWebhookResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteWebhookResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetWebhookResponse parses an HTTP response from a GetWebhookWithResponse call
+func ParseGetWebhookResponse(rsp *http.Response) (*GetWebhookResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetWebhookResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Webhook
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateWebhookResponse parses an HTTP response from a UpdateWebhookWithResponse call
+func ParseUpdateWebhookResponse(rsp *http.Response) (*UpdateWebhookResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateWebhookResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Webhook
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
 
 	}
 

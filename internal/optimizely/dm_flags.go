@@ -11,6 +11,7 @@ import (
 	"sync/atomic"
 	"test-cli/internal/models"
 	"test-cli/internal/optimizely/features"
+	"test-cli/internal/optimizely/projects"
 )
 
 var (
@@ -47,6 +48,20 @@ func NewFlagsDM(client *features.ClientWithResponses, token string, projectID st
 		token:     token,
 		projectID: projectID,
 	}, nil
+}
+
+func BaseEnvironmentClient(cfg *Configuration) *projects.ClientWithResponses {
+	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
+		if cfg != nil && cfg.APIKey != "" {
+			client.RequestEditors = append(client.RequestEditors, WithToken(cfg.APIKey))
+		}
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	return fc
 }
 
 func (f *flagDataMapper) Get(ctx context.Context, ID string) (*models.FeatureFlag, error) {

@@ -6,6 +6,7 @@ import (
 
 // Configuration holds settings for API access and associated projects.
 type Configuration struct {
-	APIKey   string           `mapstructure:"apiKey" json:"apiKey" yaml:"apiKey"`
-	Projects []models.Project `mapstructure:"projects" json:"projects" yaml:"projects"`
+	APIKey         string                          `mapstructure:"apiKey" json:"apiKey" yaml:"apiKey"`
+	Projects       []models.Project                `mapstructure:"projects" json:"projects" yaml:"projects"`
+	EnvironmentMap map[string][]models.Environment `json:"environmentMap" mapstructure:"environmentMap" yaml:"environmentMap"`
 }
