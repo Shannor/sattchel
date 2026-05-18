@@ -8,7 +8,7 @@ import (
 
 // FlagsDMFactory creates DataMapper instances scoped to a specific project.
 type FlagsDMFactory interface {
-	Create(ctx context.Context, projectID string) (models.DataMapper[models.FeatureFlag], error)
+	Create(ctx context.Context, projectID string) (models.DataMapper[models.FeatureFlagDefinition], error)
 }
 
 type flagsDMFactory struct {
@@ -25,6 +25,6 @@ func NewFlagsDMFactory(client *features.ClientWithResponses, token string) Flags
 }
 
 // Create returns a DataMapper scoped to the given projectID.
-func (f *flagsDMFactory) Create(ctx context.Context, projectID string) (models.DataMapper[models.FeatureFlag], error) {
+func (f *flagsDMFactory) Create(ctx context.Context, projectID string) (models.DataMapper[models.FeatureFlagDefinition], error) {
 	return NewFlagsDM(f.client, f.token, projectID)
 }

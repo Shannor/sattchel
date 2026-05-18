@@ -16,3 +16,12 @@ type DataMapper[T any] interface {
 	Delete(ctx context.Context, ID string) (string, error)
 	Create(ctx context.Context, value T) (*T, error)
 }
+
+type FlagApplication interface {
+	GetFlag(
+		ctx context.Context,
+		projectID string,
+		environmentIDs []string,
+		flagID string,
+	) (FeatureFlagDefinition, []FeatureFlagInstance, error)
+}

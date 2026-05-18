@@ -3,35 +3,54 @@ package optimizely
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"test-cli/internal/models"
+	"test-cli/internal/set"
 )
 
 type Service interface {
-	GetProjects(ctx context.Context) ([]models.Project, error)
+	GetAllProjects(ctx context.Context) ([]models.Project, error)
+	GetSelectedProjects(ctx context.Context) ([]models.Project, error)
 	GetConfig(ctx context.Context) (*Configuration, error)
 	SetConfig(ctx context.Context, config Configuration) error
-	GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlag, error)
+
+	GetFlag(ctx context.Context, projectID string, environmentIDs []string, flagID string) (*models.FeatureFlagDefinition, []models.FeatureFlagInstance, error)
+	GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlagDefinition, error)
 }
 
 type service struct {
 	config      ConfigDataMapper
-	source      *SourceRepository
+	projectDM   ProjectDataMapper
 	flagFactory FlagsDMFactory
+	envFactory  EnvironmentsDMFactory
 }
 
-func NewOptimizelyService(dm ConfigDataMapper, source *SourceRepository, factory FlagsDMFactory) Service {
+func NewOptimizelyService(
+	dm ConfigDataMapper,
+	projectDM ProjectDataMapper,
+	factory FlagsDMFactory,
+	dmFactory EnvironmentsDMFactory,
+) Service {
 	return &service{
 		config:      dm,
-		source:      source,
+		projectDM:   projectDM,
 		flagFactory: factory,
+		envFactory:  dmFactory,
 	}
 }
 
-func (o service) GetProjects(ctx context.Context) ([]models.Project, error) {
-	if o.source == nil {
-		return nil, fmt.Errorf("source repository is not initialized")
+func (o service) GetSelectedProjects(ctx context.Context) ([]models.Project, error) {
+	cfg, err := o.config.Get(ctx, "")
+	if err != nil {
+		return nil, err
 	}
+	if cfg.APIKey == "" {
+		return nil, fmt.Errorf("API key is required")
+	}
+	return cfg.Projects, nil
+}
 
+func (o service) GetAllProjects(ctx context.Context) ([]models.Project, error) {
 	cfg, err := o.config.Get(ctx, "")
 	if err != nil {
 		return nil, err
@@ -41,29 +60,25 @@ func (o service) GetProjects(ctx context.Context) ([]models.Project, error) {
 	}
 
 	existingProjects := cfg.Projects
-	existingSet := make(map[string]bool, len(existingProjects))
-	for _, project := range existingProjects {
-		existingSet[project.ID] = true
-	}
+	existing := set.NewFromFunc[string](existingProjects, func(v models.Project) string {
+		return v.ID
+	})
 
-	p, err := o.source.GetProjects(ctx, cfg.APIKey)
+	flagsProjects, err := o.projectDM.GetAll(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get projects: %w", err)
 	}
 
 	var results []models.Project
-	for _, project := range p {
-		if project.Status != nil && project.Status.Valid() {
-			if project.Id != nil {
-				id := fmt.Sprintf("%d", *project.Id)
-				_, active := existingSet[id]
-				results = append(results, models.Project{
-					ID:       id,
-					Name:     project.Name,
-					IsActive: active,
-					Label:    project.Name,
-				})
-			}
+	for _, proj := range flagsProjects {
+		id := proj.ID
+		if existing.Contains(id) {
+			results = append(results, models.Project{
+				ID:       id,
+				Name:     proj.Name,
+				IsActive: true,
+				Label:    proj.Label,
+			})
 		}
 	}
 	return results, nil
@@ -86,8 +101,8 @@ func (o service) SetConfig(ctx context.Context, config Configuration) error {
 	return err
 }
 
-func (o service) GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlag, error) {
-	result := make(map[string][]models.FeatureFlag)
+func (o service) GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlagDefinition, error) {
+	result := make(map[string][]models.FeatureFlagDefinition)
 
 	for _, pid := range projectIDs {
 		dm, err := o.flagFactory.Create(ctx, pid)
@@ -102,4 +117,34 @@ func (o service) GetFlags(ctx context.Context, projectIDs []string) (map[string]
 		result[pid] = flags
 	}
 	return result, nil
+}
+
+func (o service) GetFlag(ctx context.Context, projectID string, environmentIDs []string, flagID string) (*models.FeatureFlagDefinition, []models.FeatureFlagInstance, error) {
+	instances := make([]models.FeatureFlagInstance, 0)
+	dm, err := o.flagFactory.Create(ctx, projectID)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to create flag mapper for project %s: %w", projectID, err)
+	}
+	flag, err := dm.Get(ctx, flagID)
+	if err != nil {
+		return nil, nil, err
+	}
+	allowed := set.NewFrom[string](environmentIDs)
+
+	for _, environment := range flag.Environments {
+		if allowed.Contains(environment.ID) {
+			i, err := flag.Instance(environment.ID)
+			if err != nil {
+				slog.Error(
+					"error getting flag instance",
+					slog.String("flagId", flagID),
+					slog.String("envId", environment.ID),
+				)
+				continue
+			}
+			instances = append(instances, *i)
+		}
+	}
+
+	return flag, instances, nil
 }

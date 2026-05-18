@@ -18,12 +18,12 @@ func cmdConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
 		Aliases:      []string{"co"},
 		SilenceUsage: true,
 	}
-	configCmd.AddCommand(set(service))
-	configCmd.AddCommand(get(service, styles))
+	configCmd.AddCommand(setConfig(service))
+	configCmd.AddCommand(getConfig(service, styles))
 	return configCmd
 }
 
-func set(service optimizely.Service) *cobra.Command {
+func setConfig(service optimizely.Service) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set [key] [value]",
 		Short: "Set a configuration value",
@@ -51,7 +51,7 @@ func set(service optimizely.Service) *cobra.Command {
 	}
 }
 
-func get(service optimizely.Service, styles tui.Styles) *cobra.Command {
+func getConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get [key]",
 		Short: "Get a configuration value",

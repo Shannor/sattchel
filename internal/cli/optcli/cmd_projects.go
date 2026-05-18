@@ -41,7 +41,7 @@ func listProjects(s optimizely.Service, writer printer.Writer) *cobra.Command {
 				New().
 				Title("Getting projects ...").
 				Action(func() {
-					projects, err = s.GetProjects(cmd.Context())
+					projects, err = s.GetAllProjects(cmd.Context())
 				}).Run(); err != nil {
 				return err
 			}

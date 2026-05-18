@@ -74,15 +74,14 @@ func init() {
 
 func setupOptimizely(v *viper.Viper) optimizely.Service {
 	opRepo := optimizely.NewConfigDM(v)
-	sourceRepo, err := optimizely.NewSourceRepository()
-	if err != nil {
-		panic(err)
-	}
 	cfg, err := opRepo.Get(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
 	client := optimizely.BaseFlagClient(cfg)
+	v2Client := optimizely.BaseV2Client(cfg)
 	factory := optimizely.NewFlagsDMFactory(client, cfg.APIKey)
-	return optimizely.NewOptimizelyService(opRepo, sourceRepo, factory)
+	envFactory := optimizely.NewEnvironmentsDMFactory(v2Client, cfg.APIKey)
+	projectDM := optimizely.NewProjectsDM(v2Client)
+	return optimizely.NewOptimizelyService(opRepo, projectDM, factory, envFactory)
 }

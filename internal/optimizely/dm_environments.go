@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log/slog"
 	"strconv"
-
 	"test-cli/internal/models"
 	"test-cli/internal/optimizely/projects"
 )
@@ -17,6 +16,20 @@ type environmentDataMapper struct {
 }
 
 type EnvironmentDataMapper models.DataMapper[models.Environment]
+
+func BaseV2Client(cfg *Configuration) *projects.ClientWithResponses {
+	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
+		if cfg != nil && cfg.APIKey != "" {
+			client.RequestEditors = append(client.RequestEditors, WithToken(cfg.APIKey))
+		}
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	return fc
+}
 
 func NewEnvironmentsDM(client *projects.ClientWithResponses, token string, projectID string) (EnvironmentDataMapper, error) {
 	return &environmentDataMapper{
