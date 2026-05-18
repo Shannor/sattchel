@@ -267,8 +267,19 @@ func toFeatureFlag(flag features.Flag, variations []features.Variation) (models.
 
 	overrides := make(map[string]models.Override)
 	for _, variation := range variations {
+		if variation.EnvironmentUsageCount == nil {
+			continue
+		}
+		// Variation is off
+		if variation.Enabled != nil && !(*variation.Enabled) {
+			continue
+		}
+
 		o := toOverride(variation)
-		overrides[o.ID] = o
+		for env := range *variation.EnvironmentUsageCount {
+			overrides[env] = o
+		}
+
 	}
 	result.SetOverrides(overrides)
 	return result, nil

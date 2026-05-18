@@ -132,8 +132,8 @@ func (o service) GetFlag(ctx context.Context, projectID string, environmentIDs [
 	allowed := set.NewFrom[string](environmentIDs)
 
 	for _, environment := range flag.Environments {
-		if allowed.Contains(environment.ID) {
-			i, err := flag.Instance(environment.ID)
+		if allowed.Contains(environment.Key) {
+			i, err := flag.Instance(environment.Key)
 			if err != nil {
 				slog.Error(
 					"error getting flag instance",

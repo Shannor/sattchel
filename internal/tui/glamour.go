@@ -49,7 +49,7 @@ func buildFlagMarkdown(flag *models.FeatureFlagDefinition, instances []models.Fe
 	if flag.Archived {
 		status = "🗄️ Archived"
 	}
-	m.H1("🚩 " + flag.Name)
+	m.H1(flag.Name)
 	m.LF()
 	m.PlainText(fmt.Sprintf("*`%s`* — %s", flag.Key, status))
 	m.LF()
