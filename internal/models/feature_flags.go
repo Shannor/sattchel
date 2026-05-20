@@ -14,32 +14,43 @@ type FeatureFlagDefinition struct {
 	ID string `json:"id"`
 	// Key Unique key that's the same across projects but unique within the project itself
 	Key string `json:"key"`
-	// Name the user facing label
+	// Name the user-facing label
 	Name     string `json:"name"`
 	Archived bool   `json:"archived"`
 	// DefaultVariables additional configuration for features flags. Only used when enabled.
-	DefaultVariables Variables `json:"defaultVariables"`
-	Description      string    `json:"description"`
-	// Environments is a collection of all environments that the Flag exists at.
-	Environments []Environment  `json:"environments"`
-	Meta         map[string]any `json:"meta"`
-	CreatedBy    *string        `json:"createdBy"`
-	CreatedAt    *time.Time     `json:"createdAt"`
-
+	DefaultVariables Variables      `json:"defaultVariables"`
+	Description      string         `json:"description"`
+	Meta             map[string]any `json:"meta"`
+	CreatedBy        *string        `json:"createdBy"`
+	CreatedAt        *time.Time     `json:"createdAt"`
 	// overrides a collection of overriding variables that help build the instance of a Feature Flag.
 	// Private since the creation of the Feature Flag should be handled by models.
-	overrides map[string]Override
+	overrides []Override
+	// targets a collection that provides the mapping between FeatureFlagDefinition, Environment, and Override
+	targets []Target
 }
 
-func (f *FeatureFlagDefinition) SetEnvironments(envs []Environment) {
-	f.Environments = envs
-}
-
-func (f *FeatureFlagDefinition) SetOverrides(o map[string]Override) {
+func (f *FeatureFlagDefinition) SetOverrides(o []Override) {
 	f.overrides = o
 }
 
-func (f *FeatureFlagDefinition) Instance(envID string) (*FeatureFlagInstance, error) {
+func (f *FeatureFlagDefinition) SetTargets(target []Target) {
+	f.targets = target
+}
+
+func (f *FeatureFlagDefinition) AllInstances() ([]FeatureFlagInstance, error) {
+	result := make([]FeatureFlagInstance, len(f.targets))
+	for _, target := range f.targets {
+		i, err := f.ByEnvID(target.EnvironmentID)
+		if err != nil {
+			continue
+		}
+		result = append(result, *i)
+	}
+	return result, nil
+}
+
+func (f *FeatureFlagDefinition) ByEnvID(envID string) (*FeatureFlagInstance, error) {
 	result := FeatureFlagInstance{
 		ID:            f.ID,
 		Name:          f.Name,
@@ -48,22 +59,32 @@ func (f *FeatureFlagDefinition) Instance(envID string) (*FeatureFlagInstance, er
 		EnvironmentID: envID,
 		Archived:      f.Archived,
 	}
-	idx := slices.IndexFunc(f.Environments, func(environment Environment) bool {
-		return envID == environment.ID
+
+	if f.overrides == nil || len(f.overrides) == 0 {
+		return &result, nil
+	}
+
+	idx := slices.IndexFunc(f.targets, func(target Target) bool {
+		return envID == target.EnvironmentID
 	})
-	if idx >= 0 {
-		e := f.Environments[idx]
-		result.Enabled = e.IsActive
-	}
-	if f.overrides == nil {
+	if idx == -1 {
 		return &result, nil
 	}
-	value, ok := f.overrides[envID]
-	if !ok {
+
+	t := f.targets[idx]
+	result.Enabled = t.IsEnabled
+	if t.OverrideID == "" {
 		return &result, nil
 	}
-	// This might need to be merged. Revisit
-	result.Variables.Merge(value.Variables)
+
+	idx = slices.IndexFunc(f.overrides, func(override Override) bool {
+		return t.OverrideID == override.Key || t.OverrideID == override.ID
+	})
+	if idx == -1 {
+		return &result, nil
+	}
+	o := f.overrides[idx]
+	result.Variables.Merge(o.Variables)
 	return &result, nil
 }
 

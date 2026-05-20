@@ -233,7 +233,7 @@ func extractPageToken(rawURL string) string {
 	return parsed.Query().Get("page_token")
 }
 
-func toFeatureFlag(flag features.Flag, variations []features.Variation) (models.FeatureFlagDefinition, error) {
+func toFeatureFlag(flag features.Flag) (models.FeatureFlagDefinition, error) {
 	id := flag.Key
 	if flag.Id != nil {
 		id = strconv.Itoa(*flag.Id)
@@ -252,36 +252,18 @@ func toFeatureFlag(flag features.Flag, variations []features.Variation) (models.
 		result.Archived = *flag.Archived
 	}
 
-	envs := make([]models.Environment, 0)
+	targets := make([]models.Target, 0)
 	if flag.Environments != nil {
 		for _, environment := range *flag.Environments {
-			e, err := toEnvironment(environment)
+			t, err := toTarget(environment)
 			if err != nil {
 				slog.Error("Failed to convert an environment", slog.String("err", err.Error()))
 				continue
 			}
-			envs = append(envs, e)
+			targets = append(targets, t)
 		}
 	}
-	result.SetEnvironments(envs)
-
-	overrides := make(map[string]models.Override)
-	for _, variation := range variations {
-		if variation.EnvironmentUsageCount == nil {
-			continue
-		}
-		// Variation is off
-		if variation.Enabled != nil && !(*variation.Enabled) {
-			continue
-		}
-
-		o := toOverride(variation)
-		for env := range *variation.EnvironmentUsageCount {
-			overrides[env] = o
-		}
-
-	}
-	result.SetOverrides(overrides)
+	result.SetTargets(targets)
 	return result, nil
 }
 
@@ -296,18 +278,26 @@ func toOverride(variation features.Variation) models.Override {
 	return override
 }
 
-func toEnvironment(env features.FlagEnvironment) (models.Environment, error) {
-	if env.Id == nil {
-		return models.Environment{}, fmt.Errorf("missing id")
+func toTarget(env features.FlagEnvironment) (models.Target, error) {
+	result := models.Target{
+		EnvironmentID: env.Key,
+		OverrideID:    optionalString(env.DefaultVariationKey),
 	}
-	id := strconv.Itoa(int(*env.Id))
+	if env.Enabled != nil {
+		result.IsEnabled = *env.Enabled
+	}
+	return result, nil
+}
+
+func toEnvironment(env features.FlagEnvironment) (models.Environment, error) {
 	result := models.Environment{
-		ID:   id,
+		ID:   env.Key,
 		Key:  env.Key,
 		Name: env.Name,
 	}
-	if env.Enabled != nil {
-		result.IsActive = *env.Enabled
+	if env.Id != nil {
+		id := strconv.Itoa(int(*env.Id))
+		result.ID = id
 	}
 	return result, nil
 }
@@ -575,6 +565,27 @@ func (f *flagDataMapper) fetchAllVariations(ctx context.Context, flagKey string)
 // enrichFlag fetches additional data (variable definitions and variations) for a flag
 // and returns the enriched FeatureFlagDefinition.
 func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*models.FeatureFlagDefinition, error) {
+	flag.VariableDefinitions = new(getAllDefinitions(ctx, flag, f))
+	// Fetch all variations
+	allVariations, err := f.fetchAllVariations(ctx, flag.Key)
+	if err != nil {
+		slog.Warn("failed to fetch all variations", slog.String("flag", flag.Key), slog.String("error", err.Error()))
+	}
+
+	result, err := toFeatureFlag(*flag)
+	if err != nil {
+		return nil, err
+	}
+	overrides := make([]models.Override, 0)
+	for _, variation := range allVariations {
+		overrides = append(overrides, toOverride(variation))
+	}
+	result.SetOverrides(overrides)
+	return &result, nil
+}
+
+// TODO: Convert this to just a standard function to clean it up
+func getAllDefinitions(ctx context.Context, flag *features.Flag, f *flagDataMapper) map[string]features.VariableDefinition {
 	// TODO: Split into it's own function
 	definitions := make(map[string]features.VariableDefinition)
 	// Fetch all variable definitions if the flag has more than 5
@@ -594,19 +605,7 @@ func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*
 			}
 		}
 	}
-
-	flag.VariableDefinitions = &definitions
-	// Fetch all variations
-	allVariations, err := f.fetchAllVariations(ctx, flag.Key)
-	if err != nil {
-		slog.Warn("failed to fetch all variations", slog.String("flag", flag.Key), slog.String("error", err.Error()))
-	}
-
-	result, err := toFeatureFlag(*flag, allVariations)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return definitions
 }
 
 func (f *flagDataMapper) Delete(ctx context.Context, ID string) (string, error) {

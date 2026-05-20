@@ -48,12 +48,11 @@ func getFlag(s optimizely.Service) *cobra.Command {
 				return err
 			}
 			projectID := projects[0].ID
-			environments := []string{"production", "demo", "pre-prod", "qa", "development"}
+			environments := []string{"production", "demo", "preprod", "qa", "development"}
 			flag, instances, err := s.GetFlag(ctx, projectID, environments, flagId)
 			if err != nil {
 				return err
 			}
-			fmt.Printf("instances: %+v\n\n", instances)
 			return tui.RenderFlagGlamour(flag, instances)
 		},
 	}

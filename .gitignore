@@ -18,3 +18,4 @@ go.work
 .DS_Store
 
 # Dependency directories
+/.antigravitycli/*.json

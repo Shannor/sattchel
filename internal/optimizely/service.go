@@ -129,21 +129,26 @@ func (o service) GetFlag(ctx context.Context, projectID string, environmentIDs [
 	if err != nil {
 		return nil, nil, err
 	}
-	allowed := set.NewFrom[string](environmentIDs)
 
-	for _, environment := range flag.Environments {
-		if allowed.Contains(environment.Key) {
-			i, err := flag.Instance(environment.Key)
-			if err != nil {
-				slog.Error(
-					"error getting flag instance",
-					slog.String("flagId", flagID),
-					slog.String("envId", environment.ID),
-				)
-				continue
-			}
-			instances = append(instances, *i)
+	if len(environmentIDs) == 0 {
+		r, err := flag.AllInstances()
+		if err != nil {
+			return nil, nil, err
 		}
+		instances = append(instances, r...)
+	}
+
+	for _, environment := range environmentIDs {
+		i, err := flag.ByEnvID(environment)
+		if err != nil {
+			slog.Error(
+				"error getting flag instance",
+				slog.String("flagId", flagID),
+				slog.String("envId", environment),
+			)
+			continue
+		}
+		instances = append(instances, *i)
 	}
 
 	return flag, instances, nil

@@ -10,11 +10,22 @@ type Project struct {
 	Source   string `json:"source" mapstructure:"source" yaml:"source"`
 }
 
+// Environment Top level class under Project. Will generally exist in an array.
+// Will have manu to many mappings with other Models generally.
 type Environment struct {
 	ID        string         `json:"id"`
 	ProjectID string         `json:"projectId"`
 	Key       string         `json:"key"`
 	Name      string         `json:"name"`
-	IsActive  bool           `json:"isActive"`
+	Archived  bool           `json:"archived"`
 	Meta      map[string]any `json:"meta"`
+}
+
+// Target is a mapping with information between Environment and FeatureFlagDefinition.
+// It has relationship data that will inform statuses of a FeatureFlagInstance.
+// It will be nested within the FeatureFlagDefinition and private.
+type Target struct {
+	EnvironmentID string `json:"environmentId"`
+	OverrideID    string `json:"overrideId,omitempty"`
+	IsEnabled     bool   `json:"isEnabled"`
 }

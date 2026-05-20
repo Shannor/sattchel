@@ -141,16 +141,18 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]models.Environmen
 }
 
 func toProjectsEnvironment(env projects.Environment, projectID string) (models.Environment, error) {
-	if env.Id == nil {
-		return models.Environment{}, fmt.Errorf("missing id")
-	}
-	id := strconv.Itoa(*env.Id)
 	result := models.Environment{
-		ID:        id,
+		ID:        env.Key,
 		ProjectID: projectID,
 		Key:       env.Key,
 		Name:      env.Name,
-		IsActive:  env.Archived != nil && !*env.Archived,
+	}
+	if env.Id != nil {
+		id := strconv.Itoa(*env.Id)
+		result.ID = id
+	}
+	if env.Archived != nil {
+		result.Archived = *env.Archived
 	}
 	return result, nil
 }
