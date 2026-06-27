@@ -1,7 +1,7 @@
 package contentfulcli
 
 import (
-	"test-cli/internal/contentful"
+	"sattchel/internal/contentful"
 
 	"github.com/spf13/cobra"
 )

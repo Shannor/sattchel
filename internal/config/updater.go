@@ -17,10 +17,10 @@ import (
 
 const (
 	repoOwner = "Shannor"
-	repoName  = "test-cli"
+	repoName  = "sattchel"
 )
 
-// Version is set at build time via ldflags (e.g. -ldflags "-X test-cli/internal/config.Version=v1.0.0").
+// Version is set at build time via ldflags (e.g. -ldflags "-X sattchel/internal/config.Version=v1.0.0").
 var Version = "dev"
 
 type githubRelease struct {

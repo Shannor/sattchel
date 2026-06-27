@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"sattchel/internal/models"
+	"sattchel/internal/optimizely/projects"
 	"strconv"
-	"test-cli/internal/models"
-	"test-cli/internal/optimizely/projects"
 )
 
 type environmentDataMapper struct {

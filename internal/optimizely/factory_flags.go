@@ -2,8 +2,8 @@ package optimizely
 
 import (
 	"context"
-	"test-cli/internal/models"
-	"test-cli/internal/optimizely/features"
+	"sattchel/internal/models"
+	"sattchel/internal/optimizely/features"
 )
 
 // FlagsDMFactory creates DataMapper instances scoped to a specific project.

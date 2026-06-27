@@ -1,6 +1,6 @@
 package contentful
 
-import "test-cli/internal/models"
+import "sattchel/internal/models"
 
 type Service interface {
 	GetConfig() (*Configuration, error)

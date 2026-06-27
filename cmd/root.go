@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"test-cli/internal/cli/optcli"
-	"test-cli/internal/cli/update"
-	"test-cli/internal/config"
-	"test-cli/internal/optimizely"
-	"test-cli/internal/printer"
-	"test-cli/internal/tui"
+	"sattchel/internal/cli/optcli"
+	"sattchel/internal/cli/update"
+	"sattchel/internal/config"
+	"sattchel/internal/optimizely"
+	"sattchel/internal/printer"
+	"sattchel/internal/tui"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -18,10 +18,11 @@ import (
 var updateCh <-chan config.UpdateInformation
 
 var rootCmd = &cobra.Command{
-	Use:           "test-cli",
-	Short:         "A brief description of your application",
+	Use:           "sattchel",
+	Short:         "A collection of tools for optimizing my workflows or fun",
 	SilenceErrors: true,
 	SilenceUsage:  true,
+	Aliases:       []string{"sat", "satt"},
 	Version:       config.Version,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		updateCh = config.NewUpdater().CheckForUpdate()
@@ -33,7 +34,7 @@ var rootCmd = &cobra.Command{
 		if update, ok := <-updateCh; ok {
 			writer := printer.NewStyleWriter(tui.AutoStyles())
 			if update.NeedToUpdate {
-				msg := fmt.Sprintf("A new version is available: %s (current: %s). Run \"test-cli update\" to upgrade.", update.NewVersion, update.CurrentVersion)
+				msg := fmt.Sprintf("A new version is available: %s (current: %s). Run \"sattchel update\" to upgrade.", update.NewVersion, update.CurrentVersion)
 				writer.Info(msg)
 			}
 		}

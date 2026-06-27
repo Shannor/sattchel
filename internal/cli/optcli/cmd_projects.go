@@ -2,11 +2,11 @@ package optcli
 
 import (
 	"fmt"
+	"sattchel/internal/models"
+	"sattchel/internal/optimizely"
+	"sattchel/internal/printer"
 	"slices"
 	"strings"
-	"test-cli/internal/models"
-	"test-cli/internal/optimizely"
-	"test-cli/internal/printer"
 
 	"charm.land/huh/v2"
 	"charm.land/huh/v2/spinner"

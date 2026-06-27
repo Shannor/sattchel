@@ -2,10 +2,10 @@ package optcli
 
 import (
 	"fmt"
+	"sattchel/internal/optimizely"
 	"strings"
-	"test-cli/internal/optimizely"
 
-	"test-cli/internal/tui"
+	"sattchel/internal/tui"
 
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/tree"

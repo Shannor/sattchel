@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"test-cli/internal/models"
+	"sattchel/internal/models"
 
 	"charm.land/glamour/v2"
 	"github.com/charmbracelet/x/term"

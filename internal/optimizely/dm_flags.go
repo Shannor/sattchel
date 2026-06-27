@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
+	"sattchel/internal/models"
+	"sattchel/internal/optimizely/features"
+	"sattchel/internal/optimizely/projects"
 	"strconv"
 	"sync"
 	"sync/atomic"
-	"test-cli/internal/models"
-	"test-cli/internal/optimizely/features"
-	"test-cli/internal/optimizely/projects"
 )
 
 var (

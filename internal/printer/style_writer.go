@@ -3,7 +3,7 @@ package printer
 import (
 	"fmt"
 	"os"
-	"test-cli/internal/tui"
+	"sattchel/internal/tui"
 )
 
 type Writer interface {

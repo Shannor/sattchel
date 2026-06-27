@@ -3,9 +3,9 @@ package optimizely
 import (
 	"context"
 	"fmt"
+	"sattchel/internal/models"
+	"sattchel/internal/optimizely/projects"
 	"strconv"
-	"test-cli/internal/models"
-	"test-cli/internal/optimizely/projects"
 )
 
 type projectDataMapper struct {

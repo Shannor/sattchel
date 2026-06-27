@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"test-cli/internal/models"
-	"test-cli/internal/set"
+	"sattchel/internal/models"
+	"sattchel/internal/set"
 )
 
 type Service interface {

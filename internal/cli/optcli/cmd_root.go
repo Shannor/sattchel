@@ -1,9 +1,9 @@
 package optcli
 
 import (
-	"test-cli/internal/optimizely"
-	"test-cli/internal/printer"
-	"test-cli/internal/tui"
+	"sattchel/internal/optimizely"
+	"sattchel/internal/printer"
+	"sattchel/internal/tui"
 
 	"github.com/spf13/cobra"
 )

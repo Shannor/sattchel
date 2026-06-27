@@ -2,9 +2,9 @@ package optcli
 
 import (
 	"fmt"
-	"test-cli/internal/models"
-	"test-cli/internal/optimizely"
-	"test-cli/internal/tui"
+	"sattchel/internal/models"
+	"sattchel/internal/optimizely"
+	"sattchel/internal/tui"
 
 	"github.com/spf13/cobra"
 )
@@ -34,7 +34,7 @@ func getFlag(s optimizely.Service) *cobra.Command {
 		Args:  cobra.MaximumNArgs(1),
 		Long: `Get feature flag.
    Examples:
-     test-cli optimizely flags get <key>
+     sattchel optimizely flags get <key>
      `,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {

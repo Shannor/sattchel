@@ -1,4 +1,4 @@
-module test-cli
+module sattchel
 
 go 1.26
 

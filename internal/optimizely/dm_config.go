@@ -3,7 +3,7 @@ package optimizely
 import (
 	"context"
 	"fmt"
-	"test-cli/internal/models"
+	"sattchel/internal/models"
 
 	"github.com/spf13/viper"
 )

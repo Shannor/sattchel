@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"test-cli/internal/models"
+	"sattchel/internal/models"
 
 	"charm.land/bubbles/v2/table"
 	"charm.land/lipgloss/v2"

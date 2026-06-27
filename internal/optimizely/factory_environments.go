@@ -2,8 +2,8 @@ package optimizely
 
 import (
 	"context"
-	"test-cli/internal/models"
-	"test-cli/internal/optimizely/projects"
+	"sattchel/internal/models"
+	"sattchel/internal/optimizely/projects"
 )
 
 // EnvironmentsDMFactory creates DataMapper instances scoped to a specific project.

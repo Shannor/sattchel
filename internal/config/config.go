@@ -9,13 +9,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-const SubFolder = ".config/test-cli"
+const SubFolder = ".config/sattchel"
 const FileName = "config"
 const FileType = "yml"
 
 func Init() (*viper.Viper, error) {
 	v := viper.New()
-	v.AddConfigPath("$HOME/.config/test-cli")
+	v.AddConfigPath("$HOME/.config/sattchel")
 	v.SetConfigName(FileName)
 	v.SetConfigType(FileType)
 

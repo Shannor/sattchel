@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"test-cli/internal/models"
+	"sattchel/internal/models"
 )
 
 // Configuration holds settings for API access and associated projects.

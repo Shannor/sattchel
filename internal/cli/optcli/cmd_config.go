@@ -3,8 +3,8 @@ package optcli
 import (
 	"context"
 	"fmt"
-	"test-cli/internal/optimizely"
-	"test-cli/internal/tui"
+	"sattchel/internal/optimizely"
+	"sattchel/internal/tui"
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/huh/v2"
@@ -30,9 +30,9 @@ func setConfig(service optimizely.Service) *cobra.Command {
 		Long: `Set an allowed configuration value.
 	If no key is provided, a list of available keys will be displayed.
    Examples:
-     test-cli optimizely config set 
-     test-cli optimizely config set apiKey
-     test-cli optimizely config set apiKey <value>
+     sattchel optimizely config set 
+     sattchel optimizely config set apiKey
+     sattchel optimizely config set apiKey <value>
      `,
 		Args:         cobra.MaximumNArgs(2),
 		SilenceUsage: true,
@@ -58,8 +58,8 @@ func getConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
 		Long: `Get an configuration value.
 	If no key is provided, all keys will be displayed.
    Examples:
-     test-cli optimizely config get 
-     test-cli optimizely config get apiKey
+     sattchel optimizely config get 
+     sattchel optimizely config get apiKey
      `,
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,

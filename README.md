@@ -1,7 +1,9 @@
-# Test CLI
+# Sattchel
 
-CLI testing with patterns and best practices.
-It's just for learning and fun if I think of a use case. 
+> Named because of my initials and because this CLI Tool is a mix of random tools.
+
+CLI testing with patterns and best practices and random tools that I found useful at times.
+It's just for learning and fun.
 
 I'm mainly trying to learn the process of setting up a CLI testing framework with patterns and best practices.
 I don't want to use AI too much during this process. Though I'm sure I'll use it here and there for certain tasks when I'm lazy.
@@ -32,7 +34,7 @@ I don't want to use AI too much during this process. Though I'm sure I'll use it
 ### Build from Source (preferred if using Go)
 
 ```bash
-go install github.com/Shannor/test-cli/cmd/test-cli@latest
+go install github.com/Shannor/sattchel/cmd/sattchel@latest
 ```
 
 ### From GitHub Releases
@@ -43,51 +45,51 @@ Download pre-built binaries directly from GitHub releases:
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_x86_64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Linux_x86_64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### Linux (arm64)
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Linux_arm64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Linux_arm64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### macOS (Intel)
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_x86_64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Darwin_x86_64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### macOS (Apple Silicon)
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Darwin_arm64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Darwin_arm64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### Windows (amd64)
 
 ```powershell
 $env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
-Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Windows_x86_64.zip -OutFile test-cli.zip
-Expand-Archive test-cli.zip -DestinationPath $env:USERPROFILE/temp
-copy-item $env:USERPROFILE/temp/test-cli_Windows_x86_64/test-cli.exe $env:USERPROFILE/bin/
-Remove-Item test-cli.zip, $env:USERPROFILE/temp -Recurse -Force
+Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Windows_x86_64.zip -OutFile sattchel.zip
+Expand-Archive sattchel.zip -DestinationPath $env:USERPROFILE/temp
+copy-item $env:USERPROFILE/temp/sattchel_Windows_x86_64/sattchel.exe $env:USERPROFILE/bin/
+Remove-Item sattchel.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
 #### Windows (arm64)
 
 ```powershell
 $env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
-Invoke-WebRequest -Uri https://github.com/Shannor/test-cli/releases/latest/download/test-cli_Windows_arm64.zip -OutFile test-cli.zip
-Expand-Archive test-cli.zip -DestinationPath $env:USERPROFILE/temp
-copy-item $env:USERPROFILE/temp/test-cli_Windows_arm64/test-cli.exe $env:USERPROFILE/bin/
-Remove-Item test-cli.zip, $env:USERPROFILE/temp -Recurse -Force
+Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Windows_arm64.zip -OutFile sattchel.zip
+Expand-Archive sattchel.zip -DestinationPath $env:USERPROFILE/temp
+copy-item $env:USERPROFILE/temp/sattchel_Windows_arm64/sattchel.exe $env:USERPROFILE/bin/
+Remove-Item sattchel.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
-Or download manually from the [Releases page](https://github.com/Shannor/test-cli/releases) and place the binary in your PATH.
+Or download manually from the [Releases page](https://github.com/Shannor/sattchel/releases) and place the binary in your PATH.
 
 **Important:** Make sure `~/bin` is in your PATH. Add the following to your shell configuration file (e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`):
 
@@ -126,12 +128,12 @@ The CLI automatically checks for updates on startup. If a new version is availab
 
 To manually check for updates:
 ```bash
-test-cli update
+sattchel update
 ```
 
 To force update to the latest version:
 ```bash
-test-cli update --force
+sattchel update --force
 ```
 
 ---

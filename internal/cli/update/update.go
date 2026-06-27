@@ -2,8 +2,8 @@ package update
 
 import (
 	"fmt"
-	"test-cli/internal/config"
-	"test-cli/internal/printer"
+	"sattchel/internal/config"
+	"sattchel/internal/printer"
 
 	"charm.land/huh/v2/spinner"
 	"github.com/spf13/cobra"

@@ -1,7 +1,7 @@
 package contentful
 
 import (
-	"test-cli/internal/models"
+	"sattchel/internal/models"
 
 	"github.com/spf13/viper"
 )
