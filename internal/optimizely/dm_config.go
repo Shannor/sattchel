@@ -3,7 +3,7 @@ package optimizely
 import (
 	"context"
 	"fmt"
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 
 	"github.com/spf13/viper"
 )
@@ -13,7 +13,7 @@ type configDataMapper struct {
 }
 
 // ConfigDataMapper is the data mapper interface for Optimizely configuration.
-type ConfigDataMapper models.DataMapper[Configuration]
+type ConfigDataMapper domain.DataMapper[Configuration]
 
 func NewConfigDM(v *viper.Viper) ConfigDataMapper {
 	return &configDataMapper{v: v}

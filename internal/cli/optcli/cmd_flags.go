@@ -2,7 +2,7 @@ package optcli
 
 import (
 	"fmt"
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 	"sattchel/internal/optimizely"
 	"sattchel/internal/tui"
 
@@ -86,7 +86,7 @@ func listFlags(s optimizely.Service) *cobra.Command {
 				Spinner: spinner,
 			}
 
-			ctx = models.WithProgress(ctx, reporter)
+			ctx = domain.WithProgress(ctx, reporter)
 			flags, err := s.GetFlags(ctx, ids)
 			if err != nil {
 				return err

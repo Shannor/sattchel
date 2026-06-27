@@ -2,7 +2,7 @@ package optcli
 
 import (
 	"fmt"
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 	"sattchel/internal/optimizely"
 	"sattchel/internal/printer"
 	"slices"
@@ -33,7 +33,7 @@ func listProjects(s optimizely.Service, writer printer.Writer) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			var (
-				projects []models.Project
+				projects []domain.Project
 				err      error
 			)
 
@@ -59,7 +59,7 @@ func listProjects(s optimizely.Service, writer printer.Writer) *cobra.Command {
 				options     []huh.Option[string]
 			)
 
-			slices.SortFunc(projects, func(i, j models.Project) int {
+			slices.SortFunc(projects, func(i, j domain.Project) int {
 				return strings.Compare(i.Name, j.Name)
 			})
 
@@ -82,7 +82,7 @@ func listProjects(s optimizely.Service, writer printer.Writer) *cobra.Command {
 			for _, id := range selectedIds {
 				selectedSet[id] = true
 			}
-			var results []models.Project
+			var results []domain.Project
 			for _, project := range projects {
 				if selectedSet[project.ID] {
 					results = append(results, project)

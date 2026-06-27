@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 
 	"charm.land/bubbles/v2/table"
 	"charm.land/lipgloss/v2"
@@ -12,7 +12,7 @@ import (
 
 // RenderFlagLipGloss renders a FeatureFlagDefinition and its instances as
 // styled tabular output using lipgloss tables.
-func RenderFlagLipGloss(flag *models.FeatureFlagDefinition, instances []models.FeatureFlagInstance) error {
+func RenderFlagLipGloss(flag *domain.FeatureFlagDefinition, instances []domain.FeatureFlagInstance) error {
 	s := AutoStyles()
 
 	// ── Header ──────────────────────────────────────────────────────────
@@ -162,7 +162,7 @@ func renderTable(s Styles, rows [][]string) string {
 }
 
 // hasVariables returns true if any variable type has entries.
-func hasVariables(vars models.Variables) bool {
+func hasVariables(vars domain.Variables) bool {
 	return len(vars.BoolVariables) > 0 ||
 		len(vars.IntVariables) > 0 ||
 		len(vars.FloatVariables) > 0 ||

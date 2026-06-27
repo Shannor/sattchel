@@ -4,18 +4,18 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"sattchel/internal/models"
-	"sattchel/internal/set"
+	"sattchel/internal/domain"
+	"sattchel/pkg/set"
 )
 
 type Service interface {
-	GetAllProjects(ctx context.Context) ([]models.Project, error)
-	GetSelectedProjects(ctx context.Context) ([]models.Project, error)
+	GetAllProjects(ctx context.Context) ([]domain.Project, error)
+	GetSelectedProjects(ctx context.Context) ([]domain.Project, error)
 	GetConfig(ctx context.Context) (*Configuration, error)
 	SetConfig(ctx context.Context, config Configuration) error
 
-	GetFlag(ctx context.Context, projectID string, environmentIDs []string, flagID string) (*models.FeatureFlagDefinition, []models.FeatureFlagInstance, error)
-	GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlagDefinition, error)
+	GetFlag(ctx context.Context, projectID string, environmentIDs []string, flagID string) (*domain.FeatureFlagDefinition, []domain.FeatureFlagInstance, error)
+	GetFlags(ctx context.Context, projectIDs []string) (map[string][]domain.FeatureFlagDefinition, error)
 }
 
 type service struct {
@@ -39,7 +39,7 @@ func NewOptimizelyService(
 	}
 }
 
-func (o service) GetSelectedProjects(ctx context.Context) ([]models.Project, error) {
+func (o service) GetSelectedProjects(ctx context.Context) ([]domain.Project, error) {
 	cfg, err := o.config.Get(ctx, "")
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (o service) GetSelectedProjects(ctx context.Context) ([]models.Project, err
 	return cfg.Projects, nil
 }
 
-func (o service) GetAllProjects(ctx context.Context) ([]models.Project, error) {
+func (o service) GetAllProjects(ctx context.Context) ([]domain.Project, error) {
 	cfg, err := o.config.Get(ctx, "")
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (o service) GetAllProjects(ctx context.Context) ([]models.Project, error) {
 	}
 
 	existingProjects := cfg.Projects
-	existing := set.NewFromFunc[string](existingProjects, func(v models.Project) string {
+	existing := set.NewFromFunc[string](existingProjects, func(v domain.Project) string {
 		return v.ID
 	})
 
@@ -69,11 +69,11 @@ func (o service) GetAllProjects(ctx context.Context) ([]models.Project, error) {
 		return nil, fmt.Errorf("failed to get projects: %w", err)
 	}
 
-	var results []models.Project
+	var results []domain.Project
 	for _, proj := range flagsProjects {
 		id := proj.ID
 		if existing.Contains(id) {
-			results = append(results, models.Project{
+			results = append(results, domain.Project{
 				ID:       id,
 				Name:     proj.Name,
 				IsActive: true,
@@ -101,8 +101,8 @@ func (o service) SetConfig(ctx context.Context, config Configuration) error {
 	return err
 }
 
-func (o service) GetFlags(ctx context.Context, projectIDs []string) (map[string][]models.FeatureFlagDefinition, error) {
-	result := make(map[string][]models.FeatureFlagDefinition)
+func (o service) GetFlags(ctx context.Context, projectIDs []string) (map[string][]domain.FeatureFlagDefinition, error) {
+	result := make(map[string][]domain.FeatureFlagDefinition)
 
 	for _, pid := range projectIDs {
 		dm, err := o.flagFactory.Create(ctx, pid)
@@ -119,8 +119,8 @@ func (o service) GetFlags(ctx context.Context, projectIDs []string) (map[string]
 	return result, nil
 }
 
-func (o service) GetFlag(ctx context.Context, projectID string, environmentIDs []string, flagID string) (*models.FeatureFlagDefinition, []models.FeatureFlagInstance, error) {
-	instances := make([]models.FeatureFlagInstance, 0)
+func (o service) GetFlag(ctx context.Context, projectID string, environmentIDs []string, flagID string) (*domain.FeatureFlagDefinition, []domain.FeatureFlagInstance, error) {
+	instances := make([]domain.FeatureFlagInstance, 0)
 	dm, err := o.flagFactory.Create(ctx, projectID)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to create flag mapper for project %s: %w", projectID, err)

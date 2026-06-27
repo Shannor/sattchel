@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 	"sattchel/internal/optimizely/features"
 	"sattchel/internal/optimizely/projects"
 	"strconv"
@@ -30,7 +30,7 @@ type flagDataMapper struct {
 	projectID string
 }
 
-type FlagDataMapper models.DataMapper[models.FeatureFlagDefinition]
+type FlagDataMapper domain.DataMapper[domain.FeatureFlagDefinition]
 
 func BaseFlagClient(cfg *Configuration) *features.ClientWithResponses {
 	fc, err := features.NewClientWithResponses("https://api.optimizely.com/flags/v1/", func(client *features.Client) error {
@@ -69,7 +69,7 @@ func BaseEnvironmentClient(cfg *Configuration) *projects.ClientWithResponses {
 	return fc
 }
 
-func (f *flagDataMapper) Get(ctx context.Context, ID string) (*models.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) Get(ctx context.Context, ID string) (*domain.FeatureFlagDefinition, error) {
 	err := f.validate()
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ func (f *flagDataMapper) Get(ctx context.Context, ID string) (*models.FeatureFla
 	if err != nil {
 		return nil, err
 	}
-	reporter := models.ProgressFromContext(ctx)
+	reporter := domain.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(f.projectID, 0.0, "starting")
 	}
@@ -120,7 +120,7 @@ func (f *flagDataMapper) getIdForService() (int, error) {
 	return id, nil
 }
 
-func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) GetAll(ctx context.Context) ([]domain.FeatureFlagDefinition, error) {
 	err := f.validate()
 	if err != nil {
 		return nil, err
@@ -131,7 +131,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlagDefini
 		return nil, err
 	}
 
-	reporter := models.ProgressFromContext(ctx)
+	reporter := domain.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(f.projectID, 0.0, "starting")
 	}
@@ -151,7 +151,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]models.FeatureFlagDefini
 
 	info := response.JSON200
 
-	results := make([]models.FeatureFlagDefinition, 0)
+	results := make([]domain.FeatureFlagDefinition, 0)
 	for _, flag := range info.Items {
 		enriched, err := f.enrichFlag(ctx, &flag)
 		if err != nil {
@@ -233,12 +233,12 @@ func extractPageToken(rawURL string) string {
 	return parsed.Query().Get("page_token")
 }
 
-func toFeatureFlag(flag features.Flag) (models.FeatureFlagDefinition, error) {
+func toFeatureFlag(flag features.Flag) (domain.FeatureFlagDefinition, error) {
 	id := flag.Key
 	if flag.Id != nil {
 		id = strconv.Itoa(*flag.Id)
 	}
-	result := models.FeatureFlagDefinition{
+	result := domain.FeatureFlagDefinition{
 		ID:               id,
 		Key:              flag.Key,
 		Name:             flag.Name,
@@ -252,7 +252,7 @@ func toFeatureFlag(flag features.Flag) (models.FeatureFlagDefinition, error) {
 		result.Archived = *flag.Archived
 	}
 
-	targets := make([]models.Target, 0)
+	targets := make([]domain.Target, 0)
 	if flag.Environments != nil {
 		for _, environment := range *flag.Environments {
 			t, err := toTarget(environment)
@@ -267,8 +267,8 @@ func toFeatureFlag(flag features.Flag) (models.FeatureFlagDefinition, error) {
 	return result, nil
 }
 
-func toOverride(variation features.Variation) models.Override {
-	override := models.Override{
+func toOverride(variation features.Variation) domain.Override {
+	override := domain.Override{
 		ID:          variation.Key,
 		Key:         variation.Key,
 		Name:        variation.Name,
@@ -278,8 +278,8 @@ func toOverride(variation features.Variation) models.Override {
 	return override
 }
 
-func toTarget(env features.FlagEnvironment) (models.Target, error) {
-	result := models.Target{
+func toTarget(env features.FlagEnvironment) (domain.Target, error) {
+	result := domain.Target{
 		EnvironmentID: env.Key,
 		OverrideID:    optionalString(env.DefaultVariationKey),
 	}
@@ -289,8 +289,8 @@ func toTarget(env features.FlagEnvironment) (models.Target, error) {
 	return result, nil
 }
 
-func toEnvironment(env features.FlagEnvironment) (models.Environment, error) {
-	result := models.Environment{
+func toEnvironment(env features.FlagEnvironment) (domain.Environment, error) {
+	result := domain.Environment{
 		ID:   env.Key,
 		Key:  env.Key,
 		Name: env.Name,
@@ -302,8 +302,8 @@ func toEnvironment(env features.FlagEnvironment) (models.Environment, error) {
 	return result, nil
 }
 
-func fromVariableValue(defs *map[string]features.VariableValue) models.Variables {
-	vars := models.Variables{}
+func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables {
+	vars := domain.Variables{}
 	if defs == nil {
 		return vars
 	}
@@ -317,9 +317,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) models.Variables
 			b, err := strconv.ParseBool(def.Value)
 			if err == nil {
 				if vars.BoolVariables == nil {
-					vars.BoolVariables = make(models.VariableMap[bool])
+					vars.BoolVariables = make(domain.VariableMap[bool])
 				}
-				vars.BoolVariables[key] = models.Variable[bool]{
+				vars.BoolVariables[key] = domain.Variable[bool]{
 					Key:   key,
 					Value: b,
 					Type:  string(*def.Type),
@@ -330,9 +330,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) models.Variables
 			n, err := strconv.ParseInt(def.Value, 10, 64)
 			if err == nil {
 				if vars.IntVariables == nil {
-					vars.IntVariables = make(models.VariableMap[int])
+					vars.IntVariables = make(domain.VariableMap[int])
 				}
-				vars.IntVariables[key] = models.Variable[int]{
+				vars.IntVariables[key] = domain.Variable[int]{
 					Key:   key,
 					Value: int(n),
 					Type:  string(*def.Type),
@@ -343,9 +343,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) models.Variables
 			f, err := strconv.ParseFloat(def.Value, 64)
 			if err == nil {
 				if vars.FloatVariables == nil {
-					vars.FloatVariables = make(models.VariableMap[float64])
+					vars.FloatVariables = make(domain.VariableMap[float64])
 				}
-				vars.FloatVariables[key] = models.Variable[float64]{
+				vars.FloatVariables[key] = domain.Variable[float64]{
 					Key:   key,
 					Value: f,
 					Type:  string(*def.Type),
@@ -354,9 +354,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) models.Variables
 
 		case features.VariableValueTypeJson:
 			if vars.JsonVariables == nil {
-				vars.JsonVariables = make(models.VariableMap[any])
+				vars.JsonVariables = make(domain.VariableMap[any])
 			}
-			vars.JsonVariables[key] = models.Variable[any]{
+			vars.JsonVariables[key] = domain.Variable[any]{
 				Key:   key,
 				Value: def.Value,
 				Type:  string(*def.Type),
@@ -364,9 +364,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) models.Variables
 
 		case features.VariableValueTypeString:
 			if vars.StringVariables == nil {
-				vars.StringVariables = make(models.VariableMap[string])
+				vars.StringVariables = make(domain.VariableMap[string])
 			}
-			vars.StringVariables[key] = models.Variable[string]{
+			vars.StringVariables[key] = domain.Variable[string]{
 				Key:   key,
 				Value: def.Value,
 				Type:  string(*def.Type),
@@ -377,8 +377,8 @@ func fromVariableValue(defs *map[string]features.VariableValue) models.Variables
 	return vars
 }
 
-func parseVariableDefinitions(defs *map[string]features.VariableDefinition) models.Variables {
-	vars := models.Variables{}
+func parseVariableDefinitions(defs *map[string]features.VariableDefinition) domain.Variables {
+	vars := domain.Variables{}
 	if defs == nil {
 		return vars
 	}
@@ -389,9 +389,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) mode
 			b, err := strconv.ParseBool(def.DefaultValue)
 			if err == nil {
 				if vars.BoolVariables == nil {
-					vars.BoolVariables = make(models.VariableMap[bool])
+					vars.BoolVariables = make(domain.VariableMap[bool])
 				}
-				vars.BoolVariables[key] = models.Variable[bool]{
+				vars.BoolVariables[key] = domain.Variable[bool]{
 					Key:         key,
 					Value:       b,
 					Type:        string(def.Type),
@@ -403,9 +403,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) mode
 			n, err := strconv.ParseInt(def.DefaultValue, 10, 64)
 			if err == nil {
 				if vars.IntVariables == nil {
-					vars.IntVariables = make(models.VariableMap[int])
+					vars.IntVariables = make(domain.VariableMap[int])
 				}
-				vars.IntVariables[key] = models.Variable[int]{
+				vars.IntVariables[key] = domain.Variable[int]{
 					Key:         key,
 					Value:       int(n),
 					Type:        string(def.Type),
@@ -417,9 +417,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) mode
 			f, err := strconv.ParseFloat(def.DefaultValue, 64)
 			if err == nil {
 				if vars.FloatVariables == nil {
-					vars.FloatVariables = make(models.VariableMap[float64])
+					vars.FloatVariables = make(domain.VariableMap[float64])
 				}
-				vars.FloatVariables[key] = models.Variable[float64]{
+				vars.FloatVariables[key] = domain.Variable[float64]{
 					Key:         key,
 					Value:       f,
 					Type:        string(def.Type),
@@ -429,9 +429,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) mode
 
 		case features.VariableDefinitionTypeJson:
 			if vars.JsonVariables == nil {
-				vars.JsonVariables = make(models.VariableMap[any])
+				vars.JsonVariables = make(domain.VariableMap[any])
 			}
-			vars.JsonVariables[key] = models.Variable[any]{
+			vars.JsonVariables[key] = domain.Variable[any]{
 				Key:         key,
 				Value:       def.DefaultValue,
 				Type:        string(def.Type),
@@ -440,9 +440,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) mode
 
 		case features.VariableDefinitionTypeString:
 			if vars.StringVariables == nil {
-				vars.StringVariables = make(models.VariableMap[string])
+				vars.StringVariables = make(domain.VariableMap[string])
 			}
-			vars.StringVariables[key] = models.Variable[string]{
+			vars.StringVariables[key] = domain.Variable[string]{
 				Key:         key,
 				Value:       def.DefaultValue,
 				Type:        string(def.Type),
@@ -564,7 +564,7 @@ func (f *flagDataMapper) fetchAllVariations(ctx context.Context, flagKey string)
 
 // enrichFlag fetches additional data (variable definitions and variations) for a flag
 // and returns the enriched FeatureFlagDefinition.
-func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*models.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*domain.FeatureFlagDefinition, error) {
 	flag.VariableDefinitions = new(getAllDefinitions(ctx, flag, f))
 	// Fetch all variations
 	allVariations, err := f.fetchAllVariations(ctx, flag.Key)
@@ -576,7 +576,7 @@ func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*
 	if err != nil {
 		return nil, err
 	}
-	overrides := make([]models.Override, 0)
+	overrides := make([]domain.Override, 0)
 	for _, variation := range allVariations {
 		overrides = append(overrides, toOverride(variation))
 	}
@@ -613,12 +613,12 @@ func (f *flagDataMapper) Delete(ctx context.Context, ID string) (string, error) 
 	panic("implement me")
 }
 
-func (f *flagDataMapper) Create(ctx context.Context, value models.FeatureFlagDefinition) (*models.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) Create(ctx context.Context, value domain.FeatureFlagDefinition) (*domain.FeatureFlagDefinition, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f *flagDataMapper) Update(ctx context.Context, updater func(value *models.FeatureFlagDefinition) error) (*models.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) Update(ctx context.Context, updater func(value *domain.FeatureFlagDefinition) error) (*domain.FeatureFlagDefinition, error) {
 	//TODO implement me
 	panic("implement me")
 }

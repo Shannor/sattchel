@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Project represents any project in the system. Similar to a tenant.
 // Everything will be below this.

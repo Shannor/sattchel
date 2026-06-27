@@ -2,13 +2,13 @@ package optimizely
 
 import (
 	"context"
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 	"sattchel/internal/optimizely/projects"
 )
 
 // EnvironmentsDMFactory creates DataMapper instances scoped to a specific project.
 type EnvironmentsDMFactory interface {
-	Create(ctx context.Context, projectID string) (models.DataMapper[models.Environment], error)
+	Create(ctx context.Context, projectID string) (domain.DataMapper[domain.Environment], error)
 }
 
 type environmentsDMFactory struct {
@@ -25,6 +25,6 @@ func NewEnvironmentsDMFactory(client *projects.ClientWithResponses, token string
 }
 
 // Create returns a DataMapper scoped to the given projectID.
-func (f *environmentsDMFactory) Create(ctx context.Context, projectID string) (models.DataMapper[models.Environment], error) {
+func (f *environmentsDMFactory) Create(ctx context.Context, projectID string) (domain.DataMapper[domain.Environment], error) {
 	return NewEnvironmentsDM(f.client, f.token, projectID)
 }

@@ -2,13 +2,13 @@ package optimizely
 
 import (
 	"context"
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 	"sattchel/internal/optimizely/features"
 )
 
 // FlagsDMFactory creates DataMapper instances scoped to a specific project.
 type FlagsDMFactory interface {
-	Create(ctx context.Context, projectID string) (models.DataMapper[models.FeatureFlagDefinition], error)
+	Create(ctx context.Context, projectID string) (domain.DataMapper[domain.FeatureFlagDefinition], error)
 }
 
 type flagsDMFactory struct {
@@ -25,6 +25,6 @@ func NewFlagsDMFactory(client *features.ClientWithResponses, token string) Flags
 }
 
 // Create returns a DataMapper scoped to the given projectID.
-func (f *flagsDMFactory) Create(ctx context.Context, projectID string) (models.DataMapper[models.FeatureFlagDefinition], error) {
+func (f *flagsDMFactory) Create(ctx context.Context, projectID string) (domain.DataMapper[domain.FeatureFlagDefinition], error) {
 	return NewFlagsDM(f.client, f.token, projectID)
 }

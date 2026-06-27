@@ -18,15 +18,7 @@ I don't want to use AI too much during this process. Though I'm sure I'll use it
 
 ## Goals
 
-- [x] Set up a Simple CLI
-- [x] Add installation instructions
-- [x] Setup an Install and Update Flow
-- [ ] Write tests for CLI commands 
-- [ ] Add commands useful for Optimizely
-- [ ] Play with Commands around Contentful
-- [ ] Use Arch/Business Patterns that I'm learning
-  - Document the patterns being used and why so they are getting commit to my memory of why I thought they were good at the time.
-- [ ] More comfortable with Architecture Patterns
+My goals can be followed along [ here if you care ](./LEARNINGS.md) :)
 
 ## Installation
 
@@ -135,22 +127,3 @@ To force update to the latest version:
 ```bash
 sattchel update --force
 ```
-
----
-
-## Patterns
-
-The main Architecture Patterns used so far in this project are:
-- Service Layer
-  - Where the domain logic should live and stop. Things above this would be the UI/CLI/Consumer Layer.
-- Repository Pattern
-  - Focuses on how the data is returned from a Data Source. Data source could be a 3rd Party, Database, Local File system, etc.
-  - Based on the pure description of this. It should be interacted with a Query Critera Constructor by the Domain Layer. 
-  - 
-- Module Pattern 
-- Dependency Injection
-
-I'm trying to use a Domain Model Pattern without a fully Object-Oriented Programming language. Therefore, some
-patterns will mostly likely change based on how Golang works and it's features and limitations. 
-Some patterns won't match at all to their textbook examples. But that's another fun challenge for me to understand
-what patterns can work or can be modified to fit my needs.

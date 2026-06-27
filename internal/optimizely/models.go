@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 )
 
 // Configuration holds settings for API access and associated projects.
 type Configuration struct {
 	APIKey         string                          `mapstructure:"apiKey" json:"apiKey" yaml:"apiKey"`
-	Projects       []models.Project                `mapstructure:"projects" json:"projects" yaml:"projects"`
-	EnvironmentMap map[string][]models.Environment `json:"environmentMap" mapstructure:"environmentMap" yaml:"environmentMap"`
+	Projects       []domain.Project                `mapstructure:"projects" json:"projects" yaml:"projects"`
+	EnvironmentMap map[string][]domain.Environment `json:"environmentMap" mapstructure:"environmentMap" yaml:"environmentMap"`
 }
 
 // WithToken returns a RequestEditorFn that injects the auth header.

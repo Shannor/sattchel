@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"sattchel/internal/models"
+	"sattchel/internal/domain"
 	"sattchel/internal/optimizely/projects"
 	"strconv"
 )
@@ -15,7 +15,7 @@ type environmentDataMapper struct {
 	projectID string
 }
 
-type EnvironmentDataMapper models.DataMapper[models.Environment]
+type EnvironmentDataMapper domain.DataMapper[domain.Environment]
 
 func BaseV2Client(cfg *Configuration) *projects.ClientWithResponses {
 	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
@@ -57,7 +57,7 @@ func (e *environmentDataMapper) getIdForService() (int64, error) {
 	return id, nil
 }
 
-func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*models.Environment, error) {
+func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*domain.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*models.Env
 		return nil, err
 	}
 
-	reporter := models.ProgressFromContext(ctx)
+	reporter := domain.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "starting")
 	}
@@ -92,7 +92,7 @@ func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*models.Env
 	return &env, nil
 }
 
-func (e *environmentDataMapper) GetAll(ctx context.Context) ([]models.Environment, error) {
+func (e *environmentDataMapper) GetAll(ctx context.Context) ([]domain.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -103,7 +103,7 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]models.Environmen
 		return nil, err
 	}
 
-	reporter := models.ProgressFromContext(ctx)
+	reporter := domain.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "starting")
 	}
@@ -124,7 +124,7 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]models.Environmen
 		return nil, fmt.Errorf("missing environment response")
 	}
 
-	results := make([]models.Environment, 0)
+	results := make([]domain.Environment, 0)
 	for _, env := range *response.JSON200 {
 		eModel, err := toProjectsEnvironment(env, e.projectID)
 		if err != nil {
@@ -140,8 +140,8 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]models.Environmen
 	return results, nil
 }
 
-func toProjectsEnvironment(env projects.Environment, projectID string) (models.Environment, error) {
-	result := models.Environment{
+func toProjectsEnvironment(env projects.Environment, projectID string) (domain.Environment, error) {
+	result := domain.Environment{
 		ID:        env.Key,
 		ProjectID: projectID,
 		Key:       env.Key,
@@ -168,7 +168,7 @@ func (e *environmentDataMapper) Delete(ctx context.Context, ID string) (string, 
 		return "", err
 	}
 
-	reporter := models.ProgressFromContext(ctx)
+	reporter := domain.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "deleting")
 	}
@@ -187,7 +187,7 @@ func (e *environmentDataMapper) Delete(ctx context.Context, ID string) (string, 
 	return ID, nil
 }
 
-func (e *environmentDataMapper) Create(ctx context.Context, value models.Environment) (*models.Environment, error) {
+func (e *environmentDataMapper) Create(ctx context.Context, value domain.Environment) (*domain.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -198,7 +198,7 @@ func (e *environmentDataMapper) Create(ctx context.Context, value models.Environ
 		return nil, err
 	}
 
-	reporter := models.ProgressFromContext(ctx)
+	reporter := domain.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "creating")
 	}
@@ -231,7 +231,7 @@ func (e *environmentDataMapper) Create(ctx context.Context, value models.Environ
 	return &result, nil
 }
 
-func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *models.Environment) error) (*models.Environment, error) {
+func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *domain.Environment) error) (*domain.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -242,7 +242,7 @@ func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *
 		return nil, err
 	}
 
-	reporter := models.ProgressFromContext(ctx)
+	reporter := domain.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "updating")
 	}
