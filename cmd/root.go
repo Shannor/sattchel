@@ -9,6 +9,9 @@ import (
 	"sattchel/internal/config"
 	"sattchel/internal/optimizely"
 	"sattchel/internal/printer"
+	trackerDriven "sattchel/internal/tracker/adapters/driven"
+	trackerDriving "sattchel/internal/tracker/adapters/driving"
+	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
 
 	"github.com/spf13/cobra"
@@ -69,8 +72,17 @@ func init() {
 	writer := printer.NewStyleWriter(styles)
 
 	opService := setupOptimizely(v)
+
+	rootCmd.AddCommand(setupTracker())
 	rootCmd.AddCommand(optcli.NewCommand(opService, writer, styles))
 	rootCmd.AddCommand(update.NewCommand(writer))
+}
+
+func setupTracker() *cobra.Command {
+
+	fileStorage := trackerDriven.NewFileStorage("tracker.json", nil)
+	trackerService := core.NewService(fileStorage)
+	return trackerDriving.NewCommand(trackerService)
 }
 
 func setupOptimizely(v *viper.Viper) optimizely.Service {

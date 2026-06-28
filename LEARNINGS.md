@@ -1,6 +1,6 @@
 # Learnings
 
-> Will hold my learnings as I go along. Changes and pivots. Why I did the pivots and more.
+> Will hold my learnings as I go along. Changes and pivots. Why, I did the pivots.
 
 ## Pattern / Idea (2026-04-26)
 
@@ -42,3 +42,30 @@ Going forward, my goals are:
 3. Still try to keep "Domain" models so that if I ever expand to a new source it still works. 
    1. Probably covered inside of hexagonal architecture probably. 
 
+
+After reading about hex arch, I can tell I've seen some patterns before in the wild without knowning. 
+One thing of note is that it uses similar nomenclature to DDD, however, it means different things. 
+Most notably being Repository. In DDD a Repository is about reading data in from a source and caching it in memory for
+continuous use during the program actions, but in hex arch it's closer to a Data Mapper idea.
+
+I think I will also need to separate the Hex Archs for each CLI tool or idea. I don't think they need to be mixed together.
+
+The file structure pattern will change to a Multi Component Pattern with Hex Arch.
+Each Component will look like the following:
+
+├── internal/
+│   ├── componentA/           # Entirely self-contained Hexagonal System A
+│   │   ├── core/
+│   │   │   ├── domain/       # Business logic for A
+│   │   │   └── ports/        # Interfaces for A
+│   │   └── adapters/
+│   │       ├── driving/      # CLI specific controllers for A
+│   │       └── driven/       # DB, API, or File adapters for A
+
+When creating `ports` they should be based on architecutral responsiblity and *not* per domain model. 
+Ports are just the interfaces and live inside core.
+
+> Note: In Go, we'll need to flatten core in practice since it would cause circular dependencies. 
+
+This system is similar to what DDD calls "Transaction Scripts". Since each piece of logic is added
+into a "use case" and executed. It does fit well with CLI to be honest, since that's generally how CLI tools work.

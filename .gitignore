@@ -1,6 +1,6 @@
 # Binaries for programs and plugins
-my-cli
 sattchel
+bin
 
 # Test binary, built with `go test -c`
 *.test

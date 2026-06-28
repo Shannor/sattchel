@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "projects": {
+    "7d47a039-bbc8-4799-95c3-075cacd92168": {
+      "id": "7d47a039-bbc8-4799-95c3-075cacd92168",
+      "label": "Test 2",
+      "description": "Trying",
+      "rootGoalId": ""
+    }
+  },
+  "goals": {},
+  "members": {},
+  "goalsByMembers": {}
+}
