@@ -13,12 +13,15 @@ import (
 	trackerDriving "sattchel/internal/tracker/adapters/driving"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var updateCh <-chan config.UpdateInformation
+
+const cliRootPath = ".config/sattchel"
 
 var rootCmd = &cobra.Command{
 	Use:           "sattchel",
@@ -79,8 +82,8 @@ func init() {
 }
 
 func setupTracker() *cobra.Command {
-
-	fileStorage := trackerDriven.NewFileStorage("tracker.json", nil)
+	path := strings.Join([]string{os.Getenv("HOME"), cliRootPath, "tracker.json"}, "/")
+	fileStorage := trackerDriven.NewFileStorage(path, nil)
 	trackerService := core.NewService(fileStorage)
 	return trackerDriving.NewCommand(trackerService)
 }

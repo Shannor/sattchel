@@ -6,7 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"slices"
+	"strings"
 	"sync"
 
 	"github.com/google/uuid"
@@ -55,7 +57,13 @@ func newDB() *DB {
 // on first use. Pass a non-nil db to seed an in-memory state without reading
 // from disk.
 func NewFileStorage(path string, db *DB) core.TrackerRepository {
-	return &FileStorage{path: path, db: db}
+	if strings.HasPrefix(path, "~/") {
+		home, err := os.UserHomeDir()
+		if err == nil {
+			path = filepath.Join(home, path[2:])
+		}
+	}
+	return &FileStorage{path: os.ExpandEnv(path), db: db}
 }
 
 // ensureLoaded loads the DB from disk on first access. Caller must hold s.mu.
@@ -104,6 +112,10 @@ func ensureMaps(db *DB) {
 
 // flush writes the in-memory DB atomically via tmp + rename. Caller must hold s.mu.
 func (s *FileStorage) flush() error {
+	dir := filepath.Dir(s.path)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("create dir: %w", err)
+	}
 	tmp := s.path + ".tmp"
 	f, err := os.Create(tmp)
 	if err != nil {

@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
+	"strings"
 )
 
 type Service struct {
@@ -139,4 +141,26 @@ func (s *Service) AttachMember(ctx context.Context, projectID string, goalID str
 		return nil, err
 	}
 	return updated, nil
+}
+
+func (s *Service) GetProjects(ctx context.Context) ([]Project, error) {
+	projects, err := s.repo.GetProjects(ctx)
+	if err != nil {
+		return nil, err
+	}
+	slices.SortFunc(projects, func(i, j Project) int {
+		return strings.Compare(i.Label, j.Label)
+	})
+	return projects, nil
+}
+
+func (s *Service) GetGoals(ctx context.Context, projectID string) ([]Goal, error) {
+	goals, err := s.repo.GetGoals(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+	slices.SortFunc(goals, func(i, j Goal) int {
+		return strings.Compare(i.Name, j.Name)
+	})
+	return goals, nil
 }
