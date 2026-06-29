@@ -1,11 +1,11 @@
-package optimizely
+package driven
 
 import (
 	"context"
 	"fmt"
 	"log/slog"
-	"sattchel/internal/domain"
-	"sattchel/internal/optimizely/projects"
+	"sattchel/internal/optimizely/adapters/driven/projects"
+	"sattchel/internal/optimizely/core"
 	"strconv"
 )
 
@@ -15,12 +15,10 @@ type environmentDataMapper struct {
 	projectID string
 }
 
-type EnvironmentDataMapper domain.DataMapper[domain.Environment]
-
-func BaseV2Client(cfg *Configuration) *projects.ClientWithResponses {
+func BaseV2Client(cfg *core.Configuration) *projects.ClientWithResponses {
 	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
 		if cfg != nil && cfg.APIKey != "" {
-			client.RequestEditors = append(client.RequestEditors, WithToken(cfg.APIKey))
+			client.RequestEditors = append(client.RequestEditors, core.WithToken(cfg.APIKey))
 		}
 		return nil
 	})
@@ -31,7 +29,7 @@ func BaseV2Client(cfg *Configuration) *projects.ClientWithResponses {
 	return fc
 }
 
-func NewEnvironmentsDM(client *projects.ClientWithResponses, token string, projectID string) (EnvironmentDataMapper, error) {
+func NewEnvironmentsDM(client *projects.ClientWithResponses, token string, projectID string) (core.EnvironmentsRepository, error) {
 	return &environmentDataMapper{
 		client:    client,
 		token:     token,
@@ -57,7 +55,7 @@ func (e *environmentDataMapper) getIdForService() (int64, error) {
 	return id, nil
 }
 
-func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*domain.Environment, error) {
+func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*core.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -68,7 +66,7 @@ func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*domain.Env
 		return nil, err
 	}
 
-	reporter := domain.ProgressFromContext(ctx)
+	reporter := core.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "starting")
 	}
@@ -92,7 +90,7 @@ func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*domain.Env
 	return &env, nil
 }
 
-func (e *environmentDataMapper) GetAll(ctx context.Context) ([]domain.Environment, error) {
+func (e *environmentDataMapper) GetAll(ctx context.Context) ([]core.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -103,7 +101,7 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]domain.Environmen
 		return nil, err
 	}
 
-	reporter := domain.ProgressFromContext(ctx)
+	reporter := core.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "starting")
 	}
@@ -124,7 +122,7 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]domain.Environmen
 		return nil, fmt.Errorf("missing environment response")
 	}
 
-	results := make([]domain.Environment, 0)
+	results := make([]core.Environment, 0)
 	for _, env := range *response.JSON200 {
 		eModel, err := toProjectsEnvironment(env, e.projectID)
 		if err != nil {
@@ -140,8 +138,8 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]domain.Environmen
 	return results, nil
 }
 
-func toProjectsEnvironment(env projects.Environment, projectID string) (domain.Environment, error) {
-	result := domain.Environment{
+func toProjectsEnvironment(env projects.Environment, projectID string) (core.Environment, error) {
+	result := core.Environment{
 		ID:        env.Key,
 		ProjectID: projectID,
 		Key:       env.Key,
@@ -168,7 +166,7 @@ func (e *environmentDataMapper) Delete(ctx context.Context, ID string) (string, 
 		return "", err
 	}
 
-	reporter := domain.ProgressFromContext(ctx)
+	reporter := core.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "deleting")
 	}
@@ -187,7 +185,7 @@ func (e *environmentDataMapper) Delete(ctx context.Context, ID string) (string, 
 	return ID, nil
 }
 
-func (e *environmentDataMapper) Create(ctx context.Context, value domain.Environment) (*domain.Environment, error) {
+func (e *environmentDataMapper) Create(ctx context.Context, value core.Environment) (*core.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -198,7 +196,7 @@ func (e *environmentDataMapper) Create(ctx context.Context, value domain.Environ
 		return nil, err
 	}
 
-	reporter := domain.ProgressFromContext(ctx)
+	reporter := core.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "creating")
 	}
@@ -231,7 +229,7 @@ func (e *environmentDataMapper) Create(ctx context.Context, value domain.Environ
 	return &result, nil
 }
 
-func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *domain.Environment) error) (*domain.Environment, error) {
+func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *core.Environment) error) (*core.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err
@@ -242,7 +240,7 @@ func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *
 		return nil, err
 	}
 
-	reporter := domain.ProgressFromContext(ctx)
+	reporter := core.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(e.projectID, 0.0, "updating")
 	}

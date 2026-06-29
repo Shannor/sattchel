@@ -1,10 +1,10 @@
-package optimizely
+package driven
 
 import (
 	"context"
 	"fmt"
-	"sattchel/internal/domain"
-	"sattchel/internal/optimizely/projects"
+	"sattchel/internal/optimizely/adapters/driven/projects"
+	"sattchel/internal/optimizely/core"
 	"strconv"
 )
 
@@ -12,15 +12,13 @@ type projectDataMapper struct {
 	client *projects.ClientWithResponses
 }
 
-type ProjectDataMapper domain.DataMapper[domain.Project]
-
-func NewProjectsDM(client *projects.ClientWithResponses) ProjectDataMapper {
+func NewProjectsDM(client *projects.ClientWithResponses) core.ProjectRepository {
 	return &projectDataMapper{
 		client: client,
 	}
 }
 
-func (p *projectDataMapper) Get(ctx context.Context, ID string) (*domain.Project, error) {
+func (p *projectDataMapper) Get(ctx context.Context, ID string) (*core.Project, error) {
 	id, err := strconv.ParseInt(ID, 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("invalid project id format: %v", err)
@@ -44,7 +42,7 @@ func (p *projectDataMapper) Get(ctx context.Context, ID string) (*domain.Project
 	return &project, nil
 }
 
-func (p *projectDataMapper) GetAll(ctx context.Context) ([]domain.Project, error) {
+func (p *projectDataMapper) GetAll(ctx context.Context) ([]core.Project, error) {
 	response, err := p.client.ListProjectsWithResponse(ctx, &projects.ListProjectsParams{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to list projects: %w", err)
@@ -57,7 +55,7 @@ func (p *projectDataMapper) GetAll(ctx context.Context) ([]domain.Project, error
 	}
 
 	projs := *response.JSON200
-	results := make([]domain.Project, 0, len(projs))
+	results := make([]core.Project, 0, len(projs))
 	for _, proj := range projs {
 		p, err := toProject(proj)
 		if err != nil {
@@ -68,9 +66,9 @@ func (p *projectDataMapper) GetAll(ctx context.Context) ([]domain.Project, error
 	return results, nil
 }
 
-func toProject(proj projects.Project) (domain.Project, error) {
+func toProject(proj projects.Project) (core.Project, error) {
 	if proj.Id == nil {
-		return domain.Project{}, fmt.Errorf("missing project id")
+		return core.Project{}, fmt.Errorf("missing project id")
 	}
 
 	id := strconv.FormatInt(*proj.Id, 10)
@@ -79,7 +77,7 @@ func toProject(proj projects.Project) (domain.Project, error) {
 		label = *proj.Description
 	}
 
-	return domain.Project{
+	return core.Project{
 		ID:       id,
 		Name:     proj.Name,
 		IsActive: false, // set by caller based on config
@@ -91,10 +89,10 @@ func (p *projectDataMapper) Delete(ctx context.Context, ID string) (string, erro
 	return "", fmt.Errorf("delete not supported for projects")
 }
 
-func (p *projectDataMapper) Create(ctx context.Context, value domain.Project) (*domain.Project, error) {
+func (p *projectDataMapper) Create(ctx context.Context, value core.Project) (*core.Project, error) {
 	return nil, fmt.Errorf("create not supported for projects")
 }
 
-func (p *projectDataMapper) Update(ctx context.Context, updater func(value *domain.Project) error) (*domain.Project, error) {
+func (p *projectDataMapper) Update(ctx context.Context, updater func(value *core.Project) error) (*core.Project, error) {
 	return nil, fmt.Errorf("update not supported for projects")
 }

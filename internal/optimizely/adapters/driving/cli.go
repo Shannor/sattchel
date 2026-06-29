@@ -1,14 +1,14 @@
-package optcli
+package driving
 
 import (
-	"sattchel/internal/optimizely"
+	"sattchel/internal/optimizely/core"
 	"sattchel/internal/printer"
 	"sattchel/internal/tui"
 
 	"github.com/spf13/cobra"
 )
 
-func NewCommand(s optimizely.Service, writer printer.Writer, styles tui.Styles) *cobra.Command {
+func NewCommand(s *core.Service, writer printer.Writer, styles tui.Styles) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "optimizely",
 		Short:   "Optimizely commands",

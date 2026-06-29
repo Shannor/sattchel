@@ -1,9 +1,9 @@
-package optimizely
+package driven
 
 import (
 	"context"
 	"fmt"
-	"sattchel/internal/domain"
+	"sattchel/internal/optimizely/core"
 
 	"github.com/spf13/viper"
 )
@@ -12,15 +12,12 @@ type configDataMapper struct {
 	v *viper.Viper
 }
 
-// ConfigDataMapper is the data mapper interface for Optimizely configuration.
-type ConfigDataMapper domain.DataMapper[Configuration]
-
-func NewConfigDM(v *viper.Viper) ConfigDataMapper {
+func NewConfigDM(v *viper.Viper) core.ConfigRepository {
 	return &configDataMapper{v: v}
 }
 
-func (c *configDataMapper) Get(ctx context.Context, ID string) (*Configuration, error) {
-	var cfg Configuration
+func (c *configDataMapper) Get(ctx context.Context, ID string) (*core.Configuration, error) {
+	var cfg core.Configuration
 	err := c.v.UnmarshalKey("optimizely", &cfg)
 	if err != nil {
 		return nil, err
@@ -28,7 +25,7 @@ func (c *configDataMapper) Get(ctx context.Context, ID string) (*Configuration, 
 	return &cfg, nil
 }
 
-func (c *configDataMapper) GetAll(ctx context.Context) ([]Configuration, error) {
+func (c *configDataMapper) GetAll(ctx context.Context) ([]core.Configuration, error) {
 	cfg, err := c.Get(ctx, "")
 	if err != nil {
 		return nil, err
@@ -36,10 +33,10 @@ func (c *configDataMapper) GetAll(ctx context.Context) ([]Configuration, error) 
 	if cfg == nil {
 		return nil, fmt.Errorf("missing configuration")
 	}
-	return []Configuration{*cfg}, nil
+	return []core.Configuration{*cfg}, nil
 }
 
-func (c *configDataMapper) Create(ctx context.Context, value Configuration) (*Configuration, error) {
+func (c *configDataMapper) Create(ctx context.Context, value core.Configuration) (*core.Configuration, error) {
 	c.v.Set("optimizely", value)
 	if err := c.v.WriteConfig(); err != nil {
 		return nil, err
@@ -47,7 +44,7 @@ func (c *configDataMapper) Create(ctx context.Context, value Configuration) (*Co
 	return &value, nil
 }
 
-func (c *configDataMapper) Update(ctx context.Context, updater func(value *Configuration) error) (*Configuration, error) {
+func (c *configDataMapper) Update(ctx context.Context, updater func(value *core.Configuration) error) (*core.Configuration, error) {
 	cfg, err := c.Get(ctx, "")
 	if err != nil {
 		return nil, err

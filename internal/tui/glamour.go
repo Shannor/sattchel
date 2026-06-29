@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"sattchel/internal/domain"
+	"sattchel/internal/optimizely/core"
 
 	"charm.land/glamour/v2"
 	"github.com/charmbracelet/x/term"
@@ -14,7 +14,7 @@ import (
 
 // RenderFlagGlamour renders the flag markdown output directly to stdout
 // using Glamour's dark style, auto-detected terminal width.
-func RenderFlagGlamour(flag *domain.FeatureFlagDefinition, instances []domain.FeatureFlagInstance) error {
+func RenderFlagGlamour(flag *core.FeatureFlagDefinition, instances []core.FeatureFlagInstance) error {
 	mdStr := buildFlagMarkdown(flag, instances)
 
 	width, _, err := term.GetSize(uintptr(os.Stdout.Fd()))
@@ -41,7 +41,7 @@ func RenderFlagGlamour(flag *domain.FeatureFlagDefinition, instances []domain.Fe
 }
 
 // buildFlagMarkdown composes a markdown string from a feature flag and its instances.
-func buildFlagMarkdown(flag *domain.FeatureFlagDefinition, instances []domain.FeatureFlagInstance) string {
+func buildFlagMarkdown(flag *core.FeatureFlagDefinition, instances []core.FeatureFlagInstance) string {
 	m := markdown.NewMarkdown(nil)
 
 	// Header
@@ -124,7 +124,7 @@ func buildFlagMarkdown(flag *domain.FeatureFlagDefinition, instances []domain.Fe
 }
 
 // renderVariables outputs each variable as a structured block.
-func renderVariables(m *markdown.Markdown, vars domain.Variables) {
+func renderVariables(m *markdown.Markdown, vars core.Variables) {
 	for key, v := range vars.BoolVariables {
 		renderVariable(m, key, "boolean", fmt.Sprintf("%v", v.Value), v.Description)
 	}

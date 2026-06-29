@@ -1,9 +1,9 @@
-package optcli
+package driving
 
 import (
 	"context"
 	"fmt"
-	"sattchel/internal/optimizely"
+	"sattchel/internal/optimizely/core"
 	"sattchel/internal/tui"
 
 	tea "charm.land/bubbletea/v2"
@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func cmdConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
+func cmdConfig(service *core.Service, styles tui.Styles) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "config",
 		Short:        "Manage configs",
@@ -23,7 +23,7 @@ func cmdConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
 	return configCmd
 }
 
-func setConfig(service optimizely.Service) *cobra.Command {
+func setConfig(service *core.Service) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set [key] [value]",
 		Short: "Set a configuration value",
@@ -51,7 +51,7 @@ func setConfig(service optimizely.Service) *cobra.Command {
 	}
 }
 
-func getConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
+func getConfig(service *core.Service, styles tui.Styles) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get [key]",
 		Short: "Get a configuration value",
@@ -81,7 +81,7 @@ func getConfig(service optimizely.Service, styles tui.Styles) *cobra.Command {
 	}
 }
 
-func noChoiceConfig(ctx context.Context, service optimizely.Service) error {
+func noChoiceConfig(ctx context.Context, service *core.Service) error {
 	choice := ""
 	err := huh.NewForm(
 		huh.NewGroup(
@@ -111,7 +111,7 @@ func noChoiceConfig(ctx context.Context, service optimizely.Service) error {
 			if v.Value() == "" {
 				return fmt.Errorf("value cannot be empty")
 			}
-			c := optimizely.Configuration{APIKey: v.Value()}
+			c := core.Configuration{APIKey: v.Value()}
 			err = service.SetConfig(ctx, c)
 			if err != nil {
 				return fmt.Errorf("failed to set config: %w", err)

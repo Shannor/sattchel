@@ -1,4 +1,4 @@
-package optimizely
+package driven
 
 import (
 	"context"
@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
-	"sattchel/internal/domain"
-	"sattchel/internal/optimizely/features"
-	"sattchel/internal/optimizely/projects"
+	"sattchel/internal/optimizely/adapters/driven/features"
+	"sattchel/internal/optimizely/adapters/driven/projects"
+	"sattchel/internal/optimizely/core"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -30,12 +30,10 @@ type flagDataMapper struct {
 	projectID string
 }
 
-type FlagDataMapper domain.DataMapper[domain.FeatureFlagDefinition]
-
-func BaseFlagClient(cfg *Configuration) *features.ClientWithResponses {
+func BaseFlagClient(cfg *core.Configuration) *features.ClientWithResponses {
 	fc, err := features.NewClientWithResponses("https://api.optimizely.com/flags/v1/", func(client *features.Client) error {
 		if cfg != nil && cfg.APIKey != "" {
-			client.RequestEditors = append(client.RequestEditors, WithToken(cfg.APIKey))
+			client.RequestEditors = append(client.RequestEditors, core.WithToken(cfg.APIKey))
 		}
 		return nil
 	})
@@ -46,8 +44,7 @@ func BaseFlagClient(cfg *Configuration) *features.ClientWithResponses {
 	return fc
 }
 
-func NewFlagsDM(client *features.ClientWithResponses, token string, projectID string) (FlagDataMapper, error) {
-
+func NewFlagsDM(client *features.ClientWithResponses, token string, projectID string) (core.FlagsRepository, error) {
 	return &flagDataMapper{
 		client:    client,
 		token:     token,
@@ -55,10 +52,10 @@ func NewFlagsDM(client *features.ClientWithResponses, token string, projectID st
 	}, nil
 }
 
-func BaseEnvironmentClient(cfg *Configuration) *projects.ClientWithResponses {
+func BaseEnvironmentClient(cfg *core.Configuration) *projects.ClientWithResponses {
 	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
 		if cfg != nil && cfg.APIKey != "" {
-			client.RequestEditors = append(client.RequestEditors, WithToken(cfg.APIKey))
+			client.RequestEditors = append(client.RequestEditors, core.WithToken(cfg.APIKey))
 		}
 		return nil
 	})
@@ -69,7 +66,7 @@ func BaseEnvironmentClient(cfg *Configuration) *projects.ClientWithResponses {
 	return fc
 }
 
-func (f *flagDataMapper) Get(ctx context.Context, ID string) (*domain.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) Get(ctx context.Context, ID string) (*core.FeatureFlagDefinition, error) {
 	err := f.validate()
 	if err != nil {
 		return nil, err
@@ -79,7 +76,7 @@ func (f *flagDataMapper) Get(ctx context.Context, ID string) (*domain.FeatureFla
 	if err != nil {
 		return nil, err
 	}
-	reporter := domain.ProgressFromContext(ctx)
+	reporter := core.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(f.projectID, 0.0, "starting")
 	}
@@ -120,7 +117,7 @@ func (f *flagDataMapper) getIdForService() (int, error) {
 	return id, nil
 }
 
-func (f *flagDataMapper) GetAll(ctx context.Context) ([]domain.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefinition, error) {
 	err := f.validate()
 	if err != nil {
 		return nil, err
@@ -131,7 +128,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]domain.FeatureFlagDefini
 		return nil, err
 	}
 
-	reporter := domain.ProgressFromContext(ctx)
+	reporter := core.ProgressFromContext(ctx)
 	if reporter != nil {
 		reporter.Report(f.projectID, 0.0, "starting")
 	}
@@ -151,7 +148,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]domain.FeatureFlagDefini
 
 	info := response.JSON200
 
-	results := make([]domain.FeatureFlagDefinition, 0)
+	results := make([]core.FeatureFlagDefinition, 0)
 	for _, flag := range info.Items {
 		enriched, err := f.enrichFlag(ctx, &flag)
 		if err != nil {
@@ -179,9 +176,11 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]domain.FeatureFlagDefini
 	var completedPages atomic.Int64
 	totalPages := info.TotalPages
 	for _, token := range tokens {
-		wg.Go(func() {
+		wg.Add(1)
+		go func(tok string) {
+			defer wg.Done()
 			response, err := f.client.ListFlagsWithResponse(ctx, id, &features.ListFlagsParams{
-				PageToken:  &token,
+				PageToken:  &tok,
 				PageWindow: new(pageSize),
 			})
 			if err != nil {
@@ -211,7 +210,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]domain.FeatureFlagDefini
 			if reporter != nil {
 				reporter.Report(f.projectID, float64(n)/float64(totalPages), "fetching pages")
 			}
-		})
+		}(token)
 	}
 
 	wg.Wait()
@@ -233,12 +232,12 @@ func extractPageToken(rawURL string) string {
 	return parsed.Query().Get("page_token")
 }
 
-func toFeatureFlag(flag features.Flag) (domain.FeatureFlagDefinition, error) {
+func toFeatureFlag(flag features.Flag) (core.FeatureFlagDefinition, error) {
 	id := flag.Key
 	if flag.Id != nil {
 		id = strconv.Itoa(*flag.Id)
 	}
-	result := domain.FeatureFlagDefinition{
+	result := core.FeatureFlagDefinition{
 		ID:               id,
 		Key:              flag.Key,
 		Name:             flag.Name,
@@ -252,7 +251,7 @@ func toFeatureFlag(flag features.Flag) (domain.FeatureFlagDefinition, error) {
 		result.Archived = *flag.Archived
 	}
 
-	targets := make([]domain.Target, 0)
+	targets := make([]core.Target, 0)
 	if flag.Environments != nil {
 		for _, environment := range *flag.Environments {
 			t, err := toTarget(environment)
@@ -267,8 +266,8 @@ func toFeatureFlag(flag features.Flag) (domain.FeatureFlagDefinition, error) {
 	return result, nil
 }
 
-func toOverride(variation features.Variation) domain.Override {
-	override := domain.Override{
+func toOverride(variation features.Variation) core.Override {
+	override := core.Override{
 		ID:          variation.Key,
 		Key:         variation.Key,
 		Name:        variation.Name,
@@ -278,8 +277,8 @@ func toOverride(variation features.Variation) domain.Override {
 	return override
 }
 
-func toTarget(env features.FlagEnvironment) (domain.Target, error) {
-	result := domain.Target{
+func toTarget(env features.FlagEnvironment) (core.Target, error) {
+	result := core.Target{
 		EnvironmentID: env.Key,
 		OverrideID:    optionalString(env.DefaultVariationKey),
 	}
@@ -289,8 +288,8 @@ func toTarget(env features.FlagEnvironment) (domain.Target, error) {
 	return result, nil
 }
 
-func toEnvironment(env features.FlagEnvironment) (domain.Environment, error) {
-	result := domain.Environment{
+func toEnvironment(env features.FlagEnvironment) (core.Environment, error) {
+	result := core.Environment{
 		ID:   env.Key,
 		Key:  env.Key,
 		Name: env.Name,
@@ -302,8 +301,8 @@ func toEnvironment(env features.FlagEnvironment) (domain.Environment, error) {
 	return result, nil
 }
 
-func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables {
-	vars := domain.Variables{}
+func fromVariableValue(defs *map[string]features.VariableValue) core.Variables {
+	vars := core.Variables{}
 	if defs == nil {
 		return vars
 	}
@@ -317,9 +316,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables
 			b, err := strconv.ParseBool(def.Value)
 			if err == nil {
 				if vars.BoolVariables == nil {
-					vars.BoolVariables = make(domain.VariableMap[bool])
+					vars.BoolVariables = make(core.VariableMap[bool])
 				}
-				vars.BoolVariables[key] = domain.Variable[bool]{
+				vars.BoolVariables[key] = core.Variable[bool]{
 					Key:   key,
 					Value: b,
 					Type:  string(*def.Type),
@@ -330,9 +329,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables
 			n, err := strconv.ParseInt(def.Value, 10, 64)
 			if err == nil {
 				if vars.IntVariables == nil {
-					vars.IntVariables = make(domain.VariableMap[int])
+					vars.IntVariables = make(core.VariableMap[int])
 				}
-				vars.IntVariables[key] = domain.Variable[int]{
+				vars.IntVariables[key] = core.Variable[int]{
 					Key:   key,
 					Value: int(n),
 					Type:  string(*def.Type),
@@ -343,9 +342,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables
 			f, err := strconv.ParseFloat(def.Value, 64)
 			if err == nil {
 				if vars.FloatVariables == nil {
-					vars.FloatVariables = make(domain.VariableMap[float64])
+					vars.FloatVariables = make(core.VariableMap[float64])
 				}
-				vars.FloatVariables[key] = domain.Variable[float64]{
+				vars.FloatVariables[key] = core.Variable[float64]{
 					Key:   key,
 					Value: f,
 					Type:  string(*def.Type),
@@ -354,9 +353,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables
 
 		case features.VariableValueTypeJson:
 			if vars.JsonVariables == nil {
-				vars.JsonVariables = make(domain.VariableMap[any])
+				vars.JsonVariables = make(core.VariableMap[any])
 			}
-			vars.JsonVariables[key] = domain.Variable[any]{
+			vars.JsonVariables[key] = core.Variable[any]{
 				Key:   key,
 				Value: def.Value,
 				Type:  string(*def.Type),
@@ -364,9 +363,9 @@ func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables
 
 		case features.VariableValueTypeString:
 			if vars.StringVariables == nil {
-				vars.StringVariables = make(domain.VariableMap[string])
+				vars.StringVariables = make(core.VariableMap[string])
 			}
-			vars.StringVariables[key] = domain.Variable[string]{
+			vars.StringVariables[key] = core.Variable[string]{
 				Key:   key,
 				Value: def.Value,
 				Type:  string(*def.Type),
@@ -377,8 +376,8 @@ func fromVariableValue(defs *map[string]features.VariableValue) domain.Variables
 	return vars
 }
 
-func parseVariableDefinitions(defs *map[string]features.VariableDefinition) domain.Variables {
-	vars := domain.Variables{}
+func parseVariableDefinitions(defs *map[string]features.VariableDefinition) core.Variables {
+	vars := core.Variables{}
 	if defs == nil {
 		return vars
 	}
@@ -389,9 +388,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) doma
 			b, err := strconv.ParseBool(def.DefaultValue)
 			if err == nil {
 				if vars.BoolVariables == nil {
-					vars.BoolVariables = make(domain.VariableMap[bool])
+					vars.BoolVariables = make(core.VariableMap[bool])
 				}
-				vars.BoolVariables[key] = domain.Variable[bool]{
+				vars.BoolVariables[key] = core.Variable[bool]{
 					Key:         key,
 					Value:       b,
 					Type:        string(def.Type),
@@ -403,9 +402,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) doma
 			n, err := strconv.ParseInt(def.DefaultValue, 10, 64)
 			if err == nil {
 				if vars.IntVariables == nil {
-					vars.IntVariables = make(domain.VariableMap[int])
+					vars.IntVariables = make(core.VariableMap[int])
 				}
-				vars.IntVariables[key] = domain.Variable[int]{
+				vars.IntVariables[key] = core.Variable[int]{
 					Key:         key,
 					Value:       int(n),
 					Type:        string(def.Type),
@@ -417,9 +416,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) doma
 			f, err := strconv.ParseFloat(def.DefaultValue, 64)
 			if err == nil {
 				if vars.FloatVariables == nil {
-					vars.FloatVariables = make(domain.VariableMap[float64])
+					vars.FloatVariables = make(core.VariableMap[float64])
 				}
-				vars.FloatVariables[key] = domain.Variable[float64]{
+				vars.FloatVariables[key] = core.Variable[float64]{
 					Key:         key,
 					Value:       f,
 					Type:        string(def.Type),
@@ -429,9 +428,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) doma
 
 		case features.VariableDefinitionTypeJson:
 			if vars.JsonVariables == nil {
-				vars.JsonVariables = make(domain.VariableMap[any])
+				vars.JsonVariables = make(core.VariableMap[any])
 			}
-			vars.JsonVariables[key] = domain.Variable[any]{
+			vars.JsonVariables[key] = core.Variable[any]{
 				Key:         key,
 				Value:       def.DefaultValue,
 				Type:        string(def.Type),
@@ -440,9 +439,9 @@ func parseVariableDefinitions(defs *map[string]features.VariableDefinition) doma
 
 		case features.VariableDefinitionTypeString:
 			if vars.StringVariables == nil {
-				vars.StringVariables = make(domain.VariableMap[string])
+				vars.StringVariables = make(core.VariableMap[string])
 			}
-			vars.StringVariables[key] = domain.Variable[string]{
+			vars.StringVariables[key] = core.Variable[string]{
 				Key:         key,
 				Value:       def.DefaultValue,
 				Type:        string(def.Type),
@@ -564,7 +563,7 @@ func (f *flagDataMapper) fetchAllVariations(ctx context.Context, flagKey string)
 
 // enrichFlag fetches additional data (variable definitions and variations) for a flag
 // and returns the enriched FeatureFlagDefinition.
-func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*domain.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*core.FeatureFlagDefinition, error) {
 	flag.VariableDefinitions = new(getAllDefinitions(ctx, flag, f))
 	// Fetch all variations
 	allVariations, err := f.fetchAllVariations(ctx, flag.Key)
@@ -576,7 +575,7 @@ func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*
 	if err != nil {
 		return nil, err
 	}
-	overrides := make([]domain.Override, 0)
+	overrides := make([]core.Override, 0)
 	for _, variation := range allVariations {
 		overrides = append(overrides, toOverride(variation))
 	}
@@ -584,9 +583,7 @@ func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*
 	return &result, nil
 }
 
-// TODO: Convert this to just a standard function to clean it up
 func getAllDefinitions(ctx context.Context, flag *features.Flag, f *flagDataMapper) map[string]features.VariableDefinition {
-	// TODO: Split into it's own function
 	definitions := make(map[string]features.VariableDefinition)
 	// Fetch all variable definitions if the flag has more than 5
 	if flag.VariableDefinitions != nil {
@@ -609,16 +606,13 @@ func getAllDefinitions(ctx context.Context, flag *features.Flag, f *flagDataMapp
 }
 
 func (f *flagDataMapper) Delete(ctx context.Context, ID string) (string, error) {
-	//TODO implement me
-	panic("implement me")
+	return "", fmt.Errorf("delete not supported for flags")
 }
 
-func (f *flagDataMapper) Create(ctx context.Context, value domain.FeatureFlagDefinition) (*domain.FeatureFlagDefinition, error) {
-	//TODO implement me
-	panic("implement me")
+func (f *flagDataMapper) Create(ctx context.Context, value core.FeatureFlagDefinition) (*core.FeatureFlagDefinition, error) {
+	return nil, fmt.Errorf("create not supported for flags")
 }
 
-func (f *flagDataMapper) Update(ctx context.Context, updater func(value *domain.FeatureFlagDefinition) error) (*domain.FeatureFlagDefinition, error) {
-	//TODO implement me
-	panic("implement me")
+func (f *flagDataMapper) Update(ctx context.Context, updater func(value *core.FeatureFlagDefinition) error) (*core.FeatureFlagDefinition, error) {
+	return nil, fmt.Errorf("update not supported for flags")
 }

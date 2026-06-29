@@ -1,9 +1,8 @@
-package optcli
+package driving
 
 import (
 	"fmt"
-	"sattchel/internal/domain"
-	"sattchel/internal/optimizely"
+	"sattchel/internal/optimizely/core"
 	"sattchel/internal/tui"
 
 	"github.com/spf13/cobra"
@@ -14,7 +13,7 @@ var (
 	envFilter     = make([]string, 0)
 )
 
-func cmdFlags(s optimizely.Service) *cobra.Command {
+func cmdFlags(s *core.Service) *cobra.Command {
 	var flagCmd = &cobra.Command{
 		Use:          "flags",
 		Short:        "Manage feature flags",
@@ -27,9 +26,9 @@ func cmdFlags(s optimizely.Service) *cobra.Command {
 	return flagCmd
 }
 
-func getFlag(s optimizely.Service) *cobra.Command {
+func getFlag(s *core.Service) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get",
+		Use:   "get [key]",
 		Short: "Get feature flag",
 		Args:  cobra.MaximumNArgs(1),
 		Long: `Get feature flag.
@@ -61,7 +60,7 @@ func getFlag(s optimizely.Service) *cobra.Command {
 	return cmd
 }
 
-func listFlags(s optimizely.Service) *cobra.Command {
+func listFlags(s *core.Service) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:          "list",
 		Short:        "List feature flags between projects",
@@ -86,7 +85,7 @@ func listFlags(s optimizely.Service) *cobra.Command {
 				Spinner: spinner,
 			}
 
-			ctx = domain.WithProgress(ctx, reporter)
+			ctx = core.WithProgress(ctx, reporter)
 			flags, err := s.GetFlags(ctx, ids)
 			if err != nil {
 				return err
@@ -94,6 +93,9 @@ func listFlags(s optimizely.Service) *cobra.Command {
 			for key, featureFlags := range flags {
 				fmt.Printf("Project: %s - Count: %d\n", key, len(featureFlags))
 				for i := range int64(4) {
+					if int(i) >= len(featureFlags) {
+						break
+					}
 					f := featureFlags[i]
 					fmt.Printf("ID: %s, Name: %s\n", f.ID, f.Name)
 				}

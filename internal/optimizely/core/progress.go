@@ -1,20 +1,11 @@
-package domain
+package core
 
-import (
-	"context"
-)
+import "context"
 
-// ProgressReporter defines the contract for reporting progress
-// from data mappers back to the CLI layer.
-type ProgressReporter interface {
-	Report(ID string, progress float64, message string)
-}
-
-// progressKey is the context key type for storing a ProgressReporter.
 type progressKey struct{}
 
 // WithProgress stores a ProgressReporter in the context so it can be
-// extracted by downstream layers (service, factory, data mapper).
+// extracted by downstream layers.
 func WithProgress(ctx context.Context, reporter ProgressReporter) context.Context {
 	return context.WithValue(ctx, progressKey{}, reporter)
 }

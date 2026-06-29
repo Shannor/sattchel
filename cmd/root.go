@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"sattchel/internal/cli/optcli"
 	"sattchel/internal/cli/update"
 	"sattchel/internal/config"
-	"sattchel/internal/optimizely"
+	optimizelyDriven "sattchel/internal/optimizely/adapters/driven"
+	optimizelyDriving "sattchel/internal/optimizely/adapters/driving"
+	optimizelyCore "sattchel/internal/optimizely/core"
 	"sattchel/internal/printer"
 	trackerDriven "sattchel/internal/tracker/adapters/driven"
 	trackerDriving "sattchel/internal/tracker/adapters/driving"
@@ -77,7 +78,7 @@ func init() {
 	opService := setupOptimizely(v)
 
 	rootCmd.AddCommand(setupTracker())
-	rootCmd.AddCommand(optcli.NewCommand(opService, writer, styles))
+	rootCmd.AddCommand(optimizelyDriving.NewCommand(opService, writer, styles))
 	rootCmd.AddCommand(update.NewCommand(writer))
 }
 
@@ -88,16 +89,16 @@ func setupTracker() *cobra.Command {
 	return trackerDriving.NewCommand(trackerService)
 }
 
-func setupOptimizely(v *viper.Viper) optimizely.Service {
-	opRepo := optimizely.NewConfigDM(v)
+func setupOptimizely(v *viper.Viper) *optimizelyCore.Service {
+	opRepo := optimizelyDriven.NewConfigDM(v)
 	cfg, err := opRepo.Get(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	client := optimizely.BaseFlagClient(cfg)
-	v2Client := optimizely.BaseV2Client(cfg)
-	factory := optimizely.NewFlagsDMFactory(client, cfg.APIKey)
-	envFactory := optimizely.NewEnvironmentsDMFactory(v2Client, cfg.APIKey)
-	projectDM := optimizely.NewProjectsDM(v2Client)
-	return optimizely.NewOptimizelyService(opRepo, projectDM, factory, envFactory)
+	client := optimizelyDriven.BaseFlagClient(cfg)
+	v2Client := optimizelyDriven.BaseV2Client(cfg)
+	factory := optimizelyDriven.NewFlagsDMFactory(client, cfg.APIKey)
+	envFactory := optimizelyDriven.NewEnvironmentsDMFactory(v2Client, cfg.APIKey)
+	projectDM := optimizelyDriven.NewProjectsDM(v2Client)
+	return optimizelyCore.NewService(opRepo, projectDM, factory, envFactory)
 }
