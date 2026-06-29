@@ -183,13 +183,15 @@ func (s *FileStorage) UpdateProject(_ context.Context, project *core.Project) (*
 	if !ok {
 		return nil, fmt.Errorf("project %w", ErrNotFound)
 	}
+
 	current.Label = project.Label
 	current.Description = project.Description
 	current.RootGoalID = project.RootGoalID
+	s.db.Projects[project.ID] = current
+
 	if err := s.flush(); err != nil {
 		return nil, err
 	}
-	s.db.Projects[project.ID] = current
 	return &current, nil
 
 }
@@ -221,7 +223,7 @@ func (s *FileStorage) GetGoal(ctx context.Context, goalID string) (*core.Goal, e
 	return nil, fmt.Errorf("goal %s: %w", goalID, ErrNotFound)
 }
 
-func (s *FileStorage) UpdateGoal(ctx context.Context, goal *core.Goal) (*core.Goal, error) {
+func (s *FileStorage) UpdateGoal(_ context.Context, goal *core.Goal) (*core.Goal, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if err := s.ensureLoaded(); err != nil {
@@ -232,7 +234,7 @@ func (s *FileStorage) UpdateGoal(ctx context.Context, goal *core.Goal) (*core.Go
 		return nil, fmt.Errorf("goal %s: %w", goal.ID, ErrNotFound)
 	}
 
-	if goal.Member != nil && goal.Member.ID != "" {
+	if goal.HasMember() {
 		_, ok := s.db.Members[goal.Member.ID]
 		if !ok {
 			return nil, fmt.Errorf("member %s: %w", goal.Member.ID, ErrNotFound)
@@ -250,7 +252,7 @@ func (s *FileStorage) UpdateGoal(ctx context.Context, goal *core.Goal) (*core.Go
 	current.Member = goal.Member
 
 	// Remove old member if applicable
-	if current.Member.ID != "" {
+	if current.HasMember() {
 		s.db.GoalsByMembers[current.Member.ID] = slices.DeleteFunc(
 			s.db.GoalsByMembers[current.Member.ID],
 			func(id string) bool { return id == goal.ID },
@@ -258,13 +260,14 @@ func (s *FileStorage) UpdateGoal(ctx context.Context, goal *core.Goal) (*core.Go
 	}
 
 	// Add new member if applicable
-	if goal.Member.ID != "" {
+	if goal.HasMember() {
 		s.db.GoalsByMembers[goal.Member.ID] = append(s.db.GoalsByMembers[goal.Member.ID], goal.ID)
 	}
+	s.db.Goals[current.ID] = current
+
 	if err := s.flush(); err != nil {
 		return nil, err
 	}
-	s.db.Goals[current.ID] = current
 	return &current, nil
 }
 
@@ -288,7 +291,7 @@ func (s *FileStorage) CreateGoal(_ context.Context, projectID string, goal *core
 	}
 
 	s.db.Goals[goal.ID] = *goal
-	if goal.Member.ID != "" {
+	if goal.HasMember() {
 		s.db.GoalsByMembers[goal.Member.ID] = append(s.db.GoalsByMembers[goal.Member.ID], goal.ID)
 	}
 

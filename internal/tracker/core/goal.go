@@ -83,6 +83,10 @@ func (g *Goal) AssignMember(m *Member) {
 	g.Member = m
 }
 
+func (g *Goal) HasMember() bool {
+	return g.Member != nil && g.Member.ID != ""
+}
+
 func (g *Goal) AttachChild(child *Goal, rel LinkRelationship, desc string) error {
 	if child.ID == "" {
 		return errors.New("child goal ID is missing")
@@ -146,4 +150,9 @@ func (o *GoalOptions) CanBeRoot(p *Project) bool {
 // WantsRoot returns if the goal request wants to be the root of the project.
 func (o *GoalOptions) WantsRoot() bool {
 	return o.ParentID == ""
+}
+
+// IsOrphan returns if the goal request is an orphan
+func (o *GoalOptions) IsOrphan(p *Project) bool {
+	return o.ParentID == "" && !o.CanBeRoot(p)
 }

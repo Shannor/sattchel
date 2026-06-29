@@ -78,7 +78,7 @@ func goals(service *core.Service) *cobra.Command {
 
 func createGoal(service *core.Service) *cobra.Command {
 	description := ""
-	parentID := ""
+	parentID := "a22cbfff-eb6c-4edd-95f0-7a3f6796c785"
 	projectID := ""
 	cmd := &cobra.Command{
 		Use:   "add <name>",
@@ -86,8 +86,9 @@ func createGoal(service *core.Service) *cobra.Command {
 		Long: `Add a new goal.
 	If no key is provided, a list of available keys will be displayed.
    Examples:
-     sattchel tracker goal add <name> 
-     sattchel tracker goal add <name> -d "description"
+     sattchel tracker goal add short
+     sattchel tracker goal add "Long Title with Spaces"
+     sattchel tracker goal add <name> -d="description" --parent=<parentId>
      `,
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
@@ -109,5 +110,6 @@ func createGoal(service *core.Service) *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&description, "description", "d", "", "Description of the goal")
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "7d47a039-bbc8-4799-95c3-075cacd92168", "Project id of the goal. If not provided, the default project will be used")
+	cmd.Flags().StringVarP(&parentID, "parent", "", "", "Parent goal id of the goal. If not provided, the last parent will be used")
 	return cmd
 }

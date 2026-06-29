@@ -64,55 +64,59 @@ func (s *Service) CreateGoal(ctx context.Context, projectID string, goalName str
 		return nil, err
 	}
 
-	newGoal := NewGoal(projectID, goalName, options)
+	if options.IsOrphan(p) {
+		return nil, errors.New("no orphan goals allowed")
+	}
+
+	if options.WantsRoot() && !options.CanBeRoot(p) {
+		return nil, fmt.Errorf("project already has a root goal: %w", ErrInvalidRequest)
+	}
+
+	goalEntity := NewGoal(projectID, goalName, options)
 	if options.MemberID != "" {
 		member, err := s.repo.GetMember(ctx, options.MemberID)
 		if err != nil {
 			return nil, err
 		}
-		newGoal.AssignMember(member)
+		goalEntity.AssignMember(member)
+	}
+
+	newGoal, err := s.repo.CreateGoal(ctx, projectID, new(goalEntity))
+	if err != nil {
+		return nil, err
 	}
 
 	if options.WantsRoot() {
-		if !options.CanBeRoot(p) {
-			return nil, fmt.Errorf("project already has a root goal: %w", ErrInvalidRequest)
-		}
-		g, err := s.repo.CreateGoal(ctx, projectID, new(newGoal))
-		if err != nil {
-			return nil, err
-		}
-		p.SetRoot(*g)
+		p.SetRoot(*newGoal)
 		_, err = s.repo.UpdateProject(ctx, p)
 		if err != nil {
 			return nil, err
 		}
-		return g, nil
+		return newGoal, nil
 	}
 
-	if options.ParentID == "" {
-		return nil, errors.New("no orphan goals allowed")
-	}
 	// Attaching goal to a parent goal
 	parent, err := s.repo.GetGoal(ctx, options.ParentID)
 	if err != nil {
 		return nil, err
 	}
 
-	child, err := s.repo.CreateGoal(ctx, projectID, new(newGoal))
+	err = parent.AttachChild(newGoal, options.LinkRelationship, options.Description)
 	if err != nil {
 		return nil, err
 	}
 
-	err = parent.AttachChild(child, options.LinkRelationship, options.Description)
-	if err != nil {
-		return nil, err
-	}
-	g, err := s.repo.UpdateGoal(ctx, parent)
+	_, err = s.repo.UpdateGoal(ctx, parent)
 	if err != nil {
 		return nil, err
 	}
 
-	return g, nil
+	result, err := s.repo.UpdateGoal(ctx, newGoal)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (s *Service) AttachMember(ctx context.Context, projectID string, goalID string, memberID string) (*Goal, error) {
