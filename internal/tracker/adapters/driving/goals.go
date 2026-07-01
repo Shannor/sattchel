@@ -16,19 +16,21 @@ import (
 
 func goals(service *core.Service, cfg *Config) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "goals [next]",
+		Use:     "goals [verb]",
 		Short:   "Manage goals",
 		Aliases: []string{"g"},
-		Long: `Manage goals.
+		Long: `Commands to manage goals.
    Examples:
-     sattchel tracker goals create <name>
+     sattchel tracker goals add <name>
      sattchel tracker goals set
      sattchel tracker goals list
+     sattchel tracker goals move <childId> <newParentId>
      `,
 	}
 	cmd.AddCommand(addGoal(service, cfg))
 	cmd.AddCommand(setGoal(service, cfg))
 	cmd.AddCommand(listGoals(service, cfg))
+	cmd.AddCommand(moveGoal(service, cfg))
 	return cmd
 }
 
@@ -36,12 +38,13 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	description := ""
 	parentID := ""
 	projectID := ""
-
+	changeCurrent := false
 	cmd := &cobra.Command{
 		Use:   "add <name>",
 		Short: "Add a new goal",
 		Long: `Add a new goal.
-	If no key is provided, a list of available keys will be displayed.
+	Will create a new goal. If it's the root goal it will automatically get set as current'.
+	For each goal after it will stay pointing at root unless you provide a parent or flag on creation to change it.
    Examples:
      sattchel tracker goal add short
      sattchel tracker goal add "Long Title with Spaces"
@@ -77,13 +80,16 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return err
 			}
 			fmt.Printf("Goal %s created successfully\n", goal.Name)
-			_ = cfg.SetCurrentGoalID(goal.ID)
+			if changeCurrent {
+				_ = cfg.SetCurrentGoalID(goal.ID)
+			}
 			return nil
 		},
 	}
 	cmd.Flags().StringVarP(&description, "description", "d", "", "Description of the goal")
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
 	cmd.Flags().StringVarP(&parentID, "parent", "", "", "Parent goal id of the goal. If not provided, the last parent will be used")
+	cmd.Flags().BoolVarP(&changeCurrent, "set", "s", false, "Set the newly created goal as current")
 	return cmd
 }
 
@@ -367,4 +373,249 @@ func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.St
 	}
 
 	return nodeTrees[root.Goal.ID]
+}
+
+func buildSelectOptions(roots []*GoalNode, filterFn func(*core.Goal) (bool, bool), rootGoalID string) []huh.Option[string] {
+	type stackElement struct {
+		node   *GoalNode
+		indent string
+		isLast bool
+	}
+
+	var options []huh.Option[string]
+	stack := make([]stackElement, 0)
+	for i := len(roots) - 1; i >= 0; i-- {
+		stack = append(stack, stackElement{
+			node:   roots[i],
+			indent: "",
+			isLast: i == len(roots)-1,
+		})
+	}
+
+	for len(stack) > 0 {
+		curr := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+
+		include := true
+		traverseChildren := true
+		if filterFn != nil {
+			include, traverseChildren = filterFn(curr.node.Goal)
+		}
+
+		if !include && !traverseChildren {
+			continue
+		}
+
+		if include {
+			marker := ""
+			if len(curr.indent) > 0 {
+				if curr.isLast {
+					marker = "└─ "
+				} else {
+					marker = "├─ "
+				}
+			}
+
+			label := curr.indent + marker + curr.node.Goal.Name
+			if curr.node.Goal.ID == rootGoalID {
+				label += " (root - cannot move)"
+			}
+			option := huh.NewOption(label, curr.node.Goal.ID)
+			options = append(options, option)
+		}
+
+		if traverseChildren {
+			childIndent := curr.indent
+			if len(curr.indent) > 0 {
+				if curr.isLast {
+					childIndent += "   "
+				} else {
+					childIndent += "│  "
+				}
+			} else {
+				childIndent = "  "
+			}
+
+			for i := len(curr.node.Children) - 1; i >= 0; i-- {
+				stack = append(stack, stackElement{
+					node:   curr.node.Children[i],
+					indent: childIndent,
+					isLast: i == len(curr.node.Children)-1,
+				})
+			}
+		}
+	}
+	return options
+}
+
+func getExcludedSubtreeIDs(roots []*GoalNode, childID string) map[string]bool {
+	nodesMap := make(map[string]*GoalNode)
+	var traverse func(*GoalNode)
+	traverse = func(n *GoalNode) {
+		nodesMap[n.Goal.ID] = n
+		for _, child := range n.Children {
+			traverse(child)
+		}
+	}
+	for _, root := range roots {
+		traverse(root)
+	}
+
+	excluded := make(map[string]bool)
+	childNode, ok := nodesMap[childID]
+	if !ok {
+		excluded[childID] = true
+		return excluded
+	}
+
+	stack := []*GoalNode{childNode}
+	for len(stack) > 0 {
+		curr := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		excluded[curr.Goal.ID] = true
+		for _, child := range curr.Children {
+			stack = append(stack, child)
+		}
+	}
+	return excluded
+}
+
+func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
+	projectID := ""
+
+	cmd := &cobra.Command{
+		Use:     "move [childId] [newParentId]",
+		Short:   "Move a goal to a new parent",
+		Aliases: []string{"mv"},
+		Long: `Move a goal to a new parent.
+   If childId and newParentId are not provided, it will prompt for them interactively.
+   Examples:
+     sattchel tracker goals move <childId> <newParentId>
+     sattchel tracker goals move
+     `,
+		Args:         cobra.MaximumNArgs(2),
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			pid := projectID
+			if !cmd.Flags().Changed("projectId") {
+				if lastProj := cfg.CurrentProjectID(); lastProj != "" {
+					pid = lastProj
+				}
+			}
+			if pid == "" {
+				return fmt.Errorf("no project selected")
+			}
+
+			var childID string
+			var newParentID string
+
+			if len(args) >= 1 {
+				childID = args[0]
+			}
+			if len(args) == 2 {
+				newParentID = args[1]
+			}
+
+			var (
+				goals []core.Goal
+				err   error
+			)
+			if err := spinner.
+				New().
+				Title("Getting goals ...").
+				Action(func() {
+					goals, err = service.GetGoals(cmd.Context(), pid)
+				}).Run(); err != nil {
+				return err
+			}
+			if err != nil {
+				return err
+			}
+			if len(goals) == 0 {
+				return fmt.Errorf("no goals found for project %s", pid)
+			}
+
+			var rootGoalID string
+			for _, g := range goals {
+				if g.Parent == nil || g.Parent.TargetID == "" {
+					rootGoalID = g.ID
+					break
+				}
+			}
+
+			if childID != "" && childID == rootGoalID {
+				return fmt.Errorf("the root goal cannot be moved")
+			}
+
+			if childID == "" {
+				roots := buildGoalTree(goals)
+				options := buildSelectOptions(roots, nil, rootGoalID)
+
+				err = huh.NewForm(
+					huh.NewGroup(
+						huh.NewSelect[string]().
+							Title("Select Goal to Move").
+							Options(options...).
+							Value(&childID).
+							Validate(func(val string) error {
+								if val == rootGoalID {
+									return fmt.Errorf("the root goal cannot be moved")
+								}
+								return nil
+							}),
+					),
+				).WithShowHelp(true).Run()
+				if err != nil {
+					return err
+				}
+			}
+
+			if newParentID == "" {
+				roots := buildGoalTree(goals)
+				excludedIDs := getExcludedSubtreeIDs(roots, childID)
+
+				options := buildSelectOptions(roots, func(g *core.Goal) (bool, bool) {
+					if excludedIDs[g.ID] {
+						return false, false
+					}
+					return true, true
+				}, "")
+
+				if len(options) == 0 {
+					return fmt.Errorf("no valid destination goals available to set as parent")
+				}
+
+				err = huh.NewForm(
+					huh.NewGroup(
+						huh.NewSelect[string]().
+							Title("Select New Parent Goal").
+							Options(options...).
+							Value(&newParentID),
+					),
+				).WithShowHelp(true).Run()
+				if err != nil {
+					return err
+				}
+			}
+
+			var movedGoal *core.Goal
+			if err := spinner.
+				New().
+				Title("Moving goal ...").
+				Action(func() {
+					movedGoal, err = service.ChangeParent(cmd.Context(), pid, childID, newParentID, core.GoalOptions{})
+				}).Run(); err != nil {
+				return err
+			}
+			if err != nil {
+				return err
+			}
+
+			fmt.Printf("Goal %q (%s) moved successfully under parent %s\n", movedGoal.Name, movedGoal.ID, newParentID)
+			return nil
+		},
+	}
+
+	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	return cmd
 }

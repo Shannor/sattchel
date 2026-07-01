@@ -376,3 +376,271 @@ func TestServiceGetGoals(t *testing.T) {
 		t.Errorf("GetGoals() sorted order = %v; want %v", got, expected)
 	}
 }
+
+func TestServiceChangeParent(t *testing.T) {
+	t.Run("invalid project", func(t *testing.T) {
+		expectedErr := errors.New("project not found")
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return nil, expectedErr
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-invalid", "g-1", "g-2", GoalOptions{})
+		if !errors.Is(err, expectedErr) {
+			t.Errorf("expected error %v, got %v", expectedErr, err)
+		}
+	})
+
+	t.Run("invalid child goal", func(t *testing.T) {
+		expectedErr := errors.New("child goal not found")
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				return nil, expectedErr
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-1", "g-invalid", "g-2", GoalOptions{})
+		if !errors.Is(err, expectedErr) {
+			t.Errorf("expected error %v, got %v", expectedErr, err)
+		}
+	})
+
+	t.Run("invalid new parent goal", func(t *testing.T) {
+		expectedErr := errors.New("new parent goal not found")
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{ID: "g-child"}, nil
+				}
+				return nil, expectedErr
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-invalid", GoalOptions{})
+		if !errors.Is(err, expectedErr) {
+			t.Errorf("expected error %v, got %v", expectedErr, err)
+		}
+	})
+
+	t.Run("successful parent change - no existing parent", func(t *testing.T) {
+		var updatedChild *Goal
+		var updatedNewParent *Goal
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{ID: "g-child"}, nil
+				}
+				if goalID == "g-new-parent" {
+					return &Goal{ID: "g-new-parent"}, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				if g.ID == "g-child" {
+					updatedChild = g
+				} else if g.ID == "g-new-parent" {
+					updatedNewParent = g
+				}
+				return g, nil
+			},
+		}
+		s := NewService(repo)
+		g, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-new-parent", GoalOptions{
+			LinkRelationship: LinkRequired,
+			Description:      "Required dependency",
+		})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if g.ID != "g-child" {
+			t.Errorf("expected returned goal to be g-child, got %q", g.ID)
+		}
+		if updatedChild == nil || updatedChild.Parent == nil || updatedChild.Parent.TargetID != "g-new-parent" {
+			t.Errorf("expected child's parent to be updated to 'g-new-parent', got %v", updatedChild)
+		}
+		if updatedChild.Parent.Relationship != LinkRequired {
+			t.Errorf("expected relationship to be 'required', got %v", updatedChild.Parent.Relationship)
+		}
+		if updatedChild.Parent.Description != "Required dependency" {
+			t.Errorf("expected description to be 'Required dependency', got %q", updatedChild.Parent.Description)
+		}
+		if updatedNewParent == nil || len(updatedNewParent.Children) != 1 || updatedNewParent.Children[0].ID != "g-child" {
+			t.Errorf("expected new parent to have attached child, got %v", updatedNewParent)
+		}
+	})
+
+	t.Run("successful parent change - with existing parent", func(t *testing.T) {
+		var updatedOldParent *Goal
+		var updatedChild *Goal
+		var updatedNewParent *Goal
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{
+						ID: "g-child",
+						Parent: &Link{
+							TargetID: "g-old-parent",
+						},
+					}, nil
+				}
+				if goalID == "g-old-parent" {
+					return &Goal{
+						ID: "g-old-parent",
+						Children: []Goal{
+							{ID: "g-child"},
+						},
+					}, nil
+				}
+				if goalID == "g-new-parent" {
+					return &Goal{ID: "g-new-parent"}, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				if g.ID == "g-old-parent" {
+					updatedOldParent = g
+				} else if g.ID == "g-child" {
+					updatedChild = g
+				} else if g.ID == "g-new-parent" {
+					updatedNewParent = g
+				}
+				return g, nil
+			},
+		}
+		s := NewService(repo)
+		g, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-new-parent", GoalOptions{
+			LinkRelationship: LinkPreferred,
+			Description:      "Preferred dependency",
+		})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if g.ID != "g-child" {
+			t.Errorf("expected returned goal to be g-child, got %q", g.ID)
+		}
+		if updatedOldParent == nil || len(updatedOldParent.Children) != 0 {
+			t.Errorf("expected old parent to have detached child, got %v", updatedOldParent)
+		}
+		if updatedChild == nil || updatedChild.Parent == nil || updatedChild.Parent.TargetID != "g-new-parent" {
+			t.Errorf("expected child's parent to be updated to 'g-new-parent', got %v", updatedChild)
+		}
+		if updatedNewParent == nil || len(updatedNewParent.Children) != 1 || updatedNewParent.Children[0].ID != "g-child" {
+			t.Errorf("expected new parent to have attached child, got %v", updatedNewParent)
+		}
+	})
+
+	t.Run("error detaching/updating old parent", func(t *testing.T) {
+		expectedErr := errors.New("update old parent error")
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{
+						ID: "g-child",
+						Parent: &Link{
+							TargetID: "g-old-parent",
+						},
+					}, nil
+				}
+				if goalID == "g-old-parent" {
+					return &Goal{
+						ID: "g-old-parent",
+						Children: []Goal{
+							{ID: "g-child"},
+						},
+					}, nil
+				}
+				if goalID == "g-new-parent" {
+					return &Goal{ID: "g-new-parent"}, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				if g.ID == "g-old-parent" {
+					return nil, expectedErr
+				}
+				return g, nil
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-new-parent", GoalOptions{})
+		if !errors.Is(err, expectedErr) {
+			t.Errorf("expected error %v, got %v", expectedErr, err)
+		}
+	})
+
+	t.Run("error updating child", func(t *testing.T) {
+		expectedErr := errors.New("update child error")
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{ID: "g-child"}, nil
+				}
+				if goalID == "g-new-parent" {
+					return &Goal{ID: "g-new-parent"}, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				if g.ID == "g-child" {
+					return nil, expectedErr
+				}
+				return g, nil
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-new-parent", GoalOptions{})
+		if !errors.Is(err, expectedErr) {
+			t.Errorf("expected error %v, got %v", expectedErr, err)
+		}
+	})
+
+	t.Run("error updating new parent", func(t *testing.T) {
+		expectedErr := errors.New("update new parent error")
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{ID: "g-child"}, nil
+				}
+				if goalID == "g-new-parent" {
+					return &Goal{ID: "g-new-parent"}, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				if g.ID == "g-new-parent" {
+					return nil, expectedErr
+				}
+				return g, nil
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-new-parent", GoalOptions{})
+		if !errors.Is(err, expectedErr) {
+			t.Errorf("expected error %v, got %v", expectedErr, err)
+		}
+	})
+}

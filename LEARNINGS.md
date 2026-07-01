@@ -69,3 +69,14 @@ Ports are just the interfaces and live inside core.
 
 This system is similar to what DDD calls "Transaction Scripts". Since each piece of logic is added
 into a "use case" and executed. It does fit well with CLI to be honest, since that's generally how CLI tools work.
+
+2026-06-30
+----
+
+CLI Format to used
+### The "Modern Cloud / Noun-Verb" Style (Structured Subcommands)
+
+Examples:  docker container create ,  gh issue list ,  aws ec2 start-instances ,  kubectl get pods
+• How it works: Highly structured tree hierarchy. First command is the resource (Noun), second command is the action (Verb):  tool <noun> <verb> [flags] .
+
+Using this because it's easier to expand later and clearer, even though it's more annoying to type 

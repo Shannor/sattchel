@@ -121,6 +121,55 @@ func (s *Service) CreateGoal(ctx context.Context, projectID string, goalName str
 	return result, nil
 }
 
+func (s *Service) ChangeParent(ctx context.Context, projectID string, goalID string, newParentID string, options GoalOptions) (*Goal, error) {
+	_, err := s.repo.GetProject(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+
+	child, err := s.repo.GetGoal(ctx, goalID)
+	if err != nil {
+		return nil, err
+	}
+	// Make sure new parent exists before removing existing parent
+	newParent, err := s.repo.GetGoal(ctx, newParentID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Remove existing parent if there is one
+	if child.HasParent() {
+		oldParent, err := s.repo.GetGoal(ctx, child.Parent.TargetID)
+		if err != nil {
+			return nil, err
+		}
+		err = oldParent.DetachChild(child)
+		if err != nil {
+			return nil, err
+		}
+		_, err = s.repo.UpdateGoal(ctx, oldParent)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err = newParent.AttachChild(child, options.LinkRelationship, options.Description)
+	if err != nil {
+		return nil, err
+	}
+	_, err = s.repo.UpdateGoal(ctx, child)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = s.repo.UpdateGoal(ctx, newParent)
+	if err != nil {
+		return nil, err
+	}
+
+	return child, nil
+}
+
 func (s *Service) AttachMember(ctx context.Context, projectID string, goalID string, memberID string) (*Goal, error) {
 	_, err := s.repo.GetProject(ctx, projectID)
 	if err != nil {

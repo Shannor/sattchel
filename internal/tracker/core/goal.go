@@ -87,6 +87,10 @@ func (g *Goal) HasMember() bool {
 	return g.Member != nil && g.Member.ID != ""
 }
 
+func (g *Goal) HasParent() bool {
+	return g.Parent != nil && g.Parent.TargetID != ""
+}
+
 func (g *Goal) AttachChild(child *Goal, rel LinkRelationship, desc string) error {
 	if child.ID == "" {
 		return errors.New("child goal ID is missing")
@@ -113,9 +117,9 @@ func (g *Goal) AttachChild(child *Goal, rel LinkRelationship, desc string) error
 	return nil
 }
 
-// RemoveChild may need to revisit this. We don't want orphaned goals.
+// DetachChild may need to revisit this. We don't want orphaned goals.
 // So we may need to be replaced instead of removed
-func (g *Goal) RemoveChild(child *Goal) error {
+func (g *Goal) DetachChild(child *Goal) error {
 	if child.ID == "" {
 		return errors.New("child goal ID is missing")
 	}

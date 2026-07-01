@@ -177,7 +177,7 @@ func TestRemoveChild(t *testing.T) {
 		child := Goal{ID: "child-id"}
 
 		_ = parent.AttachChild(&child, "", "")
-		err := parent.RemoveChild(&child)
+		err := parent.DetachChild(&child)
 		if err != nil {
 			t.Fatalf("unexpected error on remove: %v", err)
 		}
@@ -194,7 +194,7 @@ func TestRemoveChild(t *testing.T) {
 		parent := Goal{ID: "parent-id"}
 		child := Goal{ID: ""}
 
-		err := parent.RemoveChild(&child)
+		err := parent.DetachChild(&child)
 		if err == nil {
 			t.Errorf("expected error for missing child ID, got nil")
 		}
@@ -203,7 +203,7 @@ func TestRemoveChild(t *testing.T) {
 	t.Run("cannot remove from itself error", func(t *testing.T) {
 		parent := Goal{ID: "parent-id"}
 
-		err := parent.RemoveChild(&parent)
+		err := parent.DetachChild(&parent)
 		if err == nil {
 			t.Errorf("expected error for removing itself, got nil")
 		}
