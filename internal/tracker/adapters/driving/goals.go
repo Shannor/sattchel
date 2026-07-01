@@ -130,7 +130,7 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return err
 			}
 			fmt.Printf("Goal %s created successfully\n", goal.Name)
-			if changeCurrent {
+			if changeCurrent || !goal.HasParent() {
 				_ = cfg.SetCurrentGoalID(goal.ID)
 			}
 			return nil
