@@ -72,3 +72,11 @@ func (c *Config) SetCurrentGoalID(id string) error {
 	c.v.Set("current_goal_id", id)
 	return c.v.WriteConfig()
 }
+
+func (c *Config) ConfigDir() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(home, subFolder), nil
+}

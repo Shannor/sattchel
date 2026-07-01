@@ -1,8 +1,14 @@
 package driving
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/exec"
+	"os/signal"
+	"runtime"
 	"sattchel/internal/tracker/core"
+	"sattchel/internal/tracker/visualizer"
 	"sattchel/internal/tui"
 	"slices"
 	"strings"
@@ -13,6 +19,48 @@ import (
 	"charm.land/lipgloss/v2/tree"
 	"github.com/spf13/cobra"
 )
+
+func getProjectCompletions(service *core.Service) []string {
+	projects, err := service.GetProjects(context.Background())
+	if err != nil {
+		return nil
+	}
+	var completions []string
+	for _, p := range projects {
+		completions = append(completions, fmt.Sprintf("%s\t%s", p.ID, p.Label))
+	}
+	return completions
+}
+
+func getGoalCompletions(service *core.Service, pid string) []string {
+	if pid == "" {
+		return nil
+	}
+	goals, err := service.GetGoals(context.Background(), pid)
+	if err != nil {
+		return nil
+	}
+	var completions []string
+	for _, g := range goals {
+		completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
+	}
+	return completions
+}
+
+func getActiveProjectID(cmd *cobra.Command, cfg *Config, projectIDFlag string) string {
+	if projectIDFlag != "" {
+		return projectIDFlag
+	}
+	if cmd.Flags().Changed("projectId") {
+		if pid, err := cmd.Flags().GetString("projectId"); err == nil && pid != "" {
+			return pid
+		}
+	}
+	if lastProj := cfg.CurrentProjectID(); lastProj != "" {
+		return lastProj
+	}
+	return ""
+}
 
 func goals(service *core.Service, cfg *Config) *cobra.Command {
 	cmd := &cobra.Command{
@@ -25,12 +73,14 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
      sattchel tracker goals set
      sattchel tracker goals list
      sattchel tracker goals move <childId> <newParentId>
+     sattchel tracker goals visualize
      `,
 	}
 	cmd.AddCommand(addGoal(service, cfg))
 	cmd.AddCommand(setGoal(service, cfg))
 	cmd.AddCommand(listGoals(service, cfg))
 	cmd.AddCommand(moveGoal(service, cfg))
+	cmd.AddCommand(visualizeGoals(service, cfg))
 	return cmd
 }
 
@@ -90,6 +140,15 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
 	cmd.Flags().StringVarP(&parentID, "parent", "", "", "Parent goal id of the goal. If not provided, the last parent will be used")
 	cmd.Flags().BoolVarP(&changeCurrent, "set", "s", false, "Set the newly created goal as current")
+
+	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("parent", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		pid := getActiveProjectID(cmd, cfg, projectID)
+		return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
+	})
+
 	return cmd
 }
 
@@ -222,6 +281,9 @@ func setGoal(service *core.Service, cfg *Config) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
 	return cmd
 }
 
@@ -284,6 +346,9 @@ func listGoals(service *core.Service, cfg *Config) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
 	return cmd
 }
 
@@ -495,6 +560,54 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
      `,
 		Args:         cobra.MaximumNArgs(2),
 		SilenceUsage: true,
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			pid := getActiveProjectID(cmd, cfg, projectID)
+			if pid == "" {
+				return nil, cobra.ShellCompDirectiveNoFileComp
+			}
+
+			goals, err := service.GetGoals(cmd.Context(), pid)
+			if err != nil || len(goals) == 0 {
+				return nil, cobra.ShellCompDirectiveNoFileComp
+			}
+
+			// Identify rootGoalID
+			var rootGoalID string
+			for _, g := range goals {
+				if g.Parent == nil || g.Parent.TargetID == "" {
+					rootGoalID = g.ID
+					break
+				}
+			}
+
+			if len(args) == 0 {
+				var completions []string
+				for _, g := range goals {
+					if g.ID == rootGoalID {
+						continue
+					}
+					completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
+				}
+				return completions, cobra.ShellCompDirectiveNoFileComp
+			}
+
+			if len(args) == 1 {
+				childID := args[0]
+				roots := buildGoalTree(goals)
+				excludedIDs := getExcludedSubtreeIDs(roots, childID)
+
+				var completions []string
+				for _, g := range goals {
+					if excludedIDs[g.ID] {
+						continue
+					}
+					completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
+				}
+				return completions, cobra.ShellCompDirectiveNoFileComp
+			}
+
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			pid := projectID
 			if !cmd.Flags().Changed("projectId") {
@@ -617,5 +730,87 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
 	return cmd
+}
+
+func visualizeGoals(service *core.Service, cfg *Config) *cobra.Command {
+	projectID := ""
+
+	cmd := &cobra.Command{
+		Use:   "visualize",
+		Short: "Start the visualizer web server for goals",
+		Long: `Start an ephemeral local web server to visualize goals as an interactive mind map.
+   Automatically opens the mind map in your default browser.
+   Examples:
+     sattchel tracker goals visualize
+     `,
+		Args:         cobra.NoArgs,
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			pid := projectID
+			if !cmd.Flags().Changed("projectId") {
+				if lastProj := cfg.CurrentProjectID(); lastProj != "" {
+					pid = lastProj
+				}
+			}
+			if pid == "" {
+				return fmt.Errorf("no project selected")
+			}
+
+			fmt.Println("Getting goals ...")
+			goals, err := service.GetGoals(cmd.Context(), pid)
+			if err != nil {
+				return err
+			}
+			if len(goals) == 0 {
+				return fmt.Errorf("no goals found for project %s", pid)
+			}
+
+			fmt.Println("Starting visualizer server ...")
+			url, shutdown, err := visualizer.StartServer(cmd.Context(), goals, service, pid)
+			if err != nil {
+				return fmt.Errorf("failed to start server: %w", err)
+			}
+
+			fmt.Printf("Visualizer server running at: %s\n", url)
+			fmt.Println("Opening in browser...")
+			_ = openBrowser(url)
+
+			fmt.Println("Press Ctrl+C to stop the visualizer server.")
+
+			// Wait for interrupt signal to stop the server
+			stop := make(chan os.Signal, 1)
+			signal.Notify(stop, os.Interrupt)
+			<-stop
+
+			fmt.Println("\nStopping server ...")
+			if err := shutdown(); err != nil {
+				fmt.Printf("Error stopping server: %v\n", err)
+			}
+
+			return nil
+		},
+	}
+
+	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goals. If not provided, the default project will be used")
+	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
+	return cmd
+}
+
+func openBrowser(url string) error {
+	var cmd *exec.Cmd
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start", url)
+	case "darwin":
+		cmd = exec.Command("open", url)
+	default: // "linux", "freebsd", etc.
+		cmd = exec.Command("xdg-open", url)
+	}
+	return cmd.Run()
 }

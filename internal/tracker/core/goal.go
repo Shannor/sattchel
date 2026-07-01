@@ -109,11 +109,12 @@ func (g *Goal) AttachChild(child *Goal, rel LinkRelationship, desc string) error
 		parentLink.Relationship = LinkOptional
 	}
 
+	child.Parent = &parentLink
+
 	if slices.ContainsFunc(g.Children, func(it Goal) bool { return it.ID == child.ID }) {
 		return nil
 	}
 	g.Children = append(g.Children, *child)
-	child.Parent = &parentLink
 	return nil
 }
 

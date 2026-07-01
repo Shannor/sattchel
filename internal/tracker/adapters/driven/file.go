@@ -110,8 +110,49 @@ func ensureMaps(db *DB) {
 	}
 }
 
+// syncChildren rebuilds the children lists dynamically based on the parent links
+// to guarantee that the nested children arrays are 100% consistent and up to date.
+func (s *FileStorage) syncChildren() {
+	if s.db == nil || s.db.Goals == nil {
+		return
+	}
+
+	// 1. Build a map of child IDs for each parent ID
+	parentToChildren := make(map[string][]string)
+	for id, g := range s.db.Goals {
+		if g.HasParent() {
+			pID := g.Parent.TargetID
+			parentToChildren[pID] = append(parentToChildren[pID], id)
+		}
+	}
+
+	// 2. Define a recursive function to build the Goal tree with nested children
+	var buildTree func(id string) core.Goal
+	buildTree = func(id string) core.Goal {
+		g := s.db.Goals[id]
+		childIDs := parentToChildren[id]
+		if len(childIDs) == 0 {
+			g.Children = nil
+			return g
+		}
+
+		g.Children = make([]core.Goal, 0, len(childIDs))
+		for _, childID := range childIDs {
+			g.Children = append(g.Children, buildTree(childID))
+		}
+		return g
+	}
+
+	// 3. Rebuild every goal so its Children slice is fully hydrated and consistent
+	for id := range s.db.Goals {
+		s.db.Goals[id] = buildTree(id)
+	}
+}
+
 // flush writes the in-memory DB atomically via tmp + rename. Caller must hold s.mu.
 func (s *FileStorage) flush() error {
+	s.syncChildren()
+
 	dir := filepath.Dir(s.path)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return fmt.Errorf("create dir: %w", err)

@@ -131,6 +131,9 @@ func (s *Service) ChangeParent(ctx context.Context, projectID string, goalID str
 	if err != nil {
 		return nil, err
 	}
+	if child.HasParent() && child.Parent.TargetID == newParentID {
+		return child, nil
+	}
 	// Make sure new parent exists before removing existing parent
 	newParent, err := s.repo.GetGoal(ctx, newParentID)
 	if err != nil {

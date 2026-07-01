@@ -643,4 +643,85 @@ func TestServiceChangeParent(t *testing.T) {
 			t.Errorf("expected error %v, got %v", expectedErr, err)
 		}
 	})
+
+	t.Run("move to same parent does nothing and preserves parent link", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{
+						ID: "g-child",
+						Parent: &Link{
+							TargetID: "g-parent",
+						},
+					}, nil
+				}
+				if goalID == "g-parent" {
+					return &Goal{
+						ID: "g-parent",
+						Children: []Goal{
+							{ID: "g-child"},
+						},
+					}, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				return g, nil
+			},
+		}
+		s := NewService(repo)
+		child, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-parent", GoalOptions{})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if child.Parent == nil || child.Parent.TargetID != "g-parent" {
+			t.Errorf("expected parent link to remain 'g-parent', got %v", child.Parent)
+		}
+	})
+
+	t.Run("moved child parent link inside parent Children slice is correct", func(t *testing.T) {
+		var updatedParent *Goal
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				if goalID == "g-child" {
+					return &Goal{
+						ID: "g-child",
+					}, nil
+				}
+				if goalID == "g-new-parent" {
+					return &Goal{
+						ID: "g-new-parent",
+					}, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				if g.ID == "g-new-parent" {
+					updatedParent = g
+				}
+				return g, nil
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-new-parent", GoalOptions{})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if updatedParent == nil {
+			t.Fatal("expected parent to be updated")
+		}
+		if len(updatedParent.Children) != 1 {
+			t.Fatalf("expected 1 child, got %d", len(updatedParent.Children))
+		}
+		childInParent := updatedParent.Children[0]
+		if childInParent.Parent == nil || childInParent.Parent.TargetID != "g-new-parent" {
+			t.Errorf("expected child inside parent Children to have parent link target 'g-new-parent', got %v", childInParent.Parent)
+		}
+	})
 }
