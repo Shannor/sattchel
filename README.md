@@ -27,13 +27,10 @@ My goals can be followed along [ here if you care ](./LEARNINGS.md) :)
 
 ```bash
 go install github.com/Shannor/sattchel@latest
-
-bin_dir="${GOBIN:-$(go env GOPATH)/bin}"
-ln -sf "$bin_dir/sattchel" "$bin_dir/sat"
-ln -sf "$bin_dir/sattchel" "$bin_dir/satt"
+sattchel --help
 ```
 
-That installs the main binary as `sattchel` and creates the `sat` and `satt` aliases in the same Go bin directory.
+That installs the main binary as `sattchel`. The first run automatically creates the `sat` and `satt` aliases in the same Go bin directory.
 
 ### From GitHub Releases
 

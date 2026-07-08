@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"sattchel/internal/cli/update"
@@ -58,6 +59,9 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	rootCmd.Use = executableName()
+	if err := config.EnsureExecutableAliases(); err != nil {
+		slog.Warn("failed to sync cli aliases", slog.String("error", err.Error()))
+	}
 	err := rootCmd.Execute()
 	if err != nil {
 		styles := tui.AutoStyles()
