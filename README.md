@@ -103,6 +103,49 @@ Then reload your shell configuration:
 source ~/.bashrc  # or source ~/.zshrc, or source ~/.profile
 ```
 
+### Shell Completion
+
+The release install puts the binary on your `PATH`, but it does **not** automatically enable shell completion. To get tab completion for commands like `optimizely` or `tracker`, run the built-in Cobra completion command for your shell.
+
+#### zsh
+
+```bash
+mkdir -p ~/.zsh/completions
+sattchel completion zsh > ~/.zsh/completions/_sattchel
+```
+
+Add this to `~/.zshrc` if it is not already there:
+
+```bash
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit && compinit
+```
+
+Then reload your shell:
+
+```bash
+source ~/.zshrc
+```
+
+#### bash
+
+```bash
+mkdir -p ~/.bash_completion.d
+sattchel completion bash > ~/.bash_completion.d/sattchel
+```
+
+Add this to `~/.bashrc` if it is not already there:
+
+```bash
+source ~/.bash_completion.d/sattchel
+```
+
+Then reload your shell:
+
+```bash
+source ~/.bashrc
+```
+
 **Verify your PATH:**
 
 Check if `~/bin` is in your PATH:

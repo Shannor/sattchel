@@ -34,9 +34,16 @@ var rootCmd = &cobra.Command{
 	SilenceUsage:  true,
 	Version:       config.Version,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if isCompletionCommand(cmd) {
+			updateCh = nil
+			return
+		}
 		updateCh = config.NewUpdater().CheckForUpdate()
 	},
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		if isCompletionCommand(cmd) {
+			return
+		}
 		if updateCh == nil {
 			return
 		}
@@ -78,6 +85,16 @@ func executableName() string {
 		return defaultBinaryName
 	}
 	return name
+}
+
+func isCompletionCommand(cmd *cobra.Command) bool {
+	for current := cmd; current != nil; current = current.Parent() {
+		switch current.Name() {
+		case "completion", "__complete", "__completeNoDesc":
+			return true
+		}
+	}
+	return false
 }
 
 func init() {
