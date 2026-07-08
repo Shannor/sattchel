@@ -26,8 +26,14 @@ My goals can be followed along [ here if you care ](./LEARNINGS.md) :)
 ### Build from Source (preferred if using Go)
 
 ```bash
-go install github.com/Shannor/sattchel/cmd/sattchel@latest
+go install github.com/Shannor/sattchel@latest
+
+bin_dir="${GOBIN:-$(go env GOPATH)/bin}"
+ln -sf "$bin_dir/sattchel" "$bin_dir/sat"
+ln -sf "$bin_dir/sattchel" "$bin_dir/satt"
 ```
+
+That installs the main binary as `sattchel` and creates the `sat` and `satt` aliases in the same Go bin directory.
 
 ### From GitHub Releases
 
@@ -67,7 +73,7 @@ curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel
 $env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
 Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Windows_x86_64.zip -OutFile sattchel.zip
 Expand-Archive sattchel.zip -DestinationPath $env:USERPROFILE/temp
-copy-item $env:USERPROFILE/temp/sattchel_Windows_x86_64/sattchel.exe $env:USERPROFILE/bin/
+copy-item $env:USERPROFILE/temp/sattchel_Windows_x86_64/*.exe $env:USERPROFILE/bin/
 Remove-Item sattchel.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
@@ -77,13 +83,18 @@ Remove-Item sattchel.zip, $env:USERPROFILE/temp -Recurse -Force
 $env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
 Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Windows_arm64.zip -OutFile sattchel.zip
 Expand-Archive sattchel.zip -DestinationPath $env:USERPROFILE/temp
-copy-item $env:USERPROFILE/temp/sattchel_Windows_arm64/sattchel.exe $env:USERPROFILE/bin/
+copy-item $env:USERPROFILE/temp/sattchel_Windows_arm64/*.exe $env:USERPROFILE/bin/
 Remove-Item sattchel.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
-Or download manually from the [Releases page](https://github.com/Shannor/sattchel/releases) and place the binary in your PATH.
+Or download manually from the [Releases page](https://github.com/Shannor/sattchel/releases) and place the binaries in your PATH.
 
-**Important:** Make sure `~/bin` is in your PATH. Add the following to your shell configuration file (e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`):
+**Important:** Make sure the install directory is in your PATH.
+
+- Release installs above extract into `~/bin`
+- `go install` uses `$GOBIN` when set, otherwise `$(go env GOPATH)/bin`
+
+For release installs, add the following to your shell configuration file (e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`):
 
 ```bash
 export PATH="$HOME/bin:$PATH"
@@ -107,6 +118,13 @@ If you don't see `~/bin` in the output, your PATH isn't set up correctly. You ca
 
 ```bash
 echo $PATH
+```
+
+For `go install`, verify the Go bin directory instead:
+
+```bash
+bin_dir="${GOBIN:-$(go env GOPATH)/bin}"
+echo "$PATH" | grep "$bin_dir"
 ```
 
 ---

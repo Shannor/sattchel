@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sattchel/internal/cli/update"
 	"sattchel/internal/config"
 	optimizelyDriven "sattchel/internal/optimizely/adapters/driven"
@@ -23,13 +24,13 @@ import (
 var updateCh <-chan config.UpdateInformation
 
 const cliRootPath = ".config/sattchel"
+const defaultBinaryName = "sattchel"
 
 var rootCmd = &cobra.Command{
-	Use:           "sattchel",
+	Use:           defaultBinaryName,
 	Short:         "A collection of tools for optimizing my workflows or fun",
 	SilenceErrors: true,
 	SilenceUsage:  true,
-	Aliases:       []string{"sat", "satt"},
 	Version:       config.Version,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		updateCh = config.NewUpdater().CheckForUpdate()
@@ -41,7 +42,12 @@ var rootCmd = &cobra.Command{
 		if update, ok := <-updateCh; ok {
 			writer := printer.NewStyleWriter(tui.AutoStyles())
 			if update.NeedToUpdate {
-				msg := fmt.Sprintf("A new version is available: %s (current: %s). Run \"sattchel update\" to upgrade.", update.NewVersion, update.CurrentVersion)
+				msg := fmt.Sprintf(
+					"A new version is available: %s (current: %s). Run \"%s update\" to upgrade.",
+					update.NewVersion,
+					update.CurrentVersion,
+					cmd.Root().Name(),
+				)
 				writer.Info(msg)
 			}
 		}
@@ -51,6 +57,7 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+	rootCmd.Use = executableName()
 	err := rootCmd.Execute()
 	if err != nil {
 		styles := tui.AutoStyles()
@@ -59,6 +66,14 @@ func Execute() {
 		writer.Error(msg)
 		os.Exit(1)
 	}
+}
+
+func executableName() string {
+	name := filepath.Base(os.Args[0])
+	if name == "." || name == string(filepath.Separator) || name == "" {
+		return defaultBinaryName
+	}
+	return name
 }
 
 func init() {
