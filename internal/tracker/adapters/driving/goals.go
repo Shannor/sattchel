@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"runtime"
 	"sattchel/internal/tracker/core"
-	"sattchel/internal/tracker/visualizer"
 	"sattchel/internal/tui"
 	"slices"
 	"strings"
@@ -770,10 +769,13 @@ func visualizeGoals(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			fmt.Println("Starting visualizer server ...")
-			url, shutdown, err := visualizer.StartServer(cmd.Context(), goals, service, pid)
+			server := NewHTTPServer(service)
+			addr, shutdown, err := server.Start(cmd.Context(), "127.0.0.1:0")
 			if err != nil {
 				return fmt.Errorf("failed to start server: %w", err)
 			}
+
+			url := fmt.Sprintf("http://%s?projectId=%s", addr, pid)
 
 			fmt.Printf("Visualizer server running at: %s\n", url)
 			fmt.Println("Opening in browser...")

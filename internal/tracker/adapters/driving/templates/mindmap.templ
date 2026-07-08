@@ -221,6 +221,9 @@ script renderMindmap(goalsJSON string) {
         const childID = e.dataTransfer.getData('text/plain');
         if (!childID || childID === targetID) return;
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('projectId') || '';
+
         // Perform the API call to move the goal
         fetch('/api/goals/move', {
             method: 'POST',
@@ -228,6 +231,7 @@ script renderMindmap(goalsJSON string) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                projectId: projectId,
                 childId: childID,
                 newParentId: targetID
             })

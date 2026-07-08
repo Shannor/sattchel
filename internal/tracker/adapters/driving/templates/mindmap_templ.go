@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 func renderMindmap(goalsJSON string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_renderMindmap_1426`,
-		Function: `function __templ_renderMindmap_1426(goalsJSON){const goals = JSON.parse(goalsJSON);
+		Name: `__templ_renderMindmap_3da4`,
+		Function: `function __templ_renderMindmap_3da4(goalsJSON){const goals = JSON.parse(goalsJSON);
 
     // Build tree structure
     const goalsMap = {};
@@ -231,6 +231,9 @@ func renderMindmap(goalsJSON string) templ.ComponentScript {
         const childID = e.dataTransfer.getData('text/plain');
         if (!childID || childID === targetID) return;
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('projectId') || '';
+
         // Perform the API call to move the goal
         fetch('/api/goals/move', {
             method: 'POST',
@@ -238,6 +241,7 @@ func renderMindmap(goalsJSON string) templ.ComponentScript {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                projectId: projectId,
                 childId: childID,
                 newParentId: targetID
             })
@@ -319,8 +323,8 @@ func renderMindmap(goalsJSON string) templ.ComponentScript {
         document.getElementById('details-drawer').classList.remove('open');
     };
 }`,
-		Call:       templ.SafeScript(`__templ_renderMindmap_1426`, goalsJSON),
-		CallInline: templ.SafeScriptInline(`__templ_renderMindmap_1426`, goalsJSON),
+		Call:       templ.SafeScript(`__templ_renderMindmap_3da4`, goalsJSON),
+		CallInline: templ.SafeScriptInline(`__templ_renderMindmap_3da4`, goalsJSON),
 	}
 }
 
