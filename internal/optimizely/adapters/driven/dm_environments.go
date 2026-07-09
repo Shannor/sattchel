@@ -15,10 +15,10 @@ type environmentDataMapper struct {
 	projectID string
 }
 
-func BaseV2Client(cfg *core.Configuration) *projects.ClientWithResponses {
+func BaseV2Client(apiKey string) *projects.ClientWithResponses {
 	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
-		if cfg != nil && cfg.APIKey != "" {
-			client.RequestEditors = append(client.RequestEditors, core.WithToken(cfg.APIKey))
+		if apiKey != "" {
+			client.RequestEditors = append(client.RequestEditors, WithToken(apiKey))
 		}
 		return nil
 	})

@@ -3,7 +3,6 @@ package driving
 import (
 	"context"
 	"fmt"
-	"sattchel/internal/optimizely/core"
 	"sattchel/internal/tui"
 
 	tea "charm.land/bubbletea/v2"
@@ -11,19 +10,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func cmdConfig(service *core.Service, styles tui.Styles) *cobra.Command {
+func cmdConfig(config *Config, styles tui.Styles) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "config",
 		Short:        "Manage configs",
 		Aliases:      []string{"co"},
 		SilenceUsage: true,
 	}
-	configCmd.AddCommand(setConfig(service))
-	configCmd.AddCommand(getConfig(service, styles))
+	configCmd.AddCommand(setConfig(config))
+	configCmd.AddCommand(getConfig(config, styles))
 	return configCmd
 }
 
-func setConfig(service *core.Service) *cobra.Command {
+func setConfig(config *Config) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set [key] [value]",
 		Short: "Set a configuration value",
@@ -39,7 +38,7 @@ func setConfig(service *core.Service) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			switch len(args) {
 			case 0:
-				err := noChoiceConfig(cmd.Context(), service)
+				err := noChoiceConfig(cmd.Context(), config)
 				if err != nil {
 					return fmt.Errorf("failed to set config: %w", err)
 				}
@@ -51,7 +50,7 @@ func setConfig(service *core.Service) *cobra.Command {
 	}
 }
 
-func getConfig(service *core.Service, styles tui.Styles) *cobra.Command {
+func getConfig(config *Config, styles tui.Styles) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get [key]",
 		Short: "Get a configuration value",
@@ -64,7 +63,7 @@ func getConfig(service *core.Service, styles tui.Styles) *cobra.Command {
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cfg, err := service.GetConfig(cmd.Context())
+			cfg, err := config.Get()
 			if err != nil {
 				return err
 			}
@@ -81,7 +80,7 @@ func getConfig(service *core.Service, styles tui.Styles) *cobra.Command {
 	}
 }
 
-func noChoiceConfig(ctx context.Context, service *core.Service) error {
+func noChoiceConfig(ctx context.Context, config *Config) error {
 	choice := ""
 	err := huh.NewForm(
 		huh.NewGroup(
@@ -111,8 +110,10 @@ func noChoiceConfig(ctx context.Context, service *core.Service) error {
 			if v.Value() == "" {
 				return fmt.Errorf("value cannot be empty")
 			}
-			c := core.Configuration{APIKey: v.Value()}
-			err = service.SetConfig(ctx, c)
+			_, err = config.Update(func(cfg *Configuration) error {
+				cfg.APIKey = v.Value()
+				return nil
+			})
 			if err != nil {
 				return fmt.Errorf("failed to set config: %w", err)
 			}

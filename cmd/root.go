@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -16,7 +15,6 @@ import (
 	trackerDriving "sattchel/internal/tracker/adapters/driving"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -24,7 +22,6 @@ import (
 
 var updateCh <-chan config.UpdateInformation
 
-const cliRootPath = ".config/sattchel"
 const defaultBinaryName = "sattchel"
 
 var rootCmd = &cobra.Command{
@@ -113,28 +110,26 @@ func init() {
 
 	opService := setupOptimizely(v)
 
-	rootCmd.AddCommand(setupTracker())
-	rootCmd.AddCommand(optimizelyDriving.NewCommand(opService, writer, styles))
+	rootCmd.AddCommand(setupTracker(v))
+	rootCmd.AddCommand(optimizelyDriving.NewCommand(opService, v, writer, styles))
 	rootCmd.AddCommand(update.NewCommand(writer))
 }
 
-func setupTracker() *cobra.Command {
-	path := strings.Join([]string{os.Getenv("HOME"), cliRootPath, "tracker.json"}, "/")
+func setupTracker(v *viper.Viper) *cobra.Command {
+	path := filepath.Join(config.ResolvedConfigDir, "tracker.json")
 	fileStorage := trackerDriven.NewFileStorage(path, nil)
 	trackerService := core.NewService(fileStorage)
-	return trackerDriving.NewCommand(trackerService)
+	return trackerDriving.NewCommand(trackerService, v)
 }
 
 func setupOptimizely(v *viper.Viper) *optimizelyCore.Service {
-	opRepo := optimizelyDriven.NewConfigDM(v)
-	cfg, err := opRepo.Get(context.Background(), "")
-	if err != nil {
-		panic(err)
-	}
-	client := optimizelyDriven.BaseFlagClient(cfg)
-	v2Client := optimizelyDriven.BaseV2Client(cfg)
+	var cfg optimizelyDriving.Configuration
+	_ = v.UnmarshalKey("optimizely", &cfg)
+
+	client := optimizelyDriven.BaseFlagClient(cfg.APIKey)
+	v2Client := optimizelyDriven.BaseV2Client(cfg.APIKey)
 	factory := optimizelyDriven.NewFlagsDMFactory(client, cfg.APIKey)
 	envFactory := optimizelyDriven.NewEnvironmentsDMFactory(v2Client, cfg.APIKey)
 	projectDM := optimizelyDriven.NewProjectsDM(v2Client)
-	return optimizelyCore.NewService(opRepo, projectDM, factory, envFactory)
+	return optimizelyCore.NewService(projectDM, factory, envFactory)
 }

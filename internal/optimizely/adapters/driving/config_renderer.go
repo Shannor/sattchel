@@ -2,7 +2,6 @@ package driving
 
 import (
 	"fmt"
-	"sattchel/internal/optimizely/core"
 	"strings"
 
 	"sattchel/internal/tui"
@@ -12,7 +11,7 @@ import (
 )
 
 // renderConfig formats the Configuration as a styled string for terminal output.
-func renderConfig(cfg *core.Configuration, styles tui.Styles) string {
+func renderConfig(cfg *Configuration, styles tui.Styles) string {
 
 	enumeratorStyle := lipgloss.NewStyle().Foreground(styles.Success.GetForeground()).MarginRight(1)
 	rootStyle := lipgloss.NewStyle().Foreground(styles.Title.GetForeground())

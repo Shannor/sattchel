@@ -20,3 +20,5 @@ go.work
 # Dependency directories
 /.antigravitycli/*.json
 tracker.json
+dev-config/
+.env

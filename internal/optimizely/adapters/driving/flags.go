@@ -13,7 +13,7 @@ var (
 	envFilter     = make([]string, 0)
 )
 
-func cmdFlags(s *core.Service) *cobra.Command {
+func cmdFlags(s *core.Service, config *Config) *cobra.Command {
 	var flagCmd = &cobra.Command{
 		Use:          "flags",
 		Short:        "Manage feature flags",
@@ -21,12 +21,12 @@ func cmdFlags(s *core.Service) *cobra.Command {
 		SilenceUsage: true,
 	}
 
-	flagCmd.AddCommand(listFlags(s))
-	flagCmd.AddCommand(getFlag(s))
+	flagCmd.AddCommand(listFlags(s, config))
+	flagCmd.AddCommand(getFlag(s, config))
 	return flagCmd
 }
 
-func getFlag(s *core.Service) *cobra.Command {
+func getFlag(s *core.Service, config *Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get [key]",
 		Short: "Get feature flag",
@@ -42,9 +42,16 @@ func getFlag(s *core.Service) *cobra.Command {
 			}
 			flagId := args[0]
 			ctx := cmd.Context()
-			projects, err := s.GetSelectedProjects(cmd.Context())
+			cfg, err := config.Get()
 			if err != nil {
 				return err
+			}
+			if cfg.APIKey == "" {
+				return fmt.Errorf("API key is required")
+			}
+			projects := cfg.Projects
+			if len(projects) == 0 {
+				return fmt.Errorf("no projects configured")
 			}
 			projectID := projects[0].ID
 			environments := []string{"production", "demo", "preprod", "qa", "development"}
@@ -60,17 +67,21 @@ func getFlag(s *core.Service) *cobra.Command {
 	return cmd
 }
 
-func listFlags(s *core.Service) *cobra.Command {
+func listFlags(s *core.Service, config *Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:          "list",
 		Short:        "List feature flags between projects",
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
-			projects, err := s.GetSelectedProjects(cmd.Context())
+			cfg, err := config.Get()
 			if err != nil {
 				return err
 			}
+			if cfg.APIKey == "" {
+				return fmt.Errorf("API key is required")
+			}
+			projects := cfg.Projects
 			ids := make([]string, 0)
 			for _, project := range projects {
 				ids = append(ids, project.ID)

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net/http"
 	"net/url"
 	"sattchel/internal/optimizely/adapters/driven/features"
 	"sattchel/internal/optimizely/adapters/driven/projects"
@@ -30,10 +31,18 @@ type flagDataMapper struct {
 	projectID string
 }
 
-func BaseFlagClient(cfg *core.Configuration) *features.ClientWithResponses {
+// WithToken returns a RequestEditorFn that injects the auth header.
+func WithToken(token string) func(ctx context.Context, req *http.Request) error {
+	return func(ctx context.Context, req *http.Request) error {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+		return nil
+	}
+}
+
+func BaseFlagClient(apiKey string) *features.ClientWithResponses {
 	fc, err := features.NewClientWithResponses("https://api.optimizely.com/flags/v1/", func(client *features.Client) error {
-		if cfg != nil && cfg.APIKey != "" {
-			client.RequestEditors = append(client.RequestEditors, core.WithToken(cfg.APIKey))
+		if apiKey != "" {
+			client.RequestEditors = append(client.RequestEditors, WithToken(apiKey))
 		}
 		return nil
 	})
@@ -52,10 +61,10 @@ func NewFlagsDM(client *features.ClientWithResponses, token string, projectID st
 	}, nil
 }
 
-func BaseEnvironmentClient(cfg *core.Configuration) *projects.ClientWithResponses {
+func BaseEnvironmentClient(apiKey string) *projects.ClientWithResponses {
 	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
-		if cfg != nil && cfg.APIKey != "" {
-			client.RequestEditors = append(client.RequestEditors, core.WithToken(cfg.APIKey))
+		if apiKey != "" {
+			client.RequestEditors = append(client.RequestEditors, WithToken(apiKey))
 		}
 		return nil
 	})

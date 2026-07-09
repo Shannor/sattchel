@@ -11,7 +11,6 @@ type Repository[T any] interface {
 	Create(ctx context.Context, value T) (*T, error)
 }
 
-type ConfigRepository Repository[Configuration]
 type ProjectRepository Repository[Project]
 type FlagsRepository Repository[FeatureFlagDefinition]
 type EnvironmentsRepository Repository[Environment]

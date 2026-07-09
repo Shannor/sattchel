@@ -10,9 +10,6 @@ generate:
 build: generate
 	go build -o $(BIN_DIR)/$(BINARY) .
 
-run:
-	go run .
-
 test:
 	go test $(PKG)
 

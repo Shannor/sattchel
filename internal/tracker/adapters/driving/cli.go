@@ -4,10 +4,11 @@ import (
 	"sattchel/internal/tracker/core"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-func NewCommand(service *core.Service) *cobra.Command {
-	cfg, _ := LoadConfig()
+func NewCommand(service *core.Service, v *viper.Viper) *cobra.Command {
+	cfg, _ := LoadConfig(v)
 	cmd := &cobra.Command{
 		Use:     "tracker",
 		Short:   "Tracker Commands",
