@@ -12,7 +12,14 @@ type Repository[T any] interface {
 }
 
 type ProjectRepository Repository[Project]
-type FlagsRepository Repository[FeatureFlagDefinition]
+type ListFlagsOptions struct {
+	Query string
+}
+
+type FlagsRepository interface {
+	Repository[FeatureFlagDefinition]
+	Search(ctx context.Context, opts ListFlagsOptions) ([]FeatureFlagDefinition, error)
+}
 type EnvironmentsRepository Repository[Environment]
 
 type FlagsRepositoryFactory interface {

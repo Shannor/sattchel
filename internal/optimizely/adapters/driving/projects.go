@@ -97,6 +97,9 @@ func setProjects(s *core.Service, config *Config, writer printer.Writer) *cobra.
 
 			for _, project := range projects {
 				options = append(options, huh.NewOption(project.Name, project.ID).Selected(project.IsActive))
+				if project.IsActive {
+					selectedIds = append(selectedIds, project.ID)
+				}
 			}
 
 			err = huh.NewForm(

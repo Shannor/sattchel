@@ -127,6 +127,10 @@ func (f *flagDataMapper) getIdForService() (int, error) {
 }
 
 func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefinition, error) {
+	return f.Search(ctx, core.ListFlagsOptions{})
+}
+
+func (f *flagDataMapper) Search(ctx context.Context, opts core.ListFlagsOptions) ([]core.FeatureFlagDefinition, error) {
 	err := f.validate()
 	if err != nil {
 		return nil, err
@@ -141,9 +145,15 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 	if reporter != nil {
 		reporter.Report(f.projectID, 0.0, "starting")
 	}
-	response, err := f.client.ListFlagsWithResponse(ctx, id, &features.ListFlagsParams{
+
+	params := &features.ListFlagsParams{
 		PageWindow: new(pageSize),
-	})
+	}
+	if opts.Query != "" {
+		params.Query = &opts.Query
+	}
+
+	response, err := f.client.ListFlagsWithResponse(ctx, id, params)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list flags. %v", err)
 	}
@@ -157,6 +167,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 
 	info := response.JSON200
 
+	var mu sync.Mutex
 	results := make([]core.FeatureFlagDefinition, 0)
 	for _, flag := range info.Items {
 		enriched, err := f.enrichFlag(ctx, &flag)
@@ -188,10 +199,14 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 		wg.Add(1)
 		go func(tok string) {
 			defer wg.Done()
-			response, err := f.client.ListFlagsWithResponse(ctx, id, &features.ListFlagsParams{
+			pageParams := &features.ListFlagsParams{
 				PageToken:  &tok,
 				PageWindow: new(pageSize),
-			})
+			}
+			if opts.Query != "" {
+				pageParams.Query = &opts.Query
+			}
+			response, err := f.client.ListFlagsWithResponse(ctx, id, pageParams)
 			if err != nil {
 				slog.Error("failed to get flags", slog.String("error", err.Error()))
 				return
@@ -213,7 +228,9 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 					slog.Warn("failed to enrich a feature flag", slog.String("flag_key", flag.Key))
 					continue
 				}
+				mu.Lock()
 				results = append(results, *enriched)
+				mu.Unlock()
 			}
 			n := completedPages.Add(1)
 			if reporter != nil {

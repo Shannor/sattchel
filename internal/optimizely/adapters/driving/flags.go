@@ -11,6 +11,7 @@ import (
 var (
 	projectFilter = make([]string, 0)
 	envFilter     = make([]string, 0)
+	queryFilter   string
 )
 
 func cmdFlags(s *core.Service, config *Config) *cobra.Command {
@@ -83,9 +84,12 @@ func listFlags(s *core.Service, config *Config) *cobra.Command {
 			}
 			projects := cfg.Projects
 			ids := make([]string, 0)
-			for _, project := range projects {
-				ids = append(ids, project.ID)
-				break
+			if len(projectFilter) > 0 {
+				ids = projectFilter
+			} else {
+				for _, project := range projects {
+					ids = append(ids, project.ID)
+				}
 			}
 
 			spinner := tui.NewSpinner()
@@ -97,7 +101,12 @@ func listFlags(s *core.Service, config *Config) *cobra.Command {
 			}
 
 			ctx = core.WithProgress(ctx, reporter)
-			flags, err := s.GetFlags(ctx, ids)
+			var flags map[string][]core.FeatureFlagDefinition
+			if queryFilter != "" {
+				flags, err = s.SearchFlags(ctx, ids, core.ListFlagsOptions{Query: queryFilter})
+			} else {
+				flags, err = s.GetFlags(ctx, ids)
+			}
 			if err != nil {
 				return err
 			}
@@ -117,5 +126,6 @@ func listFlags(s *core.Service, config *Config) *cobra.Command {
 	}
 	cmd.Flags().StringArrayVar(&projectFilter, "filter", []string{}, "if provided will only show the flags for the provided project ids. (if not provided will show all)")
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
+	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")
 	return cmd
 }

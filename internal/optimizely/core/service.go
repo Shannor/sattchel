@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"sync"
 )
 
 type Service struct {
@@ -79,4 +80,43 @@ func (s *Service) GetFlag(ctx context.Context, projectID string, environmentIDs 
 	}
 
 	return flag, instances, nil
+}
+
+func (s *Service) SearchFlags(ctx context.Context, projectIDs []string, opts ListFlagsOptions) (map[string][]FeatureFlagDefinition, error) {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	result := make(map[string][]FeatureFlagDefinition)
+	var errs []error
+
+	for _, pid := range projectIDs {
+		wg.Go(func() {
+			dm, err := s.flagFactory.Create(ctx, pid)
+			if err != nil {
+				mu.Lock()
+				errs = append(errs, fmt.Errorf("failed to create flag mapper for project %s: %w", pid, err))
+				mu.Unlock()
+				return
+			}
+
+			flags, err := dm.Search(ctx, opts)
+			if err != nil {
+				mu.Lock()
+				errs = append(errs, fmt.Errorf("failed to search flags for project %s: %w", pid, err))
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			result[pid] = flags
+			mu.Unlock()
+		})
+	}
+
+	wg.Wait()
+
+	if len(errs) > 0 {
+		return nil, errs[0]
+	}
+
+	return result, nil
 }
