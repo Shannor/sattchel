@@ -16,7 +16,7 @@ func NewCommand(s *core.Service, v *viper.Viper, writer printer.Writer, styles t
 		Short:   "Optimizely commands",
 		Aliases: []string{"op"},
 	}
-	cmd.AddCommand(cmdFlags(s, cfg))
+	cmd.AddCommand(cmdFlags(s, cfg, writer))
 	cmd.AddCommand(cmdProjects(s, cfg, writer))
 	cmd.AddCommand(cmdConfig(cfg, styles))
 	cmd.AddCommand(cmdCache(cfg))

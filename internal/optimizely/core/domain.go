@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
+	"strings"
 	"time"
 )
 
@@ -175,6 +176,77 @@ func (v Variables) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(flat)
+}
+
+// UnmarshalJSON reconstructs the typed Variable maps from a flat JSON object.
+func (v *Variables) UnmarshalJSON(data []byte) error {
+	var flat map[string]any
+	if err := json.Unmarshal(data, &flat); err != nil {
+		return err
+	}
+
+	v.BoolVariables = make(VariableMap[bool])
+	v.IntVariables = make(VariableMap[int])
+	v.FloatVariables = make(VariableMap[float64])
+	v.StringVariables = make(VariableMap[string])
+	v.JsonVariables = make(VariableMap[any])
+
+	for key, val := range flat {
+		switch valT := val.(type) {
+		case bool:
+			v.BoolVariables[key] = Variable[bool]{
+				Key:   key,
+				Value: valT,
+				Type:  "boolean",
+			}
+		case string:
+			trimmed := strings.TrimSpace(valT)
+			if (strings.HasPrefix(trimmed, "{") && strings.HasSuffix(trimmed, "}")) ||
+				(strings.HasPrefix(trimmed, "[") && strings.HasSuffix(trimmed, "]")) {
+				var parsed any
+				if err := json.Unmarshal([]byte(valT), &parsed); err == nil {
+					v.JsonVariables[key] = Variable[any]{
+						Key:   key,
+						Value: valT,
+						Type:  "json",
+					}
+					continue
+				}
+			}
+			v.StringVariables[key] = Variable[string]{
+				Key:   key,
+				Value: valT,
+				Type:  "string",
+			}
+		case float64:
+			if valT == float64(int(valT)) {
+				v.IntVariables[key] = Variable[int]{
+					Key:   key,
+					Value: int(valT),
+					Type:  "integer",
+				}
+			} else {
+				v.FloatVariables[key] = Variable[float64]{
+					Key:   key,
+					Value: valT,
+					Type:  "double",
+				}
+			}
+		case map[string]any, []any:
+			v.JsonVariables[key] = Variable[any]{
+				Key:   key,
+				Value: valT,
+				Type:  "json",
+			}
+		default:
+			v.JsonVariables[key] = Variable[any]{
+				Key:   key,
+				Value: valT,
+				Type:  "json",
+			}
+		}
+	}
+	return nil
 }
 
 // String returns the JSON representation of Variables.
