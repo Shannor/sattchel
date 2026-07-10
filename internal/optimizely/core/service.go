@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"slices"
 	"strings"
 	"sync"
 )
@@ -141,4 +142,89 @@ func filterFlags(flags []FeatureFlagDefinition, query string) []FeatureFlagDefin
 		}
 	}
 	return filtered
+}
+
+func (s *Service) CompareFlags(ctx context.Context, projectIDs []string) ([]FlagComparison, error) {
+	if len(projectIDs) < 2 {
+		return nil, fmt.Errorf("at least 2 project IDs must be provided for comparison")
+	}
+
+	projects, err := s.projectRepo.GetAll(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get projects: %w", err)
+	}
+
+	projMap := make(map[string]Project)
+	for _, p := range projects {
+		projMap[p.ID] = p
+	}
+
+	getProject := func(id string) Project {
+		if p, ok := projMap[id]; ok {
+			return p
+		}
+		return Project{ID: id, Name: id}
+	}
+
+	projectFlags, err := s.GetFlags(ctx, projectIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	// Track flag key to name
+	flagNames := make(map[string]string)
+	// Track project IDs where each flag exists
+	flagExistMap := make(map[string]map[string]bool)
+
+	for pid, flags := range projectFlags {
+		for _, flag := range flags {
+			if flag.Key == "" {
+				continue
+			}
+			if _, ok := flagNames[flag.Key]; !ok {
+				flagNames[flag.Key] = flag.Name
+			}
+			if _, ok := flagExistMap[flag.Key]; !ok {
+				flagExistMap[flag.Key] = make(map[string]bool)
+			}
+			flagExistMap[flag.Key][pid] = true
+		}
+	}
+
+	var comparisons []FlagComparison
+	for key, existMap := range flagExistMap {
+		if len(existMap) < len(projectIDs) {
+			var existsIn []Project
+			var missingIn []Project
+			for _, pid := range projectIDs {
+				p := getProject(pid)
+				if existMap[pid] {
+					existsIn = append(existsIn, p)
+				} else {
+					missingIn = append(missingIn, p)
+				}
+			}
+
+			slices.SortFunc(existsIn, func(a, b Project) int {
+				return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
+			})
+			slices.SortFunc(missingIn, func(a, b Project) int {
+				return strings.Compare(strings.ToLower(a.Name), strings.ToLower(b.Name))
+			})
+
+			comparisons = append(comparisons, FlagComparison{
+				Key:       key,
+				Name:      flagNames[key],
+				ExistsIn:  existsIn,
+				MissingIn: missingIn,
+			})
+		}
+	}
+
+	// Sort comparisons by key
+	slices.SortFunc(comparisons, func(a, b FlagComparison) int {
+		return strings.Compare(strings.ToLower(a.Key), strings.ToLower(b.Key))
+	})
+
+	return comparisons, nil
 }

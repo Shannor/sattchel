@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 
 	"sattchel/internal/optimizely/core"
 
@@ -442,4 +443,61 @@ func buildMultiProjectFlagMarkdown(reports []ProjectFlagReport, opts ReportOptio
 	}
 
 	return m.String()
+}
+
+// RenderFlagComparisonsGlamourStr renders a slice of core.FlagComparison as a markdown string.
+func RenderFlagComparisonsGlamourStr(comparisons []core.FlagComparison) (string, error) {
+	m := markdown.NewMarkdown(nil)
+	m.H1("⚡ Feature Flag Comparison Mismatches")
+	m.LF()
+	m.PlainText(fmt.Sprintf("Found %d mismatching flags across projects.", len(comparisons)))
+	m.LF()
+	m.LF()
+
+	rows := [][]string{}
+	for _, comp := range comparisons {
+		var existsStrs []string
+		for _, p := range comp.ExistsIn {
+			existsStrs = append(existsStrs, fmt.Sprintf("%s (%s)", p.Name, p.ID))
+		}
+		var missingStrs []string
+		for _, p := range comp.MissingIn {
+			missingStrs = append(missingStrs, fmt.Sprintf("%s (%s)", p.Name, p.ID))
+		}
+
+		rows = append(rows, []string{
+			fmt.Sprintf("`%s`", comp.Key),
+			comp.Name,
+			strings.Join(existsStrs, ", "),
+			strings.Join(missingStrs, ", "),
+		})
+	}
+
+	m.Table(markdown.TableSet{
+		Header: []string{"Flag Key", "Name", "Exists In", "Missing In"},
+		Rows:   rows,
+	})
+
+	mdStr := m.String()
+
+	width, _, err := term.GetSize(uintptr(os.Stdout.Fd()))
+	if err != nil {
+		width = 80
+	}
+
+	r, err := glamour.NewTermRenderer(
+		glamour.WithStylePath("dark"),
+		glamour.WithWordWrap(width),
+	)
+	if err != nil {
+		return "", fmt.Errorf("failed to create glamour renderer: %w", err)
+	}
+	defer r.Close()
+
+	out, err := r.Render(mdStr)
+	if err != nil {
+		return "", fmt.Errorf("failed to render markdown: %w", err)
+	}
+
+	return out, nil
 }

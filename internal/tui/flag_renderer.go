@@ -441,3 +441,35 @@ func jsonEqual(a, b any) bool {
 	}
 	return string(aBytes) == string(bBytes)
 }
+
+// RenderFlagComparisonsLipGlossStr renders a slice of core.FlagComparison as a styled table string.
+func RenderFlagComparisonsLipGlossStr(comparisons []core.FlagComparison) (string, error) {
+	s := AutoStyles()
+	var sb strings.Builder
+
+	rows := [][]string{
+		{"Flag Key", "Name", "Exists In", "Missing In"},
+	}
+	for _, comp := range comparisons {
+		var existsStrs []string
+		for _, p := range comp.ExistsIn {
+			existsStrs = append(existsStrs, fmt.Sprintf("%s (%s)", p.Name, p.ID))
+		}
+		var missingStrs []string
+		for _, p := range comp.MissingIn {
+			missingStrs = append(missingStrs, fmt.Sprintf("%s (%s)", p.Name, p.ID))
+		}
+
+		rows = append(rows, []string{
+			comp.Key,
+			comp.Name,
+			strings.Join(existsStrs, ", "),
+			strings.Join(missingStrs, ", "),
+		})
+	}
+
+	sb.WriteString(s.Title.Render("  ⚡ FEATURE FLAG COMPARISON MISMATCHES") + "\n")
+	sb.WriteString(s.Muted.Render(fmt.Sprintf("  Found %d mismatching flags across projects.", len(comparisons))) + "\n\n")
+	sb.WriteString(renderTable(s, rows) + "\n")
+	return sb.String(), nil
+}

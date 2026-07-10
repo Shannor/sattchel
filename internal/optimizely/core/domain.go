@@ -18,6 +18,14 @@ type Project struct {
 	Source   string `json:"source" mapstructure:"source" yaml:"source"`
 }
 
+// FlagComparison represents a comparison status of a feature flag across projects.
+type FlagComparison struct {
+	Key       string    `json:"key"`
+	Name      string    `json:"name"`
+	ExistsIn  []Project `json:"existsIn"`
+	MissingIn []Project `json:"missingIn"`
+}
+
 // Environment Top level class under Project. Will generally exist in an array.
 // Will have many to many mappings with other Models generally.
 type Environment struct {

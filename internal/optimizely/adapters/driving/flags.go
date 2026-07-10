@@ -40,6 +40,7 @@ func cmdFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Com
 
 	flagCmd.AddCommand(listFlags(s, config, writer))
 	flagCmd.AddCommand(getFlag(s, config))
+	flagCmd.AddCommand(compareFlags(s, config, writer))
 	return flagCmd
 }
 
@@ -352,5 +353,111 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	cmd.Flags().BoolVar(&stdoutFlag, "stdout", false, "Dump list directly to stdout instead of interactive UI")
 	cmd.Flags().StringVar(&toFile, "to-file", "", "Write list to the specified file path")
+	return cmd
+}
+
+func compareFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "compare [project-ids...]",
+		Short: "Compare feature flags across multiple projects and list missing flags",
+		Long: `Compare feature flags across 2 or more projects.
+Finds and returns a list of feature flags that don't exist in all of the specified project IDs.
+If no project IDs are provided as arguments, project IDs saved in the configuration will be used.
+There must be at least 2 project IDs provided or saved in the configuration.`,
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx := cmd.Context()
+			if skipCache {
+				ctx = context.WithValue(ctx, driven.BypassCacheKey, true)
+			}
+			cfg, err := config.Get()
+			if err != nil {
+				return err
+			}
+			if cfg.APIKey == "" {
+				return fmt.Errorf("API key is required")
+			}
+
+			// Gather project IDs from flags/args
+			var targetProjectIDs []string
+			if len(projectFilter) > 0 {
+				targetProjectIDs = projectFilter
+			}
+			if len(args) > 0 {
+				targetProjectIDs = append(targetProjectIDs, args...)
+			}
+			if len(targetProjectIDs) == 0 {
+				for _, project := range cfg.Projects {
+					targetProjectIDs = append(targetProjectIDs, project.ID)
+				}
+			}
+
+			// Check minimum requirement
+			if len(targetProjectIDs) < 2 {
+				return fmt.Errorf("at least 2 project IDs are required for comparison (found: %d)", len(targetProjectIDs))
+			}
+
+			var comparisons []core.FlagComparison
+			isTTY := true
+			if stat, err := os.Stdout.Stat(); err == nil && (stat.Mode()&os.ModeCharDevice) == 0 {
+				isTTY = false
+			}
+			bypassSpinner := stdoutFlag || toFile != "" || !isTTY
+
+			if bypassSpinner {
+				comparisons, err = s.CompareFlags(ctx, targetProjectIDs)
+			} else {
+				if err := spinner.
+					New().
+					Title("Comparing feature flags...").
+					Action(func() {
+						comparisons, err = s.CompareFlags(ctx, targetProjectIDs)
+					}).Run(); err != nil {
+					return err
+				}
+			}
+
+			if err != nil {
+				return err
+			}
+
+			if len(comparisons) == 0 {
+				writer.Success("All feature flags match perfectly across all checked projects!")
+				return nil
+			}
+
+			var content string
+			var renderErr error
+			if outputFormat == "lipgloss" {
+				content, renderErr = tui.RenderFlagComparisonsLipGlossStr(comparisons)
+			} else {
+				// default to markdown/glamour
+				content, renderErr = tui.RenderFlagComparisonsGlamourStr(comparisons)
+			}
+			if renderErr != nil {
+				return renderErr
+			}
+
+			if toFile != "" {
+				err := os.WriteFile(toFile, []byte(content), 0644)
+				if err != nil {
+					return fmt.Errorf("failed to write to file %s: %w", toFile, err)
+				}
+				return nil
+			}
+
+			if stdoutFlag || !isTTY {
+				fmt.Print(content)
+				return nil
+			}
+
+			return tui.RunPager(content)
+		},
+	}
+	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided, compares only the specified project(s)")
+	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
+	cmd.Flags().StringVarP(&outputFormat, "output", "o", "markdown", "Output format (markdown, lipgloss)")
+	cmd.Flags().BoolVar(&stdoutFlag, "stdout", false, "Dump list directly to stdout instead of using a pager")
+	cmd.Flags().StringVar(&toFile, "to-file", "", "Write comparison list to the specified file path")
 	return cmd
 }
