@@ -1,10 +1,13 @@
 package driving
 
 import (
+	"context"
 	"fmt"
+	"sattchel/internal/optimizely/adapters/driven"
 	"sattchel/internal/optimizely/core"
 	"sattchel/internal/tui"
 
+	"charm.land/huh/v2/spinner"
 	"github.com/spf13/cobra"
 )
 
@@ -12,6 +15,7 @@ var (
 	projectFilter = make([]string, 0)
 	envFilter     = make([]string, 0)
 	queryFilter   string
+	skipCache     bool
 )
 
 func cmdFlags(s *core.Service, config *Config) *cobra.Command {
@@ -43,6 +47,9 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 			}
 			flagId := args[0]
 			ctx := cmd.Context()
+			if skipCache {
+				ctx = context.WithValue(ctx, driven.BypassCacheKey, true)
+			}
 			cfg, err := config.Get()
 			if err != nil {
 				return err
@@ -65,6 +72,7 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 	}
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided will only show the flag for the project(s) (if not provided will show all)")
+	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	return cmd
 }
 
@@ -75,6 +83,9 @@ func listFlags(s *core.Service, config *Config) *cobra.Command {
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
+			if skipCache {
+				ctx = context.WithValue(ctx, driven.BypassCacheKey, true)
+			}
 			cfg, err := config.Get()
 			if err != nil {
 				return err
@@ -92,21 +103,20 @@ func listFlags(s *core.Service, config *Config) *cobra.Command {
 				}
 			}
 
-			spinner := tui.NewSpinner()
-			spinner.Start()
-			defer spinner.Stop()
-
-			reporter := &tui.TerminalReporter{
-				Spinner: spinner,
-			}
-
-			ctx = core.WithProgress(ctx, reporter)
 			var flags map[string][]core.FeatureFlagDefinition
-			if queryFilter != "" {
-				flags, err = s.SearchFlags(ctx, ids, core.ListFlagsOptions{Query: queryFilter})
-			} else {
-				flags, err = s.GetFlags(ctx, ids)
+			if err := spinner.
+				New().
+				Title("Listing feature flags...").
+				Action(func() {
+					if queryFilter != "" {
+						flags, err = s.SearchFlags(ctx, ids, core.ListFlagsOptions{Query: queryFilter})
+					} else {
+						flags, err = s.GetFlags(ctx, ids)
+					}
+				}).Run(); err != nil {
+				return err
 			}
+
 			if err != nil {
 				return err
 			}
@@ -127,5 +137,6 @@ func listFlags(s *core.Service, config *Config) *cobra.Command {
 	cmd.Flags().StringArrayVar(&projectFilter, "filter", []string{}, "if provided will only show the flags for the provided project ids. (if not provided will show all)")
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")
+	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	return cmd
 }

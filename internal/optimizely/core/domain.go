@@ -53,24 +53,15 @@ type FeatureFlagDefinition struct {
 	Meta             map[string]any `json:"meta"`
 	CreatedBy        *string        `json:"createdBy"`
 	CreatedAt        *time.Time     `json:"createdAt"`
-	// overrides a collection of overriding variables that help build the instance of a Feature Flag.
-	// Private since the creation of the Feature Flag should be handled by models.
-	overrides []Override
-	// targets a collection that provides the mapping between FeatureFlagDefinition, Environment, and Override
-	targets []Target
-}
-
-func (f *FeatureFlagDefinition) SetOverrides(o []Override) {
-	f.overrides = o
-}
-
-func (f *FeatureFlagDefinition) SetTargets(target []Target) {
-	f.targets = target
+	// Overrides a collection of overriding variables that help build the instance of a Feature Flag.
+	Overrides []Override `json:"overrides,omitempty"`
+	// Targets a collection that provides the mapping between FeatureFlagDefinition, Environment, and Override
+	Targets []Target `json:"targets,omitempty"`
 }
 
 func (f *FeatureFlagDefinition) AllInstances() ([]FeatureFlagInstance, error) {
-	result := make([]FeatureFlagInstance, len(f.targets))
-	for _, target := range f.targets {
+	result := make([]FeatureFlagInstance, len(f.Targets))
+	for _, target := range f.Targets {
 		i, err := f.ByEnvID(target.EnvironmentID)
 		if err != nil {
 			continue
@@ -90,30 +81,30 @@ func (f *FeatureFlagDefinition) ByEnvID(envID string) (*FeatureFlagInstance, err
 		Archived:      f.Archived,
 	}
 
-	if f.overrides == nil || len(f.overrides) == 0 {
+	if f.Overrides == nil || len(f.Overrides) == 0 {
 		return &result, nil
 	}
 
-	idx := slices.IndexFunc(f.targets, func(target Target) bool {
+	idx := slices.IndexFunc(f.Targets, func(target Target) bool {
 		return envID == target.EnvironmentID
 	})
 	if idx == -1 {
 		return &result, nil
 	}
 
-	t := f.targets[idx]
+	t := f.Targets[idx]
 	result.Enabled = t.IsEnabled
 	if t.OverrideID == "" {
 		return &result, nil
 	}
 
-	idx = slices.IndexFunc(f.overrides, func(override Override) bool {
+	idx = slices.IndexFunc(f.Overrides, func(override Override) bool {
 		return t.OverrideID == override.Key || t.OverrideID == override.ID
 	})
 	if idx == -1 {
 		return &result, nil
 	}
-	o := f.overrides[idx]
+	o := f.Overrides[idx]
 	result.Variables.Merge(o.Variables)
 	return &result, nil
 }

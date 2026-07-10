@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"strings"
 	"sync"
 )
 
@@ -89,27 +90,31 @@ func (s *Service) SearchFlags(ctx context.Context, projectIDs []string, opts Lis
 	var errs []error
 
 	for _, pid := range projectIDs {
-		wg.Go(func() {
-			dm, err := s.flagFactory.Create(ctx, pid)
+		wg.Add(1)
+		go func(projectID string) {
+			defer wg.Done()
+			dm, err := s.flagFactory.Create(ctx, projectID)
 			if err != nil {
 				mu.Lock()
-				errs = append(errs, fmt.Errorf("failed to create flag mapper for project %s: %w", pid, err))
+				errs = append(errs, fmt.Errorf("failed to create flag mapper for project %s: %w", projectID, err))
 				mu.Unlock()
 				return
 			}
 
-			flags, err := dm.Search(ctx, opts)
+			flags, err := dm.GetAll(ctx)
 			if err != nil {
 				mu.Lock()
-				errs = append(errs, fmt.Errorf("failed to search flags for project %s: %w", pid, err))
+				errs = append(errs, fmt.Errorf("failed to get flags for project %s: %w", projectID, err))
 				mu.Unlock()
 				return
 			}
+
+			filtered := filterFlags(flags, opts.Query)
 
 			mu.Lock()
-			result[pid] = flags
+			result[projectID] = filtered
 			mu.Unlock()
-		})
+		}(pid)
 	}
 
 	wg.Wait()
@@ -119,4 +124,21 @@ func (s *Service) SearchFlags(ctx context.Context, projectIDs []string, opts Lis
 	}
 
 	return result, nil
+}
+
+func filterFlags(flags []FeatureFlagDefinition, query string) []FeatureFlagDefinition {
+	if query == "" {
+		return flags
+	}
+	query = strings.ToLower(query)
+	var filtered []FeatureFlagDefinition
+	for _, f := range flags {
+		if strings.Contains(strings.ToLower(f.Name), query) ||
+			strings.Contains(strings.ToLower(f.Key), query) ||
+			strings.Contains(strings.ToLower(f.Description), query) ||
+			strings.Contains(strings.ToLower(f.ID), query) {
+			filtered = append(filtered, f)
+		}
+	}
+	return filtered
 }

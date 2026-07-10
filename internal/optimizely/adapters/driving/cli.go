@@ -19,5 +19,6 @@ func NewCommand(s *core.Service, v *viper.Viper, writer printer.Writer, styles t
 	cmd.AddCommand(cmdFlags(s, cfg))
 	cmd.AddCommand(cmdProjects(s, cfg, writer))
 	cmd.AddCommand(cmdConfig(cfg, styles))
+	cmd.AddCommand(cmdCache(cfg))
 	return cmd
 }

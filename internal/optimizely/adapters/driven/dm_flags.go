@@ -12,7 +12,6 @@ import (
 	"sattchel/internal/optimizely/core"
 	"strconv"
 	"sync"
-	"sync/atomic"
 )
 
 var (
@@ -85,10 +84,7 @@ func (f *flagDataMapper) Get(ctx context.Context, ID string) (*core.FeatureFlagD
 	if err != nil {
 		return nil, err
 	}
-	reporter := core.ProgressFromContext(ctx)
-	if reporter != nil {
-		reporter.Report(f.projectID, 0.0, "starting")
-	}
+
 	response, err := f.client.FetchFlagWithResponse(ctx, id, ID)
 	if err != nil {
 		return nil, err
@@ -127,10 +123,6 @@ func (f *flagDataMapper) getIdForService() (int, error) {
 }
 
 func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefinition, error) {
-	return f.Search(ctx, core.ListFlagsOptions{})
-}
-
-func (f *flagDataMapper) Search(ctx context.Context, opts core.ListFlagsOptions) ([]core.FeatureFlagDefinition, error) {
 	err := f.validate()
 	if err != nil {
 		return nil, err
@@ -141,16 +133,8 @@ func (f *flagDataMapper) Search(ctx context.Context, opts core.ListFlagsOptions)
 		return nil, err
 	}
 
-	reporter := core.ProgressFromContext(ctx)
-	if reporter != nil {
-		reporter.Report(f.projectID, 0.0, "starting")
-	}
-
 	params := &features.ListFlagsParams{
 		PageWindow: new(pageSize),
-	}
-	if opts.Query != "" {
-		params.Query = &opts.Query
 	}
 
 	response, err := f.client.ListFlagsWithResponse(ctx, id, params)
@@ -179,9 +163,6 @@ func (f *flagDataMapper) Search(ctx context.Context, opts core.ListFlagsOptions)
 	}
 
 	if info.NextUrl == nil {
-		if reporter != nil {
-			reporter.Report(f.projectID, 1.0, "done")
-		}
 		return results, nil
 	}
 
@@ -193,8 +174,6 @@ func (f *flagDataMapper) Search(ctx context.Context, opts core.ListFlagsOptions)
 	}
 
 	var wg sync.WaitGroup
-	var completedPages atomic.Int64
-	totalPages := info.TotalPages
 	for _, token := range tokens {
 		wg.Add(1)
 		go func(tok string) {
@@ -202,9 +181,6 @@ func (f *flagDataMapper) Search(ctx context.Context, opts core.ListFlagsOptions)
 			pageParams := &features.ListFlagsParams{
 				PageToken:  &tok,
 				PageWindow: new(pageSize),
-			}
-			if opts.Query != "" {
-				pageParams.Query = &opts.Query
 			}
 			response, err := f.client.ListFlagsWithResponse(ctx, id, pageParams)
 			if err != nil {
@@ -232,10 +208,7 @@ func (f *flagDataMapper) Search(ctx context.Context, opts core.ListFlagsOptions)
 				results = append(results, *enriched)
 				mu.Unlock()
 			}
-			n := completedPages.Add(1)
-			if reporter != nil {
-				reporter.Report(f.projectID, float64(n)/float64(totalPages), "fetching pages")
-			}
+
 		}(token)
 	}
 
@@ -288,7 +261,7 @@ func toFeatureFlag(flag features.Flag) (core.FeatureFlagDefinition, error) {
 			targets = append(targets, t)
 		}
 	}
-	result.SetTargets(targets)
+	result.Targets = targets
 	return result, nil
 }
 
@@ -605,7 +578,7 @@ func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*
 	for _, variation := range allVariations {
 		overrides = append(overrides, toOverride(variation))
 	}
-	result.SetOverrides(overrides)
+	result.Overrides = overrides
 	return &result, nil
 }
 

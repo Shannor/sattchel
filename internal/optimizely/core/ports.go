@@ -18,7 +18,6 @@ type ListFlagsOptions struct {
 
 type FlagsRepository interface {
 	Repository[FeatureFlagDefinition]
-	Search(ctx context.Context, opts ListFlagsOptions) ([]FeatureFlagDefinition, error)
 }
 type EnvironmentsRepository Repository[Environment]
 
@@ -28,9 +27,4 @@ type FlagsRepositoryFactory interface {
 
 type EnvironmentsRepositoryFactory interface {
 	Create(ctx context.Context, projectID string) (EnvironmentsRepository, error)
-}
-
-// ProgressReporter defines the contract for reporting progress from data mappers/repositories.
-type ProgressReporter interface {
-	Report(ID string, progress float64, message string)
 }

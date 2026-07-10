@@ -16,6 +16,8 @@ import (
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
 
+	"time"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -129,7 +131,15 @@ func setupOptimizely(v *viper.Viper) *optimizelyCore.Service {
 	client := optimizelyDriven.BaseFlagClient(cfg.APIKey)
 	v2Client := optimizelyDriven.BaseV2Client(cfg.APIKey)
 	factory := optimizelyDriven.NewFlagsDMFactory(client, cfg.APIKey)
+
+	cachePath := filepath.Join(config.ResolvedConfigDir, "optimizely_cache.json")
+	ttl := 5 * time.Minute
+	if cfg.CacheTTLMinutes > 0 {
+		ttl = time.Duration(cfg.CacheTTLMinutes) * time.Minute
+	}
+	cachedFactory := optimizelyDriven.NewCachedFlagsFactory(factory, cachePath, ttl)
+
 	envFactory := optimizelyDriven.NewEnvironmentsDMFactory(v2Client, cfg.APIKey)
 	projectDM := optimizelyDriven.NewProjectsDM(v2Client)
-	return optimizelyCore.NewService(projectDM, factory, envFactory)
+	return optimizelyCore.NewService(projectDM, cachedFactory, envFactory)
 }

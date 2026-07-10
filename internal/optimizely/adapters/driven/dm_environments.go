@@ -66,11 +66,6 @@ func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*core.Envir
 		return nil, err
 	}
 
-	reporter := core.ProgressFromContext(ctx)
-	if reporter != nil {
-		reporter.Report(e.projectID, 0.0, "starting")
-	}
-
 	response, err := e.client.GetEnvironmentWithResponse(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get environment. %v", err)
@@ -101,11 +96,6 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]core.Environment,
 		return nil, err
 	}
 
-	reporter := core.ProgressFromContext(ctx)
-	if reporter != nil {
-		reporter.Report(e.projectID, 0.0, "starting")
-	}
-
 	// Use pageSize variable defined in dm_flags.go
 	response, err := e.client.ListEnvironmentsWithResponse(ctx, &projects.ListEnvironmentsParams{
 		PerPage:   new(pageSize),
@@ -132,9 +122,6 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]core.Environment,
 		results = append(results, eModel)
 	}
 
-	if reporter != nil {
-		reporter.Report(e.projectID, 1.0, "done")
-	}
 	return results, nil
 }
 
@@ -166,11 +153,6 @@ func (e *environmentDataMapper) Delete(ctx context.Context, ID string) (string, 
 		return "", err
 	}
 
-	reporter := core.ProgressFromContext(ctx)
-	if reporter != nil {
-		reporter.Report(e.projectID, 0.0, "deleting")
-	}
-
 	response, err := e.client.DeleteEnvironmentWithResponse(ctx, id)
 	if err != nil {
 		return "", fmt.Errorf("failed to delete environment. %v", err)
@@ -179,9 +161,6 @@ func (e *environmentDataMapper) Delete(ctx context.Context, ID string) (string, 
 		return "", fmt.Errorf("non-200/204 status code: %d", response.StatusCode())
 	}
 
-	if reporter != nil {
-		reporter.Report(e.projectID, 1.0, "deleted")
-	}
 	return ID, nil
 }
 
@@ -194,11 +173,6 @@ func (e *environmentDataMapper) Create(ctx context.Context, value core.Environme
 	_, err = e.getIdForService()
 	if err != nil {
 		return nil, err
-	}
-
-	reporter := core.ProgressFromContext(ctx)
-	if reporter != nil {
-		reporter.Report(e.projectID, 0.0, "creating")
 	}
 
 	env := projects.Environment{
@@ -223,9 +197,6 @@ func (e *environmentDataMapper) Create(ctx context.Context, value core.Environme
 		return nil, err
 	}
 
-	if reporter != nil {
-		reporter.Report(e.projectID, 1.0, "created")
-	}
 	return &result, nil
 }
 
@@ -238,11 +209,6 @@ func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *
 	id, err := e.getIdForService()
 	if err != nil {
 		return nil, err
-	}
-
-	reporter := core.ProgressFromContext(ctx)
-	if reporter != nil {
-		reporter.Report(e.projectID, 0.0, "updating")
 	}
 
 	// First get the current state to apply the updater
@@ -289,8 +255,5 @@ func (e *environmentDataMapper) Update(ctx context.Context, updater func(value *
 		return nil, err
 	}
 
-	if reporter != nil {
-		reporter.Report(e.projectID, 1.0, "updated")
-	}
 	return &result, nil
 }

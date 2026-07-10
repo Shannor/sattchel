@@ -8,9 +8,10 @@ import (
 )
 
 type Configuration struct {
-	APIKey         string                        `mapstructure:"apiKey" json:"apiKey" yaml:"apiKey"`
-	Projects       []core.Project                `mapstructure:"projects" json:"projects" yaml:"projects"`
-	EnvironmentMap map[string][]core.Environment `json:"environmentMap" mapstructure:"environmentMap" yaml:"environmentMap"`
+	APIKey          string                        `mapstructure:"apiKey" json:"apiKey" yaml:"apiKey"`
+	Projects        []core.Project                `mapstructure:"projects" json:"projects" yaml:"projects"`
+	EnvironmentMap  map[string][]core.Environment `json:"environmentMap" mapstructure:"environmentMap" yaml:"environmentMap"`
+	CacheTTLMinutes int                           `mapstructure:"cacheTTLMinutes" json:"cacheTTLMinutes" yaml:"cacheTTLMinutes"`
 }
 
 type Config struct {
