@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
@@ -131,9 +132,18 @@ func renderTable(s Styles, rows [][]string) string {
 
 	columns := make([]table.Column, len(header))
 	for i, title := range header {
+		maxLen := lipgloss.Width(title)
+		for _, row := range data {
+			if i < len(row) {
+				w := lipgloss.Width(row[i])
+				if w > maxLen {
+					maxLen = w
+				}
+			}
+		}
 		columns[i] = table.Column{
 			Title: title,
-			Width: 20,
+			Width: maxLen + 4,
 		}
 	}
 
@@ -142,12 +152,18 @@ func renderTable(s Styles, rows [][]string) string {
 		rowData[i] = r
 	}
 
+	totalWidth := 0
+	for _, col := range columns {
+		totalWidth += col.Width
+	}
+	totalWidth += len(columns) + 1
+
 	t := table.New(
 		table.WithColumns(columns),
 		table.WithRows(rowData),
 		table.WithFocused(false),
 		table.WithHeight(len(data)+2),
-		table.WithWidth(80),
+		table.WithWidth(totalWidth),
 	)
 
 	styles := table.DefaultStyles()
@@ -254,9 +270,10 @@ func RenderMultiProjectFlagLipGlossStr(reports []ProjectFlagReport, opts ReportO
 					if ov.Description != "" {
 						sb.WriteString(fmt.Sprintf("      Description: %s\n", ov.Description))
 					}
-					if hasVariables(ov.Variables) {
-						sb.WriteString("      Variables:\n")
-						renderVariablesLipGloss(&sb, s, ov.Variables, "        ")
+					diffVars := GetDifferentVariables(ov.Variables, rep.Flag.DefaultVariables)
+					if hasVariables(diffVars) {
+						sb.WriteString("      Variables (Overrides):\n")
+						renderVariablesLipGloss(&sb, s, diffVars, "        ")
 					}
 					sb.WriteString("\n")
 				}
@@ -270,9 +287,10 @@ func RenderMultiProjectFlagLipGlossStr(reports []ProjectFlagReport, opts ReportO
 				sb.WriteString("    No environments configured.\n")
 				sb.WriteString("\n")
 			} else {
-				for i, inst := range rep.Instances {
-					sb.WriteString(s.Text.Bold(true).Render("    "+inst.EnvironmentID) + "\n")
-
+				envRows := [][]string{
+					{"Environment", "Enabled", "Variant"},
+				}
+				for _, inst := range rep.Instances {
 					var selectedVariant string
 					for _, target := range rep.Flag.Targets {
 						if target.EnvironmentID == inst.EnvironmentID {
@@ -293,25 +311,31 @@ func RenderMultiProjectFlagLipGlossStr(reports []ProjectFlagReport, opts ReportO
 						selectedVariant = "-"
 					}
 
-					instDetails := [][]string{
-						{"Field", "Value"},
-						{"Enabled", enabledStr(inst.Enabled)},
-						{"Selected Variant", selectedVariant},
-						{"Archived", fmt.Sprintf("%t", inst.Archived)},
-					}
-					sb.WriteString(renderTable(s, instDetails) + "\n")
+					envRows = append(envRows, []string{
+						inst.EnvironmentID,
+						enabledStr(inst.Enabled),
+						selectedVariant,
+					})
+				}
+				sb.WriteString(renderTable(s, envRows) + "\n")
+				sb.WriteString("\n")
 
-					if hasVariables(inst.Variables) {
-						sb.WriteString("\n")
-						sb.WriteString(s.Muted.Bold(true).Render("      Variable Overrides:") + "\n")
-						renderVariablesLipGloss(&sb, s, inst.Variables, "      ")
-					}
-
-					if i < len(rep.Instances)-1 {
+				hasAnyOverrides := false
+				for _, inst := range rep.Instances {
+					diffVars := GetDifferentVariables(inst.Variables, rep.Flag.DefaultVariables)
+					if hasVariables(diffVars) {
+						if !hasAnyOverrides {
+							sb.WriteString(s.Muted.Bold(true).Render("    Variable Overrides by Environment:") + "\n")
+							hasAnyOverrides = true
+						}
+						sb.WriteString(s.Text.Bold(true).Render("      "+inst.EnvironmentID) + ":\n")
+						renderVariablesLipGloss(&sb, s, diffVars, "        ")
 						sb.WriteString("\n")
 					}
 				}
-				sb.WriteString("\n")
+				if hasAnyOverrides {
+					sb.WriteString("\n")
+				}
 			}
 		}
 
@@ -358,4 +382,62 @@ func renderVariableLipGloss(w io.Writer, s Styles, name, typ, value, description
 	} else {
 		fmt.Fprintf(w, "%s  Value: %s\n", indent, value)
 	}
+}
+
+// GetDifferentVariables returns a core.Variables containing only variables from `vars` that differ from `defaults`.
+func GetDifferentVariables(vars core.Variables, defaults core.Variables) core.Variables {
+	diff := core.Variables{
+		BoolVariables:   make(core.VariableMap[bool]),
+		IntVariables:    make(core.VariableMap[int]),
+		FloatVariables:  make(core.VariableMap[float64]),
+		StringVariables: make(core.VariableMap[string]),
+		JsonVariables:   make(core.VariableMap[any]),
+	}
+
+	for key, v := range vars.BoolVariables {
+		d, exists := defaults.BoolVariables[key]
+		if !exists || v.Value != d.Value {
+			diff.BoolVariables[key] = v
+		}
+	}
+	for key, v := range vars.IntVariables {
+		d, exists := defaults.IntVariables[key]
+		if !exists || v.Value != d.Value {
+			diff.IntVariables[key] = v
+		}
+	}
+	for key, v := range vars.FloatVariables {
+		d, exists := defaults.FloatVariables[key]
+		if !exists || v.Value != d.Value {
+			diff.FloatVariables[key] = v
+		}
+	}
+	for key, v := range vars.StringVariables {
+		d, exists := defaults.StringVariables[key]
+		if !exists || v.Value != d.Value {
+			diff.StringVariables[key] = v
+		}
+	}
+	for key, v := range vars.JsonVariables {
+		d, exists := defaults.JsonVariables[key]
+		if !exists || !jsonEqual(v.Value, d.Value) {
+			diff.JsonVariables[key] = v
+		}
+	}
+
+	return diff
+}
+
+func jsonEqual(a, b any) bool {
+	aS, okA := a.(string)
+	bS, okB := b.(string)
+	if okA && okB {
+		return aS == bS
+	}
+	aBytes, errA := json.Marshal(a)
+	bBytes, errB := json.Marshal(b)
+	if errA != nil || errB != nil {
+		return false
+	}
+	return string(aBytes) == string(bBytes)
 }

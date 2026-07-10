@@ -328,26 +328,27 @@ func buildMultiProjectFlagMarkdown(reports []ProjectFlagReport, opts ReportOptio
 						m.PlainText(fmt.Sprintf("  *Description:* %s", ov.Description))
 						m.LF()
 					}
-					if hasVariables(ov.Variables) {
-						m.PlainText("  *Variables:*")
+					diffVars := GetDifferentVariables(ov.Variables, rep.Flag.DefaultVariables)
+					if hasVariables(diffVars) {
+						m.PlainText("  *Variables (Overrides):*")
 						m.LF()
-						for key, v := range ov.Variables.BoolVariables {
+						for key, v := range diffVars.BoolVariables {
 							m.PlainText(fmt.Sprintf("    - `%s` (boolean) = `%v`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range ov.Variables.IntVariables {
+						for key, v := range diffVars.IntVariables {
 							m.PlainText(fmt.Sprintf("    - `%s` (integer) = `%v`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range ov.Variables.FloatVariables {
+						for key, v := range diffVars.FloatVariables {
 							m.PlainText(fmt.Sprintf("    - `%s` (float) = `%v`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range ov.Variables.StringVariables {
+						for key, v := range diffVars.StringVariables {
 							m.PlainText(fmt.Sprintf("    - `%s` (string) = `\"%s\"`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range ov.Variables.JsonVariables {
+						for key, v := range diffVars.JsonVariables {
 							m.PlainText(fmt.Sprintf("    - `%s` (json) = `%s`", key, marshalJSON(v.Value)))
 							m.LF()
 						}
@@ -366,10 +367,8 @@ func buildMultiProjectFlagMarkdown(reports []ProjectFlagReport, opts ReportOptio
 				m.PlainText("No environments configured.")
 				m.LF()
 			} else {
+				rows := [][]string{}
 				for _, inst := range rep.Instances {
-					m.PlainText(fmt.Sprintf("#### **%s**", inst.EnvironmentID))
-					m.LF()
-
 					var selectedVariant string
 					for _, target := range rep.Flag.Targets {
 						if target.EnvironmentID == inst.EnvironmentID {
@@ -387,39 +386,55 @@ func buildMultiProjectFlagMarkdown(reports []ProjectFlagReport, opts ReportOptio
 						}
 					}
 					if selectedVariant == "" {
-						selectedVariant = "*None (or Default)*"
+						selectedVariant = "*None*"
 					}
 
-					m.PlainText(fmt.Sprintf("- **Enabled**: %s", enabledStr(inst.Enabled)))
-					m.LF()
-					m.PlainText(fmt.Sprintf("- **Selected Variant**: %s", selectedVariant))
-					m.LF()
+					rows = append(rows, []string{
+						inst.EnvironmentID,
+						enabledStr(inst.Enabled),
+						selectedVariant,
+					})
+				}
 
-					if hasVariables(inst.Variables) {
-						m.PlainText("- **Variable Overrides**:")
+				m.Table(markdown.TableSet{
+					Header: []string{"Environment", "Enabled", "Variant"},
+					Rows:   rows,
+				})
+				m.LF()
+
+				hasAnyOverrides := false
+				for _, inst := range rep.Instances {
+					diffVars := GetDifferentVariables(inst.Variables, rep.Flag.DefaultVariables)
+					if hasVariables(diffVars) {
+						if !hasAnyOverrides {
+							m.PlainText("**Variable Overrides by Environment:**")
+							m.LF()
+							hasAnyOverrides = true
+						}
+						m.PlainText(fmt.Sprintf("- **%s**:", inst.EnvironmentID))
 						m.LF()
-						for key, v := range inst.Variables.BoolVariables {
+						for key, v := range diffVars.BoolVariables {
 							m.PlainText(fmt.Sprintf("  - `%s` (boolean) = `%v`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range inst.Variables.IntVariables {
+						for key, v := range diffVars.IntVariables {
 							m.PlainText(fmt.Sprintf("  - `%s` (integer) = `%v`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range inst.Variables.FloatVariables {
+						for key, v := range diffVars.FloatVariables {
 							m.PlainText(fmt.Sprintf("  - `%s` (float) = `%v`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range inst.Variables.StringVariables {
+						for key, v := range diffVars.StringVariables {
 							m.PlainText(fmt.Sprintf("  - `%s` (string) = `\"%s\"`", key, v.Value))
 							m.LF()
 						}
-						for key, v := range inst.Variables.JsonVariables {
+						for key, v := range diffVars.JsonVariables {
 							m.PlainText(fmt.Sprintf("  - `%s` (json) = `%s`", key, marshalJSON(v.Value)))
 							m.LF()
 						}
+						m.LF()
 					}
-					m.LF()
 				}
 			}
 			m.LF()
