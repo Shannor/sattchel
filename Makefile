@@ -2,12 +2,9 @@ BINARY := satt
 BIN_DIR := bin
 PKG     := ./...
 
-.PHONY: build run test fmt vet tidy clean generate
+.PHONY: build run test fmt vet tidy clean
 
-generate:
-	go run github.com/a-h/templ/cmd/templ@latest generate
-
-build: generate
+build:
 	go build -o $(BIN_DIR)/$(BINARY) .
 
 test:

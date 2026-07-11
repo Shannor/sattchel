@@ -24,9 +24,9 @@ func Init() (*viper.Viper, error) {
 
 	v := viper.New()
 
-	configDir := envViper.GetString("SATT_CONFIG_DIR")
+	configDir := envViper.GetString("SATTCHEL_CONFIG_DIR")
 	if configDir == "" {
-		configDir = os.Getenv("SATT_CONFIG_DIR")
+		configDir = os.Getenv("SATTCHEL_CONFIG_DIR")
 	}
 
 	if configDir == "" {

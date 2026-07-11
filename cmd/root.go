@@ -23,10 +23,11 @@ import (
 
 var updateCh <-chan config.UpdateInformation
 
-const defaultBinaryName = "satt"
+// defaultTTL the amount of time we'll hold the cache locally
+const defaultTTL = 1 * time.Hour
 
 var rootCmd = &cobra.Command{
-	Use:           defaultBinaryName,
+	Use:           "satt",
 	Short:         "A collection of tools for optimizing my workflows or fun",
 	SilenceErrors: true,
 	SilenceUsage:  true,
@@ -132,7 +133,7 @@ func setupOptimizely(v *viper.Viper) *optimizelyCore.Service {
 	factory := optimizelyDriven.NewFlagsDMFactory(client, cfg.APIKey)
 
 	cachePath := filepath.Join(config.ResolvedConfigDir, "optimizely_cache.json")
-	ttl := 5 * time.Minute
+	ttl := defaultTTL
 	if cfg.CacheTTLMinutes > 0 {
 		ttl = time.Duration(cfg.CacheTTLMinutes) * time.Minute
 	}
