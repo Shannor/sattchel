@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-const SubFolder = ".config/sattchel"
+const SubFolder = ".config/satt"
 const FileName = "config"
 const FileType = "yml"
 
@@ -24,9 +24,9 @@ func Init() (*viper.Viper, error) {
 
 	v := viper.New()
 
-	configDir := envViper.GetString("SATTCHEL_CONFIG_DIR")
+	configDir := envViper.GetString("SATT_CONFIG_DIR")
 	if configDir == "" {
-		configDir = os.Getenv("SATTCHEL_CONFIG_DIR")
+		configDir = os.Getenv("SATT_CONFIG_DIR")
 	}
 
 	if configDir == "" {

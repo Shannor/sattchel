@@ -26,11 +26,11 @@ My goals can be followed along [ here if you care ](./LEARNINGS.md) :)
 ### Build from Source (preferred if using Go)
 
 ```bash
-go install github.com/Shannor/sattchel@latest
-sattchel --help
+git clone https://github.com/Shannor/sattchel.git
+cd sattchel
+make build
+# Binary is built at bin/satt
 ```
-
-That installs the main binary as `sattchel`. The first run automatically creates the `sat` and `satt` aliases in the same Go bin directory.
 
 ### From GitHub Releases
 
@@ -40,48 +40,48 @@ Download pre-built binaries directly from GitHub releases:
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Linux_x86_64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/satt_Linux_x86_64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### Linux (arm64)
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Linux_arm64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/satt_Linux_arm64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### macOS (Intel)
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Darwin_x86_64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/satt_Darwin_x86_64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### macOS (Apple Silicon)
 
 ```bash
 mkdir -p ~/bin
-curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Darwin_arm64.tar.gz | tar xz -C ~/bin/
+curl -sSfL https://github.com/Shannor/sattchel/releases/latest/download/satt_Darwin_arm64.tar.gz | tar xz -C ~/bin/
 ```
 
 #### Windows (amd64)
 
 ```powershell
 $env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
-Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Windows_x86_64.zip -OutFile sattchel.zip
-Expand-Archive sattchel.zip -DestinationPath $env:USERPROFILE/temp
-copy-item $env:USERPROFILE/temp/sattchel_Windows_x86_64/*.exe $env:USERPROFILE/bin/
-Remove-Item sattchel.zip, $env:USERPROFILE/temp -Recurse -Force
+Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/satt_Windows_x86_64.zip -OutFile satt.zip
+Expand-Archive satt.zip -DestinationPath $env:USERPROFILE/temp
+copy-item $env:USERPROFILE/temp/satt_Windows_x86_64/*.exe $env:USERPROFILE/bin/
+Remove-Item satt.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
 #### Windows (arm64)
 
 ```powershell
 $env:USERPROFILE = $env:USERPROFILE -replace '\\', '/'
-Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/sattchel_Windows_arm64.zip -OutFile sattchel.zip
-Expand-Archive sattchel.zip -DestinationPath $env:USERPROFILE/temp
-copy-item $env:USERPROFILE/temp/sattchel_Windows_arm64/*.exe $env:USERPROFILE/bin/
-Remove-Item sattchel.zip, $env:USERPROFILE/temp -Recurse -Force
+Invoke-WebRequest -Uri https://github.com/Shannor/sattchel/releases/latest/download/satt_Windows_arm64.zip -OutFile satt.zip
+Expand-Archive satt.zip -DestinationPath $env:USERPROFILE/temp
+copy-item $env:USERPROFILE/temp/satt_Windows_arm64/*.exe $env:USERPROFILE/bin/
+Remove-Item satt.zip, $env:USERPROFILE/temp -Recurse -Force
 ```
 
 Or download manually from the [Releases page](https://github.com/Shannor/sattchel/releases) and place the binaries in your PATH.
@@ -111,7 +111,7 @@ The release install puts the binary on your `PATH`, but it does **not** automati
 
 ```bash
 mkdir -p ~/.zsh/completions
-sattchel completion zsh > ~/.zsh/completions/_sattchel
+satt completion zsh > ~/.zsh/completions/_satt
 ```
 
 Add this to `~/.zshrc` if it is not already there:
@@ -131,13 +131,13 @@ source ~/.zshrc
 
 ```bash
 mkdir -p ~/.bash_completion.d
-sattchel completion bash > ~/.bash_completion.d/sattchel
+satt completion bash > ~/.bash_completion.d/satt
 ```
 
 Add this to `~/.bashrc` if it is not already there:
 
 ```bash
-source ~/.bash_completion.d/sattchel
+source ~/.bash_completion.d/satt
 ```
 
 Then reload your shell:
@@ -178,10 +178,10 @@ The CLI automatically checks for updates on startup. If a new version is availab
 
 To manually check for updates:
 ```bash
-sattchel update
+satt update
 ```
 
 To force update to the latest version:
 ```bash
-sattchel update --force
+satt update --force
 ```

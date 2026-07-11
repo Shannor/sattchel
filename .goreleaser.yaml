@@ -1,34 +1,6 @@
 version: 2
-project_name: sattchel
+project_name: satt
 builds:
-  - id: sattchel
-    main: .
-    binary: sattchel
-    env:
-      - CGO_ENABLED=0
-    ldflags:
-      - -s -w -X sattchel/internal/config.Version={{.Version}}
-    goos:
-      - linux
-      - windows
-      - darwin
-    goarch:
-      - amd64
-      - arm64
-  - id: sat
-    main: .
-    binary: sat
-    env:
-      - CGO_ENABLED=0
-    ldflags:
-      - -s -w -X sattchel/internal/config.Version={{.Version}}
-    goos:
-      - linux
-      - windows
-      - darwin
-    goarch:
-      - amd64
-      - arm64
   - id: satt
     main: .
     binary: satt

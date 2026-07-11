@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log/slog"
 	"os"
 	"path/filepath"
 	"sattchel/internal/cli/update"
@@ -24,7 +23,7 @@ import (
 
 var updateCh <-chan config.UpdateInformation
 
-const defaultBinaryName = "sattchel"
+const defaultBinaryName = "satt"
 
 var rootCmd = &cobra.Command{
 	Use:           defaultBinaryName,
@@ -64,10 +63,6 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	rootCmd.Use = executableName()
-	if err := config.EnsureExecutableAliases(); err != nil {
-		slog.Warn("failed to sync cli aliases", slog.String("error", err.Error()))
-	}
 	err := rootCmd.Execute()
 	if err != nil {
 		styles := tui.AutoStyles()
@@ -76,14 +71,6 @@ func Execute() {
 		writer.Error(msg)
 		os.Exit(1)
 	}
-}
-
-func executableName() string {
-	name := filepath.Base(os.Args[0])
-	if name == "." || name == string(filepath.Separator) || name == "" {
-		return defaultBinaryName
-	}
-	return name
 }
 
 func isCompletionCommand(cmd *cobra.Command) bool {

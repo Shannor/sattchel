@@ -16,8 +16,9 @@ import (
 )
 
 const (
-	repoOwner = "Shannor"
-	repoName  = "sattchel"
+	repoOwner  = "Shannor"
+	repoName   = "sattchel"
+	binaryName = "satt"
 )
 
 // Version is set at build time via ldflags (e.g. -ldflags "-X sattchel/internal/config.Version=v1.0.0").
@@ -156,7 +157,7 @@ func buildAssetName() string {
 		ext = "zip"
 	}
 
-	return fmt.Sprintf("%s_%s_%s.%s", repoName, os, arch, ext)
+	return fmt.Sprintf("%s_%s_%s.%s", binaryName, os, arch, ext)
 }
 
 func doUpdate(url string) error {
@@ -209,9 +210,9 @@ func extractBinaryFromTarGz(r io.Reader) (io.Reader, error) {
 		}
 
 		name := header.Name
-		if name == repoName || name == repoName+".exe" {
+		if name == binaryName || name == binaryName+".exe" {
 			return tr, nil
 		}
 	}
-	return nil, fmt.Errorf("binary %q not found in archive", repoName)
+	return nil, fmt.Errorf("binary %q not found in archive", binaryName)
 }

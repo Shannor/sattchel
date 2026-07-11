@@ -1,4 +1,4 @@
-BINARY := sattchel
+BINARY := satt
 BIN_DIR := bin
 PKG     := ./...
 

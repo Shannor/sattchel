@@ -9,7 +9,7 @@ import (
 func TestIsCompletionCommand(t *testing.T) {
 	t.Parallel()
 
-	root := &cobra.Command{Use: "sattchel"}
+	root := &cobra.Command{Use: "satt"}
 	completion := &cobra.Command{Use: "completion"}
 	zsh := &cobra.Command{Use: "zsh"}
 	tracker := &cobra.Command{Use: "tracker"}
