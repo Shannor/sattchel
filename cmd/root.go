@@ -36,7 +36,9 @@ var rootCmd = &cobra.Command{
 			updateCh = nil
 			return
 		}
-		updateCh = config.NewUpdater().CheckForUpdate()
+		if !isUpdateCommand(cmd) {
+			updateCh = config.NewUpdater().CheckForUpdate()
+		}
 	},
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
 		if isCompletionCommand(cmd) {
@@ -77,6 +79,16 @@ func isCompletionCommand(cmd *cobra.Command) bool {
 	for current := cmd; current != nil; current = current.Parent() {
 		switch current.Name() {
 		case "completion", "__complete", "__completeNoDesc":
+			return true
+		}
+	}
+	return false
+}
+
+func isUpdateCommand(cmd *cobra.Command) bool {
+	for current := cmd; current != nil; current = current.Parent() {
+		switch current.Name() {
+		case "update":
 			return true
 		}
 	}
