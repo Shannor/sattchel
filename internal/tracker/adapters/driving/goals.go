@@ -8,7 +8,6 @@ import (
 	"slices"
 	"strings"
 
-	"charm.land/huh/v2"
 	"charm.land/huh/v2/spinner"
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/tree"
@@ -68,12 +67,14 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
        satt tracker goals set
        satt tracker goals list
        satt tracker goals move <childId> <newParentId>
+       satt tracker goals view [id]
        `,
 	}
 	cmd.AddCommand(addGoal(service, cfg))
 	cmd.AddCommand(setGoal(service, cfg))
 	cmd.AddCommand(listGoals(service, cfg))
 	cmd.AddCommand(moveGoal(service, cfg))
+	cmd.AddCommand(viewGoal(service, cfg))
 	return cmd
 }
 
@@ -216,78 +217,7 @@ func setGoal(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			currentGoalID := cfg.CurrentGoalID()
-			roots := buildGoalTree(goals)
-
-			// Iterative DFS to build select options with tree indentation prefixes
-			type stackElement struct {
-				node   *GoalNode
-				indent string
-				isLast bool
-			}
-
-			var (
-				selectedID string
-				options    []huh.Option[string]
-			)
-
-			stack := make([]stackElement, 0)
-			for i := len(roots) - 1; i >= 0; i-- {
-				stack = append(stack, stackElement{
-					node:   roots[i],
-					indent: "",
-					isLast: i == len(roots)-1,
-				})
-			}
-
-			for len(stack) > 0 {
-				curr := stack[len(stack)-1]
-				stack = stack[:len(stack)-1]
-
-				marker := ""
-				if len(curr.indent) > 0 {
-					if curr.isLast {
-						marker = "└─ "
-					} else {
-						marker = "├─ "
-					}
-				}
-
-				label := curr.indent + marker + curr.node.Goal.Name
-				option := huh.NewOption(label, curr.node.Goal.ID)
-				if curr.node.Goal.ID == currentGoalID {
-					option = option.Selected(true)
-					selectedID = curr.node.Goal.ID
-				}
-				options = append(options, option)
-
-				childIndent := curr.indent
-				if len(curr.indent) > 0 {
-					if curr.isLast {
-						childIndent += "   "
-					} else {
-						childIndent += "│  "
-					}
-				} else {
-					childIndent = "  "
-				}
-
-				for i := len(curr.node.Children) - 1; i >= 0; i-- {
-					stack = append(stack, stackElement{
-						node:   curr.node.Children[i],
-						indent: childIndent,
-						isLast: i == len(curr.node.Children)-1,
-					})
-				}
-			}
-
-			err = huh.NewForm(
-				huh.NewGroup(
-					huh.NewSelect[string]().
-						Title("Select Active Goal").
-						Options(options...).
-						Value(&selectedID),
-				),
-			).WithShowHelp(true).Run()
+			selectedID, err := tui.ChooseGoal(goals, "Select Active Goal", currentGoalID, nil, nil)
 			if err != nil {
 				return err
 			}
@@ -464,79 +394,6 @@ func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.St
 	return nodeTrees[root.Goal.ID]
 }
 
-func buildSelectOptions(roots []*GoalNode, filterFn func(*core.Goal) (bool, bool), rootGoalID string) []huh.Option[string] {
-	type stackElement struct {
-		node   *GoalNode
-		indent string
-		isLast bool
-	}
-
-	var options []huh.Option[string]
-	stack := make([]stackElement, 0)
-	for i := len(roots) - 1; i >= 0; i-- {
-		stack = append(stack, stackElement{
-			node:   roots[i],
-			indent: "",
-			isLast: i == len(roots)-1,
-		})
-	}
-
-	for len(stack) > 0 {
-		curr := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-
-		include := true
-		traverseChildren := true
-		if filterFn != nil {
-			include, traverseChildren = filterFn(curr.node.Goal)
-		}
-
-		if !include && !traverseChildren {
-			continue
-		}
-
-		if include {
-			marker := ""
-			if len(curr.indent) > 0 {
-				if curr.isLast {
-					marker = "└─ "
-				} else {
-					marker = "├─ "
-				}
-			}
-
-			label := curr.indent + marker + curr.node.Goal.Name
-			if curr.node.Goal.ID == rootGoalID {
-				label += " (root - cannot move)"
-			}
-			option := huh.NewOption(label, curr.node.Goal.ID)
-			options = append(options, option)
-		}
-
-		if traverseChildren {
-			childIndent := curr.indent
-			if len(curr.indent) > 0 {
-				if curr.isLast {
-					childIndent += "   "
-				} else {
-					childIndent += "│  "
-				}
-			} else {
-				childIndent = "  "
-			}
-
-			for i := len(curr.node.Children) - 1; i >= 0; i-- {
-				stack = append(stack, stackElement{
-					node:   curr.node.Children[i],
-					indent: childIndent,
-					isLast: i == len(curr.node.Children)-1,
-				})
-			}
-		}
-	}
-	return options
-}
-
 func getExcludedSubtreeIDs(roots []*GoalNode, childID string) map[string]bool {
 	nodesMap := make(map[string]*GoalNode)
 	var traverse func(*GoalNode)
@@ -685,23 +542,12 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			if childID == "" {
-				roots := buildGoalTree(goals)
-				options := buildSelectOptions(roots, nil, rootGoalID)
-
-				err = huh.NewForm(
-					huh.NewGroup(
-						huh.NewSelect[string]().
-							Title("Select Goal to Move").
-							Options(options...).
-							Value(&childID).
-							Validate(func(val string) error {
-								if val == rootGoalID {
-									return fmt.Errorf("the root goal cannot be moved")
-								}
-								return nil
-							}),
-					),
-				).WithShowHelp(true).Run()
+				childID, err = tui.ChooseGoal(goals, "Select Goal to Move", "", nil, func(val string) error {
+					if val == rootGoalID {
+						return fmt.Errorf("the root goal cannot be moved")
+					}
+					return nil
+				})
 				if err != nil {
 					return err
 				}
@@ -711,25 +557,12 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				roots := buildGoalTree(goals)
 				excludedIDs := getExcludedSubtreeIDs(roots, childID)
 
-				options := buildSelectOptions(roots, func(g *core.Goal) (bool, bool) {
+				newParentID, err = tui.ChooseGoal(goals, "Select New Parent Goal", "", func(g *core.Goal) (bool, bool) {
 					if excludedIDs[g.ID] {
 						return false, false
 					}
 					return true, true
-				}, "")
-
-				if len(options) == 0 {
-					return fmt.Errorf("no valid destination goals available to set as parent")
-				}
-
-				err = huh.NewForm(
-					huh.NewGroup(
-						huh.NewSelect[string]().
-							Title("Select New Parent Goal").
-							Options(options...).
-							Value(&newParentID),
-					),
-				).WithShowHelp(true).Run()
+				}, nil)
 				if err != nil {
 					return err
 				}
@@ -749,6 +582,90 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			fmt.Printf("Goal %q (%s) moved successfully under parent %s\n", movedGoal.Name, movedGoal.ID, newParentID)
+			return nil
+		},
+	}
+
+	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
+	return cmd
+}
+
+func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
+	projectID := ""
+
+	cmd := &cobra.Command{
+		Use:   "view [id]",
+		Short: "View goal details",
+		Long: `View detailed information about a tracker goal.
+   If no ID is provided, an interactive select interface will be displayed.
+   Examples:
+     satt tracker goals view <id>
+     satt tracker goals view
+     `,
+		Args:         cobra.MaximumNArgs(1),
+		SilenceUsage: true,
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			if len(args) != 0 {
+				return nil, cobra.ShellCompDirectiveNoFileComp
+			}
+			pid := getActiveProjectID(cmd, cfg, projectID)
+			return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			pid := getActiveProjectID(cmd, cfg, projectID)
+			if pid == "" {
+				return fmt.Errorf("no project selected")
+			}
+
+			var selectedID string
+			var err error
+			if len(args) > 0 {
+				selectedID = args[0]
+			} else {
+				var goals []core.Goal
+				if err := spinner.
+					New().
+					Title("Getting goals ...").
+					Action(func() {
+						goals, err = service.GetGoals(cmd.Context(), pid)
+					}).Run(); err != nil {
+					return err
+				}
+				if err != nil {
+					return err
+				}
+				if len(goals) == 0 {
+					return fmt.Errorf("no goals found for project %s", pid)
+				}
+
+				currentGoalID := cfg.CurrentGoalID()
+				selectedID, err = tui.ChooseGoal(goals, "Select Goal to View", currentGoalID, nil, nil)
+				if err != nil {
+					return err
+				}
+			}
+
+			if selectedID == "" {
+				return fmt.Errorf("no goal selected")
+			}
+
+			var targetGoal *core.Goal
+			if err := spinner.
+				New().
+				Title("Getting goal details ...").
+				Action(func() {
+					targetGoal, err = service.GetGoal(cmd.Context(), selectedID)
+				}).Run(); err != nil {
+				return err
+			}
+			if err != nil {
+				return err
+			}
+
+			fmt.Print(tui.RenderGoalDetails(targetGoal))
 			return nil
 		},
 	}

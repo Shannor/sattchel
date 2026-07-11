@@ -216,3 +216,7 @@ func (s *Service) GetGoals(ctx context.Context, projectID string) ([]Goal, error
 	})
 	return goals, nil
 }
+
+func (s *Service) GetGoal(ctx context.Context, goalID string) (*Goal, error) {
+	return s.repo.GetGoal(ctx, goalID)
+}
