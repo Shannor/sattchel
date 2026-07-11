@@ -52,7 +52,7 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 		Long: `Get's all details about a feature flag.
  	Including information like the variations, statuses, and usage per project
    Examples:
-     sattchel optimizely flags get <key>
+     satt optimizely flags get <key>
      `,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -336,7 +336,7 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 			}
 
 			if selectedKey != "" {
-				cmdStr := fmt.Sprintf("sattchel optimizely flags get %s", selectedKey)
+				cmdStr := fmt.Sprintf("satt optimizely flags get %s", selectedKey)
 				if err := clipboard.WriteAll(cmdStr); err != nil {
 					writer.Error(fmt.Sprintf("Selected: %s\n(Failed to copy to clipboard: %v)\n", selectedKey, err))
 				} else {

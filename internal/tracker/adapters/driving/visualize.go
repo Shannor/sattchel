@@ -20,7 +20,7 @@ func visualizeProject(service *core.Service, cfg *Config) *cobra.Command {
 		Long: `Start an ephemeral local web server to visualize a project's goals as an interactive mind map.
 Automatically opens the mind map in your default browser.
 Examples:
-  sattchel tracker visualize
+  satt tracker visualize
   `,
 		Args:         cobra.NoArgs,
 		SilenceUsage: true,

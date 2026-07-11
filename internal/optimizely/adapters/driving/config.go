@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"sattchel/internal/tui"
+	"strconv"
+	"time"
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/huh/v2"
@@ -13,8 +15,7 @@ import (
 func cmdConfig(config *Config, styles tui.Styles) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "config",
-		Short:        "Manage configs",
-		Aliases:      []string{"co"},
+		Short:        "Manage optimizely configs",
 		SilenceUsage: true,
 	}
 	configCmd.AddCommand(setConfig(config))
@@ -24,26 +25,18 @@ func cmdConfig(config *Config, styles tui.Styles) *cobra.Command {
 
 func setConfig(config *Config) *cobra.Command {
 	return &cobra.Command{
-		Use:   "set [key] [value]",
-		Short: "Set a configuration value",
+		Use:   "set",
+		Short: "Set Optimizely configuration values",
 		Long: `Set an allowed configuration value.
-	If no key is provided, a list of available keys will be displayed.
-   Examples:
-     sattchel optimizely config set 
-     sattchel optimizely config set apiKey
-     sattchel optimizely config set apiKey <value>
+	Examples:
+     satt optimizely config set 
      `,
-		Args:         cobra.MaximumNArgs(2),
+		Args:         cobra.NoArgs,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			switch len(args) {
-			case 0:
-				err := noChoiceConfig(cmd.Context(), config)
-				if err != nil {
-					return fmt.Errorf("failed to set config: %w", err)
-				}
-			case 1:
-			case 2:
+			err := noChoiceConfig(cmd.Context(), config)
+			if err != nil {
+				return fmt.Errorf("failed to set config: %w", err)
 			}
 			return nil
 		},
@@ -52,29 +45,20 @@ func setConfig(config *Config) *cobra.Command {
 
 func getConfig(config *Config, styles tui.Styles) *cobra.Command {
 	return &cobra.Command{
-		Use:   "get [key]",
-		Short: "Get a configuration value",
-		Long: `Get an configuration value.
-	If no key is provided, all keys will be displayed.
+		Use:   "get",
+		Short: "Get Optimizely configuration values",
+		Long: `Get all configuration values.
    Examples:
-     sattchel optimizely config get 
-     sattchel optimizely config get apiKey
+     satt optimizely config get 
      `,
-		Args:         cobra.MaximumNArgs(1),
+		Args:         cobra.NoArgs,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := config.Get()
 			if err != nil {
 				return err
 			}
-			switch len(args) {
-			case 0:
-				fmt.Println(renderConfig(cfg, styles))
-			case 1:
-				fmt.Println(renderConfig(cfg, styles))
-			default:
-				return fmt.Errorf("unsupported amount of commands")
-			}
+			fmt.Println(renderConfig(cfg, styles))
 			return nil
 		},
 	}
@@ -88,7 +72,7 @@ func noChoiceConfig(ctx context.Context, config *Config) error {
 				Title("Pick a config to set").
 				Options(
 					huh.NewOption("API Key", "apiKey"),
-					huh.NewOption("Products", "products"),
+					huh.NewOption("Cache TTL", "cacheTTLMinutes"),
 				).
 				Value(&choice),
 		).WithShowHelp(true),
@@ -101,7 +85,7 @@ func noChoiceConfig(ctx context.Context, config *Config) error {
 	switch choice {
 	case "apiKey":
 		value, err := tea.NewProgram(tui.NewTextPrompt(tui.InputConfig{
-			Placeholder: "Insert Config Value",
+			Placeholder: "Insert API Key",
 		})).Run()
 		if err != nil {
 			return fmt.Errorf("failed to run program: %w", err)
@@ -118,7 +102,30 @@ func noChoiceConfig(ctx context.Context, config *Config) error {
 				return fmt.Errorf("failed to set config: %w", err)
 			}
 		}
-	case "products":
+	case "cacheTTLMinutes":
+		value, err := tea.NewProgram(tui.NewTextPrompt(tui.InputConfig{
+			Placeholder: "Insert time in minutes",
+			Header:      "Provide cache TTL in minutes. ex (10 = 10 minutes)",
+		})).Run()
+		if err != nil {
+			return fmt.Errorf("failed to run program: %w", err)
+		}
+		if v, ok := value.(tui.InputModel); ok {
+			if v.Value() == "" {
+				return fmt.Errorf("value cannot be empty")
+			}
+			_, err = config.Update(func(cfg *Configuration) error {
+				v, err := strconv.Atoi(v.Value())
+				if err != nil {
+					return err
+				}
+				cfg.CacheTTLMinutes = int64(time.Duration(v) * time.Minute)
+				return nil
+			})
+			if err != nil {
+				return fmt.Errorf("failed to set config: %w", err)
+			}
+		}
 	}
 	return nil
 }

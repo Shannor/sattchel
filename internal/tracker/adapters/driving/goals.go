@@ -64,10 +64,10 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
 		Aliases: []string{"g"},
 		Long: `Commands to manage goals.
      Examples:
-       sattchel tracker goals add <name>
-       sattchel tracker goals set
-       sattchel tracker goals list
-       sattchel tracker goals move <childId> <newParentId>
+       satt tracker goals add <name>
+       satt tracker goals set
+       satt tracker goals list
+       satt tracker goals move <childId> <newParentId>
        `,
 	}
 	cmd.AddCommand(addGoal(service, cfg))
@@ -81,6 +81,9 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	description := ""
 	parentID := ""
 	projectID := ""
+	impact := ""
+	effort := ""
+	relationship := ""
 	changeCurrent := false
 	cmd := &cobra.Command{
 		Use:   "add <name>",
@@ -89,9 +92,9 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	Will create a new goal. If it's the root goal it will automatically get set as current'.
 	For each goal after it will stay pointing at root unless you provide a parent or flag on creation to change it.
    Examples:
-     sattchel tracker goal add short
-     sattchel tracker goal add "Long Title with Spaces"
-     sattchel tracker goal add <name> -d="description" --parent=<parentId>
+     satt tracker goal add short
+     satt tracker goal add "Long Title with Spaces"
+     satt tracker goal add <name> -d="description" --parent=<parentId>
      `,
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
@@ -117,6 +120,8 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 			options := core.GoalOptions{
 				ParentID:    parent,
 				Description: description,
+				Effort:      core.Effort(effort),
+				Impact:      core.Impact(impact),
 			}
 			goal, err := service.CreateGoal(cmd.Context(), pid, args[0], options)
 			if err != nil {
@@ -133,6 +138,9 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
 	cmd.Flags().StringVarP(&parentID, "parent", "", "", "Parent goal id of the goal. If not provided, the last parent will be used")
 	cmd.Flags().BoolVarP(&changeCurrent, "set", "s", false, "Set the newly created goal as current")
+	cmd.Flags().StringVarP(&effort, "effort", "e", string(core.UnknownEffort), "How much effort is required to achieve the goal")
+	cmd.Flags().StringVarP(&impact, "impact", "i", string(core.UnknownImpact), "How much impact will the goal have")
+	cmd.Flags().StringVarP(&relationship, "relationship", "r", string(core.LinkPreferred), "Requirement relationship with parent goal")
 
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
@@ -141,7 +149,30 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 		pid := getActiveProjectID(cmd, cfg, projectID)
 		return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
 	})
+	_ = cmd.RegisterFlagCompletionFunc("effort", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.XSmallEffort),
+			string(core.SmallEffort),
+			string(core.MediumEffort),
+			string(core.LargeEffort),
+			string(core.XLargeEffort),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
 
+	_ = cmd.RegisterFlagCompletionFunc("impact", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.LowImpact),
+			string(core.MediumImpact),
+			string(core.HighImpact),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("relationship", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.LinkOptional),
+			string(core.LinkPreferred),
+			string(core.LinkRequired),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
 	return cmd
 }
 
@@ -548,8 +579,8 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 		Long: `Move a goal to a new parent.
    If childId and newParentId are not provided, it will prompt for them interactively.
    Examples:
-     sattchel tracker goals move <childId> <newParentId>
-     sattchel tracker goals move
+     satt tracker goals move <childId> <newParentId>
+     satt tracker goals move
      `,
 		Args:         cobra.MaximumNArgs(2),
 		SilenceUsage: true,

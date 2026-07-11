@@ -21,15 +21,15 @@ func (m InputModel) Value() string {
 type InputConfig struct {
 	Placeholder string
 	CharLimit   int
-	header      string
-	footer      string
+	Header      string
+	Footer      string
 }
 
 func NewTextPrompt(c InputConfig) InputModel {
 
 	ti := textinput.New()
 	ti.SetVirtualCursor(false)
-	ti.SetWidth(20)
+	ti.SetWidth(100)
 	ti.Focus()
 	ti.Placeholder = "Enter value..."
 	ti.CharLimit = 300
@@ -44,6 +44,8 @@ func NewTextPrompt(c InputConfig) InputModel {
 
 	return InputModel{
 		textInput: ti,
+		header:    c.Header,
+		footer:    c.Footer,
 	}
 }
 

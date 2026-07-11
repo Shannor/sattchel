@@ -16,9 +16,9 @@ func projects(service *core.Service, cfg *Config) *cobra.Command {
 		Short:   "Manage projects",
 		Long: `Manage projects.
    Examples:
-     sattchel tracker project create <name> 
-     sattchel tracker project set
-     sattchel tracker project list
+     satt tracker project create <name> 
+     satt tracker project set
+     satt tracker project list
      `,
 	}
 	cmd.AddCommand(createProject(service, cfg))
@@ -35,8 +35,8 @@ func createProject(service *core.Service, cfg *Config) *cobra.Command {
 		Long: `Create a new project.
 	If no key is provided, a list of available keys will be displayed.
    Examples:
-     sattchel tracker project create <name> 
-     sattchel tracker project create <name> -d "description"
+     satt tracker project create <name> 
+     satt tracker project create <name> -d "description"
      `,
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
