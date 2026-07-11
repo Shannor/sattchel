@@ -8,7 +8,6 @@ require (
 	charm.land/glamour/v2 v2.0.0
 	charm.land/huh/v2 v2.0.3
 	charm.land/lipgloss/v2 v2.0.2
-	github.com/a-h/templ v0.3.1020
 	github.com/atotto/clipboard v0.1.4
 	github.com/charmbracelet/x/term v0.2.2
 	github.com/google/uuid v1.6.0

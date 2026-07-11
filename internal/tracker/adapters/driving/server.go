@@ -2,10 +2,15 @@ package driving
 
 import (
 	"context"
+	"embed"
+	"io/fs"
 	"net"
 	"net/http"
 	"sattchel/internal/tracker/core"
 )
+
+//go:embed static
+var staticFS embed.FS
 
 // HTTPServer drives the core logic through HTTP.
 type HTTPServer struct {
@@ -26,8 +31,26 @@ func (s *HTTPServer) Start(ctx context.Context, listenAddr string) (string, func
 	mux.HandleFunc("/api/goals", s.handleGetGoals)
 	mux.HandleFunc("/api/goals/move", s.handleMoveGoal)
 
-	// 2. Mount UI / Visualizer Page (from visualizer.go)
-	mux.HandleFunc("/", s.handleVisualizerUI)
+	// 2. Mount UI / Visualizer Page (served from embedded static assets)
+	subFS, err := fs.Sub(staticFS, "static")
+	if err != nil {
+		return "", nil, err
+	}
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(subFS))))
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
+		content, err := fs.ReadFile(subFS, "index.html")
+		if err != nil {
+			http.Error(w, "not found", http.StatusNotFound)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		_, _ = w.Write(content)
+	})
 
 	listener, err := net.Listen("tcp", listenAddr)
 	if err != nil {

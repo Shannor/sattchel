@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sattchel - Goals Mind Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+    <div id="app-header">
+        <h1>Goals Mind Map</h1>
+        <p>Sattchel Ephemeral Visualizer</p>
+    </div>
+
+    <div id="mindmap-container">
+        <svg id="mindmap">
+            <g id="workspace">
+                <g id="links"></g>
+                <g id="nodes"></g>
+            </g>
+        </svg>
+    </div>
+
+    <div id="controls-panel">
+        <button class="control-btn" title="Zoom In">+</button>
+        <button class="control-btn" title="Zoom Out">−</button>
+        <button class="control-btn" title="Reset View">⊙</button>
+    </div>
+
+    <div id="details-drawer">
+        <div class="drawer-header">
+            <div>
+                <span id="drawer-status-badge" class="badge">Status</span>
+                <h2 id="drawer-title" style="margin-top: 8px;">Goal Title</h2>
+            </div>
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="drawer-content">
+            <div class="detail-section">
+                <span class="detail-label">Description</span>
+                <div id="drawer-description" class="detail-desc">No description provided.</div>
+            </div>
+
+            <div class="detail-section">
+                <span class="detail-label">Metrics</span>
+                <div class="info-pill-container">
+                    <div class="info-pill">
+                        <span class="detail-label" style="font-size: 9px;">Impact</span>
+                        <span id="drawer-impact" class="pill-val">Unknown</span>
+                    </div>
+                    <div class="info-pill">
+                        <span class="detail-label" style="font-size: 9px;">Effort</span>
+                        <span id="drawer-effort" class="pill-val">Unknown</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <span class="detail-label">Owner</span>
+                <div id="drawer-owner" class="detail-value">Unassigned</div>
+            </div>
+
+            <div class="detail-section">
+                <span class="detail-label">Identifier</span>
+                <div id="drawer-id" class="detail-value" style="font-family: monospace; color: var(--text-secondary);">ID</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>
