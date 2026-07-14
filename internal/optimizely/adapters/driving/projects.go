@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"sattchel/internal/optimizely/core"
 	"sattchel/internal/printer"
-	"sattchel/internal/tui"
 	"sattchel/pkg/set"
 	"slices"
 	"strings"
 
+	"sattchel/pkg/loader"
+
 	"charm.land/huh/v2"
-	"charm.land/huh/v2/spinner"
 	"github.com/spf13/cobra"
 )
 
@@ -69,15 +69,9 @@ func setProjects(s *core.Service, config *Config, writer printer.Writer) *cobra.
 				err      error
 			)
 
-			if err := spinner.
-				New().
-				Title("Getting projects ...").
-				Action(func() {
-					projects, err = getAllProjects(cmd.Context(), s, config)
-				}).Run(); err != nil {
-				return err
-			}
-
+			err = loader.Run("Getting projects ...", func() {
+				projects, err = getAllProjects(cmd.Context(), s, config)
+			})
 			if err != nil {
 				return err
 			}
@@ -143,16 +137,14 @@ func listProjects(s *core.Service, config *Config, writer printer.Writer) *cobra
 		Use:   "list",
 		Short: "List all projects",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			spinner := tui.NewSpinner()
-			spinner.Start()
-			defer spinner.Stop()
-
-			projects, err := getAllProjects(cmd.Context(), s, config)
+			var projects []core.Project
+			var err error
+			err = loader.Run("Getting projects ...", func() {
+				projects, err = getAllProjects(cmd.Context(), s, config)
+			})
 			if err != nil {
 				return err
 			}
-
-			spinner.Stop()
 
 			if len(projects) == 0 {
 				writer.Info("No projects found")

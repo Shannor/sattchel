@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"sattchel/internal/tracker/core"
 
+	"sattchel/pkg/loader"
+
 	"charm.land/huh/v2"
-	"charm.land/huh/v2/spinner"
 	"github.com/spf13/cobra"
 )
 
@@ -67,15 +68,9 @@ func setProject(service *core.Service, cfg *Config) *cobra.Command {
 				err      error
 			)
 
-			if err := spinner.
-				New().
-				Title("Getting projects ...").
-				Action(func() {
-					projects, err = service.GetProjects(cmd.Context())
-				}).Run(); err != nil {
-				return err
-			}
-
+			err = loader.Run("Getting projects ...", func() {
+				projects, err = service.GetProjects(cmd.Context())
+			})
 			if err != nil {
 				return err
 			}
@@ -139,15 +134,9 @@ func listProjects(service *core.Service, cfg *Config) *cobra.Command {
 				err      error
 			)
 
-			if err := spinner.
-				New().
-				Title("Getting projects ...").
-				Action(func() {
-					projects, err = service.GetProjects(cmd.Context())
-				}).Run(); err != nil {
-				return err
-			}
-
+			err = loader.Run("Getting projects ...", func() {
+				projects, err = service.GetProjects(cmd.Context())
+			})
 			if err != nil {
 				return err
 			}

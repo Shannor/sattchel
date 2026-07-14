@@ -27,4 +27,6 @@ type TrackerRepository interface {
 	CreateMember(ctx context.Context, member *Member) (*Member, error)
 	GetMember(ctx context.Context, memberID string) (*Member, error)
 	GetMembers(ctx context.Context) ([]Member, error)
+	UpdateMember(ctx context.Context, member *Member) (*Member, error)
+	DeleteMember(ctx context.Context, memberID string) error
 }

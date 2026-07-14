@@ -220,3 +220,39 @@ func (s *Service) GetGoals(ctx context.Context, projectID string) ([]Goal, error
 func (s *Service) GetGoal(ctx context.Context, goalID string) (*Goal, error) {
 	return s.repo.GetGoal(ctx, goalID)
 }
+
+func (s *Service) CreateMember(ctx context.Context, name string, email string) (*Member, error) {
+	if name == "" {
+		return nil, fmt.Errorf("%w - name", ErrMissingRequiredFields)
+	}
+	member := &Member{
+		Name:  name,
+		Email: email,
+	}
+	return s.repo.CreateMember(ctx, member)
+}
+
+func (s *Service) GetMember(ctx context.Context, memberID string) (*Member, error) {
+	if memberID == "" {
+		return nil, fmt.Errorf("%w - member ID", ErrMissingRequiredFields)
+	}
+	return s.repo.GetMember(ctx, memberID)
+}
+
+func (s *Service) GetMembers(ctx context.Context) ([]Member, error) {
+	return s.repo.GetMembers(ctx)
+}
+
+func (s *Service) UpdateMember(ctx context.Context, member *Member) (*Member, error) {
+	if member == nil || member.ID == "" {
+		return nil, fmt.Errorf("%w - member ID", ErrMissingRequiredFields)
+	}
+	return s.repo.UpdateMember(ctx, member)
+}
+
+func (s *Service) DeleteMember(ctx context.Context, memberID string) error {
+	if memberID == "" {
+		return fmt.Errorf("%w - member ID", ErrMissingRequiredFields)
+	}
+	return s.repo.DeleteMember(ctx, memberID)
+}

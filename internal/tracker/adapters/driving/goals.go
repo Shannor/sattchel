@@ -8,7 +8,8 @@ import (
 	"slices"
 	"strings"
 
-	"charm.land/huh/v2/spinner"
+	"sattchel/pkg/loader"
+
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/tree"
 	"github.com/spf13/cobra"
@@ -199,15 +200,9 @@ func setGoal(service *core.Service, cfg *Config) *cobra.Command {
 				err   error
 			)
 
-			if err := spinner.
-				New().
-				Title("Getting goals ...").
-				Action(func() {
-					goals, err = service.GetGoals(cmd.Context(), pid)
-				}).Run(); err != nil {
-				return err
-			}
-
+			err = loader.Run("Getting goals ...", func() {
+				goals, err = service.GetGoals(cmd.Context(), pid)
+			})
 			if err != nil {
 				return err
 			}
@@ -259,15 +254,9 @@ func listGoals(service *core.Service, cfg *Config) *cobra.Command {
 				err   error
 			)
 
-			if err := spinner.
-				New().
-				Title("Getting goals ...").
-				Action(func() {
-					goals, err = service.GetGoals(cmd.Context(), pid)
-				}).Run(); err != nil {
-				return err
-			}
-
+			err = loader.Run("Getting goals ...", func() {
+				goals, err = service.GetGoals(cmd.Context(), pid)
+			})
 			if err != nil {
 				return err
 			}
@@ -514,14 +503,9 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				goals []core.Goal
 				err   error
 			)
-			if err := spinner.
-				New().
-				Title("Getting goals ...").
-				Action(func() {
-					goals, err = service.GetGoals(cmd.Context(), pid)
-				}).Run(); err != nil {
-				return err
-			}
+			err = loader.Run("Getting goals ...", func() {
+				goals, err = service.GetGoals(cmd.Context(), pid)
+			})
 			if err != nil {
 				return err
 			}
@@ -569,14 +553,9 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			var movedGoal *core.Goal
-			if err := spinner.
-				New().
-				Title("Moving goal ...").
-				Action(func() {
-					movedGoal, err = service.ChangeParent(cmd.Context(), pid, childID, newParentID, core.GoalOptions{})
-				}).Run(); err != nil {
-				return err
-			}
+			err = loader.Run("Moving goal ...", func() {
+				movedGoal, err = service.ChangeParent(cmd.Context(), pid, childID, newParentID, core.GoalOptions{})
+			})
 			if err != nil {
 				return err
 			}
@@ -626,14 +605,9 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 				selectedID = args[0]
 			} else {
 				var goals []core.Goal
-				if err := spinner.
-					New().
-					Title("Getting goals ...").
-					Action(func() {
-						goals, err = service.GetGoals(cmd.Context(), pid)
-					}).Run(); err != nil {
-					return err
-				}
+				err = loader.Run("Getting goals ...", func() {
+					goals, err = service.GetGoals(cmd.Context(), pid)
+				})
 				if err != nil {
 					return err
 				}
@@ -653,14 +627,9 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			var targetGoal *core.Goal
-			if err := spinner.
-				New().
-				Title("Getting goal details ...").
-				Action(func() {
-					targetGoal, err = service.GetGoal(cmd.Context(), selectedID)
-				}).Run(); err != nil {
-				return err
-			}
+			err = loader.Run("Getting goal details ...", func() {
+				targetGoal, err = service.GetGoal(cmd.Context(), selectedID)
+			})
 			if err != nil {
 				return err
 			}

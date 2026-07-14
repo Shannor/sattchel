@@ -19,6 +19,8 @@ type mockTrackerRepository struct {
 	createMemberFunc  func(ctx context.Context, member *Member) (*Member, error)
 	getMemberFunc     func(ctx context.Context, memberID string) (*Member, error)
 	getMembersFunc    func(ctx context.Context) ([]Member, error)
+	updateMemberFunc  func(ctx context.Context, member *Member) (*Member, error)
+	deleteMemberFunc  func(ctx context.Context, memberID string) error
 }
 
 func (m *mockTrackerRepository) CreateProject(ctx context.Context, project *Project) (*Project, error) {
@@ -96,6 +98,20 @@ func (m *mockTrackerRepository) GetMembers(ctx context.Context) ([]Member, error
 		return m.getMembersFunc(ctx)
 	}
 	return nil, nil
+}
+
+func (m *mockTrackerRepository) UpdateMember(ctx context.Context, member *Member) (*Member, error) {
+	if m.updateMemberFunc != nil {
+		return m.updateMemberFunc(ctx, member)
+	}
+	return nil, nil
+}
+
+func (m *mockTrackerRepository) DeleteMember(ctx context.Context, memberID string) error {
+	if m.deleteMemberFunc != nil {
+		return m.deleteMemberFunc(ctx, memberID)
+	}
+	return nil
 }
 
 func TestServiceCreateProject(t *testing.T) {
@@ -722,6 +738,99 @@ func TestServiceChangeParent(t *testing.T) {
 		childInParent := updatedParent.Children[0]
 		if childInParent.Parent == nil || childInParent.Parent.TargetID != "g-new-parent" {
 			t.Errorf("expected child inside parent Children to have parent link target 'g-new-parent', got %v", childInParent.Parent)
+		}
+	})
+}
+
+func TestMemberCRUD(t *testing.T) {
+	t.Run("CreateMember successful", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			createMemberFunc: func(ctx context.Context, m *Member) (*Member, error) {
+				m.ID = "m-test"
+				return m, nil
+			},
+		}
+		s := NewService(repo)
+		m, err := s.CreateMember(context.Background(), "Bob", "bob@example.com")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if m.ID != "m-test" || m.Name != "Bob" || m.Email != "bob@example.com" {
+			t.Errorf("unexpected created member: %+v", m)
+		}
+	})
+
+	t.Run("CreateMember missing name", func(t *testing.T) {
+		s := NewService(&mockTrackerRepository{})
+		_, err := s.CreateMember(context.Background(), "", "bob@example.com")
+		if !errors.Is(err, ErrMissingRequiredFields) {
+			t.Errorf("expected ErrMissingRequiredFields, got %v", err)
+		}
+	})
+
+	t.Run("GetMember successful", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getMemberFunc: func(ctx context.Context, id string) (*Member, error) {
+				return &Member{ID: id, Name: "Bob"}, nil
+			},
+		}
+		s := NewService(repo)
+		m, err := s.GetMember(context.Background(), "m-test")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if m.ID != "m-test" || m.Name != "Bob" {
+			t.Errorf("unexpected member: %+v", m)
+		}
+	})
+
+	t.Run("GetMembers successful", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getMembersFunc: func(ctx context.Context) ([]Member, error) {
+				return []Member{{ID: "m-1", Name: "Bob"}, {ID: "m-2", Name: "Alice"}}, nil
+			},
+		}
+		s := NewService(repo)
+		members, err := s.GetMembers(context.Background())
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(members) != 2 {
+			t.Errorf("expected 2 members, got %d", len(members))
+		}
+	})
+
+	t.Run("UpdateMember successful", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			updateMemberFunc: func(ctx context.Context, m *Member) (*Member, error) {
+				return m, nil
+			},
+		}
+		s := NewService(repo)
+		m, err := s.UpdateMember(context.Background(), &Member{ID: "m-test", Name: "Bob Updated", Email: "bob2@example.com"})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if m.Name != "Bob Updated" || m.Email != "bob2@example.com" {
+			t.Errorf("unexpected updated member: %+v", m)
+		}
+	})
+
+	t.Run("DeleteMember successful", func(t *testing.T) {
+		deletedID := ""
+		repo := &mockTrackerRepository{
+			deleteMemberFunc: func(ctx context.Context, id string) error {
+				deletedID = id
+				return nil
+			},
+		}
+		s := NewService(repo)
+		err := s.DeleteMember(context.Background(), "m-test")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if deletedID != "m-test" {
+			t.Errorf("expected deleted ID 'm-test', got '%s'", deletedID)
 		}
 	})
 }

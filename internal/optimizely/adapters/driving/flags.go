@@ -11,8 +11,9 @@ import (
 	"slices"
 	"strings"
 
+	"sattchel/pkg/loader"
+
 	tea "charm.land/bubbletea/v2"
-	"charm.land/huh/v2/spinner"
 	"github.com/atotto/clipboard"
 	"github.com/spf13/cobra"
 )
@@ -203,31 +204,20 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 			}
 
 			var flags map[string][]core.FeatureFlagDefinition
-			isTTY := true
-			if stat, err := os.Stdout.Stat(); err == nil && (stat.Mode()&os.ModeCharDevice) == 0 {
-				isTTY = false
-			}
-			bypassSpinner := stdoutFlag || toFile != "" || !isTTY
-
-			if bypassSpinner {
+			if stdoutFlag || toFile != "" {
 				if queryFilter != "" {
 					flags, err = s.SearchFlags(ctx, ids, core.ListFlagsOptions{Query: queryFilter})
 				} else {
 					flags, err = s.GetFlags(ctx, ids)
 				}
 			} else {
-				if err := spinner.
-					New().
-					Title("Retrieving feature flags...").
-					Action(func() {
-						if queryFilter != "" {
-							flags, err = s.SearchFlags(ctx, ids, core.ListFlagsOptions{Query: queryFilter})
-						} else {
-							flags, err = s.GetFlags(ctx, ids)
-						}
-					}).Run(); err != nil {
-					return err
-				}
+				err = loader.Run("Retrieving feature flags...", func() {
+					if queryFilter != "" {
+						flags, err = s.SearchFlags(ctx, ids, core.ListFlagsOptions{Query: queryFilter})
+					} else {
+						flags, err = s.GetFlags(ctx, ids)
+					}
+				})
 			}
 
 			if err != nil {
@@ -299,7 +289,7 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 				return nil
 			}
 
-			bypassUI := bypassSpinner
+			bypassUI := stdoutFlag || toFile != "" || !loader.IsTerminal()
 
 			if bypassUI {
 				var sb strings.Builder
@@ -398,23 +388,12 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 			}
 
 			var comparisons []core.FlagComparison
-			isTTY := true
-			if stat, err := os.Stdout.Stat(); err == nil && (stat.Mode()&os.ModeCharDevice) == 0 {
-				isTTY = false
-			}
-			bypassSpinner := stdoutFlag || toFile != "" || !isTTY
-
-			if bypassSpinner {
+			if stdoutFlag || toFile != "" {
 				comparisons, err = s.CompareFlags(ctx, targetProjectIDs)
 			} else {
-				if err := spinner.
-					New().
-					Title("Comparing feature flags...").
-					Action(func() {
-						comparisons, err = s.CompareFlags(ctx, targetProjectIDs)
-					}).Run(); err != nil {
-					return err
-				}
+				err = loader.Run("Comparing feature flags...", func() {
+					comparisons, err = s.CompareFlags(ctx, targetProjectIDs)
+				})
 			}
 
 			if err != nil {
@@ -446,7 +425,7 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 				return nil
 			}
 
-			if stdoutFlag || !isTTY {
+			if stdoutFlag || !loader.IsTerminal() {
 				fmt.Print(content)
 				return nil
 			}

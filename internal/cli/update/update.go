@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sattchel/internal/config"
 	"sattchel/internal/printer"
+	"sattchel/pkg/loader"
 
-	"charm.land/huh/v2/spinner"
 	"github.com/spf13/cobra"
 )
 
@@ -22,15 +22,10 @@ func NewCommand(writer printer.Writer) *cobra.Command {
 				update config.UpdateInformation
 				err    error
 			)
-			if err = spinner.
-				New().
-				Title("Checking for updates ...").
-				Action(func() {
-					update, err = updater.RunUpdate(force)
-					if err != nil {
-						return
-					}
-				}).Run(); err != nil {
+			err = loader.Run("Checking for updates ...", func() {
+				update, err = updater.RunUpdate(force)
+			})
+			if err != nil {
 				return err
 			}
 			if update.NeedToUpdate {

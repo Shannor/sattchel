@@ -49,8 +49,8 @@ var rootCmd = &cobra.Command{
 			return
 		}
 		if update, ok := <-updateCh; ok {
-			writer := printer.NewStyleWriter(tui.AutoStyles())
 			if update.NeedToUpdate {
+				writer := printer.NewStyleWriter(tui.AutoStyles())
 				msg := fmt.Sprintf(
 					"A new version is available: %s (current: %s). Run \"%s update\" to upgrade.",
 					update.NewVersion,
@@ -107,8 +107,8 @@ func init() {
 		panic(err)
 	}
 
-	styles := tui.AutoStyles()
-	writer := printer.NewStyleWriter(styles)
+	styles := tui.DefaultStyles(true)
+	writer := printer.NewStyleWriter()
 
 	opService := setupOptimizely(v)
 

@@ -40,6 +40,7 @@ const (
 
 type Effort string
 
+// TODO: Rename these to maybe say small-effort
 const (
 	XSmallEffort  Effort = "xs"
 	SmallEffort   Effort = "s"

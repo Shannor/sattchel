@@ -402,3 +402,53 @@ func (s *FileStorage) GetMembers(_ context.Context) ([]core.Member, error) {
 	}
 	return members, nil
 }
+
+func (s *FileStorage) UpdateMember(_ context.Context, member *core.Member) (*core.Member, error) {
+	if member == nil {
+		return nil, errors.New("nil member")
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if err := s.ensureLoaded(); err != nil {
+		return nil, err
+	}
+
+	current, ok := s.db.Members[member.ID]
+	if !ok {
+		return nil, fmt.Errorf("member %s: %w", member.ID, ErrNotFound)
+	}
+
+	current.Name = member.Name
+	current.Email = member.Email
+	s.db.Members[member.ID] = current
+
+	if err := s.flush(); err != nil {
+		return nil, err
+	}
+	return &current, nil
+}
+
+func (s *FileStorage) DeleteMember(_ context.Context, memberID string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if err := s.ensureLoaded(); err != nil {
+		return err
+	}
+
+	if _, ok := s.db.Members[memberID]; !ok {
+		return fmt.Errorf("member %s: %w", memberID, ErrNotFound)
+	}
+
+	delete(s.db.Members, memberID)
+
+	// Clean up related data/associations
+	delete(s.db.GoalsByMembers, memberID)
+	for goalID, goal := range s.db.Goals {
+		if goal.HasMember() && goal.Member.ID == memberID {
+			goal.Member = nil
+			s.db.Goals[goalID] = goal
+		}
+	}
+
+	return s.flush()
+}
