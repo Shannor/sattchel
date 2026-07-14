@@ -834,3 +834,33 @@ func TestMemberCRUD(t *testing.T) {
 		}
 	})
 }
+
+func TestServiceUpdateGoal(t *testing.T) {
+	t.Run("successful goal update", func(t *testing.T) {
+		targetGoal := &Goal{ID: "g-test", Name: "Old Goal", Description: "Old Desc", Effort: UnknownEffort}
+		repo := &mockTrackerRepository{
+			getGoalFunc: func(ctx context.Context, id string) (*Goal, error) {
+				return targetGoal, nil
+			},
+			getMemberFunc: func(ctx context.Context, id string) (*Member, error) {
+				return &Member{ID: id, Name: "Assignee"}, nil
+			},
+			updateGoalFunc: func(ctx context.Context, goal *Goal) (*Goal, error) {
+				return goal, nil
+			},
+		}
+		s := NewService(repo)
+		options := GoalOptions{
+			Description: "New Desc",
+			Effort:      LowEffort,
+			MemberID:    "m-test",
+		}
+		updated, err := s.UpdateGoal(context.Background(), "g-test", "New Name", options)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if updated.Name != "New Name" || updated.Description != "New Desc" || updated.Effort != LowEffort || updated.Member.ID != "m-test" {
+			t.Errorf("unexpected updated goal: %+v", updated)
+		}
+	})
+}

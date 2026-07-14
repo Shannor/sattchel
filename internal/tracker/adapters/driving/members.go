@@ -3,6 +3,7 @@ package driving
 import (
 	"fmt"
 	"sattchel/internal/tracker/core"
+	"sattchel/internal/tui"
 	"sattchel/pkg/loader"
 
 	"github.com/spf13/cobra"
@@ -108,6 +109,39 @@ func listMembers(service *core.Service, cfg *Config) *cobra.Command {
 				fmt.Fprintln(cmd.OutOrStdout(), "No members found")
 				return nil
 			}
+
+			if loader.IsTerminal() {
+				var options []tui.ListOption
+				for _, m := range members {
+					desc := m.ID
+					if m.Email != "" {
+						desc = fmt.Sprintf("%s — %s", m.Email, m.ID)
+					}
+					options = append(options, tui.ListOption{
+						TitleStr:       m.Name,
+						DescriptionStr: desc,
+						ValueStr:       m.ID,
+					})
+				}
+				selected, err := tui.Choose("Select Member to View", options)
+				if err != nil {
+					return err
+				}
+				if selected != nil {
+					for _, m := range members {
+						if m.ID == selected.ValueStr {
+							if m.Email != "" {
+								fmt.Fprintf(cmd.OutOrStdout(), "ID: %s\nName: %s\nEmail: %s\n", m.ID, m.Name, m.Email)
+							} else {
+								fmt.Fprintf(cmd.OutOrStdout(), "ID: %s\nName: %s\n", m.ID, m.Name)
+							}
+							break
+						}
+					}
+				}
+				return nil
+			}
+
 			for _, m := range members {
 				if m.Email != "" {
 					fmt.Fprintf(cmd.OutOrStdout(), "- %s (%s) - %s\n", m.Name, m.ID, m.Email)

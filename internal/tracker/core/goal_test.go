@@ -9,7 +9,7 @@ func TestNewGoal(t *testing.T) {
 		Description: "A test goal description",
 		Status:      GoalInProgress,
 		Impact:      HighImpact,
-		Effort:      SmallEffort,
+		Effort:      LowEffort,
 		MemberID:    "member-1",
 		ParentID:    "parent-1",
 	}
@@ -31,8 +31,8 @@ func TestNewGoal(t *testing.T) {
 	if g.Impact != HighImpact {
 		t.Errorf("expected Impact %q, got %q", HighImpact, g.Impact)
 	}
-	if g.Effort != SmallEffort {
-		t.Errorf("expected Effort %q, got %q", SmallEffort, g.Effort)
+	if g.Effort != LowEffort {
+		t.Errorf("expected Effort %q, got %q", LowEffort, g.Effort)
 	}
 	if g.Member == nil || g.Member.ID != "member-1" {
 		t.Errorf("expected Member.ID 'member-1', got %v", g.Member)

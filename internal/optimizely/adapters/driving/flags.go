@@ -13,7 +13,6 @@ import (
 
 	"sattchel/pkg/loader"
 
-	tea "charm.land/bubbletea/v2"
 	"github.com/atotto/clipboard"
 	"github.com/spf13/cobra"
 )
@@ -311,18 +310,14 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 				return nil
 			}
 
-			p := tea.NewProgram(tui.NewListSelect("Select Feature Flag to copy 'get' command", options))
-			m, err := p.Run()
+			selected, err := tui.Choose("Select Feature Flag to copy 'get' command", options)
 			if err != nil {
 				return err
 			}
 
 			var selectedKey string
-			if selectModel, ok := m.(tui.ListSelectModel); ok {
-				selected := selectModel.Selected()
-				if selected != nil {
-					selectedKey = selected.ValueStr
-				}
+			if selected != nil {
+				selectedKey = selected.ValueStr
 			}
 
 			if selectedKey != "" {

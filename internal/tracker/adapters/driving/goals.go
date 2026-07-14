@@ -1,7 +1,6 @@
 package driving
 
 import (
-	"context"
 	"fmt"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
@@ -15,48 +14,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getProjectCompletions(service *core.Service) []string {
-	projects, err := service.GetProjects(context.Background())
-	if err != nil {
-		return nil
-	}
-	var completions []string
-	for _, p := range projects {
-		completions = append(completions, fmt.Sprintf("%s\t%s", p.ID, p.Label))
-	}
-	return completions
-}
-
-func getGoalCompletions(service *core.Service, pid string) []string {
-	if pid == "" {
-		return nil
-	}
-	goals, err := service.GetGoals(context.Background(), pid)
-	if err != nil {
-		return nil
-	}
-	var completions []string
-	for _, g := range goals {
-		completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
-	}
-	return completions
-}
-
-func getActiveProjectID(cmd *cobra.Command, cfg *Config, projectIDFlag string) string {
-	if projectIDFlag != "" {
-		return projectIDFlag
-	}
-	if cmd.Flags().Changed("projectId") {
-		if pid, err := cmd.Flags().GetString("projectId"); err == nil && pid != "" {
-			return pid
-		}
-	}
-	if lastProj := cfg.CurrentProjectID(); lastProj != "" {
-		return lastProj
-	}
-	return ""
-}
-
 func goals(service *core.Service, cfg *Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "goals [verb]",
@@ -68,7 +25,8 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
        satt tracker goals set
        satt tracker goals list
        satt tracker goals move <childId> <newParentId>
-       satt tracker goals view [id]
+       satt tracker goals update <id>
+       satt tracker goals view <id>
        `,
 	}
 	cmd.AddCommand(addGoal(service, cfg))
@@ -76,6 +34,7 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
 	cmd.AddCommand(listGoals(service, cfg))
 	cmd.AddCommand(moveGoal(service, cfg))
 	cmd.AddCommand(viewGoal(service, cfg))
+	cmd.AddCommand(updateGoal(service, cfg))
 	return cmd
 }
 
@@ -86,6 +45,7 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	impact := ""
 	effort := ""
 	relationship := ""
+	memberID := ""
 	changeCurrent := false
 	cmd := &cobra.Command{
 		Use:   "add <name>",
@@ -96,7 +56,6 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
    Examples:
      satt tracker goal add short
      satt tracker goal add "Long Title with Spaces"
-     satt tracker goal add <name> -d="description" --parent=<parentId>
      `,
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
@@ -124,6 +83,7 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 				Description: description,
 				Effort:      core.Effort(effort),
 				Impact:      core.Impact(impact),
+				MemberID:    memberID,
 			}
 			goal, err := service.CreateGoal(cmd.Context(), pid, args[0], options)
 			if err != nil {
@@ -143,6 +103,7 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	cmd.Flags().StringVarP(&effort, "effort", "e", string(core.UnknownEffort), "How much effort is required to achieve the goal")
 	cmd.Flags().StringVarP(&impact, "impact", "i", string(core.UnknownImpact), "How much impact will the goal have")
 	cmd.Flags().StringVarP(&relationship, "relationship", "r", string(core.LinkPreferred), "Requirement relationship with parent goal")
+	cmd.Flags().StringVarP(&memberID, "memberId", "m", "", "(Optional) Member ID to assign to the goal")
 
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
@@ -153,11 +114,9 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	})
 	_ = cmd.RegisterFlagCompletionFunc("effort", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{
-			string(core.XSmallEffort),
-			string(core.SmallEffort),
+			string(core.LowEffort),
 			string(core.MediumEffort),
-			string(core.LargeEffort),
-			string(core.XLargeEffort),
+			string(core.HighEffort),
 		}, cobra.ShellCompDirectiveNoFileComp
 	})
 
@@ -174,6 +133,9 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 			string(core.LinkPreferred),
 			string(core.LinkRequired),
 		}, cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("memberId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getMemberCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
 	return cmd
 }
@@ -436,24 +398,16 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return nil, cobra.ShellCompDirectiveNoFileComp
 			}
 
+			// TODO: This logic of where a child can move too should be decided in the service layer.
+			// The UI shouldn't make this choice.
 			goals, err := service.GetGoals(cmd.Context(), pid)
-			if err != nil || len(goals) == 0 {
+			if err != nil {
 				return nil, cobra.ShellCompDirectiveNoFileComp
 			}
-
-			// Identify rootGoalID
-			var rootGoalID string
-			for _, g := range goals {
-				if g.Parent == nil || g.Parent.TargetID == "" {
-					rootGoalID = g.ID
-					break
-				}
-			}
-
 			if len(args) == 0 {
 				var completions []string
 				for _, g := range goals {
-					if g.ID == rootGoalID {
+					if g.IsRoot() {
 						continue
 					}
 					completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
@@ -643,5 +597,106 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
+	return cmd
+}
+
+func updateGoal(service *core.Service, cfg *Config) *cobra.Command {
+	var (
+		name        string
+		description string
+		effort      string
+		impact      string
+		memberID    string
+		status      string
+	)
+
+	cmd := &cobra.Command{
+		Use:          "update <id>",
+		Aliases:      []string{"edit"},
+		Short:        "Update a goal's details",
+		Args:         cobra.ExactArgs(1),
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			id := args[0]
+
+			// Check if at least one flag was set
+			if !cmd.Flags().Changed("name") &&
+				!cmd.Flags().Changed("description") &&
+				!cmd.Flags().Changed("effort") &&
+				!cmd.Flags().Changed("impact") &&
+				!cmd.Flags().Changed("memberId") &&
+				!cmd.Flags().Changed("status") {
+				return fmt.Errorf("at least one flag must be specified for update")
+			}
+
+			options := core.GoalOptions{
+				Description: description,
+				Effort:      core.Effort(effort),
+				Impact:      core.Impact(impact),
+				MemberID:    memberID,
+				Status:      core.GoalStatus(status),
+			}
+
+			var goal *core.Goal
+			var err error
+			runErr := loader.Run("Updating goal...", func() {
+				goal, err = service.UpdateGoal(cmd.Context(), id, name, options)
+			})
+			if runErr != nil {
+				return runErr
+			}
+			if err != nil {
+				return err
+			}
+
+			fmt.Printf("Goal %q (%s) updated successfully\n", goal.Name, goal.ID)
+			return nil
+		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			if len(args) != 0 {
+				return nil, cobra.ShellCompDirectiveNoFileComp
+			}
+			pid := getActiveProjectID(cmd, cfg, "")
+			return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
+		},
+	}
+
+	cmd.Flags().StringVar(&name, "name", "", "New name of the goal")
+	cmd.Flags().StringVarP(&description, "description", "d", "", "New description of the goal")
+	cmd.Flags().StringVarP(&effort, "effort", "e", "", "New effort level of the goal")
+	cmd.Flags().StringVarP(&impact, "impact", "i", "", "New impact level of the goal")
+	cmd.Flags().StringVarP(&memberID, "memberId", "m", "", "New member ID assigned to the goal")
+	cmd.Flags().StringVar(&status, "status", "", "New status of the goal")
+
+	_ = cmd.RegisterFlagCompletionFunc("effort", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.LowEffort),
+			string(core.MediumEffort),
+			string(core.HighEffort),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc("impact", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.LowImpact),
+			string(core.MediumImpact),
+			string(core.HighImpact),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc("memberId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getMemberCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
+
+	_ = cmd.RegisterFlagCompletionFunc("status", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.GoalOpen),
+			string(core.GoalInProgress),
+			string(core.GoalCompleted),
+			string(core.GoalCancelled),
+			string(core.GoalDraft),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
+
 	return cmd
 }

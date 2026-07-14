@@ -217,6 +217,23 @@ func (s *Service) GetGoals(ctx context.Context, projectID string) ([]Goal, error
 	return goals, nil
 }
 
+func (s *Service) GetRootGoal(ctx context.Context, projectID string) (*Goal, error) {
+	goals, err := s.GetGoals(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+	if len(goals) == 0 {
+		return nil, fmt.Errorf("no goals found")
+	}
+
+	for _, g := range goals {
+		if g.IsRoot() {
+			return &g, nil
+		}
+	}
+	return nil, fmt.Errorf("no root goal found")
+}
+
 func (s *Service) GetGoal(ctx context.Context, goalID string) (*Goal, error) {
 	return s.repo.GetGoal(ctx, goalID)
 }
@@ -255,4 +272,37 @@ func (s *Service) DeleteMember(ctx context.Context, memberID string) error {
 		return fmt.Errorf("%w - member ID", ErrMissingRequiredFields)
 	}
 	return s.repo.DeleteMember(ctx, memberID)
+}
+
+func (s *Service) UpdateGoal(ctx context.Context, goalID string, name string, options GoalOptions) (*Goal, error) {
+	if goalID == "" {
+		return nil, fmt.Errorf("%w - goal ID", ErrMissingRequiredFields)
+	}
+	goal, err := s.repo.GetGoal(ctx, goalID)
+	if err != nil {
+		return nil, err
+	}
+	if name != "" {
+		goal.Name = name
+	}
+	if options.Description != "" {
+		goal.Description = options.Description
+	}
+	if options.Status != "" {
+		goal.Status = options.Status
+	}
+	if options.Impact != "" {
+		goal.Impact = options.Impact
+	}
+	if options.Effort != "" {
+		goal.Effort = options.Effort
+	}
+	if options.MemberID != "" {
+		member, err := s.repo.GetMember(ctx, options.MemberID)
+		if err != nil {
+			return nil, err
+		}
+		goal.AssignMember(member)
+	}
+	return s.repo.UpdateGoal(ctx, goal)
 }

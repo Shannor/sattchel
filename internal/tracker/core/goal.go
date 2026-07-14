@@ -40,13 +40,10 @@ const (
 
 type Effort string
 
-// TODO: Rename these to maybe say small-effort
 const (
-	XSmallEffort  Effort = "xs"
-	SmallEffort   Effort = "s"
-	MediumEffort  Effort = "m"
-	LargeEffort   Effort = "l"
-	XLargeEffort  Effort = "xl"
+	LowEffort     Effort = "low"
+	MediumEffort  Effort = "medium"
+	HighEffort    Effort = "high"
 	UnknownEffort Effort = "unknown"
 )
 
@@ -90,6 +87,10 @@ func (g *Goal) HasMember() bool {
 
 func (g *Goal) HasParent() bool {
 	return g.Parent != nil && g.Parent.TargetID != ""
+}
+
+func (g *Goal) IsRoot() bool {
+	return g.Parent == nil || g.Parent.TargetID == ""
 }
 
 func (g *Goal) AttachChild(child *Goal, rel LinkRelationship, desc string) error {

@@ -120,3 +120,17 @@ func (m ListSelectModel) Selected() *ListOption {
 
 // docStyle defines the outer margins/padding of the list UI.
 var docStyle = lipgloss.NewStyle().Margin(1, 2)
+
+// Choose runs the list selection program and returns the selected ListOption.
+// If the user cancels or closes, it returns nil, nil.
+func Choose(title string, options []ListOption) (*ListOption, error) {
+	p := tea.NewProgram(NewListSelect(title, options))
+	m, err := p.Run()
+	if err != nil {
+		return nil, err
+	}
+	if model, ok := m.(ListSelectModel); ok {
+		return model.Selected(), nil
+	}
+	return nil, nil
+}

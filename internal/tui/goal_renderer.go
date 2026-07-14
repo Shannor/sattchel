@@ -1,12 +1,13 @@
 package tui
 
 import (
-	"charm.land/huh/v2"
-	"charm.land/lipgloss/v2"
 	"fmt"
-	"golang.org/x/exp/slices"
 	"sattchel/internal/tracker/core"
 	"strings"
+
+	"charm.land/huh/v2"
+	"charm.land/lipgloss/v2"
+	"golang.org/x/exp/slices"
 )
 
 type GoalNode struct {
@@ -200,11 +201,11 @@ func RenderGoalDetails(goal *core.Goal) string {
 
 	var effortStyle lipgloss.Style
 	switch goal.Effort {
-	case core.XSmallEffort, core.SmallEffort:
+	case core.LowEffort:
 		effortStyle = styles.Success
 	case core.MediumEffort:
 		effortStyle = styles.Info
-	case core.LargeEffort, core.XLargeEffort:
+	case core.HighEffort:
 		effortStyle = styles.Error
 	default:
 		effortStyle = styles.Warning
