@@ -408,6 +408,19 @@ func TestServiceChangeParent(t *testing.T) {
 		}
 	})
 
+	t.Run("cannot move root goal", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID, RootGoalID: "g-root"}, nil
+			},
+		}
+		s := NewService(repo)
+		_, err := s.ChangeParent(context.Background(), "p-1", "g-root", "g-2", GoalOptions{})
+		if !errors.Is(err, ErrCannotMoveRoot) {
+			t.Errorf("expected error %v, got %v", ErrCannotMoveRoot, err)
+		}
+	})
+
 	t.Run("invalid child goal", func(t *testing.T) {
 		expectedErr := errors.New("child goal not found")
 		repo := &mockTrackerRepository{

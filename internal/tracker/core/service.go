@@ -23,6 +23,7 @@ var (
 	ErrInvalidName           = errors.New("invalid name")
 	ErrProjectAlreadyExists  = errors.New("project already exists")
 	ErrMissingRequiredFields = errors.New("missing required fields")
+	ErrCannotMoveRoot        = errors.New("the root goal cannot be moved")
 )
 
 func (s *Service) CreateProject(ctx context.Context, name string, description string) (*Project, error) {
@@ -122,9 +123,13 @@ func (s *Service) CreateGoal(ctx context.Context, projectID string, goalName str
 }
 
 func (s *Service) ChangeParent(ctx context.Context, projectID string, goalID string, newParentID string, options GoalOptions) (*Goal, error) {
-	_, err := s.repo.GetProject(ctx, projectID)
+	p, err := s.repo.GetProject(ctx, projectID)
 	if err != nil {
 		return nil, err
+	}
+
+	if goalID == p.RootGoalID {
+		return nil, ErrCannotMoveRoot
 	}
 
 	child, err := s.repo.GetGoal(ctx, goalID)

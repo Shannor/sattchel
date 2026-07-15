@@ -80,3 +80,18 @@ Examples:  docker container create ,  gh issue list ,  aws ec2 start-instances ,
 • How it works: Highly structured tree hierarchy. First command is the resource (Noun), second command is the action (Verb):  tool <noun> <verb> [flags] .
 
 Using this because it's easier to expand later and clearer, even though it's more annoying to type 
+
+2026-07-14
+---
+
+### The importance of DTO's returns
+
+I made some pretty good progress with the Hex Arch pattern and I'm starting to feel the benefits and I do feel like I'm moving faster.
+I've mostly been using AI on the UI part of this project, while business logic has been what I wont let it touch. 
+In that I'm trying to make sure I don't put any business logic inside of the CLI or Web UI. 
+The reason being it would make it hard to change the driving adapters.
+
+Thus DTOs come back into importance. Since this is a CLI I can _cheat_ and use my Go core domain and use
+the methods on the structs. But, if I had an Web UI that wouldn't be possible. Which means I need to introduce
+DTOs that have enough information for the UI to make decisions with complicated logic. 
+*Or* I need to introduce functions on the service that will do the logic in the core and return a DTO.

@@ -2,6 +2,7 @@ package driving
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"sattchel/internal/tracker/core"
 )
@@ -27,6 +28,10 @@ func (s *HTTPServer) handleMoveGoal(w http.ResponseWriter, r *http.Request) {
 
 	_, err := s.service.ChangeParent(r.Context(), req.ProjectID, req.ChildID, req.NewParentID, core.GoalOptions{})
 	if err != nil {
+		if errors.Is(err, core.ErrCannotMoveRoot) {
+			http.Error(w, "failed to move goal: "+err.Error(), http.StatusBadRequest)
+			return
+		}
 		http.Error(w, "failed to move goal: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
