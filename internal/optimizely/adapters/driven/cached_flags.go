@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,6 +11,8 @@ import (
 	"time"
 
 	"sattchel/internal/optimizely/core"
+
+	"charm.land/log/v2"
 )
 
 type ContextKey string
@@ -112,7 +113,7 @@ func (r *cachedFlagsRepository) updateCachedFlag(ctx context.Context, flags []co
 		flags = append(flags, updatedFlag)
 	}
 	if err := r.saveCache(ctx, flags); err != nil {
-		slog.Warn("failed to update cached flag", slog.String("projectID", r.projectID), slog.String("error", err.Error()))
+		log.Warn("failed to update cached flag", "projectID", r.projectID, "error", err.Error())
 	}
 }
 
@@ -141,7 +142,7 @@ func (r *cachedFlagsRepository) Get(ctx context.Context, ID string) (*core.Featu
 func (r *cachedFlagsRepository) GetAll(ctx context.Context) ([]core.FeatureFlagDefinition, error) {
 	flags, ok, err := r.loadCache(ctx)
 	if err != nil {
-		slog.Warn("failed to load cache", slog.String("projectID", r.projectID), slog.String("error", err.Error()))
+		log.Warn("failed to load cache", "projectID", r.projectID, "error", err.Error())
 	}
 	if ok {
 		return flags, nil
@@ -153,7 +154,7 @@ func (r *cachedFlagsRepository) GetAll(ctx context.Context) ([]core.FeatureFlagD
 	}
 
 	if err := r.saveCache(ctx, freshFlags); err != nil {
-		slog.Warn("failed to save cache", slog.String("projectID", r.projectID), slog.String("error", err.Error()))
+		log.Warn("failed to save cache", "projectID", r.projectID, "error", err.Error())
 	}
 
 	return freshFlags, nil
