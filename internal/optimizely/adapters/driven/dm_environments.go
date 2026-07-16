@@ -56,7 +56,7 @@ func (e *environmentDataMapper) getIdForService() (int64, error) {
 	return id, nil
 }
 
-func (e *environmentDataMapper) Get(ctx context.Context, ID string) (*core.Environment, error) {
+func (e *environmentDataMapper) Get(ctx context.Context, _ string) (*core.Environment, error) {
 	err := e.validate()
 	if err != nil {
 		return nil, err

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
+	"sattchel/pkg/set"
 	"slices"
 	"strings"
 
@@ -390,14 +391,11 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				if err != nil {
 					return nil, cobra.ShellCompDirectiveNoFileComp
 				}
-				allowedIDs := make(map[string]bool)
-				for _, g := range allowedParents {
-					allowedIDs[g.ID] = true
-				}
 
+				allowedSet := set.NewFromFunc(allowedParents, func(g core.Goal) string { return g.ID })
 				var completions []string
 				for _, g := range goals {
-					if !allowedIDs[g.ID] {
+					if !allowedSet.Contains(g.ID) {
 						continue
 					}
 					completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
@@ -467,13 +465,10 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			allowedIDs := make(map[string]bool)
-			for _, g := range allowedGoals {
-				allowedIDs[g.ID] = true
-			}
+			allowedSet := set.NewFromFunc(allowedGoals, func(g core.Goal) string { return g.ID })
 			if newParentID == "" {
 				newParentID, err = tui.ChooseGoal(goals, "Select New Parent Goal", "", func(g *core.Goal) (bool, bool) {
-					if allowedIDs[g.ID] {
+					if allowedSet.Contains(g.ID) {
 						return true, true
 					}
 					return false, false

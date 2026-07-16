@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"sattchel/internal/optimizely/adapters/driven/features"
-	"sattchel/internal/optimizely/adapters/driven/projects"
 	"sattchel/internal/optimizely/core"
 	"strconv"
 	"sync"
@@ -59,20 +58,6 @@ func NewFlagsDM(client *features.ClientWithResponses, token string, projectID st
 		token:     token,
 		projectID: projectID,
 	}, nil
-}
-
-func BaseEnvironmentClient(apiKey string) *projects.ClientWithResponses {
-	fc, err := projects.NewClientWithResponses("https://api.optimizely.com/v2", func(client *projects.Client) error {
-		if apiKey != "" {
-			client.RequestEditors = append(client.RequestEditors, WithToken(apiKey))
-		}
-		return nil
-	})
-	if err != nil {
-		panic(err)
-	}
-
-	return fc
 }
 
 func (f *flagDataMapper) Get(ctx context.Context, ID string) (*core.FeatureFlagDefinition, error) {
@@ -460,7 +445,7 @@ func (f *flagDataMapper) fetchAllVariableDefinitions(ctx context.Context, flagKe
 	if err != nil {
 		return nil, fmt.Errorf("invalid project ID %q: %w", f.projectID, err)
 	}
-	response, err := f.client.ListVariableDefinitionsWithResponse(ctx, features.ProjectId(projectId), flagKey, &features.ListVariableDefinitionsParams{
+	response, err := f.client.ListVariableDefinitionsWithResponse(ctx, projectId, flagKey, &features.ListVariableDefinitionsParams{
 		PerPage:    new(int64(100)),
 		PageWindow: new(1),
 	})
@@ -486,7 +471,7 @@ func (f *flagDataMapper) fetchAllVariableDefinitions(ctx context.Context, flagKe
 			tokens = append(tokens, extractPageToken(u))
 		}
 		for _, token := range tokens {
-			pageResp, err := f.client.ListVariableDefinitionsWithResponse(ctx, features.ProjectId(projectId), flagKey, &features.ListVariableDefinitionsParams{
+			pageResp, err := f.client.ListVariableDefinitionsWithResponse(ctx, projectId, flagKey, &features.ListVariableDefinitionsParams{
 				PageToken:  &token,
 				PerPage:    new(largePageSize),
 				PageWindow: new(1),
@@ -514,7 +499,7 @@ func (f *flagDataMapper) fetchAllVariations(ctx context.Context, flagKey string)
 	if err != nil {
 		return nil, fmt.Errorf("invalid project ID %q: %w", f.projectID, err)
 	}
-	response, err := f.client.ListVariationsWithResponse(ctx, features.ProjectId(projectId), flagKey, &features.ListVariationsParams{
+	response, err := f.client.ListVariationsWithResponse(ctx, projectId, flagKey, &features.ListVariationsParams{
 		PerPage:    new(largePageSize),
 		PageWindow: new(1),
 	})
@@ -540,7 +525,7 @@ func (f *flagDataMapper) fetchAllVariations(ctx context.Context, flagKey string)
 			tokens = append(tokens, extractPageToken(u))
 		}
 		for _, token := range tokens {
-			pageResp, err := f.client.ListVariationsWithResponse(ctx, features.ProjectId(projectId), flagKey, &features.ListVariationsParams{
+			pageResp, err := f.client.ListVariationsWithResponse(ctx, projectId, flagKey, &features.ListVariationsParams{
 				PageToken:  &token,
 				PerPage:    new(largePageSize),
 				PageWindow: new(1),
@@ -605,14 +590,14 @@ func getAllDefinitions(ctx context.Context, flag *features.Flag, f *flagDataMapp
 	return definitions
 }
 
-func (f *flagDataMapper) Delete(ctx context.Context, ID string) (string, error) {
+func (f *flagDataMapper) Delete(_ context.Context, _ string) (string, error) {
 	return "", fmt.Errorf("delete not supported for flags")
 }
 
-func (f *flagDataMapper) Create(ctx context.Context, value core.FeatureFlagDefinition) (*core.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) Create(_ context.Context, _ core.FeatureFlagDefinition) (*core.FeatureFlagDefinition, error) {
 	return nil, fmt.Errorf("create not supported for flags")
 }
 
-func (f *flagDataMapper) Update(ctx context.Context, updater func(value *core.FeatureFlagDefinition) error) (*core.FeatureFlagDefinition, error) {
+func (f *flagDataMapper) Update(_ context.Context, _ func(value *core.FeatureFlagDefinition) error) (*core.FeatureFlagDefinition, error) {
 	return nil, fmt.Errorf("update not supported for flags")
 }

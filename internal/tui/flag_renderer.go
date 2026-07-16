@@ -9,114 +9,6 @@ import (
 	"sattchel/internal/optimizely/core"
 )
 
-// RenderFlagLipGloss renders a FeatureFlagDefinition and its instances as
-// styled tabular output using lipgloss tables.
-func RenderFlagLipGloss(flag *core.FeatureFlagDefinition, instances []core.FeatureFlagInstance) error {
-	s := AutoStyles()
-
-	// ── Header ──────────────────────────────────────────────────────────
-	status := "✅ Active"
-	if flag.Archived {
-		status = "🗄️ Archived"
-	}
-
-	fmt.Println(s.Title.Render("🚩 " + flag.Name))
-	fmt.Println(s.Muted.Render("  " + flag.Key + " — " + status))
-	fmt.Println()
-
-	if flag.Description != "" {
-		fmt.Println(s.Text.Render("  " + flag.Description))
-		fmt.Println()
-	}
-
-	// ── Details ─────────────────────────────────────────────────────────
-	fmt.Println(s.Title.Render("  DETAILS"))
-
-	detailHeaders := []string{"Field", "Value"}
-	detailRows := [][]string{
-		{"ID", flag.ID},
-		{"Archived", fmt.Sprintf("%t", flag.Archived)},
-	}
-	if flag.CreatedAt != nil {
-		detailRows = append(detailRows, []string{"Created", flag.CreatedAt.Format("2006-01-02")})
-	}
-	if flag.CreatedBy != nil {
-		detailRows = append(detailRows, []string{"Created By", *flag.CreatedBy})
-	}
-	fmt.Println(RenderTable(detailHeaders, detailRows))
-	fmt.Println()
-
-	// ── Default Variables ───────────────────────────────────────────────
-	if hasVariables(flag.DefaultVariables) {
-		fmt.Println(s.Title.Render("  DEFAULT VARIABLES"))
-		varHeaders := []string{"Variable", "Type", "Value", "Description"}
-		var varRows [][]string
-		for key, v := range flag.DefaultVariables.BoolVariables {
-			varRows = append(varRows, []string{key, "boolean", fmt.Sprintf("%v", v.Value), v.Description})
-		}
-		for key, v := range flag.DefaultVariables.IntVariables {
-			varRows = append(varRows, []string{key, "integer", fmt.Sprintf("%v", v.Value), v.Description})
-		}
-		for key, v := range flag.DefaultVariables.FloatVariables {
-			varRows = append(varRows, []string{key, "float", fmt.Sprintf("%v", v.Value), v.Description})
-		}
-		for key, v := range flag.DefaultVariables.StringVariables {
-			varRows = append(varRows, []string{key, "string", v.Value, v.Description})
-		}
-		for key, v := range flag.DefaultVariables.JsonVariables {
-			varRows = append(varRows, []string{key, "json", fmt.Sprintf("%v", v.Value), v.Description})
-		}
-		fmt.Println(RenderTable(varHeaders, varRows))
-		fmt.Println()
-	}
-
-	// ── Environment Overrides ───────────────────────────────────────────
-	if len(instances) > 0 {
-		fmt.Println(s.Title.Render("  ENVIRONMENT OVERRIDES"))
-		for i, inst := range instances {
-			fmt.Println(s.Text.Bold(true).Render("  " + inst.EnvironmentID))
-
-			instHeaders := []string{"Field", "Value"}
-			instRows := [][]string{
-				{"Enabled", enabledStr(inst.Enabled)},
-				{"Archived", fmt.Sprintf("%t", inst.Archived)},
-			}
-			fmt.Println(RenderTable(instHeaders, instRows))
-
-			if hasVariables(inst.Variables) {
-				fmt.Println()
-				fmt.Println(s.Info.Bold(true).Render("  Overrides"))
-				varHeaders := []string{"Variable", "Type", "Value", "Description"}
-				var varRows [][]string
-				for key, v := range inst.Variables.BoolVariables {
-					varRows = append(varRows, []string{key, "boolean", fmt.Sprintf("%v", v.Value), v.Description})
-				}
-				for key, v := range inst.Variables.IntVariables {
-					varRows = append(varRows, []string{key, "integer", fmt.Sprintf("%v", v.Value), v.Description})
-				}
-				for key, v := range inst.Variables.FloatVariables {
-					varRows = append(varRows, []string{key, "float", fmt.Sprintf("%v", v.Value), v.Description})
-				}
-				for key, v := range inst.Variables.StringVariables {
-					varRows = append(varRows, []string{key, "string", v.Value, v.Description})
-				}
-				for key, v := range inst.Variables.JsonVariables {
-					varRows = append(varRows, []string{key, "json", fmt.Sprintf("%v", v.Value), v.Description})
-				}
-				fmt.Println(RenderTable(varHeaders, varRows))
-			}
-
-			if i < len(instances)-1 {
-				fmt.Println()
-				fmt.Println(strings.Repeat("─", 40))
-				fmt.Println()
-			}
-		}
-	}
-
-	return nil
-}
-
 // hasVariables returns true if any variable type has entries.
 func hasVariables(vars core.Variables) bool {
 	return len(vars.BoolVariables) > 0 ||
@@ -132,16 +24,6 @@ func enabledStr(enabled bool) string {
 		return "✅ Yes"
 	}
 	return "❌ No"
-}
-
-// RenderMultiProjectFlagLipGloss renders multiple ProjectFlagReports using LipGloss styling and tables.
-func RenderMultiProjectFlagLipGloss(reports []ProjectFlagReport, opts ReportOptions) error {
-	out, err := RenderMultiProjectFlagLipGlossStr(reports, opts)
-	if err != nil {
-		return err
-	}
-	fmt.Print(out)
-	return nil
 }
 
 // RenderMultiProjectFlagLipGlossStr renders multiple ProjectFlagReports using LipGloss styling and tables, returning the formatted string.

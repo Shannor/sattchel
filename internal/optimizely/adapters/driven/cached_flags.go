@@ -77,7 +77,7 @@ func (r *cachedFlagsRepository) loadCache(ctx context.Context) ([]core.FeatureFl
 	return cache.Flags, true, nil
 }
 
-func (r *cachedFlagsRepository) saveCache(ctx context.Context, flags []core.FeatureFlagDefinition) error {
+func (r *cachedFlagsRepository) saveCache(_ context.Context, flags []core.FeatureFlagDefinition) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

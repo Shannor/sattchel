@@ -13,117 +13,6 @@ import (
 	"github.com/nao1215/markdown"
 )
 
-// RenderFlagGlamour renders the flag markdown output directly to stdout
-// using Glamour's dark style, auto-detected terminal width.
-func RenderFlagGlamour(flag *core.FeatureFlagDefinition, instances []core.FeatureFlagInstance) error {
-	mdStr := buildFlagMarkdown(flag, instances)
-
-	width, _, err := term.GetSize(uintptr(os.Stdout.Fd()))
-	if err != nil {
-		width = 80
-	}
-
-	r, err := glamour.NewTermRenderer(
-		glamour.WithStylePath("dark"),
-		glamour.WithWordWrap(width),
-	)
-	if err != nil {
-		return fmt.Errorf("failed to create glamour renderer: %w", err)
-	}
-	defer r.Close()
-
-	out, err := r.Render(mdStr)
-	if err != nil {
-		return fmt.Errorf("failed to render markdown: %w", err)
-	}
-
-	fmt.Print(out)
-	return nil
-}
-
-// buildFlagMarkdown composes a markdown string from a feature flag and its instances.
-func buildFlagMarkdown(flag *core.FeatureFlagDefinition, instances []core.FeatureFlagInstance) string {
-	m := markdown.NewMarkdown(nil)
-
-	// Header
-	status := "✅ Active"
-	if flag.Archived {
-		status = "🗄️ Archived"
-	}
-	m.H1(flag.Name)
-	m.LF()
-	m.PlainText(fmt.Sprintf("*`%s`* — %s", flag.Key, status))
-	m.LF()
-	m.LF()
-
-	// Description
-	if flag.Description != "" {
-		m.Blockquote(flag.Description)
-		m.LF()
-		m.LF()
-	}
-
-	// Details table
-	m.H2("📋 Details")
-	m.LF()
-	m.Table(markdown.TableSet{
-		Header: []string{"Field", "Value"},
-		Rows: [][]string{
-			{"ID", fmt.Sprintf("`%s`", flag.ID)},
-			{"Archived", archivedStr(flag.Archived)},
-		},
-	})
-	if flag.CreatedAt != nil {
-		m.LF()
-		m.PlainText(fmt.Sprintf("| Created | %s |", flag.CreatedAt.Format("2006-01-02")))
-	}
-	if flag.CreatedBy != nil {
-		m.LF()
-		m.PlainText(fmt.Sprintf("| Created By | %s |", *flag.CreatedBy))
-	}
-	m.LF()
-
-	// Default variables
-	if hasVariables(flag.DefaultVariables) {
-		m.H2("⚙️ Default Variables")
-		m.LF()
-		renderVariables(m, flag.DefaultVariables)
-		m.LF()
-	}
-
-	// Environment overrides
-	if len(instances) > 0 {
-		m.H2("🌍 Environment Overrides")
-		m.LF()
-		for i, inst := range instances {
-			m.H3(inst.EnvironmentID)
-			m.LF()
-			m.Table(markdown.TableSet{
-				Header: []string{"Field", "Value"},
-				Rows: [][]string{
-					{"Enabled", enabledStr(inst.Enabled)},
-					{"Archived", archivedStr(inst.Archived)},
-				},
-			})
-			m.LF()
-
-			if hasVariables(inst.Variables) {
-				m.PlainText("**Overrides:**")
-				m.LF()
-				renderVariables(m, inst.Variables)
-				m.LF()
-			}
-
-			if i < len(instances)-1 {
-				m.HorizontalRule()
-				m.LF()
-			}
-		}
-	}
-
-	return m.String()
-}
-
 // renderVariables outputs each variable as a structured block.
 func renderVariables(m *markdown.Markdown, vars core.Variables) {
 	for key, v := range vars.BoolVariables {
@@ -215,22 +104,11 @@ type ReportOptions struct {
 	ShowEnvironments bool
 }
 
-// RenderMultiProjectFlagGlamour renders the multi-project flag markdown output directly to stdout
-// using Glamour's dark style, auto-detected terminal width.
-func RenderMultiProjectFlagGlamour(reports []ProjectFlagReport, opts ReportOptions) error {
-	out, err := RenderMultiProjectFlagGlamourStr(reports, opts)
-	if err != nil {
-		return err
-	}
-	fmt.Print(out)
-	return nil
-}
-
 // RenderMultiProjectFlagGlamourStr renders the multi-project flag markdown output and returns it as a string.
 func RenderMultiProjectFlagGlamourStr(reports []ProjectFlagReport, opts ReportOptions) (string, error) {
 	mdStr := buildMultiProjectFlagMarkdown(reports, opts)
 
-	width, _, err := term.GetSize(uintptr(os.Stdout.Fd()))
+	width, _, err := term.GetSize(os.Stdout.Fd())
 	if err != nil {
 		width = 80
 	}
@@ -368,7 +246,7 @@ func buildMultiProjectFlagMarkdown(reports []ProjectFlagReport, opts ReportOptio
 				m.PlainText("No environments configured.")
 				m.LF()
 			} else {
-				rows := [][]string{}
+				var rows [][]string
 				for _, inst := range rep.Instances {
 					var selectedVariant string
 					for _, target := range rep.Flag.Targets {
@@ -454,7 +332,7 @@ func RenderFlagComparisonsGlamourStr(comparisons []core.FlagComparison) (string,
 	m.LF()
 	m.LF()
 
-	rows := [][]string{}
+	var rows [][]string
 	for _, comp := range comparisons {
 		var existsStrs []string
 		for _, p := range comp.ExistsIn {
@@ -480,7 +358,7 @@ func RenderFlagComparisonsGlamourStr(comparisons []core.FlagComparison) (string,
 
 	mdStr := m.String()
 
-	width, _, err := term.GetSize(uintptr(os.Stdout.Fd()))
+	width, _, err := term.GetSize(os.Stdout.Fd())
 	if err != nil {
 		width = 80
 	}
