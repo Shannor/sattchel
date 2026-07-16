@@ -17,11 +17,13 @@ import (
 
 	"time"
 
+	"charm.land/log/v2"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var updateCh <-chan config.UpdateInformation
+var verbose bool
 
 // defaultTTL the amount of time we'll hold the cache locally
 const defaultTTL = 1 * time.Hour
@@ -33,6 +35,16 @@ var rootCmd = &cobra.Command{
 	SilenceUsage:  true,
 	Version:       config.Version,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		logLevel := log.WarnLevel
+		if verbose {
+			logLevel = log.DebugLevel
+		}
+
+		log.SetOutput(os.Stderr)
+		log.SetLevel(logLevel)
+		log.SetReportTimestamp(false)
+		log.SetReportCaller(verbose)
+
 		if isCompletionCommand(cmd) {
 			updateCh = nil
 			return
@@ -97,6 +109,8 @@ func isUpdateCommand(cmd *cobra.Command) bool {
 }
 
 func init() {
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "enable verbose logging")
+
 	rootCmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
 		cmd.Println(cmd.UsageString())
 		return err

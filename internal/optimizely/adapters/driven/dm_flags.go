@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log/slog"
 	"net/http"
 	"net/url"
 	"sattchel/internal/optimizely/adapters/driven/features"
@@ -12,6 +11,8 @@ import (
 	"sattchel/internal/optimizely/core"
 	"strconv"
 	"sync"
+
+	"charm.land/log/v2"
 )
 
 var (
@@ -156,7 +157,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 	for _, flag := range info.Items {
 		enriched, err := f.enrichFlag(ctx, &flag)
 		if err != nil {
-			slog.Warn("failed to enrich a feature flag", slog.String("flag_key", flag.Key))
+			log.Warn("failed to enrich a feature flag", "flag_key", flag.Key)
 			continue
 		}
 		results = append(results, *enriched)
@@ -184,16 +185,16 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 			}
 			response, err := f.client.ListFlagsWithResponse(ctx, id, pageParams)
 			if err != nil {
-				slog.Error("failed to get flags", slog.String("error", err.Error()))
+				log.Error("failed to get flags", "error", err.Error())
 				return
 			}
 			if response.StatusCode() != 200 {
-				slog.Error("non-200 status code", slog.Int("code", response.StatusCode()))
+				log.Error("non-200 status code", "code", response.StatusCode())
 				return
 			}
 
 			if response.JSON200 == nil {
-				slog.Error("missing flag response")
+				log.Error("missing flag response")
 				return
 			}
 
@@ -201,7 +202,7 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 			for _, flag := range r.Items {
 				enriched, err := f.enrichFlag(ctx, &flag)
 				if err != nil {
-					slog.Warn("failed to enrich a feature flag", slog.String("flag_key", flag.Key))
+					log.Warn("failed to enrich a feature flag", "flag_key", flag.Key)
 					continue
 				}
 				mu.Lock()
@@ -255,7 +256,7 @@ func toFeatureFlag(flag features.Flag) (core.FeatureFlagDefinition, error) {
 		for _, environment := range *flag.Environments {
 			t, err := toTarget(environment)
 			if err != nil {
-				slog.Error("Failed to convert an environment", slog.String("err", err.Error()))
+				log.Error("Failed to convert an environment", "err", err.Error())
 				continue
 			}
 			targets = append(targets, t)
@@ -491,7 +492,7 @@ func (f *flagDataMapper) fetchAllVariableDefinitions(ctx context.Context, flagKe
 				PageWindow: new(1),
 			})
 			if err != nil {
-				slog.Warn("failed to fetch next page of variable definitions", slog.String("flag", flagKey), slog.String("error", err.Error()))
+				log.Warn("failed to fetch next page of variable definitions", "flag", flagKey, "error", err.Error())
 				continue
 			}
 			if pageResp.StatusCode() != 200 || pageResp.JSON200 == nil || pageResp.JSON200.Items == nil {
@@ -545,7 +546,7 @@ func (f *flagDataMapper) fetchAllVariations(ctx context.Context, flagKey string)
 				PageWindow: new(1),
 			})
 			if err != nil {
-				slog.Warn("failed to fetch next page of variations", slog.String("flag", flagKey), slog.String("error", err.Error()))
+				log.Warn("failed to fetch next page of variations", "flag", flagKey, "error", err.Error())
 				continue
 			}
 			if pageResp.StatusCode() != 200 || pageResp.JSON200 == nil || pageResp.JSON200.Items == nil {
@@ -567,7 +568,7 @@ func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*
 	// Fetch all variations
 	allVariations, err := f.fetchAllVariations(ctx, flag.Key)
 	if err != nil {
-		slog.Warn("failed to fetch all variations", slog.String("flag", flag.Key), slog.String("error", err.Error()))
+		log.Warn("failed to fetch all variations", "flag", flag.Key, "error", err.Error())
 	}
 
 	result, err := toFeatureFlag(*flag)
@@ -590,7 +591,7 @@ func getAllDefinitions(ctx context.Context, flag *features.Flag, f *flagDataMapp
 		if len(definitions) > 5 {
 			allDefs, err := f.fetchAllVariableDefinitions(ctx, flag.Key)
 			if err != nil {
-				slog.Warn("failed to fetch all variable definitions", slog.String("flag", flag.Key), slog.String("error", err.Error()))
+				log.Warn("failed to fetch all variable definitions", "flag", flag.Key, "error", err.Error())
 			} else {
 				// Merge fetched definitions into the flag's existing definitions
 				if allDefs != nil {

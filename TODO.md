@@ -15,5 +15,7 @@
   - Or at least scaffold it
 - [ ] Improvements to CLI UI and UX
 - [ ] Improvements to the MindMap UI/UX
-- [ ] Introduce a global --verbose flag to turn on logging
-  - Need to research if special logging is needed for CLIs. I assume not. 
+- [x] Introduce a global --verbose flag to turn on logging
+  - Need to research if special logging is needed for CLIs. I assume not.
+- [ ] Introduce a state machine for Goal Status transitions
+  - [ ] Introduce limits on what can chnage in certain statuses  

@@ -3,10 +3,11 @@ package driven
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"sattchel/internal/optimizely/adapters/driven/projects"
 	"sattchel/internal/optimizely/core"
 	"strconv"
+
+	"charm.land/log/v2"
 )
 
 type environmentDataMapper struct {
@@ -116,7 +117,7 @@ func (e *environmentDataMapper) GetAll(ctx context.Context) ([]core.Environment,
 	for _, env := range *response.JSON200 {
 		eModel, err := toProjectsEnvironment(env, e.projectID)
 		if err != nil {
-			slog.Warn("failed to convert an environment")
+			log.Warn("failed to convert an environment")
 			continue
 		}
 		results = append(results, eModel)
