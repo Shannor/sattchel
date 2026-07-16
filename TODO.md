@@ -1,15 +1,19 @@
-# TODO 
+# TODO List 
 
-- Introduce DTOs for the service layer in the core. 
-- Introduce a Transaction Pattern (using a Unit of Work) in the service layer.
-  - Interface for the Unit of Work
-  - Implementation for the Unit of Work in the driven adapter
-- Tracker Sorting logic for Goals views. 
+- [ ] Introduce DTOs for the service layer in the core. 
+- [x] Introduce a Transaction Pattern (using a Unit of Work) in the service layer.
+  - [x] Interface for the Unit of Work 
+  - [x] Implementation for the Unit of Work in the driven adapter
+- [x] Tracker Sorting logic for Goals views.  
   - Do It Now (High Impact, Low Effort)
   - Why? (Low Impact, High Effort)
   - Honest Work (High Impact, High Effort)
   - Snacking (Low Impact, Low Effort)
-- Tracker Goal filtering. MemberID, Status, Impact, Effort, etc.
-- Optimizely find the flags not synced
-- Optimizely add support to create new flags for all projects. 
-- Improvements to CLI UI and UX
+- [x] Tracker Goal filtering. MemberID, Status, Impact, Effort, etc.
+- [ ] Optimizely find the flags aren’t synced with all projects
+- [ ] Optimizely add support to create new flags for all projects. 
+  - Or at least scaffold it
+- [ ] Improvements to CLI UI and UX
+- [ ] Improvements to the MindMap UI/UX
+- [ ] Introduce a global --verbose flag to turn on logging
+  - Need to research if special logging is needed for CLIs. I assume not. 

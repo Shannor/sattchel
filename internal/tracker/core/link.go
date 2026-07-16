@@ -11,7 +11,20 @@ type Link struct {
 type LinkRelationship string
 
 const (
-	LinkRequired  LinkRelationship = "required"
-	LinkOptional  LinkRelationship = "optional"
-	LinkPreferred LinkRelationship = "preferred"
+	LinkRequired LinkRelationship = "required"
+	LinkOptional LinkRelationship = "optional"
 )
+
+func linkValue(link LinkRelationship) int {
+	switch link {
+	case LinkRequired:
+		return 1
+	case LinkOptional:
+		return 2
+	}
+	return 0
+}
+
+func (r LinkRelationship) Compare(lr LinkRelationship) int {
+	return linkValue(r) - linkValue(lr)
+}

@@ -158,88 +158,122 @@ func ChooseGoal(goals []core.Goal, title string, currentGoalID string, filterFn 
 	return selectedID, nil
 }
 
-// RenderGoalDetails formats a Goal entity into a beautiful, styled string using Lipgloss.
-func RenderGoalDetails(goal *core.Goal) string {
+// RenderGoalDetails formats a Goal entity into a beautiful, styled string using Lipgloss tables.
+func RenderGoalDetails(goal *core.Goal, parent *core.Goal) string {
 	styles := AutoStyles()
 	var sb strings.Builder
 
 	sb.WriteString("\n")
 	sb.WriteString(styles.Title.Render(" GOAL DETAILS ") + "\n\n")
 
-	sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("ID:         "), styles.Text.Render(goal.ID)))
-	sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Name:       "), styles.Text.Bold(true).Render(goal.Name)))
+	statusVal := getStatusStyle(goal.Status, styles).Render(string(goal.Status))
+	impactVal := getImpactStyle(goal.Impact, styles).Render(string(goal.Impact))
+	effortVal := getEffortStyle(goal.Effort, styles).Render(string(goal.Effort))
 
-	var statusStyle lipgloss.Style
-	switch goal.Status {
-	case core.GoalCompleted:
-		statusStyle = styles.Success.Bold(true)
-	case core.GoalInProgress:
-		statusStyle = styles.Info.Bold(true)
-	case core.GoalCancelled:
-		statusStyle = styles.Muted.Bold(true)
-	case core.GoalOpen:
-		statusStyle = styles.Info
-	default:
-		statusStyle = styles.Warning
-	}
-	sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Status:     "), statusStyle.Render(string(goal.Status))))
-
-	sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Project ID: "), styles.Text.Render(goal.ProjectID)))
-
-	var impactStyle lipgloss.Style
-	switch goal.Impact {
-	case core.HighImpact:
-		impactStyle = styles.Success.Bold(true)
-	case core.MediumImpact:
-		impactStyle = styles.Info
-	case core.LowImpact:
-		impactStyle = styles.Muted
-	default:
-		impactStyle = styles.Warning
-	}
-	sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Impact:     "), impactStyle.Render(string(goal.Impact))))
-
-	var effortStyle lipgloss.Style
-	switch goal.Effort {
-	case core.LowEffort:
-		effortStyle = styles.Success
-	case core.MediumEffort:
-		effortStyle = styles.Info
-	case core.HighEffort:
-		effortStyle = styles.Error
-	default:
-		effortStyle = styles.Warning
-	}
-	sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Effort:     "), effortStyle.Render(string(goal.Effort))))
-
-	if goal.Description != "" {
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Description:"), styles.Text.Render(goal.Description)))
+	descVal := goal.Description
+	if descVal == "" {
+		descVal = styles.Muted.Render("No description provided")
 	} else {
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Description:"), styles.Muted.Render("No description provided")))
+		descVal = styles.Text.Render(descVal)
 	}
 
-	if goal.Parent != nil && goal.Parent.TargetID != "" {
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Parent ID:  "), styles.Text.Render(goal.Parent.TargetID)))
-	} else {
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Parent ID:  "), styles.Muted.Render("None")))
+	parentVal := styles.Muted.Render("None")
+	if parent != nil {
+		parentVal = fmt.Sprintf("%s (%s)", styles.Text.Render(parent.Name), styles.Muted.Render(parent.ID))
 	}
+
+	memberVal := styles.Muted.Render("Unassigned")
+	if goal.Member != nil && goal.Member.ID != "" {
+		memberVal = fmt.Sprintf("%s (%s)", styles.Text.Render(goal.Member.Name), styles.Muted.Render(goal.Member.ID))
+	}
+
+	detailHeaders := []string{"Field", "Value"}
+	detailRows := [][]string{
+		{"ID", styles.Text.Render(goal.ID)},
+		{"Name", styles.Text.Bold(true).Render(goal.Name)},
+		{"Status", statusVal},
+		{"Project ID", styles.Text.Render(goal.ProjectID)},
+		{"Impact", impactVal},
+		{"Effort", effortVal},
+		{"Description", descVal},
+		{"Parent", parentVal},
+		{"Member", memberVal},
+	}
+
+	sb.WriteString(RenderTable(detailHeaders, detailRows) + "\n\n")
 
 	if len(goal.Children) > 0 {
-		var childNames []string
+		sb.WriteString(styles.Title.Render(" CHILDREN GOALS ") + "\n\n")
+		slices.SortFunc(goal.Children, func(a, b core.Goal) int { return a.Compare(b) })
+		childHeaders := []string{"ID", "Name", "Relationship", "Status", "Impact", "Effort", "Member"}
+		var childRows [][]string
 		for _, ch := range goal.Children {
-			childNames = append(childNames, fmt.Sprintf("%s (%s)", ch.Name, ch.ID))
+			chStatusVal := getStatusStyle(ch.Status, styles).Render(string(ch.Status))
+			chImpactVal := getImpactStyle(ch.Impact, styles).Render(string(ch.Impact))
+			chEffortVal := getEffortStyle(ch.Effort, styles).Render(string(ch.Effort))
+			member := styles.Text.Render("Unassigned")
+			if ch.HasMember() {
+				member = styles.Text.Render(ch.Member.Name)
+			}
+			relVal := styles.Text.Render("-")
+			if ch.Parent != nil && ch.Parent.Relationship != "" {
+				relVal = styles.Text.Render(string(ch.Parent.Relationship))
+			}
+			childRows = append(childRows, []string{
+				styles.Text.Render(ch.ID),
+				styles.Text.Bold(true).Render(ch.Name),
+				relVal,
+				chStatusVal,
+				chImpactVal,
+				chEffortVal,
+				member,
+			})
 		}
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Children:   "), styles.Text.Render(strings.Join(childNames, ", "))))
+		sb.WriteString(RenderTable(childHeaders, childRows) + "\n")
 	} else {
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Children:   "), styles.Muted.Render("None")))
+		sb.WriteString(styles.Muted.Render("  No children goals") + "\n\n")
 	}
-
-	if goal.Member != nil && goal.Member.ID != "" {
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Member ID:  "), styles.Text.Render(goal.Member.ID)))
-	} else {
-		sb.WriteString(fmt.Sprintf("%s %s\n", styles.Muted.Render("Member ID:  "), styles.Muted.Render("Unassigned")))
-	}
-	sb.WriteString("\n")
 
 	return sb.String()
+}
+
+func getStatusStyle(status core.GoalStatus, styles Styles) lipgloss.Style {
+	switch status {
+	case core.GoalCompleted:
+		return styles.Success.Bold(true)
+	case core.GoalInProgress:
+		return styles.Info.Bold(true)
+	case core.GoalCancelled:
+		return styles.Muted.Bold(true)
+	case core.GoalOpen:
+		return styles.Info
+	default:
+		return styles.Warning
+	}
+}
+
+func getImpactStyle(impact core.Impact, styles Styles) lipgloss.Style {
+	switch impact {
+	case core.HighImpact:
+		return styles.Success.Bold(true)
+	case core.MediumImpact:
+		return styles.Info
+	case core.LowImpact:
+		return styles.Muted
+	default:
+		return styles.Warning
+	}
+}
+
+func getEffortStyle(effort core.Effort, styles Styles) lipgloss.Style {
+	switch effort {
+	case core.LowEffort:
+		return styles.Success
+	case core.MediumEffort:
+		return styles.Info
+	case core.HighEffort:
+		return styles.Error
+	default:
+		return styles.Warning
+	}
 }

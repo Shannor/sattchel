@@ -12,6 +12,7 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
+	"golang.org/x/exp/maps"
 
 	"sattchel/internal/tracker/core"
 )
@@ -53,6 +54,29 @@ func newDB() *DB {
 	}
 }
 
+func (db *DB) clone() *DB {
+	if db == nil {
+		return nil
+	}
+	clone := &DB{
+		Version:        db.Version,
+		Projects:       make(map[string]core.Project, len(db.Projects)),
+		Goals:          make(map[string]core.Goal, len(db.Goals)),
+		Members:        make(map[string]core.Member, len(db.Members)),
+		GoalsByMembers: make(map[string][]string, len(db.GoalsByMembers)),
+	}
+
+	// Going to try this copy way first
+	maps.Copy(clone.GoalsByMembers, db.GoalsByMembers)
+	maps.Copy(clone.Projects, db.Projects)
+	maps.Copy(clone.Goals, db.Goals)
+	maps.Copy(clone.Members, db.Members)
+	for k, v := range db.GoalsByMembers {
+		clone.GoalsByMembers[k] = slices.Clone(v)
+	}
+	return clone
+}
+
 // NewFileStorage builds a FileStorage backed by path. The DB is loaded lazily
 // on first use. Pass a non-nil db to seed an in-memory state without reading
 // from disk.
@@ -64,6 +88,59 @@ func NewFileStorage(path string, db *DB) core.TrackerRepository {
 		}
 	}
 	return &FileStorage{path: os.ExpandEnv(path), db: db}
+}
+
+// txKey is used to mark a context as being within a transaction.
+type txKey struct{}
+
+// txState placeholder value for txKey
+type txState struct{}
+
+func (s *FileStorage) isTx(ctx context.Context) bool {
+	return ctx.Value(txKey{}) != nil
+}
+
+func (s *FileStorage) lock(ctx context.Context) func() {
+	if s.isTx(ctx) {
+		return func() {}
+	}
+	s.mu.Lock()
+	return func() {
+		s.mu.Unlock()
+	}
+}
+
+func (s *FileStorage) flushMaybe(ctx context.Context) error {
+	if s.isTx(ctx) {
+		return nil
+	}
+	return s.flush()
+}
+
+func (s *FileStorage) Transaction(ctx context.Context, fn func(ctx context.Context) error) error {
+	if s.isTx(ctx) {
+		return fn(ctx)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if err := s.ensureLoaded(); err != nil {
+		return err
+	}
+
+	backup := s.db.clone()
+	txCtx := context.WithValue(ctx, txKey{}, txState{})
+	err := fn(txCtx)
+	if err != nil {
+		s.db = backup
+		return err
+	}
+
+	if err := s.flush(); err != nil {
+		s.db = backup
+		return err
+	}
+	return nil
 }
 
 // ensureLoaded loads the DB from disk on first access. Caller must hold s.mu.
@@ -179,28 +256,28 @@ func (s *FileStorage) flush() error {
 	return nil
 }
 
-func (s *FileStorage) CreateProject(_ context.Context, project *core.Project) (*core.Project, error) {
+func (s *FileStorage) CreateProject(ctx context.Context, project *core.Project) (*core.Project, error) {
 	if project == nil {
 		return nil, errors.New("nil project")
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
 
 	project.ID = uuid.NewString()
 	s.db.Projects[project.ID] = *project
-	if err := s.flush(); err != nil {
+	if err := s.flushMaybe(ctx); err != nil {
 		delete(s.db.Projects, project.ID)
 		return nil, err
 	}
 	return new(s.db.Projects[project.ID]), nil
 }
 
-func (s *FileStorage) GetProjects(_ context.Context) ([]core.Project, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *FileStorage) GetProjects(ctx context.Context) ([]core.Project, error) {
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -212,9 +289,9 @@ func (s *FileStorage) GetProjects(_ context.Context) ([]core.Project, error) {
 	return results, nil
 }
 
-func (s *FileStorage) GetProject(_ context.Context, projectID string) (*core.Project, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *FileStorage) GetProject(ctx context.Context, projectID string) (*core.Project, error) {
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -226,9 +303,9 @@ func (s *FileStorage) GetProject(_ context.Context, projectID string) (*core.Pro
 	return nil, fmt.Errorf("project %w", ErrNotFound)
 
 }
-func (s *FileStorage) UpdateProject(_ context.Context, project *core.Project) (*core.Project, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *FileStorage) UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error) {
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -242,7 +319,7 @@ func (s *FileStorage) UpdateProject(_ context.Context, project *core.Project) (*
 	current.RootGoalID = project.RootGoalID
 	s.db.Projects[project.ID] = current
 
-	if err := s.flush(); err != nil {
+	if err := s.flushMaybe(ctx); err != nil {
 		return nil, err
 	}
 	return &current, nil
@@ -250,8 +327,8 @@ func (s *FileStorage) UpdateProject(_ context.Context, project *core.Project) (*
 }
 
 func (s *FileStorage) GetGoals(ctx context.Context, projectID string) ([]core.Goal, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -263,9 +340,80 @@ func (s *FileStorage) GetGoals(ctx context.Context, projectID string) ([]core.Go
 	return results, nil
 }
 
+func (s *FileStorage) QueryGoals(ctx context.Context, projectID string, query *core.GoalQuery) ([]core.Goal, error) {
+	unlock := s.lock(ctx)
+	defer unlock()
+	if err := s.ensureLoaded(); err != nil {
+		return nil, err
+	}
+
+	var results []core.Goal
+	for _, goal := range s.db.Goals {
+		if goal.ProjectID != projectID {
+			continue
+		}
+		if query != nil {
+			if query.ParentID != "" {
+				if goal.Parent == nil || goal.Parent.TargetID != query.ParentID {
+					continue
+				}
+			}
+			if len(query.MemberIDs) > 0 {
+				if goal.Member == nil || !slices.Contains(query.MemberIDs, goal.Member.ID) {
+					continue
+				}
+			}
+			if len(query.Impacts) > 0 {
+				if !slices.Contains(query.Impacts, goal.Impact) {
+					continue
+				}
+			}
+			if len(query.Efforts) > 0 {
+				if !slices.Contains(query.Efforts, goal.Effort) {
+					continue
+				}
+			}
+			if len(query.Relationships) > 0 {
+				if goal.Parent == nil || !slices.Contains(query.Relationships, goal.Parent.Relationship) {
+					continue
+				}
+			}
+			if len(query.Statuses) > 0 {
+				if !slices.Contains(query.Statuses, goal.Status) {
+					continue
+				}
+			}
+			if len(query.MissingFields) > 0 {
+				hasMissingField := false
+				for _, field := range query.MissingFields {
+					switch strings.ToLower(strings.TrimSpace(field)) {
+					case "member":
+						if goal.Member == nil || goal.Member.ID == "" {
+							hasMissingField = true
+						}
+					case "impact":
+						if goal.Impact == core.UnknownImpact || goal.Impact == "" {
+							hasMissingField = true
+						}
+					case "effort":
+						if goal.Effort == core.UnknownEffort || goal.Effort == "" {
+							hasMissingField = true
+						}
+					}
+				}
+				if !hasMissingField {
+					continue
+				}
+			}
+		}
+		results = append(results, goal)
+	}
+	return results, nil
+}
+
 func (s *FileStorage) GetGoal(ctx context.Context, goalID string) (*core.Goal, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -276,9 +424,9 @@ func (s *FileStorage) GetGoal(ctx context.Context, goalID string) (*core.Goal, e
 	return nil, fmt.Errorf("goal %s: %w", goalID, ErrNotFound)
 }
 
-func (s *FileStorage) UpdateGoal(_ context.Context, goal *core.Goal) (*core.Goal, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *FileStorage) UpdateGoal(ctx context.Context, goal *core.Goal) (*core.Goal, error) {
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -318,18 +466,18 @@ func (s *FileStorage) UpdateGoal(_ context.Context, goal *core.Goal) (*core.Goal
 	}
 	s.db.Goals[current.ID] = current
 
-	if err := s.flush(); err != nil {
+	if err := s.flushMaybe(ctx); err != nil {
 		return nil, err
 	}
 	return &current, nil
 }
 
-func (s *FileStorage) CreateGoal(_ context.Context, projectID string, goal *core.Goal) (*core.Goal, error) {
+func (s *FileStorage) CreateGoal(ctx context.Context, projectID string, goal *core.Goal) (*core.Goal, error) {
 	if goal == nil {
 		return nil, errors.New("nil goal")
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -348,19 +496,19 @@ func (s *FileStorage) CreateGoal(_ context.Context, projectID string, goal *core
 		s.db.GoalsByMembers[goal.Member.ID] = append(s.db.GoalsByMembers[goal.Member.ID], goal.ID)
 	}
 
-	if err := s.flush(); err != nil {
+	if err := s.flushMaybe(ctx); err != nil {
 		delete(s.db.Goals, goal.ID)
 		return nil, err
 	}
 	return new(s.db.Goals[goal.ID]), nil
 }
 
-func (s *FileStorage) CreateMember(_ context.Context, member *core.Member) (*core.Member, error) {
+func (s *FileStorage) CreateMember(ctx context.Context, member *core.Member) (*core.Member, error) {
 	if member == nil {
 		return nil, errors.New("nil member")
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -371,16 +519,16 @@ func (s *FileStorage) CreateMember(_ context.Context, member *core.Member) (*cor
 		return nil, fmt.Errorf("member %s: %w", member.ID, ErrAlreadyExists)
 	}
 	s.db.Members[member.ID] = *member
-	if err := s.flush(); err != nil {
+	if err := s.flushMaybe(ctx); err != nil {
 		delete(s.db.Members, member.ID)
 		return nil, err
 	}
 	return new(s.db.Members[member.ID]), nil
 }
 
-func (s *FileStorage) GetMember(_ context.Context, memberID string) (*core.Member, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *FileStorage) GetMember(ctx context.Context, memberID string) (*core.Member, error) {
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -390,9 +538,9 @@ func (s *FileStorage) GetMember(_ context.Context, memberID string) (*core.Membe
 	return nil, fmt.Errorf("member %s: %w", memberID, ErrNotFound)
 }
 
-func (s *FileStorage) GetMembers(_ context.Context) ([]core.Member, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *FileStorage) GetMembers(ctx context.Context) ([]core.Member, error) {
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -403,12 +551,12 @@ func (s *FileStorage) GetMembers(_ context.Context) ([]core.Member, error) {
 	return members, nil
 }
 
-func (s *FileStorage) UpdateMember(_ context.Context, member *core.Member) (*core.Member, error) {
+func (s *FileStorage) UpdateMember(ctx context.Context, member *core.Member) (*core.Member, error) {
 	if member == nil {
 		return nil, errors.New("nil member")
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return nil, err
 	}
@@ -422,15 +570,15 @@ func (s *FileStorage) UpdateMember(_ context.Context, member *core.Member) (*cor
 	current.Email = member.Email
 	s.db.Members[member.ID] = current
 
-	if err := s.flush(); err != nil {
+	if err := s.flushMaybe(ctx); err != nil {
 		return nil, err
 	}
 	return &current, nil
 }
 
-func (s *FileStorage) DeleteMember(_ context.Context, memberID string) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *FileStorage) DeleteMember(ctx context.Context, memberID string) error {
+	unlock := s.lock(ctx)
+	defer unlock()
 	if err := s.ensureLoaded(); err != nil {
 		return err
 	}
@@ -450,5 +598,5 @@ func (s *FileStorage) DeleteMember(_ context.Context, memberID string) error {
 		}
 	}
 
-	return s.flush()
+	return s.flushMaybe(ctx)
 }

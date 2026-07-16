@@ -7,9 +7,6 @@ import (
 	"strings"
 
 	"sattchel/internal/optimizely/core"
-
-	"charm.land/bubbles/v2/table"
-	"charm.land/lipgloss/v2"
 )
 
 // RenderFlagLipGloss renders a FeatureFlagDefinition and its instances as
@@ -35,25 +32,25 @@ func RenderFlagLipGloss(flag *core.FeatureFlagDefinition, instances []core.Featu
 	// ── Details ─────────────────────────────────────────────────────────
 	fmt.Println(s.Title.Render("  DETAILS"))
 
-	detailPairs := [][]string{
+	detailHeaders := []string{"Field", "Value"}
+	detailRows := [][]string{
 		{"ID", flag.ID},
 		{"Archived", fmt.Sprintf("%t", flag.Archived)},
 	}
 	if flag.CreatedAt != nil {
-		detailPairs = append(detailPairs, []string{"Created", flag.CreatedAt.Format("2006-01-02")})
+		detailRows = append(detailRows, []string{"Created", flag.CreatedAt.Format("2006-01-02")})
 	}
 	if flag.CreatedBy != nil {
-		detailPairs = append(detailPairs, []string{"Created By", *flag.CreatedBy})
+		detailRows = append(detailRows, []string{"Created By", *flag.CreatedBy})
 	}
-	fmt.Println(renderTable(s, detailPairs))
+	fmt.Println(RenderTable(detailHeaders, detailRows))
 	fmt.Println()
 
 	// ── Default Variables ───────────────────────────────────────────────
 	if hasVariables(flag.DefaultVariables) {
 		fmt.Println(s.Title.Render("  DEFAULT VARIABLES"))
-		varRows := [][]string{
-			{"Variable", "Type", "Value", "Description"},
-		}
+		varHeaders := []string{"Variable", "Type", "Value", "Description"}
+		var varRows [][]string
 		for key, v := range flag.DefaultVariables.BoolVariables {
 			varRows = append(varRows, []string{key, "boolean", fmt.Sprintf("%v", v.Value), v.Description})
 		}
@@ -69,7 +66,7 @@ func RenderFlagLipGloss(flag *core.FeatureFlagDefinition, instances []core.Featu
 		for key, v := range flag.DefaultVariables.JsonVariables {
 			varRows = append(varRows, []string{key, "json", fmt.Sprintf("%v", v.Value), v.Description})
 		}
-		fmt.Println(renderTable(s, varRows))
+		fmt.Println(RenderTable(varHeaders, varRows))
 		fmt.Println()
 	}
 
@@ -79,18 +76,18 @@ func RenderFlagLipGloss(flag *core.FeatureFlagDefinition, instances []core.Featu
 		for i, inst := range instances {
 			fmt.Println(s.Text.Bold(true).Render("  " + inst.EnvironmentID))
 
-			instDetails := [][]string{
+			instHeaders := []string{"Field", "Value"}
+			instRows := [][]string{
 				{"Enabled", enabledStr(inst.Enabled)},
 				{"Archived", fmt.Sprintf("%t", inst.Archived)},
 			}
-			fmt.Println(renderTable(s, instDetails))
+			fmt.Println(RenderTable(instHeaders, instRows))
 
 			if hasVariables(inst.Variables) {
 				fmt.Println()
 				fmt.Println(s.Info.Bold(true).Render("  Overrides"))
-				varRows := [][]string{
-					{"Variable", "Type", "Value", "Description"},
-				}
+				varHeaders := []string{"Variable", "Type", "Value", "Description"}
+				var varRows [][]string
 				for key, v := range inst.Variables.BoolVariables {
 					varRows = append(varRows, []string{key, "boolean", fmt.Sprintf("%v", v.Value), v.Description})
 				}
@@ -106,7 +103,7 @@ func RenderFlagLipGloss(flag *core.FeatureFlagDefinition, instances []core.Featu
 				for key, v := range inst.Variables.JsonVariables {
 					varRows = append(varRows, []string{key, "json", fmt.Sprintf("%v", v.Value), v.Description})
 				}
-				fmt.Println(renderTable(s, varRows))
+				fmt.Println(RenderTable(varHeaders, varRows))
 			}
 
 			if i < len(instances)-1 {
@@ -118,64 +115,6 @@ func RenderFlagLipGloss(flag *core.FeatureFlagDefinition, instances []core.Featu
 	}
 
 	return nil
-}
-
-// renderTable renders a table using the bubbles/table component.
-func renderTable(s Styles, rows [][]string) string {
-	if len(rows) == 0 {
-		return ""
-	}
-
-	// First row is the header
-	header := rows[0]
-	data := rows[1:]
-
-	columns := make([]table.Column, len(header))
-	for i, title := range header {
-		maxLen := lipgloss.Width(title)
-		for _, row := range data {
-			if i < len(row) {
-				w := lipgloss.Width(row[i])
-				if w > maxLen {
-					maxLen = w
-				}
-			}
-		}
-		columns[i] = table.Column{
-			Title: title,
-			Width: maxLen + 4,
-		}
-	}
-
-	rowData := make([]table.Row, len(data))
-	for i, r := range data {
-		rowData[i] = r
-	}
-
-	totalWidth := 0
-	for _, col := range columns {
-		totalWidth += col.Width
-	}
-	totalWidth += len(columns) + 1
-
-	t := table.New(
-		table.WithColumns(columns),
-		table.WithRows(rowData),
-		table.WithFocused(false),
-		table.WithHeight(len(data)+2),
-		table.WithWidth(totalWidth),
-	)
-
-	styles := table.DefaultStyles()
-	styles.Header = styles.Header.
-		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("240")).
-		Bold(true)
-	styles.Cell = styles.Cell.
-		Foreground(s.Text.GetForeground())
-	t.SetStyles(styles)
-
-	return t.View()
 }
 
 // hasVariables returns true if any variable type has entries.
@@ -236,19 +175,19 @@ func RenderMultiProjectFlagLipGlossStr(reports []ProjectFlagReport, opts ReportO
 			if rep.Flag.Archived {
 				status = "🗄️ Archived"
 			}
-			detailPairs := [][]string{
-				{"Field", "Value"},
+			detailHeaders := []string{"Field", "Value"}
+			detailRows := [][]string{
 				{"Status", status},
 				{"ID", rep.Flag.ID},
 				{"Archived", fmt.Sprintf("%t", rep.Flag.Archived)},
 			}
 			if rep.Flag.CreatedAt != nil {
-				detailPairs = append(detailPairs, []string{"Created", rep.Flag.CreatedAt.Format("2006-01-02")})
+				detailRows = append(detailRows, []string{"Created", rep.Flag.CreatedAt.Format("2006-01-02")})
 			}
 			if rep.Flag.CreatedBy != nil {
-				detailPairs = append(detailPairs, []string{"Created By", *rep.Flag.CreatedBy})
+				detailRows = append(detailRows, []string{"Created By", *rep.Flag.CreatedBy})
 			}
-			sb.WriteString(renderTable(s, detailPairs) + "\n")
+			sb.WriteString(RenderTable(detailHeaders, detailRows) + "\n")
 			sb.WriteString("\n")
 
 			if hasVariables(rep.Flag.DefaultVariables) {
@@ -287,9 +226,8 @@ func RenderMultiProjectFlagLipGlossStr(reports []ProjectFlagReport, opts ReportO
 				sb.WriteString("    No environments configured.\n")
 				sb.WriteString("\n")
 			} else {
-				envRows := [][]string{
-					{"Environment", "Enabled", "Variant"},
-				}
+				envHeaders := []string{"Environment", "Enabled", "Variant"}
+				var envRows [][]string
 				for _, inst := range rep.Instances {
 					var selectedVariant string
 					for _, target := range rep.Flag.Targets {
@@ -317,7 +255,7 @@ func RenderMultiProjectFlagLipGlossStr(reports []ProjectFlagReport, opts ReportO
 						selectedVariant,
 					})
 				}
-				sb.WriteString(renderTable(s, envRows) + "\n")
+				sb.WriteString(RenderTable(envHeaders, envRows) + "\n")
 				sb.WriteString("\n")
 
 				hasAnyOverrides := false
@@ -447,9 +385,8 @@ func RenderFlagComparisonsLipGlossStr(comparisons []core.FlagComparison) (string
 	s := AutoStyles()
 	var sb strings.Builder
 
-	rows := [][]string{
-		{"Flag Key", "Name", "Exists In", "Missing In"},
-	}
+	headers := []string{"Flag Key", "Name", "Exists In", "Missing In"}
+	var rows [][]string
 	for _, comp := range comparisons {
 		var existsStrs []string
 		for _, p := range comp.ExistsIn {
@@ -470,6 +407,6 @@ func RenderFlagComparisonsLipGlossStr(comparisons []core.FlagComparison) (string
 
 	sb.WriteString(s.Title.Render("  ⚡ FEATURE FLAG COMPARISON MISMATCHES") + "\n")
 	sb.WriteString(s.Muted.Render(fmt.Sprintf("  Found %d mismatching flags across projects.", len(comparisons))) + "\n\n")
-	sb.WriteString(renderTable(s, rows) + "\n")
+	sb.WriteString(RenderTable(headers, rows) + "\n")
 	return sb.String(), nil
 }

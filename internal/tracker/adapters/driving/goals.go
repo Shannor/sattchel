@@ -27,6 +27,7 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
        satt tracker goals move <childId> <newParentId>
        satt tracker goals update <id>
        satt tracker goals view <id>
+       satt tracker goals triage
        `,
 	}
 	cmd.AddCommand(addGoal(service, cfg))
@@ -35,6 +36,7 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
 	cmd.AddCommand(moveGoal(service, cfg))
 	cmd.AddCommand(viewGoal(service, cfg))
 	cmd.AddCommand(updateGoal(service, cfg))
+	cmd.AddCommand(triageGoals(service, cfg))
 	return cmd
 }
 
@@ -96,13 +98,13 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().StringVarP(&description, "description", "d", "", "Description of the goal")
-	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
-	cmd.Flags().StringVarP(&parentID, "parent", "", "", "Parent goal id of the goal. If not provided, the last parent will be used")
-	cmd.Flags().BoolVarP(&changeCurrent, "set", "s", false, "Set the newly created goal as current")
-	cmd.Flags().StringVarP(&effort, "effort", "e", string(core.UnknownEffort), "How much effort is required to achieve the goal")
-	cmd.Flags().StringVarP(&impact, "impact", "i", string(core.UnknownImpact), "How much impact will the goal have")
-	cmd.Flags().StringVarP(&relationship, "relationship", "r", string(core.LinkPreferred), "Requirement relationship with parent goal")
+	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. Default: default project")
+	cmd.Flags().StringVarP(&parentID, "parent", "", "", "Parent goal id of the goal. Default: last parent")
+	cmd.Flags().StringVarP(&description, "description", "d", "", "(Optional) Description of the goal")
+	cmd.Flags().BoolVarP(&changeCurrent, "set", "s", false, "(Optional) Set the newly created goal as current")
+	cmd.Flags().StringVarP(&effort, "effort", "e", string(core.UnknownEffort), "(Optional) How much effort is required to achieve the goal")
+	cmd.Flags().StringVarP(&impact, "impact", "i", string(core.UnknownImpact), "(Optional) How much impact will the goal have")
+	cmd.Flags().StringVarP(&relationship, "relationship", "r", string(core.LinkOptional), "relationship with parent goal. Default: optional")
 	cmd.Flags().StringVarP(&memberID, "memberId", "m", "", "(Optional) Member ID to assign to the goal")
 
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -130,7 +132,6 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	_ = cmd.RegisterFlagCompletionFunc("relationship", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{
 			string(core.LinkOptional),
-			string(core.LinkPreferred),
 			string(core.LinkRequired),
 		}, cobra.ShellCompDirectiveNoFileComp
 	})
@@ -345,50 +346,20 @@ func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.St
 	return nodeTrees[root.Goal.ID]
 }
 
-func getExcludedSubtreeIDs(roots []*GoalNode, childID string) map[string]bool {
-	nodesMap := make(map[string]*GoalNode)
-	var traverse func(*GoalNode)
-	traverse = func(n *GoalNode) {
-		nodesMap[n.Goal.ID] = n
-		for _, child := range n.Children {
-			traverse(child)
-		}
-	}
-	for _, root := range roots {
-		traverse(root)
-	}
-
-	excluded := make(map[string]bool)
-	childNode, ok := nodesMap[childID]
-	if !ok {
-		excluded[childID] = true
-		return excluded
-	}
-
-	stack := []*GoalNode{childNode}
-	for len(stack) > 0 {
-		curr := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		excluded[curr.Goal.ID] = true
-		for _, child := range curr.Children {
-			stack = append(stack, child)
-		}
-	}
-	return excluded
-}
-
 func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
-	projectID := ""
+	var (
+		relationship = core.LinkOptional
+		projectID    string
+	)
 
 	cmd := &cobra.Command{
-		Use:     "move [childId] [newParentId]",
+		Use:     "move <childId> <newParentId>",
 		Short:   "Move a goal to a new parent",
 		Aliases: []string{"mv"},
 		Long: `Move a goal to a new parent.
    If childId and newParentId are not provided, it will prompt for them interactively.
    Examples:
-     satt tracker goals move <childId> <newParentId>
-     satt tracker goals move
+     satt tracker goals move <childId> <newParentId> -r <relationship>
      `,
 		Args:         cobra.MaximumNArgs(2),
 		SilenceUsage: true,
@@ -398,8 +369,6 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return nil, cobra.ShellCompDirectiveNoFileComp
 			}
 
-			// TODO: This logic of where a child can move too should be decided in the service layer.
-			// The UI shouldn't make this choice.
 			goals, err := service.GetGoals(cmd.Context(), pid)
 			if err != nil {
 				return nil, cobra.ShellCompDirectiveNoFileComp
@@ -417,12 +386,18 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 
 			if len(args) == 1 {
 				childID := args[0]
-				roots := buildGoalTree(goals)
-				excludedIDs := getExcludedSubtreeIDs(roots, childID)
+				allowedParents, err := service.GetAllowedParents(cmd.Context(), pid, childID)
+				if err != nil {
+					return nil, cobra.ShellCompDirectiveNoFileComp
+				}
+				allowedIDs := make(map[string]bool)
+				for _, g := range allowedParents {
+					allowedIDs[g.ID] = true
+				}
 
 				var completions []string
 				for _, g := range goals {
-					if excludedIDs[g.ID] {
+					if !allowedIDs[g.ID] {
 						continue
 					}
 					completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
@@ -467,21 +442,18 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return fmt.Errorf("no goals found for project %s", pid)
 			}
 
-			var rootGoalID string
-			for _, g := range goals {
-				if g.Parent == nil || g.Parent.TargetID == "" {
-					rootGoalID = g.ID
-					break
-				}
+			rootGoal, err := service.GetRootGoal(cmd.Context(), pid)
+			if err != nil {
+				return err
 			}
 
-			if childID != "" && childID == rootGoalID {
+			if childID != "" && childID == rootGoal.ID {
 				return fmt.Errorf("the root goal cannot be moved")
 			}
 
 			if childID == "" {
 				childID, err = tui.ChooseGoal(goals, "Select Goal to Move", "", nil, func(val string) error {
-					if val == rootGoalID {
+					if val == rootGoal.ID {
 						return fmt.Errorf("the root goal cannot be moved")
 					}
 					return nil
@@ -491,15 +463,20 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				}
 			}
 
+			allowedGoals, err := service.GetAllowedParents(cmd.Context(), pid, childID)
+			if err != nil {
+				return err
+			}
+			allowedIDs := make(map[string]bool)
+			for _, g := range allowedGoals {
+				allowedIDs[g.ID] = true
+			}
 			if newParentID == "" {
-				roots := buildGoalTree(goals)
-				excludedIDs := getExcludedSubtreeIDs(roots, childID)
-
 				newParentID, err = tui.ChooseGoal(goals, "Select New Parent Goal", "", func(g *core.Goal) (bool, bool) {
-					if excludedIDs[g.ID] {
-						return false, false
+					if allowedIDs[g.ID] {
+						return true, true
 					}
-					return true, true
+					return false, false
 				}, nil)
 				if err != nil {
 					return err
@@ -508,7 +485,9 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 
 			var movedGoal *core.Goal
 			err = loader.Run("Moving goal ...", func() {
-				movedGoal, err = service.ChangeParent(cmd.Context(), pid, childID, newParentID, core.GoalOptions{})
+				movedGoal, err = service.ChangeParent(cmd.Context(), pid, childID, newParentID, core.GoalOptions{
+					LinkRelationship: relationship,
+				})
 			})
 			if err != nil {
 				return err
@@ -520,6 +499,11 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	cmd.Flags().StringVarP((*string)(&relationship), "relationship", "r", string(core.LinkOptional), "Relationship of the link between the goal and its new parent")
+	_ = cmd.RegisterFlagCompletionFunc("relationship", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{string(core.LinkOptional), string(core.LinkRequired)}, cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.MarkFlagRequired("relationship")
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
@@ -553,12 +537,15 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return fmt.Errorf("no project selected")
 			}
 
-			var selectedID string
-			var err error
+			var (
+				err        error
+				selectedID string
+				goals      []core.Goal
+				parent     *core.Goal
+			)
 			if len(args) > 0 {
 				selectedID = args[0]
 			} else {
-				var goals []core.Goal
 				err = loader.Run("Getting goals ...", func() {
 					goals, err = service.GetGoals(cmd.Context(), pid)
 				})
@@ -588,7 +575,14 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return err
 			}
 
-			fmt.Print(tui.RenderGoalDetails(targetGoal))
+			if targetGoal.Parent != nil {
+				parent, err = service.GetGoal(cmd.Context(), targetGoal.Parent.TargetID)
+				if err != nil {
+					return err
+				}
+			}
+
+			fmt.Print(tui.RenderGoalDetails(targetGoal, parent))
 			return nil
 		},
 	}

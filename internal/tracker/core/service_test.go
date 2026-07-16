@@ -8,6 +8,7 @@ import (
 )
 
 type mockTrackerRepository struct {
+	transactionFunc   func(ctx context.Context, fn func(ctx context.Context) error) error
 	createProjectFunc func(ctx context.Context, project *Project) (*Project, error)
 	getProjectsFunc   func(ctx context.Context) ([]Project, error)
 	getProjectFunc    func(ctx context.Context, projectID string) (*Project, error)
@@ -16,6 +17,7 @@ type mockTrackerRepository struct {
 	getGoalsFunc      func(ctx context.Context, projectID string) ([]Goal, error)
 	getGoalFunc       func(ctx context.Context, goalID string) (*Goal, error)
 	updateGoalFunc    func(ctx context.Context, goal *Goal) (*Goal, error)
+	queryGoalsFunc    func(ctx context.Context, projectID string, query *GoalQuery) ([]Goal, error)
 	createMemberFunc  func(ctx context.Context, member *Member) (*Member, error)
 	getMemberFunc     func(ctx context.Context, memberID string) (*Member, error)
 	getMembersFunc    func(ctx context.Context) ([]Member, error)
@@ -79,6 +81,13 @@ func (m *mockTrackerRepository) UpdateGoal(ctx context.Context, goal *Goal) (*Go
 	return nil, nil
 }
 
+func (m *mockTrackerRepository) QueryGoals(ctx context.Context, projectID string, query *GoalQuery) ([]Goal, error) {
+	if m.queryGoalsFunc != nil {
+		return m.queryGoalsFunc(ctx, projectID, query)
+	}
+	return nil, nil
+}
+
 func (m *mockTrackerRepository) CreateMember(ctx context.Context, member *Member) (*Member, error) {
 	if m.createMemberFunc != nil {
 		return m.createMemberFunc(ctx, member)
@@ -112,6 +121,13 @@ func (m *mockTrackerRepository) DeleteMember(ctx context.Context, memberID strin
 		return m.deleteMemberFunc(ctx, memberID)
 	}
 	return nil
+}
+
+func (m *mockTrackerRepository) Transaction(ctx context.Context, fn func(ctx context.Context) error) error {
+	if m.transactionFunc != nil {
+		return m.transactionFunc(ctx, fn)
+	}
+	return fn(ctx)
 }
 
 func TestServiceCreateProject(t *testing.T) {
@@ -552,8 +568,8 @@ func TestServiceChangeParent(t *testing.T) {
 		}
 		s := NewService(repo)
 		g, err := s.ChangeParent(context.Background(), "p-1", "g-child", "g-new-parent", GoalOptions{
-			LinkRelationship: LinkPreferred,
-			Description:      "Preferred dependency",
+			LinkRelationship: LinkOptional,
+			Description:      "Optional dependency",
 		})
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
