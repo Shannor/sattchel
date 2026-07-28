@@ -69,6 +69,9 @@ func RenderMultiProjectFlagLipGlossStr(reports []ProjectFlagReport, opts ReportO
 			if rep.Flag.CreatedBy != nil {
 				detailRows = append(detailRows, []string{"Created By", *rep.Flag.CreatedBy})
 			}
+			if rep.Flag.SourceURL != "" {
+				detailRows = append(detailRows, []string{"Source", rep.Flag.SourceURL})
+			}
 			sb.WriteString(RenderTable(detailHeaders, detailRows) + "\n")
 			sb.WriteString("\n")
 

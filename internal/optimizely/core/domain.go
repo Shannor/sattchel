@@ -60,6 +60,7 @@ type FeatureFlagDefinition struct {
 	DefaultVariables Variables      `json:"defaultVariables"`
 	Description      string         `json:"description"`
 	Meta             map[string]any `json:"meta"`
+	SourceURL        string         `json:"sourceUrl,omitempty"`
 	CreatedBy        *string        `json:"createdBy"`
 	CreatedAt        *time.Time     `json:"createdAt"`
 	// Overrides a collection of overriding variables that help build the instance of a Feature Flag.

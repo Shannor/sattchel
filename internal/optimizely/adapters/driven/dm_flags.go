@@ -230,6 +230,7 @@ func toFeatureFlag(flag features.Flag) (core.FeatureFlagDefinition, error) {
 		Name:             flag.Name,
 		DefaultVariables: parseVariableDefinitions(flag.VariableDefinitions),
 		Description:      optionalString(flag.Description),
+		SourceURL:        optionalString(flag.Url),
 		CreatedAt:        flag.CreatedTime,
 		CreatedBy:        flag.CreatedByUserEmail,
 	}
