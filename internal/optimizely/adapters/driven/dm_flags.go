@@ -119,7 +119,9 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 		return nil, err
 	}
 
+	perPageVal := largePageSize
 	params := &features.ListFlagsParams{
+		PerPage:    &perPageVal,
 		PageWindow: new(pageSize),
 	}
 
@@ -140,12 +142,12 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 	var mu sync.Mutex
 	results := make([]core.FeatureFlagDefinition, 0)
 	for _, flag := range info.Items {
-		enriched, err := f.enrichFlag(ctx, &flag)
+		fDef, err := toFeatureFlag(flag)
 		if err != nil {
-			log.Warn("failed to enrich a feature flag", "flag_key", flag.Key)
+			log.Warn("failed to convert a feature flag", "flag_key", flag.Key)
 			continue
 		}
-		results = append(results, *enriched)
+		results = append(results, fDef)
 	}
 
 	if info.NextUrl == nil {
@@ -161,11 +163,11 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 
 	var wg sync.WaitGroup
 	for _, token := range tokens {
-		wg.Add(1)
-		go func(tok string) {
-			defer wg.Done()
+		tok := token
+		wg.Go(func() {
 			pageParams := &features.ListFlagsParams{
 				PageToken:  &tok,
+				PerPage:    &perPageVal,
 				PageWindow: new(pageSize),
 			}
 			response, err := f.client.ListFlagsWithResponse(ctx, id, pageParams)
@@ -185,17 +187,17 @@ func (f *flagDataMapper) GetAll(ctx context.Context) ([]core.FeatureFlagDefiniti
 
 			r := response.JSON200
 			for _, flag := range r.Items {
-				enriched, err := f.enrichFlag(ctx, &flag)
+				fDef, err := toFeatureFlag(flag)
 				if err != nil {
-					log.Warn("failed to enrich a feature flag", "flag_key", flag.Key)
+					log.Warn("failed to convert a feature flag", "flag_key", flag.Key)
 					continue
 				}
 				mu.Lock()
-				results = append(results, *enriched)
+				results = append(results, fDef)
 				mu.Unlock()
 			}
 
-		}(token)
+		})
 	}
 
 	wg.Wait()
@@ -565,6 +567,12 @@ func (f *flagDataMapper) enrichFlag(ctx context.Context, flag *features.Flag) (*
 		overrides = append(overrides, toOverride(variation))
 	}
 	result.Overrides = overrides
+
+	if result.Meta == nil {
+		result.Meta = make(map[string]any)
+	}
+	result.Meta["enriched"] = true
+
 	return &result, nil
 }
 

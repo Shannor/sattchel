@@ -27,6 +27,10 @@ func (m *mockFlagsRepository) Get(ctx context.Context, ID string) (*core.Feature
 	}
 	for _, f := range m.flags {
 		if f.ID == ID || f.Key == ID {
+			if f.Meta == nil {
+				f.Meta = make(map[string]any)
+			}
+			f.Meta["enriched"] = true
 			return &f, nil
 		}
 	}
@@ -129,7 +133,7 @@ func TestCachedFlagsRepository_Get(t *testing.T) {
 	ttl := 10 * time.Second
 
 	mockFlags := []core.FeatureFlagDefinition{
-		{ID: "flag1", Key: "flag-1", Name: "Flag One", Description: "This is flag one"},
+		{ID: "flag1", Key: "flag-1", Name: "Flag One", Description: "This is flag one", Meta: map[string]any{"enriched": true}},
 	}
 
 	mockRepo := &mockFlagsRepository{flags: mockFlags}
@@ -152,7 +156,7 @@ func TestCachedFlagsRepository_Get(t *testing.T) {
 	}
 
 	// 2. Cache miss, but valid cache: calls Get on mock repo, and updates/saves cache
-	mockRepo.flags = append(mockRepo.flags, core.FeatureFlagDefinition{ID: "flag2", Key: "flag-2", Name: "Flag Two"})
+	mockRepo.flags = append(mockRepo.flags, core.FeatureFlagDefinition{ID: "flag2", Key: "flag-2", Name: "Flag Two", Meta: map[string]any{"enriched": true}})
 	f, err = cachedRepo.Get(context.Background(), "flag2")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)

@@ -122,7 +122,11 @@ func (r *cachedFlagsRepository) Get(ctx context.Context, ID string) (*core.Featu
 	if err == nil && ok {
 		for _, f := range flags {
 			if f.ID == ID || f.Key == ID {
-				return &f, nil
+				if f.Meta != nil {
+					if enriched, ok := f.Meta["enriched"].(bool); ok && enriched {
+						return &f, nil
+					}
+				}
 			}
 		}
 	}

@@ -135,13 +135,7 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 				ShowEnvironments: showEnvironments,
 			}
 
-			var content string
-			var renderErr error
-			if outputFormat == "lipgloss" {
-				content, renderErr = tui.RenderMultiProjectFlagLipGlossStr(reports, opts)
-			} else {
-				content, renderErr = tui.RenderMultiProjectFlagGlamourStr(reports, opts)
-			}
+			content, renderErr := tui.RenderMultiProjectFlagLipGlossStr(reports, opts)
 			if renderErr != nil {
 				return renderErr
 			}
@@ -166,7 +160,6 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided will only show the flag for the project(s) (if not provided will show all)")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
-	cmd.Flags().StringVarP(&outputFormat, "output", "o", "markdown", "Output format (markdown, lipgloss)")
 	cmd.Flags().BoolVar(&showDetails, "show-details", true, "Show flag details (ID, status, etc.)")
 	cmd.Flags().BoolVar(&showVariants, "show-variants", true, "Show variation/variant definitions")
 	cmd.Flags().BoolVar(&showEnvironments, "show-environments", true, "Show environment configurations")

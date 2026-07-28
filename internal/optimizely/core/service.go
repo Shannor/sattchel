@@ -32,20 +32,42 @@ func (s *Service) GetProjects(ctx context.Context) ([]Project, error) {
 }
 
 func (s *Service) GetFlags(ctx context.Context, projectIDs []string) (map[string][]FeatureFlagDefinition, error) {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
 	result := make(map[string][]FeatureFlagDefinition)
+	var errs []error
 
 	for _, pid := range projectIDs {
-		dm, err := s.flagFactory.Create(ctx, pid)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create flag mapper for project %s: %w", pid, err)
-		}
+		projectID := pid
+		wg.Go(func() {
+			dm, err := s.flagFactory.Create(ctx, projectID)
+			if err != nil {
+				mu.Lock()
+				errs = append(errs, fmt.Errorf("failed to create flag mapper for project %s: %w", projectID, err))
+				mu.Unlock()
+				return
+			}
 
-		flags, err := dm.GetAll(ctx)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get flags for project %s: %w", pid, err)
-		}
-		result[pid] = flags
+			flags, err := dm.GetAll(ctx)
+			if err != nil {
+				mu.Lock()
+				errs = append(errs, fmt.Errorf("failed to get flags for project %s: %w", projectID, err))
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			result[projectID] = flags
+			mu.Unlock()
+		})
 	}
+
+	wg.Wait()
+
+	if len(errs) > 0 {
+		return nil, errs[0]
+	}
+
 	return result, nil
 }
 
@@ -91,9 +113,8 @@ func (s *Service) SearchFlags(ctx context.Context, projectIDs []string, opts Lis
 	var errs []error
 
 	for _, pid := range projectIDs {
-		wg.Add(1)
-		go func(projectID string) {
-			defer wg.Done()
+		projectID := pid
+		wg.Go(func() {
 			dm, err := s.flagFactory.Create(ctx, projectID)
 			if err != nil {
 				mu.Lock()
@@ -115,7 +136,7 @@ func (s *Service) SearchFlags(ctx context.Context, projectIDs []string, opts Lis
 			mu.Lock()
 			result[projectID] = filtered
 			mu.Unlock()
-		}(pid)
+		})
 	}
 
 	wg.Wait()
