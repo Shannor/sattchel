@@ -23,9 +23,7 @@ func RunPager(content string) error {
 	var cmd *exec.Cmd
 	if pager == "less" {
 		// -R: show ANSI color codes
-		// -F: quit if the entire file fits on one screen
-		// -X: do not clear screen on exit
-		cmd = exec.Command("less", "-R", "-F", "-X")
+		cmd = exec.Command("less", "-R")
 	} else {
 		args := strings.Fields(pager)
 		if len(args) == 0 {

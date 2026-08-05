@@ -22,10 +22,10 @@ var (
 	envFilter        = make([]string, 0)
 	queryFilter      string
 	skipCache        bool
-	outputFormat     string
 	showDetails      bool
 	showVariants     bool
 	showEnvironments bool
+	showVariables    bool
 	stdoutFlag       bool
 	toFile           string
 )
@@ -133,6 +133,7 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 				ShowDetails:      showDetails,
 				ShowVariants:     showVariants,
 				ShowEnvironments: showEnvironments,
+				ShowVariables:    showVariables,
 			}
 
 			content, renderErr := tui.RenderMultiProjectFlagLipGlossStr(reports, opts)
@@ -163,6 +164,7 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 	cmd.Flags().BoolVar(&showDetails, "show-details", true, "Show flag details (ID, status, etc.)")
 	cmd.Flags().BoolVar(&showVariants, "show-variants", true, "Show variation/variant definitions")
 	cmd.Flags().BoolVar(&showEnvironments, "show-environments", true, "Show environment configurations")
+	cmd.Flags().BoolVar(&showVariables, "show-variables", true, "Show variable definitions and overrides")
 	cmd.Flags().BoolVar(&stdoutFlag, "stdout", false, "Dump output directly to stdout without pager")
 	cmd.Flags().StringVar(&toFile, "to-file", "", "Write output to the specified file path")
 	return cmd
@@ -393,14 +395,7 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 				return nil
 			}
 
-			var content string
-			var renderErr error
-			if outputFormat == "lipgloss" {
-				content, renderErr = tui.RenderFlagComparisonsLipGlossStr(comparisons)
-			} else {
-				// default to markdown/glamour
-				content, renderErr = tui.RenderFlagComparisonsGlamourStr(comparisons)
-			}
+			content, renderErr := tui.RenderFlagComparisonsLipGlossStr(comparisons)
 			if renderErr != nil {
 				return renderErr
 			}
@@ -423,7 +418,6 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 	}
 	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided, compares only the specified project(s)")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
-	cmd.Flags().StringVarP(&outputFormat, "output", "o", "markdown", "Output format (markdown, lipgloss)")
 	cmd.Flags().BoolVar(&stdoutFlag, "stdout", false, "Dump list directly to stdout instead of using a pager")
 	cmd.Flags().StringVar(&toFile, "to-file", "", "Write comparison list to the specified file path")
 	return cmd
