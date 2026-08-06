@@ -265,7 +265,7 @@ func projectDisplay(project core.Project) string {
 	if name == "" || name == project.ID {
 		return project.ID
 	}
-	return fmt.Sprintf("%s (%s)", name, project.ID)
+	return name
 }
 
 func joinProjects(projects []core.Project) string {
