@@ -42,19 +42,18 @@ func RenderOptimizelyCompareReport(report *core.FlagComparisonReport, baseProjec
 		return sb.String()
 	}
 
-	missingRows := make([][]string, 0, len(report.MissingFlags))
-	for _, entry := range report.MissingFlags {
-		missingRows = append(missingRows, []string{
-			entry.Flag.Key,
-			fallback(entry.Flag.Name),
-			projectDisplay(entry.SourceProject),
-			joinProjects(entry.PresentIn),
-			joinProjects(entry.MissingIn),
-			formatCreatedAt(entry.Flag.CreatedAt),
-		})
-	}
 	sb.WriteString(sectionTitle("Missing Flags") + "\n")
-	sb.WriteString(RenderTable([]string{"Key", "Name", "Source", "Present In", "Missing In", "Created"}, missingRows) + "\n")
+	for i, entry := range report.MissingFlags {
+		sb.WriteString(fmt.Sprintf("  %s %s\n", s.Info.Render("•"), s.Text.Bold(true).Render(entry.Flag.Key)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Name:"), fallback(entry.Flag.Name)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Source:"), projectDisplay(entry.SourceProject)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Present In:"), joinProjects(entry.PresentIn)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Missing In:"), joinProjects(entry.MissingIn)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Created:"), formatCreatedAt(entry.Flag.CreatedAt)))
+		if i < len(report.MissingFlags)-1 {
+			sb.WriteString("\n")
+		}
+	}
 	return sb.String()
 }
 
@@ -72,12 +71,12 @@ func RenderOptimizelyUniqueFlags(entries []core.UniqueFlagEntry) string {
 		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Name:"), fallback(entry.Flag.Name)))
 		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Project:"), projectDisplay(entry.TargetProject)))
 		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Created:"), formatCreatedAt(entry.Flag.CreatedAt)))
-		
+
 		sb.WriteString(fmt.Sprintf("    %-15s\n", s.Muted.Render("Absent From:")))
 		for _, compProj := range entry.ComparedAgainst {
 			sb.WriteString(fmt.Sprintf("      %s %s\n", s.Warning.Render("-"), projectDisplay(compProj)))
 		}
-		
+
 		if i < len(entries)-1 {
 			sb.WriteString("\n")
 		}
@@ -88,70 +87,80 @@ func RenderOptimizelyUniqueFlags(entries []core.UniqueFlagEntry) string {
 func RenderOptimizelyDormantFlags(entries []core.DormantFlagEntry, projectIDs []string) string {
 	s := AutoStyles()
 	var sb strings.Builder
-	sb.WriteString(s.Title.Render("🌙 Dormant Feature Flags") + "\n")
+	sb.WriteString(s.Title.Render("😴 Dormant Feature Flags") + "\n")
 	sb.WriteString(s.Muted.Render("Disabled in every environment across the selected projects.") + "\n\n")
 	sb.WriteString(sectionTitle("Projects Checked") + "\n")
-	sb.WriteString(strings.Join(projectIDs, ", ") + "\n\n")
+	sb.WriteString("  " + strings.Join(projectIDs, ", ") + "\n\n")
 	if len(entries) == 0 {
 		sb.WriteString(s.Success.Render("No dormant flags found.") + "\n")
 		return sb.String()
 	}
 
-	rows := make([][]string, 0, len(entries))
-	for _, entry := range entries {
-		rows = append(rows, []string{
-			entry.Flag.Key,
-			fallback(entry.Flag.Name),
-			joinProjects(entry.PresentIn),
-			formatCreatedAt(entry.Flag.CreatedAt),
-		})
+	for i, entry := range entries {
+		sb.WriteString(fmt.Sprintf("  %s %s\n", s.Info.Render("•"), s.Text.Bold(true).Render(entry.Flag.Key)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Name:"), fallback(entry.Flag.Name)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Present In:"), joinProjects(entry.PresentIn)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Created:"), formatCreatedAt(entry.Flag.CreatedAt)))
+		if i < len(entries)-1 {
+			sb.WriteString("\n")
+		}
 	}
-	sb.WriteString(RenderTable([]string{"Key", "Name", "Present In", "Created"}, rows) + "\n")
 	return sb.String()
 }
 
 func RenderOptimizelyVariableDrift(entries []core.FlagVariableDrift) string {
 	s := AutoStyles()
 	var sb strings.Builder
-	sb.WriteString(s.Title.Render("🧬 Variable Definition Drift") + "\n")
+	sb.WriteString(s.Title.Render("⚠️ Variable Definition Drift") + "\n")
 	sb.WriteString(s.Muted.Render("Flags that exist in multiple projects but disagree on variable shape or defaults.") + "\n\n")
 	if len(entries) == 0 {
 		sb.WriteString(s.Success.Render("No variable definition drift found.") + "\n")
 		return sb.String()
 	}
 
-	quickRows := make([][]string, 0, len(entries))
-	for _, entry := range entries {
-		varKeys := make([]string, 0, len(entry.Variables))
-		for _, variable := range entry.Variables {
-			varKeys = append(varKeys, variable.Key)
+	for i, entry := range entries {
+		sb.WriteString(fmt.Sprintf("  %s %s (%s)\n", s.Info.Render("•"), s.Text.Bold(true).Render(entry.FlagKey), fallback(entry.FlagName)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Present In:"), joinProjects(entry.PresentIn)))
+		sb.WriteString(fmt.Sprintf("    %-15s\n", s.Muted.Render("Drifted Variables:")))
+		
+		resolveProject := func(pid string) string {
+			for _, proj := range entry.PresentIn {
+				if proj.ID == pid {
+					return projectDisplay(proj)
+				}
+			}
+			return pid
 		}
-		quickRows = append(quickRows, []string{entry.FlagKey, fallback(entry.FlagName), joinProjects(entry.PresentIn), strings.Join(varKeys, ", ")})
-	}
-	sb.WriteString(sectionTitle("Quick Reference") + "\n")
-	sb.WriteString(RenderTable([]string{"Flag Key", "Name", "Present In", "Drifted Variables"}, quickRows) + "\n\n")
 
-	for _, entry := range entries {
-		sb.WriteString(sectionTitle(fmt.Sprintf("%s — %s", entry.FlagKey, fallback(entry.FlagName))) + "\n")
-		for _, variable := range entry.Variables {
-			rows := make([][]string, 0, len(variable.ValuesByProject))
+		for vIdx, variable := range entry.Variables {
+			sb.WriteString(fmt.Sprintf("      %s %s\n", s.Text.Render("-"), s.Text.Bold(true).Render(variable.Key)))
+			
 			projectIDs := make([]string, 0, len(variable.ValuesByProject))
 			for projectID := range variable.ValuesByProject {
 				projectIDs = append(projectIDs, projectID)
 			}
 			slices.Sort(projectIDs)
+			
 			for _, projectID := range projectIDs {
-				value := variable.ValuesByProject[projectID]
-				exists := "no"
-				if value.Exists {
-					exists = "yes"
+				val := variable.ValuesByProject[projectID]
+				if !val.Exists {
+					sb.WriteString(fmt.Sprintf("        %s (Absent)\n", s.Muted.Render("• "+resolveProject(projectID))))
+					continue
 				}
-				rows = append(rows, []string{projectID, exists, fallback(value.Type), fallback(value.DefaultValue), fallback(value.Description)})
+				sb.WriteString(fmt.Sprintf("        %s %s\n", s.Info.Render("•"), s.Text.Bold(true).Render(resolveProject(projectID))))
+				sb.WriteString(fmt.Sprintf("          %-10s%s\n", s.Muted.Render("Type:"), fallback(val.Type)))
+				sb.WriteString(fmt.Sprintf("          %-10s%s\n", s.Muted.Render("Default:"), fallback(val.DefaultValue)))
+				if val.Description != "" {
+					sb.WriteString(fmt.Sprintf("          %-10s%s\n", s.Muted.Render("Desc:"), val.Description))
+				}
 			}
-			sb.WriteString(AutoStyles().Info.Render("Variable: "+variable.Key) + "\n")
-			sb.WriteString(RenderTable([]string{"Project", "Exists", "Type", "Default", "Description"}, rows) + "\n")
+			if vIdx < len(entry.Variables)-1 {
+				sb.WriteString("\n")
+			}
 		}
-		sb.WriteString("\n")
+		if i < len(entries)-1 {
+			sb.WriteString("\n\n")
+		}
 	}
 	return sb.String()
 }
@@ -161,31 +170,29 @@ func RenderOptimizelyPromotionCandidates(entries []core.PromotionCandidate, targ
 	var sb strings.Builder
 	sb.WriteString(s.Title.Render("🚀 Promotion Candidates") + "\n")
 	sb.WriteString(s.Muted.Render("Flags enabled only in lower environments that may need promotion.") + "\n\n")
-	metaRows := [][]string{{"Target project", targetProjectID}, {"Compared against", strings.Join(againstProjectIDs, ", ")}, {"Candidate count", fmt.Sprintf("%d", len(entries))}}
-	sb.WriteString(RenderTable([]string{"Metric", "Value"}, metaRows) + "\n\n")
+	sb.WriteString(s.Muted.Render(fmt.Sprintf("Target Project: %s | Compared Against: %s", targetProjectID, strings.Join(againstProjectIDs, ", "))) + "\n\n")
 	if len(entries) == 0 {
 		sb.WriteString(s.Success.Render("No promotion candidates found.") + "\n")
 		return sb.String()
 	}
 
-	rows := make([][]string, 0, len(entries))
-	for _, entry := range entries {
-		rows = append(rows, []string{
-			entry.Flag.Key,
-			fallback(entry.Flag.Name),
-			string(entry.Reason),
-			fallback(strings.Join(entry.EnabledEnvironments, ", ")),
-			joinProjects(entry.PresentIn),
-		})
+	for i, entry := range entries {
+		sb.WriteString(fmt.Sprintf("  %s %s\n", s.Info.Render("•"), s.Text.Bold(true).Render(entry.Flag.Key)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Name:"), fallback(entry.Flag.Name)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Reason:"), string(entry.Reason)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Enabled Envs:"), strings.Join(entry.EnabledEnvironments, ", ")))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Present In:"), joinProjects(entry.PresentIn)))
+		if i < len(entries)-1 {
+			sb.WriteString("\n")
+		}
 	}
-	sb.WriteString(RenderTable([]string{"Key", "Name", "Reason", "Enabled Envs", "Present In"}, rows) + "\n")
 	return sb.String()
 }
 
 func RenderOptimizelySyncPlan(plan core.FlagSyncPlan, dryRun bool, result *core.FlagSyncResult) string {
 	s := AutoStyles()
 	var sb strings.Builder
-	title := "🔄 Optimizely Flag Sync"
+	title := "😴 Optimizely Flag Sync"
 	if dryRun {
 		title += " (dry run)"
 	}
