@@ -74,7 +74,7 @@ func cmdUniqueFlags(s *core.Service, config *Config, writer printer.Writer) *cob
 	cmd.Flags().BoolVar(&stdout, "stdout", false, "Dump output directly to stdout without pager")
 	cmd.Flags().StringVar(&toFilePath, "to-file", "", "Write output to the specified file path")
 	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
-	registerProjectFlagCompletion(cmd, s, "project", "against")
+	registerProjectFlagCompletion(cmd, config, "project", "against")
 	_ = cmd.MarkFlagRequired("project")
 	return cmd
 }
@@ -130,8 +130,8 @@ func cmdDormantFlags(s *core.Service, config *Config, writer printer.Writer) *co
 	cmd.Flags().BoolVar(&stdout, "stdout", false, "Dump output directly to stdout without pager")
 	cmd.Flags().StringVar(&toFilePath, "to-file", "", "Write output to the specified file path")
 	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
-	registerProjectFlagCompletion(cmd, s, "project")
-	registerProjectArgCompletion(cmd, s)
+	registerProjectFlagCompletion(cmd, config, "project")
+	registerProjectArgCompletion(cmd, config)
 	return cmd
 }
 
@@ -186,8 +186,8 @@ func cmdDriftFlags(s *core.Service, config *Config, writer printer.Writer) *cobr
 	cmd.Flags().BoolVar(&stdout, "stdout", false, "Dump output directly to stdout without pager")
 	cmd.Flags().StringVar(&toFilePath, "to-file", "", "Write output to the specified file path")
 	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
-	registerProjectFlagCompletion(cmd, s, "project")
-	registerProjectArgCompletion(cmd, s)
+	registerProjectFlagCompletion(cmd, config, "project")
+	registerProjectArgCompletion(cmd, config)
 	return cmd
 }
 
@@ -254,7 +254,7 @@ func cmdPromoteFlags(s *core.Service, config *Config, writer printer.Writer) *co
 	cmd.Flags().BoolVar(&stdout, "stdout", false, "Dump output directly to stdout without pager")
 	cmd.Flags().StringVar(&toFilePath, "to-file", "", "Write output to the specified file path")
 	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
-	registerProjectFlagCompletion(cmd, s, "project", "against")
+	registerProjectFlagCompletion(cmd, config, "project", "against")
 	_ = cmd.RegisterFlagCompletionFunc("lower-env", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"development", "qa", "demo", "preprod", "production"}, cobra.ShellCompDirectiveNoFileComp
 	})
@@ -381,8 +381,8 @@ func cmdSyncFlags(s *core.Service, config *Config, writer printer.Writer) *cobra
 	cmd.Flags().StringVar(&toFilePath, "to-file", "", "Write output to the specified file path")
 	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
 	cmd.Flags().BoolVar(&syncVariations, "sync-variations", false, "Also duplicate all flag variations/overrides when creating missing flags")
-	registerSourceProjectCompletion(cmd, s)
-	registerProjectFlagCompletion(cmd, s, "target")
+	registerSourceProjectCompletion(cmd, config)
+	registerProjectFlagCompletion(cmd, config, "target")
 	registerFlagKeyCompletion(cmd, s, config, "source", "flag")
 	_ = cmd.MarkFlagRequired("source")
 	return cmd

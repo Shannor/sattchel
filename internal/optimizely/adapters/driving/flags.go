@@ -167,7 +167,7 @@ variables, and usage across one or more configured projects.`,
 	}
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided will only show the flag for the project(s) (if not provided will show all)")
-	registerProjectFlagCompletion(cmd, s, "project")
+	registerProjectFlagCompletion(cmd, config, "project")
 	registerGetFlagArgCompletion(cmd, s, config, "project")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	cmd.Flags().BoolVar(&showDetails, "show-details", true, "Show flag details (ID, status, etc.)")
@@ -343,7 +343,7 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 		},
 	}
 	cmd.Flags().StringArrayVar(&projectFilter, "filter", []string{}, "if provided will only show the flags for the provided project ids. (if not provided will show all)")
-	registerProjectFlagCompletion(cmd, s, "filter")
+	registerProjectFlagCompletion(cmd, config, "filter")
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
@@ -418,8 +418,8 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 		},
 	}
 	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided, compares only the specified project(s)")
-	registerProjectFlagCompletion(cmd, s, "project", "base", "focus")
-	registerProjectArgCompletion(cmd, s)
+	registerProjectFlagCompletion(cmd, config, "project", "base", "focus")
+	registerProjectArgCompletion(cmd, config)
 	cmd.Flags().StringVar(&baseProjectID, "base", "", "Show only flags missing from this base project")
 	cmd.Flags().StringVar(&focusProjectID, "focus", "", "Show only flags this focus project has that at least one other project lacks")
 	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")

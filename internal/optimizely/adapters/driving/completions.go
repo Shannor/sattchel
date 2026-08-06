@@ -11,13 +11,13 @@ import (
 )
 
 // getProjectCompletions returns formatted shell completion options for Optimizely projects.
-func getProjectCompletions(service *core.Service) []string {
-	projects, err := service.GetProjects(context.Background())
+func getProjectCompletions(config *Config) []string {
+	cfg, err := config.Get()
 	if err != nil {
 		return nil
 	}
 	var completions []string
-	for _, p := range projects {
+	for _, p := range cfg.Projects {
 		completions = append(completions, fmt.Sprintf("%s\t%s", p.ID, p.Name))
 	}
 	sort.Strings(completions)
@@ -63,24 +63,24 @@ func getFlagKeyCompletions(service *core.Service, config *Config, projectIDs []s
 	return keys
 }
 
-func registerProjectFlagCompletion(cmd *cobra.Command, service *core.Service, flagNames ...string) {
+func registerProjectFlagCompletion(cmd *cobra.Command, config *Config, flagNames ...string) {
 	for _, flagName := range flagNames {
 		_ = cmd.RegisterFlagCompletionFunc(flagName, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+			return getProjectCompletions(config), cobra.ShellCompDirectiveNoFileComp
 		})
 	}
 }
 
-func registerProjectArgCompletion(cmd *cobra.Command, service *core.Service) {
+func registerProjectArgCompletion(cmd *cobra.Command, config *Config) {
 	cmd.ValidArgsFunction = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+		return getProjectCompletions(config), cobra.ShellCompDirectiveNoFileComp
 	}
 }
 
-func registerSourceProjectCompletion(cmd *cobra.Command, service *core.Service) {
+func registerSourceProjectCompletion(cmd *cobra.Command, config *Config) {
 	_ = cmd.RegisterFlagCompletionFunc("source", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		results := []string{"all\tUnion mode across target projects"}
-		results = append(results, getProjectCompletions(service)...)
+		results = append(results, getProjectCompletions(config)...)
 		return results, cobra.ShellCompDirectiveNoFileComp
 	})
 }
