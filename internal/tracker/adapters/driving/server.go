@@ -30,6 +30,8 @@ func (s *HTTPServer) Start(ctx context.Context, listenAddr string) (string, func
 	// 1. Mount Generic API Endpoints (from api.go)
 	mux.HandleFunc("/api/goals", s.handleGetGoals)
 	mux.HandleFunc("/api/goals/move", s.handleMoveGoal)
+	mux.HandleFunc("/api/goals/update", s.handleUpdateGoal)
+	mux.HandleFunc("/api/members", s.handleGetMembers)
 
 	// 2. Mount UI / Visualizer Page (served from embedded static assets)
 	subFS, err := fs.Sub(staticFS, "static")
