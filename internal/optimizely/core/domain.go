@@ -193,7 +193,12 @@ func (v Variables) MarshalJSON() ([]byte, error) {
 		flat[key] = val.Value
 	}
 	for key, val := range v.JsonVariables {
-		flat[key] = val.Value
+		switch typed := val.Value.(type) {
+		case string:
+			flat[key] = json.RawMessage(typed)
+		default:
+			flat[key] = typed
+		}
 	}
 	for key, val := range v.BoolVariables {
 		flat[key] = val.Value
