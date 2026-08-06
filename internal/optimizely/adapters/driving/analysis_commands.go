@@ -31,6 +31,7 @@ func cmdUniqueFlags(s *core.Service, config *Config, writer printer.Writer) *cob
 		Use:   "unique",
 		Short: "List flags unique to one project",
 		Long:  "Find flags that exist only in one project and are absent from the other selected projects.",
+		Args:  cobra.NoArgs,
 		Example: strings.TrimSpace(`
   satt optimizely flags unique --project 123
   satt optimizely flags unique --project 123 --against 456 --against 789
@@ -67,7 +68,7 @@ func cmdUniqueFlags(s *core.Service, config *Config, writer printer.Writer) *cob
 		},
 	}
 
-	cmd.Flags().StringVar(&targetProjectID, "project", "", "Project ID to check uniqueness for")
+	cmd.Flags().StringVarP(&targetProjectID, "project", "p", "", "Project ID to check uniqueness for")
 	cmd.Flags().StringSliceVar(&againstProjects, "against", nil, "Project IDs to compare against (defaults to other configured projects)")
 	cmd.Flags().StringVar(&query, "query", "", "Filter flags by name, key, or description substring")
 	cmd.Flags().BoolVar(&skipCacheFlag, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
@@ -90,12 +91,12 @@ func cmdDormantFlags(s *core.Service, config *Config, writer printer.Writer) *co
 	)
 
 	cmd := &cobra.Command{
-		Use:   "dormant [project-ids...]",
+		Use:   "dormant",
 		Short: "List flags disabled in every environment across the selected projects",
 		Long:  "Find flags that are disabled everywhere across all selected projects that contain them.",
+		Args:  cobra.NoArgs,
 		Example: strings.TrimSpace(`
   satt optimizely flags dormant
-  satt optimizely flags dormant 123 456
   satt optimizely flags dormant --project 123 --project 456 --json
 `),
 		SilenceUsage: true,
@@ -104,7 +105,10 @@ func cmdDormantFlags(s *core.Service, config *Config, writer printer.Writer) *co
 			if err != nil {
 				return err
 			}
-			targetProjectIDs := mergeProjectSelections(configuredProjectIDs(cfg), projectIDs, args)
+			targetProjectIDs := projectIDs
+			if len(targetProjectIDs) == 0 {
+				targetProjectIDs = configuredProjectIDs(cfg)
+			}
 			if len(targetProjectIDs) == 0 {
 				return fmt.Errorf("at least 1 project ID is required")
 			}
@@ -124,14 +128,13 @@ func cmdDormantFlags(s *core.Service, config *Config, writer printer.Writer) *co
 		},
 	}
 
-	cmd.Flags().StringSliceVar(&projectIDs, "project", nil, "Project IDs to inspect (defaults to configured projects)")
+	cmd.Flags().StringSliceVarP(&projectIDs, "project", "p", nil, "Project IDs to inspect (defaults to configured projects)")
 	cmd.Flags().StringVar(&query, "query", "", "Filter flags by name, key, or description substring")
 	cmd.Flags().BoolVar(&skipCacheFlag, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	cmd.Flags().BoolVar(&stdout, "stdout", false, "Dump output directly to stdout without pager")
 	cmd.Flags().StringVar(&toFilePath, "to-file", "", "Write output to the specified file path")
 	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
 	registerProjectFlagCompletion(cmd, config, "project")
-	registerProjectArgCompletion(cmd, config)
 	return cmd
 }
 
@@ -146,11 +149,12 @@ func cmdDriftFlags(s *core.Service, config *Config, writer printer.Writer) *cobr
 	)
 
 	cmd := &cobra.Command{
-		Use:   "drift [project-ids...]",
+		Use:   "drift",
 		Short: "List shared flags whose variable definitions differ across projects",
 		Long:  "Detect drift in variable definitions for same-key flags across multiple projects.",
+		Args:  cobra.NoArgs,
 		Example: strings.TrimSpace(`
-  satt optimizely flags drift 123 456
+  satt optimizely flags drift
   satt optimizely flags drift --project 123 --project 456 --query checkout
   satt optimizely flags drift --json
 `),
@@ -160,7 +164,10 @@ func cmdDriftFlags(s *core.Service, config *Config, writer printer.Writer) *cobr
 			if err != nil {
 				return err
 			}
-			targetProjectIDs := mergeProjectSelections(configuredProjectIDs(cfg), projectIDs, args)
+			targetProjectIDs := projectIDs
+			if len(targetProjectIDs) == 0 {
+				targetProjectIDs = configuredProjectIDs(cfg)
+			}
 			if len(targetProjectIDs) < 2 {
 				return fmt.Errorf("at least 2 project IDs are required")
 			}
@@ -180,14 +187,13 @@ func cmdDriftFlags(s *core.Service, config *Config, writer printer.Writer) *cobr
 		},
 	}
 
-	cmd.Flags().StringSliceVar(&projectIDs, "project", nil, "Project IDs to inspect (defaults to configured projects)")
+	cmd.Flags().StringSliceVarP(&projectIDs, "project", "p", nil, "Project IDs to inspect (defaults to configured projects)")
 	cmd.Flags().StringVar(&query, "query", "", "Filter flags by name, key, or description substring")
 	cmd.Flags().BoolVar(&skipCacheFlag, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	cmd.Flags().BoolVar(&stdout, "stdout", false, "Dump output directly to stdout without pager")
 	cmd.Flags().StringVar(&toFilePath, "to-file", "", "Write output to the specified file path")
 	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
 	registerProjectFlagCompletion(cmd, config, "project")
-	registerProjectArgCompletion(cmd, config)
 	return cmd
 }
 
@@ -207,6 +213,7 @@ func cmdPromoteFlags(s *core.Service, config *Config, writer printer.Writer) *co
 		Use:   "promote",
 		Short: "List flags enabled only in lower environments and likely ready for promotion",
 		Long:  "Find flags that are active only in lower environments like development and qa, grouped by promotion reason.",
+		Args:  cobra.NoArgs,
 		Example: strings.TrimSpace(`
   satt optimizely flags promote --project 123
   satt optimizely flags promote --project 123 --against 456 --against 789
@@ -246,7 +253,7 @@ func cmdPromoteFlags(s *core.Service, config *Config, writer printer.Writer) *co
 		},
 	}
 
-	cmd.Flags().StringVar(&targetProjectID, "project", "", "Target project ID to inspect")
+	cmd.Flags().StringVarP(&targetProjectID, "project", "p", "", "Target project ID to inspect")
 	cmd.Flags().StringSliceVar(&againstProjects, "against", nil, "Project IDs to compare against (defaults to other configured projects)")
 	cmd.Flags().StringVar(&query, "query", "", "Filter flags by name, key, or description substring")
 	cmd.Flags().StringSliceVar(&lowerEnvs, "lower-env", []string{"development", "qa"}, "Environment keys considered lower-level")

@@ -166,7 +166,7 @@ variables, and usage across one or more configured projects.`,
 		},
 	}
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
-	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided will only show the flag for the project(s) (if not provided will show all)")
+	cmd.Flags().StringArrayVarP(&projectFilter, "project", "p", []string{}, "if provided will only show the flag for the project(s) (if not provided will show all)")
 	registerProjectFlagCompletion(cmd, config, "project")
 	registerGetFlagArgCompletion(cmd, s, config, "project")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
@@ -186,7 +186,7 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 		Long:  "List feature flags across the selected projects, optionally filtered by query.",
 		Example: strings.TrimSpace(`
   satt optimizely flags list
-  satt optimizely flags list --filter 123 --filter 456 --query loyalty
+  satt optimizely flags list --project 123 --project 456 --query loyalty
   satt optimizely flags list --stdout
 `),
 		SilenceUsage: true,
@@ -342,8 +342,8 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 			return nil
 		},
 	}
-	cmd.Flags().StringArrayVar(&projectFilter, "filter", []string{}, "if provided will only show the flags for the provided project ids. (if not provided will show all)")
-	registerProjectFlagCompletion(cmd, config, "filter")
+	cmd.Flags().StringArrayVarP(&projectFilter, "project", "p", []string{}, "if provided will only show the flags for the provided project ids. (if not provided will show all)")
+	registerProjectFlagCompletion(cmd, config, "project")
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
@@ -360,14 +360,15 @@ func compareFlags(s *core.Service, config *Config, writer printer.Writer) *cobra
 	)
 
 	cmd := &cobra.Command{
-		Use:   "compare [project-ids...]",
+		Use:   "compare",
 		Short: "Compare feature flags across multiple projects and list missing flags",
 		Long: `Compare feature flags across 2 or more projects.
 Finds and returns a list of feature flags that don't exist in all of the specified project IDs.
-If no project IDs are provided as arguments, project IDs saved in the configuration will be used.
+If no project IDs are provided, project IDs saved in the configuration will be used.
 There must be at least 2 project IDs provided or saved in the configuration.`,
+		Args:  cobra.NoArgs,
 		Example: strings.TrimSpace(`
-  satt optimizely flags compare 123 456
+  satt optimizely flags compare --project 123 --project 456
   satt optimizely flags compare --project 123 --project 456 --query loyalty
   satt optimizely flags compare --base 123 --project 456 --project 789
   satt optimizely flags compare --focus 456 --project 123 --project 456 --project 789 --json
@@ -386,7 +387,10 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 				return fmt.Errorf("API key is required")
 			}
 
-			targetProjectIDs := mergeProjectSelections(configuredProjectIDs(cfg), projectFilter, args)
+			targetProjectIDs := projectFilter
+			if len(targetProjectIDs) == 0 {
+				targetProjectIDs = configuredProjectIDs(cfg)
+			}
 			if baseProjectID != "" && !slices.Contains(targetProjectIDs, baseProjectID) {
 				targetProjectIDs = append([]string{baseProjectID}, targetProjectIDs...)
 			}
@@ -417,9 +421,8 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 			return writeAnalysisOutput(content, toFile, stdoutFlag)
 		},
 	}
-	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided, compares only the specified project(s)")
+	cmd.Flags().StringArrayVarP(&projectFilter, "project", "p", []string{}, "if provided, compares only the specified project(s)")
 	registerProjectFlagCompletion(cmd, config, "project", "base", "focus")
-	registerProjectArgCompletion(cmd, config)
 	cmd.Flags().StringVar(&baseProjectID, "base", "", "Show only flags missing from this base project")
 	cmd.Flags().StringVar(&focusProjectID, "focus", "", "Show only flags this focus project has that at least one other project lacks")
 	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")
