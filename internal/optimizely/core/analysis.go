@@ -421,25 +421,39 @@ func (s *Service) FindVariableDrift(ctx context.Context, projectIDs []string, qu
 
 		variableEntries := make([]VariableDriftEntry, 0)
 		for varKey := range unionVarKeys {
-			valuesByProject := make(map[string]VariableDriftValue)
-			signatures := make(map[string]struct{})
+			hasMissing := false
+			hasPresent := false
 			for _, pid := range projectIDs {
 				flag, ok := byProject[pid]
 				if !ok {
 					continue
 				}
 				defs := flag.DefaultVariables.Definitions()
-				def, exists := defs[varKey]
-				value := VariableDriftValue{Exists: exists}
+				_, exists := defs[varKey]
 				if exists {
-					value.Type = def.Type
-					value.DefaultValue = def.DefaultValue
-					value.Description = def.Description
+					hasPresent = true
+				} else {
+					hasMissing = true
 				}
-				valuesByProject[pid] = value
-				signatures[variableDriftSignature(value)] = struct{}{}
 			}
-			if len(signatures) > 1 {
+
+			if hasMissing && hasPresent {
+				valuesByProject := make(map[string]VariableDriftValue)
+				for _, pid := range projectIDs {
+					flag, ok := byProject[pid]
+					if !ok {
+						continue
+					}
+					defs := flag.DefaultVariables.Definitions()
+					def, exists := defs[varKey]
+					value := VariableDriftValue{Exists: exists}
+					if exists {
+						value.Type = def.Type
+						value.DefaultValue = def.DefaultValue
+						value.Description = def.Description
+					}
+					valuesByProject[pid] = value
+				}
 				variableEntries = append(variableEntries, VariableDriftEntry{Key: varKey, ValuesByProject: valuesByProject})
 			}
 		}

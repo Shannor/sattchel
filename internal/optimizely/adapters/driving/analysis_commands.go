@@ -150,8 +150,8 @@ func driftFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.C
 
 	cmd := &cobra.Command{
 		Use:   "drift",
-		Short: "List shared flags whose variable definitions differ across projects",
-		Long:  "Detect drift in variable definitions for same-key flags across multiple projects.",
+		Short: "List shared flags that are missing variable definitions in some projects",
+		Long:  "Detect variable definitions that are missing from some projects for same-key flags.",
 		Args:  cobra.NoArgs,
 		Example: strings.TrimSpace(`
   satt optimizely flags drift

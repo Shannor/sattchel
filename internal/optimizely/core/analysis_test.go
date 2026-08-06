@@ -134,8 +134,11 @@ func TestFindVariableDrift(t *testing.T) {
 	if len(drift) != 1 {
 		t.Fatalf("expected 1 drifted flag, got %d", len(drift))
 	}
-	if len(drift[0].Variables) != 2 {
-		t.Fatalf("expected 2 drifted variables (changed + missing), got %+v", drift[0].Variables)
+	if len(drift[0].Variables) != 1 {
+		t.Fatalf("expected 1 drifted variable (missing in p1), got %+v", drift[0].Variables)
+	}
+	if drift[0].Variables[0].Key != "mode" {
+		t.Fatalf("expected drifted variable key to be 'mode', got %q", drift[0].Variables[0].Key)
 	}
 }
 

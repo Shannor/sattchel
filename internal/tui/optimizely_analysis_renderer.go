@@ -122,7 +122,7 @@ func RenderOptimizelyVariableDrift(entries []core.FlagVariableDrift) string {
 		sb.WriteString(fmt.Sprintf("  %s %s (%s)\n", s.Info.Render("•"), s.Text.Bold(true).Render(entry.FlagKey), fallback(entry.FlagName)))
 		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Present In:"), joinProjects(entry.PresentIn)))
 		sb.WriteString(fmt.Sprintf("    %-15s\n", s.Muted.Render("Drifted Variables:")))
-		
+
 		resolveProject := func(pid string) string {
 			for _, proj := range entry.PresentIn {
 				if proj.ID == pid {
@@ -134,13 +134,13 @@ func RenderOptimizelyVariableDrift(entries []core.FlagVariableDrift) string {
 
 		for vIdx, variable := range entry.Variables {
 			sb.WriteString(fmt.Sprintf("      %s %s\n", s.Text.Render("-"), s.Text.Bold(true).Render(variable.Key)))
-			
+
 			projectIDs := make([]string, 0, len(variable.ValuesByProject))
 			for projectID := range variable.ValuesByProject {
 				projectIDs = append(projectIDs, projectID)
 			}
 			slices.Sort(projectIDs)
-			
+
 			for _, projectID := range projectIDs {
 				val := variable.ValuesByProject[projectID]
 				if !val.Exists {
