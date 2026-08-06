@@ -171,6 +171,36 @@ echo "$PATH" | grep "$bin_dir"
 
 ## Setup
 
+## Optimizely workflows
+
+After configuring your Optimizely API key and projects, these commands are available:
+
+```bash
+# Compare projects
+satt optimizely flags compare 123 456
+satt optimizely flags compare --base 123 --project 456 --project 789
+satt optimizely flags compare --focus 456 --project 123 --project 456 --project 789
+
+# Inspect flag health
+satt optimizely flags unique --project 123
+satt optimizely flags dormant --project 123 --project 456
+satt optimizely flags drift --project 123 --project 456
+satt optimizely flags promote --project 123 --against 456
+
+# Plan or apply syncs
+satt optimizely flags sync --source 123 --target 456 --update-vars
+satt optimizely flags sync --source all --target 123 --target 456
+satt optimizely flags sync --source 123 --target 456 --flag checkout_redesign --apply --yes
+```
+
+Common output flags:
+
+- `--stdout` write directly to stdout instead of pager UI
+- `--to-file <path>` save report output
+- `--json` emit machine-readable JSON where supported
+- `--skip-cache` fetch fresh data from Optimizely
+
+With shell completion enabled, project-related flags on these commands also support tab completion.
 
 ### Updating
 

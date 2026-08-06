@@ -49,6 +49,10 @@ func (m *mockFlagsRepository) Create(ctx context.Context, value core.FeatureFlag
 	return nil, nil
 }
 
+func (m *mockFlagsRepository) AddVariables(ctx context.Context, flagKey string, vars core.Variables) error {
+	return nil
+}
+
 func (m *mockFlagsRepository) Update(ctx context.Context, updater func(value *core.FeatureFlagDefinition) error) (*core.FeatureFlagDefinition, error) {
 	return nil, nil
 }

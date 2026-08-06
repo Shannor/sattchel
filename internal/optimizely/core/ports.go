@@ -18,6 +18,7 @@ type ListFlagsOptions struct {
 
 type FlagsRepository interface {
 	Repository[FeatureFlagDefinition]
+	AddVariables(ctx context.Context, flagKey string, vars Variables) error
 }
 type EnvironmentsRepository Repository[Environment]
 

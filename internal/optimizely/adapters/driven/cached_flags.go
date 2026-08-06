@@ -164,16 +164,40 @@ func (r *cachedFlagsRepository) GetAll(ctx context.Context) ([]core.FeatureFlagD
 	return freshFlags, nil
 }
 
+func (r *cachedFlagsRepository) invalidateCache() {
+	_ = os.Remove(r.getProjectCachePath())
+}
+
 func (r *cachedFlagsRepository) Create(ctx context.Context, value core.FeatureFlagDefinition) (*core.FeatureFlagDefinition, error) {
-	return r.underlying.Create(ctx, value)
+	created, err := r.underlying.Create(ctx, value)
+	if err == nil {
+		r.invalidateCache()
+	}
+	return created, err
+}
+
+func (r *cachedFlagsRepository) AddVariables(ctx context.Context, flagKey string, vars core.Variables) error {
+	err := r.underlying.AddVariables(ctx, flagKey, vars)
+	if err == nil {
+		r.invalidateCache()
+	}
+	return err
 }
 
 func (r *cachedFlagsRepository) Update(ctx context.Context, updater func(value *core.FeatureFlagDefinition) error) (*core.FeatureFlagDefinition, error) {
-	return r.underlying.Update(ctx, updater)
+	updated, err := r.underlying.Update(ctx, updater)
+	if err == nil {
+		r.invalidateCache()
+	}
+	return updated, err
 }
 
 func (r *cachedFlagsRepository) Delete(ctx context.Context, ID string) (string, error) {
-	return r.underlying.Delete(ctx, ID)
+	deleted, err := r.underlying.Delete(ctx, ID)
+	if err == nil {
+		r.invalidateCache()
+	}
+	return deleted, err
 }
 
 type cachedFlagsFactory struct {

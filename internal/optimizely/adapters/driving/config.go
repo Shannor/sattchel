@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func cmdConfig(config *Config, styles tui.Styles) *cobra.Command {
+func configCmd(config *Config, styles tui.Styles) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "config",
 		Short:        "Manage optimizely configs",

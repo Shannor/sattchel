@@ -13,8 +13,19 @@
 - [ ] Optimizely find the flags aren’t synced with all projects
 - [ ] Optimizely add support to create new flags for all projects. 
   - Or at least scaffold it
+- [ ] Optimizely flag view improvements 
+  - Update the flag view to default to lipgloss and change the naming
+  - Have the markdown view used when trying to save to file as an option 
+  - 
 - [ ] Improvements to CLI UI and UX
+  - Have a view to hide "Completed" goals to reduce noise.
+  - Introduce delete for goals if no children are attached.
+    - If children are attached, or the can override and cascade delete
 - [ ] Improvements to the MindMap UI/UX
+  - Have a view to hide "Completed" goals to reduce noise.
+  - Introduce more colors on Effort/Impact 
+  - Introduce different view for required vs optional goals
+  - 
 - [x] Introduce a global --verbose flag to turn on logging
   - Need to research if special logging is needed for CLIs. I assume not.
 - [ ] Introduce a state machine for Goal Status transitions

@@ -9,18 +9,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func cmdCache(cfgStore *Config) *cobra.Command {
+func cache(cfgStore *Config) *cobra.Command {
 	var cacheCmd = &cobra.Command{
 		Use:          "cache",
 		Short:        "Manage Optimizely cache",
 		SilenceUsage: true,
 	}
 
-	cacheCmd.AddCommand(clearCacheCmd(cfgStore))
+	cacheCmd.AddCommand(clearCache(cfgStore))
 	return cacheCmd
 }
 
-func clearCacheCmd(cfgStore *Config) *cobra.Command {
+func clearCache(cfgStore *Config) *cobra.Command {
 	return &cobra.Command{
 		Use:   "clear",
 		Short: "Wipe all local Optimizely cache files from disk",
