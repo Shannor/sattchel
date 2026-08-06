@@ -41,6 +41,11 @@ func cmdFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Com
 	flagCmd.AddCommand(listFlags(s, config, writer))
 	flagCmd.AddCommand(getFlag(s, config))
 	flagCmd.AddCommand(compareFlags(s, config, writer))
+	flagCmd.AddCommand(cmdUniqueFlags(s, config, writer))
+	flagCmd.AddCommand(cmdDormantFlags(s, config, writer))
+	flagCmd.AddCommand(cmdDriftFlags(s, config, writer))
+	flagCmd.AddCommand(cmdPromoteFlags(s, config, writer))
+	flagCmd.AddCommand(cmdSyncFlags(s, config, writer))
 	return flagCmd
 }
 
@@ -49,11 +54,13 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 		Use:   "get <key>",
 		Short: "Get feature flag details",
 		Args:  cobra.MaximumNArgs(1),
-		Long: `Get's all details about a feature flag.
- 	Including information like the variations, statuses, and usage per project
-   Examples:
-     satt optimizely flags get <key>
-     `,
+		Long: `Get all details about a feature flag, including variations, statuses,
+variables, and usage across one or more configured projects.`,
+		Example: strings.TrimSpace(`
+  satt optimizely flags get checkout_redesign
+  satt optimizely flags get checkout_redesign --project 123
+  satt optimizely flags get checkout_redesign --project 123 --stdout
+`),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -160,6 +167,8 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 	}
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided will only show the flag for the project(s) (if not provided will show all)")
+	registerProjectFlagCompletion(cmd, s, "project")
+	registerGetFlagArgCompletion(cmd, s, config, "project")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	cmd.Flags().BoolVar(&showDetails, "show-details", true, "Show flag details (ID, status, etc.)")
 	cmd.Flags().BoolVar(&showVariants, "show-variants", true, "Show variation/variant definitions")
@@ -172,8 +181,14 @@ func getFlag(s *core.Service, config *Config) *cobra.Command {
 
 func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:          "list",
-		Short:        "List feature flags between projects",
+		Use:   "list",
+		Short: "List feature flags between projects",
+		Long:  "List feature flags across the selected projects, optionally filtered by query.",
+		Example: strings.TrimSpace(`
+  satt optimizely flags list
+  satt optimizely flags list --filter 123 --filter 456 --query loyalty
+  satt optimizely flags list --stdout
+`),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
@@ -328,6 +343,7 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 		},
 	}
 	cmd.Flags().StringArrayVar(&projectFilter, "filter", []string{}, "if provided will only show the flags for the provided project ids. (if not provided will show all)")
+	registerProjectFlagCompletion(cmd, s, "filter")
 	cmd.Flags().StringArrayVar(&envFilter, "env", []string{}, "if provided will only show the flag for the environment(s) (if not provided will show all)")
 	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
@@ -337,6 +353,12 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 }
 
 func compareFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+	var (
+		baseProjectID  string
+		focusProjectID string
+		jsonOutput     bool
+	)
+
 	cmd := &cobra.Command{
 		Use:   "compare [project-ids...]",
 		Short: "Compare feature flags across multiple projects and list missing flags",
@@ -344,6 +366,12 @@ func compareFlags(s *core.Service, config *Config, writer printer.Writer) *cobra
 Finds and returns a list of feature flags that don't exist in all of the specified project IDs.
 If no project IDs are provided as arguments, project IDs saved in the configuration will be used.
 There must be at least 2 project IDs provided or saved in the configuration.`,
+		Example: strings.TrimSpace(`
+  satt optimizely flags compare 123 456
+  satt optimizely flags compare --project 123 --project 456 --query loyalty
+  satt optimizely flags compare --base 123 --project 456 --project 789
+  satt optimizely flags compare --focus 456 --project 123 --project 456 --project 789 --json
+`),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
@@ -358,65 +386,44 @@ There must be at least 2 project IDs provided or saved in the configuration.`,
 				return fmt.Errorf("API key is required")
 			}
 
-			// Gather project IDs from flags/args
-			var targetProjectIDs []string
-			if len(projectFilter) > 0 {
-				targetProjectIDs = projectFilter
+			targetProjectIDs := mergeProjectSelections(configuredProjectIDs(cfg), projectFilter, args)
+			if baseProjectID != "" && !slices.Contains(targetProjectIDs, baseProjectID) {
+				targetProjectIDs = append([]string{baseProjectID}, targetProjectIDs...)
 			}
-			if len(args) > 0 {
-				targetProjectIDs = append(targetProjectIDs, args...)
-			}
-			if len(targetProjectIDs) == 0 {
-				for _, project := range cfg.Projects {
-					targetProjectIDs = append(targetProjectIDs, project.ID)
-				}
-			}
-
-			// Check minimum requirement
 			if len(targetProjectIDs) < 2 {
 				return fmt.Errorf("at least 2 project IDs are required for comparison (found: %d)", len(targetProjectIDs))
 			}
 
-			var comparisons []core.FlagComparison
-			if stdoutFlag || toFile != "" {
-				comparisons, err = s.CompareFlags(ctx, targetProjectIDs)
-			} else {
-				err = loader.Run("Comparing feature flags...", func() {
-					comparisons, err = s.CompareFlags(ctx, targetProjectIDs)
+			var report *core.FlagComparisonReport
+			err = loader.Run("Comparing feature flags...", func() {
+				report, err = s.CompareFlagsDetailed(ctx, targetProjectIDs, core.CompareFlagsOptions{
+					Query:          queryFilter,
+					BaseProjectID:  baseProjectID,
+					FocusProjectID: focusProjectID,
 				})
-			}
-
+			})
 			if err != nil {
 				return err
 			}
 
-			if len(comparisons) == 0 {
+			if jsonOutput {
+				return writeJSONOutput(report, toFile, stdoutFlag)
+			}
+
+			content := tui.RenderOptimizelyCompareReport(report, baseProjectID, focusProjectID)
+			if len(report.MissingFlags) == 0 {
 				writer.Success("All feature flags match perfectly across all checked projects!")
-				return nil
 			}
-
-			content, renderErr := tui.RenderFlagComparisonsLipGlossStr(comparisons)
-			if renderErr != nil {
-				return renderErr
-			}
-
-			if toFile != "" {
-				err := os.WriteFile(toFile, []byte(content), 0644)
-				if err != nil {
-					return fmt.Errorf("failed to write to file %s: %w", toFile, err)
-				}
-				return nil
-			}
-
-			if stdoutFlag || !loader.IsTerminal() {
-				fmt.Print(content)
-				return nil
-			}
-
-			return tui.RunPager(content)
+			return writeAnalysisOutput(content, toFile, stdoutFlag)
 		},
 	}
 	cmd.Flags().StringArrayVar(&projectFilter, "project", []string{}, "if provided, compares only the specified project(s)")
+	registerProjectFlagCompletion(cmd, s, "project", "base", "focus")
+	registerProjectArgCompletion(cmd, s)
+	cmd.Flags().StringVar(&baseProjectID, "base", "", "Show only flags missing from this base project")
+	cmd.Flags().StringVar(&focusProjectID, "focus", "", "Show only flags this focus project has that at least one other project lacks")
+	cmd.Flags().StringVar(&queryFilter, "query", "", "Filter the flags by name, key, or description substring")
+	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Write JSON output")
 	cmd.Flags().BoolVar(&skipCache, "skip-cache", false, "Skip the feature flag cache and fetch fresh data from Optimizely")
 	cmd.Flags().BoolVar(&stdoutFlag, "stdout", false, "Dump list directly to stdout instead of using a pager")
 	cmd.Flags().StringVar(&toFile, "to-file", "", "Write comparison list to the specified file path")

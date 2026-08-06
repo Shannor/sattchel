@@ -146,17 +146,32 @@ type Variables struct {
 }
 
 func (v Variables) Merge(other Variables) {
+	if v.BoolVariables == nil && len(other.BoolVariables) > 0 {
+		v.BoolVariables = make(VariableMap[bool])
+	}
 	for key, val := range other.BoolVariables {
 		v.BoolVariables[key] = val
+	}
+	if v.IntVariables == nil && len(other.IntVariables) > 0 {
+		v.IntVariables = make(VariableMap[int])
 	}
 	for key, val := range other.IntVariables {
 		v.IntVariables[key] = val
 	}
+	if v.StringVariables == nil && len(other.StringVariables) > 0 {
+		v.StringVariables = make(VariableMap[string])
+	}
 	for key, val := range other.StringVariables {
 		v.StringVariables[key] = val
 	}
+	if v.JsonVariables == nil && len(other.JsonVariables) > 0 {
+		v.JsonVariables = make(VariableMap[any])
+	}
 	for key, val := range other.JsonVariables {
 		v.JsonVariables[key] = val
+	}
+	if v.FloatVariables == nil && len(other.FloatVariables) > 0 {
+		v.FloatVariables = make(VariableMap[float64])
 	}
 	for key, val := range other.FloatVariables {
 		v.FloatVariables[key] = val
