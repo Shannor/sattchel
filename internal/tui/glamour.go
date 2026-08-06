@@ -28,7 +28,7 @@ func renderVariables(m *markdown.Markdown, vars core.Variables) {
 		renderVariable(m, key, "string", v.Value, v.Description)
 	}
 	for key, v := range vars.JsonVariables {
-		renderVariable(m, key, "json", marshalJSON(v.Value), v.Description)
+		renderVariable(m, key, "json", MarshalJSON(v.Value), v.Description)
 	}
 }
 
@@ -52,9 +52,9 @@ func renderVariable(m *markdown.Markdown, name, typ, value, description string) 
 	m.LF()
 }
 
-// marshalJSON formats a Go value as pretty-printed JSON with consistent 2-space indentation.
+// MarshalJSON formats a Go value as pretty-printed JSON with consistent 2-space indentation.
 // If the value is a raw JSON string, it parses and re-formats it.
-func marshalJSON(v any) string {
+func MarshalJSON(v any) string {
 	// If it's already a Go map/slice/etc, marshal directly.
 	if _, ok := v.(map[string]interface{}); ok {
 		b, err := json.MarshalIndent(v, "", "  ")
@@ -228,7 +228,7 @@ func buildMultiProjectFlagMarkdown(reports []ProjectFlagReport, opts ReportOptio
 							m.LF()
 						}
 						for key, v := range diffVars.JsonVariables {
-							m.PlainText(fmt.Sprintf("    - `%s` (json) = `%s`", key, marshalJSON(v.Value)))
+							m.PlainText(fmt.Sprintf("    - `%s` (json) = `%s`", key, MarshalJSON(v.Value)))
 							m.LF()
 						}
 					}
@@ -309,7 +309,7 @@ func buildMultiProjectFlagMarkdown(reports []ProjectFlagReport, opts ReportOptio
 							m.LF()
 						}
 						for key, v := range diffVars.JsonVariables {
-							m.PlainText(fmt.Sprintf("  - `%s` (json) = `%s`", key, marshalJSON(v.Value)))
+							m.PlainText(fmt.Sprintf("  - `%s` (json) = `%s`", key, MarshalJSON(v.Value)))
 							m.LF()
 						}
 						m.LF()

@@ -2,6 +2,7 @@ package driven
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -603,8 +604,220 @@ func (f *flagDataMapper) Delete(_ context.Context, _ string) (string, error) {
 	return "", fmt.Errorf("delete not supported for flags")
 }
 
-func (f *flagDataMapper) Create(_ context.Context, _ core.FeatureFlagDefinition) (*core.FeatureFlagDefinition, error) {
-	return nil, fmt.Errorf("create not supported for flags")
+func (f *flagDataMapper) Create(ctx context.Context, value core.FeatureFlagDefinition) (*core.FeatureFlagDefinition, error) {
+	err := f.validate()
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := f.getIdForService()
+	if err != nil {
+		return nil, err
+	}
+
+	stringPtr := func(s string) *string {
+		if s == "" {
+			return nil
+		}
+		return &s
+	}
+
+	varDefs := make(map[string]features.VariableDefinition)
+
+	for k, v := range value.DefaultVariables.BoolVariables {
+		varDefs[k] = features.VariableDefinition{
+			Key:          v.Key,
+			Type:         features.VariableDefinitionTypeBoolean,
+			DefaultValue: strconv.FormatBool(v.Value),
+			Description:  stringPtr(v.Description),
+		}
+	}
+	for k, v := range value.DefaultVariables.IntVariables {
+		varDefs[k] = features.VariableDefinition{
+			Key:          v.Key,
+			Type:         features.VariableDefinitionTypeInteger,
+			DefaultValue: strconv.Itoa(v.Value),
+			Description:  stringPtr(v.Description),
+		}
+	}
+	for k, v := range value.DefaultVariables.FloatVariables {
+		varDefs[k] = features.VariableDefinition{
+			Key:          v.Key,
+			Type:         features.VariableDefinitionTypeDouble,
+			DefaultValue: strconv.FormatFloat(v.Value, 'f', -1, 64),
+			Description:  stringPtr(v.Description),
+		}
+	}
+	for k, v := range value.DefaultVariables.StringVariables {
+		varDefs[k] = features.VariableDefinition{
+			Key:          v.Key,
+			Type:         features.VariableDefinitionTypeString,
+			DefaultValue: v.Value,
+			Description:  stringPtr(v.Description),
+		}
+	}
+	for k, v := range value.DefaultVariables.JsonVariables {
+		var valStr string
+		switch typed := v.Value.(type) {
+		case string:
+			valStr = typed
+		default:
+			bytes, err := json.Marshal(v.Value)
+			if err == nil {
+				valStr = string(bytes)
+			}
+		}
+		varDefs[k] = features.VariableDefinition{
+			Key:          v.Key,
+			Type:         features.VariableDefinitionTypeJson,
+			DefaultValue: valStr,
+			Description:  stringPtr(v.Description),
+		}
+	}
+
+	body := features.CreateFlagJSONRequestBody{
+		Key:         value.Key,
+		Name:        stringPtr(value.Name),
+		Description: stringPtr(value.Description),
+	}
+	if len(varDefs) > 0 {
+		body.VariableDefinitions = &varDefs
+	}
+
+	response, err := f.client.CreateFlagWithResponse(ctx, id, body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create flag. %w", err)
+	}
+	if response.StatusCode() != 201 {
+		detail := ""
+		if response.ApplicationproblemJSON400 != nil {
+			detail = response.ApplicationproblemJSON400.Detail
+		}
+		return nil, fmt.Errorf("non-201 status code: %d, detail: %s", response.StatusCode(), detail)
+	}
+
+	if response.JSON201 == nil {
+		return nil, fmt.Errorf("missing created flag response")
+	}
+
+	// Create variations
+	for _, override := range value.Overrides {
+		varValues := make(map[string]features.VariableValue)
+		for k, v := range override.Variables.BoolVariables {
+			t := features.VariableValueTypeBoolean
+			varValues[k] = features.VariableValue{
+				Key:   stringPtr(v.Key),
+				Type:  &t,
+				Value: strconv.FormatBool(v.Value),
+			}
+		}
+		for k, v := range override.Variables.IntVariables {
+			t := features.VariableValueTypeInteger
+			varValues[k] = features.VariableValue{
+				Key:   stringPtr(v.Key),
+				Type:  &t,
+				Value: strconv.Itoa(v.Value),
+			}
+		}
+		for k, v := range override.Variables.FloatVariables {
+			t := features.VariableValueTypeDouble
+			varValues[k] = features.VariableValue{
+				Key:   stringPtr(v.Key),
+				Type:  &t,
+				Value: strconv.FormatFloat(v.Value, 'f', -1, 64),
+			}
+		}
+		for k, v := range override.Variables.StringVariables {
+			t := features.VariableValueTypeString
+			varValues[k] = features.VariableValue{
+				Key:   stringPtr(v.Key),
+				Type:  &t,
+				Value: v.Value,
+			}
+		}
+		for k, v := range override.Variables.JsonVariables {
+			var valStr string
+			switch typed := v.Value.(type) {
+			case string:
+				valStr = typed
+			default:
+				bytes, err := json.Marshal(v.Value)
+				if err == nil {
+					valStr = string(bytes)
+				}
+			}
+			t := features.VariableValueTypeJson
+			varValues[k] = features.VariableValue{
+				Key:   stringPtr(v.Key),
+				Type:  &t,
+				Value: valStr,
+			}
+		}
+
+		varBody := features.CreateVariationJSONRequestBody{
+			Key:         override.Key,
+			Name:        override.Name,
+			Description: stringPtr(override.Description),
+		}
+		if len(varValues) > 0 {
+			varBody.Variables = &varValues
+		}
+
+		varResp, err := f.client.CreateVariationWithResponse(ctx, id, value.Key, varBody)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create variation %s: %w", override.Key, err)
+		}
+		if varResp.StatusCode() != 201 {
+			detail := ""
+			if varResp.ApplicationproblemJSON400 != nil {
+				detail = varResp.ApplicationproblemJSON400.Detail
+			}
+			return nil, fmt.Errorf("failed to create variation %s (status %d): %s", override.Key, varResp.StatusCode(), detail)
+		}
+	}
+
+	// Disable ruleset and set default variation to "off" (if it exists) for all environments
+	// to ensure the flag starts inactive / in draft mode and defaults to the off variant.
+	if response.JSON201.Environments != nil {
+		for envKey := range *response.JSON201.Environments {
+			_, disableErr := f.client.DisableRulesetWithResponse(ctx, id, value.Key, envKey)
+			if disableErr != nil {
+				log.Warn("Failed to explicitly disable ruleset for environment", "env", envKey, "error", disableErr.Error())
+			}
+
+			var hasOffVariation bool
+			for _, o := range value.Overrides {
+				if o.Key == "off" {
+					hasOffVariation = true
+					break
+				}
+			}
+			if hasOffVariation {
+				var val features.PatchRequestBody_Value
+				err = val.FromPatchRequestBodyValue3("off")
+				if err == nil {
+					patchBody := []features.PatchRequestBody{
+						{
+							Op:    features.Replace,
+							Path:  "/default_variation_key",
+							Value: &val,
+						},
+					}
+					_, patchErr := f.client.UpdateRulesetWithApplicationJSONPatchPlusJSONBodyWithResponse(ctx, id, value.Key, envKey, patchBody)
+					if patchErr != nil {
+						log.Warn("Failed to set default variation to off for environment", "env", envKey, "error", patchErr.Error())
+					}
+				}
+			}
+		}
+	}
+
+	enriched, err := f.enrichFlag(ctx, response.JSON201)
+	if err != nil {
+		return nil, fmt.Errorf("failed to enrich newly created flag: %w", err)
+	}
+
+	return enriched, nil
 }
 
 func (f *flagDataMapper) Update(_ context.Context, _ func(value *core.FeatureFlagDefinition) error) (*core.FeatureFlagDefinition, error) {

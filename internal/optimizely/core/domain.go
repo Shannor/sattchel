@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 	"fmt"
+	"maps"
 	"slices"
 	"strings"
 	"time"
@@ -146,21 +147,11 @@ type Variables struct {
 }
 
 func (v Variables) Merge(other Variables) {
-	for key, val := range other.BoolVariables {
-		v.BoolVariables[key] = val
-	}
-	for key, val := range other.IntVariables {
-		v.IntVariables[key] = val
-	}
-	for key, val := range other.StringVariables {
-		v.StringVariables[key] = val
-	}
-	for key, val := range other.JsonVariables {
-		v.JsonVariables[key] = val
-	}
-	for key, val := range other.FloatVariables {
-		v.FloatVariables[key] = val
-	}
+	maps.Copy(v.BoolVariables, other.BoolVariables)
+	maps.Copy(v.IntVariables, other.IntVariables)
+	maps.Copy(v.StringVariables, other.StringVariables)
+	maps.Copy(v.JsonVariables, other.JsonVariables)
+	maps.Copy(v.FloatVariables, other.FloatVariables)
 }
 
 // MarshalJSON flattens the Variables into a single JSON object where keys are

@@ -186,7 +186,7 @@ func renderVariablesLipGloss(w io.Writer, s Styles, vars core.Variables, indent 
 		renderVariableLipGloss(w, s, key, "string", fmt.Sprintf("%q", v.Value), v.Description, indent)
 	}
 	for key, v := range vars.JsonVariables {
-		renderVariableLipGloss(w, s, key, "json", marshalJSON(v.Value), v.Description, indent)
+		renderVariableLipGloss(w, s, key, "json", MarshalJSON(v.Value), v.Description, indent)
 	}
 }
 

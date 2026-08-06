@@ -165,7 +165,15 @@ func (r *cachedFlagsRepository) GetAll(ctx context.Context) ([]core.FeatureFlagD
 }
 
 func (r *cachedFlagsRepository) Create(ctx context.Context, value core.FeatureFlagDefinition) (*core.FeatureFlagDefinition, error) {
-	return r.underlying.Create(ctx, value)
+	created, err := r.underlying.Create(ctx, value)
+	if err != nil {
+		return nil, err
+	}
+	flags, ok, err := r.loadCache(ctx)
+	if err == nil && ok {
+		r.updateCachedFlag(ctx, flags, *created)
+	}
+	return created, nil
 }
 
 func (r *cachedFlagsRepository) Update(ctx context.Context, updater func(value *core.FeatureFlagDefinition) error) (*core.FeatureFlagDefinition, error) {

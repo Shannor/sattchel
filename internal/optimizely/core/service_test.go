@@ -38,7 +38,8 @@ func (m *mockFlagsRepo) GetAll(ctx context.Context) ([]FeatureFlagDefinition, er
 }
 
 func (m *mockFlagsRepo) Create(ctx context.Context, value FeatureFlagDefinition) (*FeatureFlagDefinition, error) {
-	return nil, nil
+	m.flags = append(m.flags, value)
+	return &value, nil
 }
 
 func (m *mockFlagsRepo) Update(ctx context.Context, updater func(*FeatureFlagDefinition) error) (*FeatureFlagDefinition, error) {
@@ -175,5 +176,36 @@ func TestCompareFlags(t *testing.T) {
 	}
 	if len(comparisons[1].MissingIn) != 1 || comparisons[1].MissingIn[0].ID != "p1" || comparisons[1].MissingIn[0].Name != "Project One" {
 		t.Errorf("expected flag-3 to be missing in p1, got %v", comparisons[1].MissingIn)
+	}
+}
+
+func TestCreateFlag(t *testing.T) {
+	mockRepo := &mockFlagsRepo{
+		flags: []FeatureFlagDefinition{},
+	}
+	factory := &mockFlagsRepoFactory{
+		repos: map[string]*mockFlagsRepo{
+			"p1": mockRepo,
+		},
+	}
+	service := NewService(nil, factory, nil)
+
+	newFlag := FeatureFlagDefinition{
+		ID:   "flag-new",
+		Key:  "flag-new-key",
+		Name: "New Test Flag",
+	}
+
+	created, err := service.CreateFlag(context.Background(), "p1", newFlag)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if created.ID != "flag-new" || created.Key != "flag-new-key" || created.Name != "New Test Flag" {
+		t.Errorf("expected created flag to match inputs, got: %+v", created)
+	}
+
+	if len(mockRepo.flags) != 1 {
+		t.Errorf("expected mock repo to have 1 flag, got %d", len(mockRepo.flags))
 	}
 }

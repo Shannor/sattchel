@@ -249,3 +249,11 @@ func (s *Service) CompareFlags(ctx context.Context, projectIDs []string) ([]Flag
 
 	return comparisons, nil
 }
+
+func (s *Service) CreateFlag(ctx context.Context, projectID string, flag FeatureFlagDefinition) (*FeatureFlagDefinition, error) {
+	dm, err := s.flagFactory.Create(ctx, projectID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create flag mapper for project %s: %w", projectID, err)
+	}
+	return dm.Create(ctx, flag)
+}
