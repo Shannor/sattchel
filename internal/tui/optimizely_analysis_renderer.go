@@ -67,17 +67,21 @@ func RenderOptimizelyUniqueFlags(entries []core.UniqueFlagEntry) string {
 		return sb.String()
 	}
 
-	rows := make([][]string, 0, len(entries))
-	for _, entry := range entries {
-		rows = append(rows, []string{
-			entry.Flag.Key,
-			fallback(entry.Flag.Name),
-			projectDisplay(entry.TargetProject),
-			joinProjects(entry.ComparedAgainst),
-			formatCreatedAt(entry.Flag.CreatedAt),
-		})
+	for i, entry := range entries {
+		sb.WriteString(fmt.Sprintf("  %s %s\n", s.Info.Render("•"), s.Text.Bold(true).Render(entry.Flag.Key)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Name:"), fallback(entry.Flag.Name)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Project:"), projectDisplay(entry.TargetProject)))
+		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Created:"), formatCreatedAt(entry.Flag.CreatedAt)))
+		
+		sb.WriteString(fmt.Sprintf("    %-15s\n", s.Muted.Render("Absent From:")))
+		for _, compProj := range entry.ComparedAgainst {
+			sb.WriteString(fmt.Sprintf("      %s %s\n", s.Warning.Render("-"), projectDisplay(compProj)))
+		}
+		
+		if i < len(entries)-1 {
+			sb.WriteString("\n")
+		}
 	}
-	sb.WriteString(RenderTable([]string{"Key", "Name", "Project", "Compared Against", "Created"}, rows) + "\n")
 	return sb.String()
 }
 
