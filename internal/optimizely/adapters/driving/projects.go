@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func cmdProjects(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+func projects(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "projects",
 		Short:        "Manage projects",

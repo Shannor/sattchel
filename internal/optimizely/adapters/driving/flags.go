@@ -30,7 +30,7 @@ var (
 	toFile           string
 )
 
-func cmdFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+func flags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	var flagCmd = &cobra.Command{
 		Use:          "flags",
 		Short:        "Manage feature flags",
@@ -41,11 +41,11 @@ func cmdFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Com
 	flagCmd.AddCommand(listFlags(s, config, writer))
 	flagCmd.AddCommand(getFlag(s, config))
 	flagCmd.AddCommand(compareFlags(s, config, writer))
-	flagCmd.AddCommand(cmdUniqueFlags(s, config, writer))
-	flagCmd.AddCommand(cmdDormantFlags(s, config, writer))
-	flagCmd.AddCommand(cmdDriftFlags(s, config, writer))
-	flagCmd.AddCommand(cmdPromoteFlags(s, config, writer))
-	flagCmd.AddCommand(cmdSyncFlags(s, config, writer))
+	flagCmd.AddCommand(uniqueFlags(s, config, writer))
+	flagCmd.AddCommand(dormantFlags(s, config, writer))
+	flagCmd.AddCommand(driftFlags(s, config, writer))
+	flagCmd.AddCommand(promoteFlags(s, config, writer))
+	flagCmd.AddCommand(syncFlags(s, config, writer))
 	return flagCmd
 }
 
@@ -366,7 +366,7 @@ func compareFlags(s *core.Service, config *Config, writer printer.Writer) *cobra
 Finds and returns a list of feature flags that don't exist in all of the specified project IDs.
 If no project IDs are provided, project IDs saved in the configuration will be used.
 There must be at least 2 project IDs provided or saved in the configuration.`,
-		Args:  cobra.NoArgs,
+		Args: cobra.NoArgs,
 		Example: strings.TrimSpace(`
   satt optimizely flags compare --project 123 --project 456
   satt optimizely flags compare --project 123 --project 456 --query loyalty

@@ -71,12 +71,6 @@ func registerProjectFlagCompletion(cmd *cobra.Command, config *Config, flagNames
 	}
 }
 
-func registerProjectArgCompletion(cmd *cobra.Command, config *Config) {
-	cmd.ValidArgsFunction = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return getProjectCompletions(config), cobra.ShellCompDirectiveNoFileComp
-	}
-}
-
 func registerSourceProjectCompletion(cmd *cobra.Command, config *Config) {
 	_ = cmd.RegisterFlagCompletionFunc("source", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		results := []string{"all\tUnion mode across target projects"}

@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func cmdUniqueFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+func uniqueFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	var (
 		targetProjectID string
 		againstProjects []string
@@ -80,7 +80,7 @@ func cmdUniqueFlags(s *core.Service, config *Config, writer printer.Writer) *cob
 	return cmd
 }
 
-func cmdDormantFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+func dormantFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	var (
 		projectIDs    []string
 		query         string
@@ -138,7 +138,7 @@ func cmdDormantFlags(s *core.Service, config *Config, writer printer.Writer) *co
 	return cmd
 }
 
-func cmdDriftFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+func driftFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	var (
 		projectIDs    []string
 		query         string
@@ -197,7 +197,7 @@ func cmdDriftFlags(s *core.Service, config *Config, writer printer.Writer) *cobr
 	return cmd
 }
 
-func cmdPromoteFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+func promoteFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	var (
 		targetProjectID string
 		againstProjects []string
@@ -269,7 +269,7 @@ func cmdPromoteFlags(s *core.Service, config *Config, writer printer.Writer) *co
 	return cmd
 }
 
-func cmdSyncFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
+func syncFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Command {
 	var (
 		sourceProjectID  string
 		targetProjectIDs []string
