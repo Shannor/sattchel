@@ -44,7 +44,6 @@ func flags(s *core.Service, config *Config, writer printer.Writer) *cobra.Comman
 	flagCmd.AddCommand(uniqueFlags(s, config, writer))
 	flagCmd.AddCommand(dormantFlags(s, config, writer))
 	flagCmd.AddCommand(driftFlags(s, config, writer))
-	flagCmd.AddCommand(promoteFlags(s, config, writer))
 	flagCmd.AddCommand(syncFlags(s, config, writer))
 	return flagCmd
 }

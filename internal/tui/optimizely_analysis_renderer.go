@@ -165,30 +165,6 @@ func RenderOptimizelyVariableDrift(entries []core.FlagVariableDrift) string {
 	return sb.String()
 }
 
-func RenderOptimizelyPromotionCandidates(entries []core.PromotionCandidate, targetProjectID string, againstProjectIDs []string) string {
-	s := AutoStyles()
-	var sb strings.Builder
-	sb.WriteString(s.Title.Render("🚀 Promotion Candidates") + "\n")
-	sb.WriteString(s.Muted.Render("Flags enabled only in lower environments that may need promotion.") + "\n\n")
-	sb.WriteString(s.Muted.Render(fmt.Sprintf("Target Project: %s | Compared Against: %s", targetProjectID, strings.Join(againstProjectIDs, ", "))) + "\n\n")
-	if len(entries) == 0 {
-		sb.WriteString(s.Success.Render("No promotion candidates found.") + "\n")
-		return sb.String()
-	}
-
-	for i, entry := range entries {
-		sb.WriteString(fmt.Sprintf("  %s %s\n", s.Info.Render("•"), s.Text.Bold(true).Render(entry.Flag.Key)))
-		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Name:"), fallback(entry.Flag.Name)))
-		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Reason:"), string(entry.Reason)))
-		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Enabled Envs:"), strings.Join(entry.EnabledEnvironments, ", ")))
-		sb.WriteString(fmt.Sprintf("    %-15s%s\n", s.Muted.Render("Present In:"), joinProjects(entry.PresentIn)))
-		if i < len(entries)-1 {
-			sb.WriteString("\n")
-		}
-	}
-	return sb.String()
-}
-
 func RenderOptimizelySyncPlan(plan core.FlagSyncPlan, dryRun bool, result *core.FlagSyncResult) string {
 	s := AutoStyles()
 	var sb strings.Builder

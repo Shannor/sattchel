@@ -142,46 +142,6 @@ func TestFindVariableDrift(t *testing.T) {
 	}
 }
 
-func TestFindPromotionCandidates(t *testing.T) {
-	factory := &mockFlagsRepoFactory{repos: map[string]*mockFlagsRepo{
-		"p1": {flags: []FeatureFlagDefinition{
-			{ID: "1", Key: "behind", Targets: []Target{{EnvironmentID: "qa", IsEnabled: true}}},
-			{ID: "2", Key: "shared-lower", Targets: []Target{{EnvironmentID: "qa", IsEnabled: true}}},
-			{ID: "3", Key: "brand-only", Targets: []Target{{EnvironmentID: "qa", IsEnabled: true}}},
-		}},
-		"p2": {flags: []FeatureFlagDefinition{
-			{ID: "1", Key: "behind", Targets: []Target{{EnvironmentID: "production", IsEnabled: true}}},
-			{ID: "2", Key: "shared-lower", Targets: []Target{{EnvironmentID: "development", IsEnabled: true}}},
-		}},
-	}}
-	service := NewService(&mockProjectRepo{projects: []Project{{ID: "p1", Name: "One"}, {ID: "p2", Name: "Two"}}}, factory, nil)
-
-	candidates, err := service.FindPromotionCandidates(context.Background(), "p1", []string{"p2"}, PromotionOptions{})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if len(candidates) != 3 {
-		t.Fatalf("expected 3 candidates, got %d", len(candidates))
-	}
-	if candidates[0].Reason == "" || candidates[1].Reason == "" || candidates[2].Reason == "" {
-		t.Fatalf("expected reasons to be populated, got %+v", candidates)
-	}
-
-	reasons := map[string]PromotionReason{}
-	for _, candidate := range candidates {
-		reasons[candidate.Flag.Key] = candidate.Reason
-	}
-	if reasons["behind"] != PromotionReasonBrandBehind {
-		t.Fatalf("expected behind flag reason %q, got %q", PromotionReasonBrandBehind, reasons["behind"])
-	}
-	if reasons["shared-lower"] != PromotionReasonSharedLowerEnv {
-		t.Fatalf("expected shared-lower flag reason %q, got %q", PromotionReasonSharedLowerEnv, reasons["shared-lower"])
-	}
-	if reasons["brand-only"] != PromotionReasonBrandOnlyLowerEnv {
-		t.Fatalf("expected brand-only flag reason %q, got %q", PromotionReasonBrandOnlyLowerEnv, reasons["brand-only"])
-	}
-}
-
 func TestPlanAndApplyFlagSync(t *testing.T) {
 	sourceFlag := FeatureFlagDefinition{ID: "1", Key: "alpha", Name: "Alpha", DefaultVariables: VariablesFromDefinitions(map[string]VariableDefinitionSpec{
 		"one": {Key: "one", Type: "string", DefaultValue: "1"},

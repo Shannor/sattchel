@@ -68,27 +68,6 @@ type FlagVariableDrift struct {
 	Variables []VariableDriftEntry `json:"variables"`
 }
 
-type PromotionReason string
-
-const (
-	PromotionReasonBrandOnlyLowerEnv PromotionReason = "brand-only-lower-env"
-	PromotionReasonSharedLowerEnv    PromotionReason = "shared-lower-env"
-	PromotionReasonBrandBehind       PromotionReason = "brand-behind"
-)
-
-type PromotionOptions struct {
-	Query                string
-	LowerEnvironmentKeys []string
-}
-
-type PromotionCandidate struct {
-	Flag                FeatureFlagDefinition            `json:"flag"`
-	Reason              PromotionReason                  `json:"reason"`
-	EnabledEnvironments []string                         `json:"enabledEnvironments"`
-	PresentIn           []Project                        `json:"presentIn"`
-	FlagByProject       map[string]FeatureFlagDefinition `json:"flagByProject"`
-}
-
 type FlagVariableSyncUpdate struct {
 	FlagKey          string                            `json:"flagKey"`
 	MissingVariables map[string]VariableDefinitionSpec `json:"missingVariables"`
@@ -473,81 +452,6 @@ func (s *Service) FindVariableDrift(ctx context.Context, projectIDs []string, qu
 	return results, nil
 }
 
-func (s *Service) FindPromotionCandidates(ctx context.Context, targetProjectID string, againstProjectIDs []string, opts PromotionOptions) ([]PromotionCandidate, error) {
-	if targetProjectID == "" {
-		return nil, fmt.Errorf("target project ID is required")
-	}
-	allProjectIDs := normalizeIDs(append([]string{targetProjectID}, againstProjectIDs...))
-	if len(allProjectIDs) < 2 {
-		return nil, fmt.Errorf("at least 1 comparison project ID is required")
-	}
-
-	lowerEnvs := opts.LowerEnvironmentKeys
-	if len(lowerEnvs) == 0 {
-		lowerEnvs = []string{"development", "qa"}
-	}
-	lowerEnvSet := make(map[string]struct{}, len(lowerEnvs))
-	for _, env := range lowerEnvs {
-		lowerEnvSet[strings.ToLower(env)] = struct{}{}
-	}
-
-	projectFlags, projects, err := s.loadProjectFlags(ctx, allProjectIDs)
-	if err != nil {
-		return nil, err
-	}
-
-	results := make([]PromotionCandidate, 0)
-	for _, flag := range filterFlags(projectFlags[targetProjectID], opts.Query) {
-		if !flagOnlyEnabledInLowerEnvs(flag, lowerEnvSet) {
-			continue
-		}
-
-		presentIn := make([]Project, 0)
-		flagByProject := make(map[string]FeatureFlagDefinition)
-		anyOtherPromoted := false
-		anyOtherLowerOnly := false
-
-		for _, pid := range allProjectIDs {
-			otherFlag, ok := findFlagByKey(projectFlags[pid], flag.Key)
-			if !ok {
-				continue
-			}
-			presentIn = append(presentIn, projectByID(projects, pid))
-			flagByProject[pid] = otherFlag
-			if pid == targetProjectID {
-				continue
-			}
-			if flagEnabledInHigherEnvs(otherFlag, lowerEnvSet) {
-				anyOtherPromoted = true
-			}
-			if flagOnlyEnabledInLowerEnvs(otherFlag, lowerEnvSet) {
-				anyOtherLowerOnly = true
-			}
-		}
-
-		reason := PromotionReasonBrandOnlyLowerEnv
-		switch {
-		case anyOtherPromoted:
-			reason = PromotionReasonBrandBehind
-		case anyOtherLowerOnly:
-			reason = PromotionReasonSharedLowerEnv
-		}
-
-		results = append(results, PromotionCandidate{
-			Flag:                flag,
-			Reason:              reason,
-			EnabledEnvironments: enabledEnvironmentKeys(flag),
-			PresentIn:           presentIn,
-			FlagByProject:       flagByProject,
-		})
-	}
-
-	slices.SortFunc(results, func(a, b PromotionCandidate) int {
-		return compareFlagNewestFirst(a.Flag, b.Flag)
-	})
-	return results, nil
-}
-
 func (s *Service) PlanFlagSync(ctx context.Context, opts FlagSyncOptions) (*FlagSyncPlan, error) {
 	if opts.UnionSource {
 		return s.planUnionFlagSync(ctx, opts)
@@ -865,39 +769,6 @@ func compareFlagNewestFirst(a, b FeatureFlagDefinition) int {
 func flagEnabledAnywhere(flag FeatureFlagDefinition) bool {
 	for _, target := range flag.Targets {
 		if target.IsEnabled {
-			return true
-		}
-	}
-	return false
-}
-
-func enabledEnvironmentKeys(flag FeatureFlagDefinition) []string {
-	result := make([]string, 0)
-	for _, target := range flag.Targets {
-		if target.IsEnabled {
-			result = append(result, target.EnvironmentID)
-		}
-	}
-	slices.Sort(result)
-	return result
-}
-
-func flagOnlyEnabledInLowerEnvs(flag FeatureFlagDefinition, lowerEnvSet map[string]struct{}) bool {
-	enabled := enabledEnvironmentKeys(flag)
-	if len(enabled) == 0 {
-		return false
-	}
-	for _, env := range enabled {
-		if _, ok := lowerEnvSet[strings.ToLower(env)]; !ok {
-			return false
-		}
-	}
-	return true
-}
-
-func flagEnabledInHigherEnvs(flag FeatureFlagDefinition, lowerEnvSet map[string]struct{}) bool {
-	for _, env := range enabledEnvironmentKeys(flag) {
-		if _, ok := lowerEnvSet[strings.ToLower(env)]; !ok {
 			return true
 		}
 	}
