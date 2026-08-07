@@ -335,7 +335,9 @@ func (s *FileStorage) GetGoals(ctx context.Context, projectID string) ([]core.Go
 
 	var results []core.Goal
 	for _, goal := range s.db.Goals {
-		results = append(results, goal)
+		if goal.ProjectID == projectID {
+			results = append(results, goal)
+		}
 	}
 	return results, nil
 }

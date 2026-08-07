@@ -76,3 +76,52 @@ func TestFileStorageTransaction(t *testing.T) {
 		t.Errorf("expected disk to only have 'Goal A', got %v", diskGoals)
 	}
 }
+
+func TestFileStorageGetGoalsFilterByProject(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath := filepath.Join(tempDir, "tracker.json")
+
+	storage := driven.NewFileStorage(dbPath, nil)
+	ctx := context.Background()
+
+	// Create two projects
+	p1, err := storage.CreateProject(ctx, &core.Project{Label: "Project 1"})
+	if err != nil {
+		t.Fatalf("failed to create project 1: %v", err)
+	}
+	p2, err := storage.CreateProject(ctx, &core.Project{Label: "Project 2"})
+	if err != nil {
+		t.Fatalf("failed to create project 2: %v", err)
+	}
+
+	// Create goal for Project 1
+	_, err = storage.CreateGoal(ctx, p1.ID, &core.Goal{Name: "Goal P1", ProjectID: p1.ID})
+	if err != nil {
+		t.Fatalf("failed to create goal for project 1: %v", err)
+	}
+
+	// Create goal for Project 2
+	_, err = storage.CreateGoal(ctx, p2.ID, &core.Goal{Name: "Goal P2", ProjectID: p2.ID})
+	if err != nil {
+		t.Fatalf("failed to create goal for project 2: %v", err)
+	}
+
+	// Get goals for Project 1
+	goalsP1, err := storage.GetGoals(ctx, p1.ID)
+	if err != nil {
+		t.Fatalf("failed to get goals for project 1: %v", err)
+	}
+	if len(goalsP1) != 1 || goalsP1[0].Name != "Goal P1" {
+		t.Errorf("expected 1 goal 'Goal P1' for project 1, got %v", goalsP1)
+	}
+
+	// Get goals for Project 2
+	goalsP2, err := storage.GetGoals(ctx, p2.ID)
+	if err != nil {
+		t.Fatalf("failed to get goals for project 2: %v", err)
+	}
+	if len(goalsP2) != 1 || goalsP2[0].Name != "Goal P2" {
+		t.Errorf("expected 1 goal 'Goal P2' for project 2, got %v", goalsP2)
+	}
+}
+
