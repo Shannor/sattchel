@@ -164,7 +164,7 @@ func setGoal(service *core.Service, cfg *Config) *cobra.Command {
 				err   error
 			)
 
-			err = loader.Run("Getting goals ...", func() {
+			_ = loader.Run("Getting goals ...", func() {
 				goals, err = service.GetGoals(cmd.Context(), pid)
 			})
 			if err != nil {
@@ -214,19 +214,30 @@ func listGoals(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			var (
-				goals []core.Goal
-				err   error
+				goals   []core.Goal
+				project *core.Project
+				err     error
 			)
 
-			err = loader.Run("Getting goals ...", func() {
+			_ = loader.Run("Getting goals ...", func() {
 				goals, err = service.GetGoals(cmd.Context(), pid)
+				if err != nil {
+					return
+				}
+				if pid != "" {
+					project, err = service.GetProject(cmd.Context(), pid)
+				}
 			})
 			if err != nil {
 				return err
 			}
 
 			if len(goals) == 0 {
-				fmt.Printf("No goals found for project %s\n", pid)
+				p := pid
+				if project != nil && project.Label != "" {
+					p = project.Label
+				}
+				fmt.Printf("No goals found for project %s\n", p)
 				return nil
 			}
 
@@ -236,7 +247,13 @@ func listGoals(service *core.Service, cfg *Config) *cobra.Command {
 			rootStyle := lipgloss.NewStyle().Foreground(styles.Title.GetForeground())
 			itemStyle := lipgloss.NewStyle().Foreground(styles.Text.GetForeground())
 
-			t := tree.Root(styles.Title.Render("Goals"))
+			headerTitle := "Goals"
+			if project != nil && project.Label != "" {
+				headerTitle = project.Label
+			} else if pid != "" {
+				headerTitle = pid
+			}
+			t := tree.Root(styles.Title.Render(headerTitle))
 			roots := buildGoalTree(goals)
 			for _, root := range roots {
 				t = t.Child(renderGoalTreeIterative(root, currentGoalID, styles))
@@ -326,11 +343,76 @@ func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.St
 		curr := stack2[len(stack2)-1]
 		stack2 = stack2[:len(stack2)-1]
 
-		currentMarker := ""
+		var nameText string
 		if curr.Goal.ID == currentGoalID {
-			currentMarker = " " + styles.Success.Render("(active)")
+			nameText = styles.Success.Bold(true).Render("★ " + curr.Goal.Name)
+		} else {
+			nameText = styles.Text.Bold(true).Render(curr.Goal.Name)
 		}
-		title := fmt.Sprintf("%s — %s%s", styles.Text.Bold(true).Render(curr.Goal.Name), styles.Muted.Render(curr.Goal.ID), currentMarker)
+
+		var details []string
+
+		// Status
+		if curr.Goal.Status != "" {
+			var statusStyle lipgloss.Style
+			switch curr.Goal.Status {
+			case core.GoalCompleted:
+				statusStyle = styles.Success.Bold(true)
+			case core.GoalInProgress:
+				statusStyle = styles.Info.Bold(true)
+			case core.GoalCancelled:
+				statusStyle = styles.Muted.Bold(true)
+			case core.GoalOpen:
+				statusStyle = styles.Info
+			default:
+				statusStyle = styles.Warning
+			}
+			details = append(details, statusStyle.Render(string(curr.Goal.Status)))
+		}
+
+		// Impact
+		if curr.Goal.Impact != "" && curr.Goal.Impact != core.UnknownImpact {
+			var impactStyle lipgloss.Style
+			switch curr.Goal.Impact {
+			case core.HighImpact:
+				impactStyle = styles.Success.Bold(true)
+			case core.MediumImpact:
+				impactStyle = styles.Info
+			case core.LowImpact:
+				impactStyle = styles.Muted
+			default:
+				impactStyle = styles.Warning
+			}
+			details = append(details, fmt.Sprintf("impact: %s", impactStyle.Render(string(curr.Goal.Impact))))
+		}
+
+		// Effort
+		if curr.Goal.Effort != "" && curr.Goal.Effort != core.UnknownEffort {
+			var effortStyle lipgloss.Style
+			switch curr.Goal.Effort {
+			case core.LowEffort:
+				effortStyle = styles.Success
+			case core.MediumEffort:
+				effortStyle = styles.Info
+			case core.HighEffort:
+				effortStyle = styles.Error
+			default:
+				effortStyle = styles.Warning
+			}
+			details = append(details, fmt.Sprintf("effort: %s", effortStyle.Render(string(curr.Goal.Effort))))
+		}
+
+		// Member
+		if curr.Goal.Member != nil && curr.Goal.Member.Name != "" {
+			details = append(details, styles.Info.Render("@"+curr.Goal.Member.Name))
+		}
+
+		var title string
+		if len(details) > 0 {
+			title = fmt.Sprintf("%s — %s", nameText, strings.Join(details, styles.Muted.Render(" • ")))
+		} else {
+			title = nameText
+		}
 
 		t := tree.Root(title)
 
@@ -380,7 +462,7 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 					if g.IsRoot() {
 						continue
 					}
-					completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
+					completions = append(completions, cobra.CompletionWithDesc(g.ID, g.Name))
 				}
 				return completions, cobra.ShellCompDirectiveNoFileComp
 			}
@@ -398,7 +480,7 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 					if !allowedSet.Contains(g.ID) {
 						continue
 					}
-					completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
+					completions = append(completions, cobra.CompletionWithDesc(g.ID, g.Name))
 				}
 				return completions, cobra.ShellCompDirectiveNoFileComp
 			}
@@ -430,7 +512,7 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				goals []core.Goal
 				err   error
 			)
-			err = loader.Run("Getting goals ...", func() {
+			_ = loader.Run("Getting goals ...", func() {
 				goals, err = service.GetGoals(cmd.Context(), pid)
 			})
 			if err != nil {
@@ -479,7 +561,7 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			var movedGoal *core.Goal
-			err = loader.Run("Moving goal ...", func() {
+			_ = loader.Run("Moving goal ...", func() {
 				movedGoal, err = service.ChangeParent(cmd.Context(), pid, childID, newParentID, core.GoalOptions{
 					LinkRelationship: relationship,
 				})
@@ -541,7 +623,7 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 			if len(args) > 0 {
 				selectedID = args[0]
 			} else {
-				err = loader.Run("Getting goals ...", func() {
+				_ = loader.Run("Getting goals ...", func() {
 					goals, err = service.GetGoals(cmd.Context(), pid)
 				})
 				if err != nil {
@@ -563,7 +645,7 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			var targetGoal *core.Goal
-			err = loader.Run("Getting goal details ...", func() {
+			_ = loader.Run("Getting goal details ...", func() {
 				targetGoal, err = service.GetGoal(cmd.Context(), selectedID)
 			})
 			if err != nil {
@@ -628,12 +710,9 @@ func updateGoal(service *core.Service, cfg *Config) *cobra.Command {
 
 			var goal *core.Goal
 			var err error
-			runErr := loader.Run("Updating goal...", func() {
+			_ = loader.Run("Updating goal...", func() {
 				goal, err = service.UpdateGoal(cmd.Context(), id, name, options)
 			})
-			if runErr != nil {
-				return runErr
-			}
 			if err != nil {
 				return err
 			}

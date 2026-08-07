@@ -271,6 +271,10 @@ func (s *Service) GetProjects(ctx context.Context) ([]Project, error) {
 	return projects, nil
 }
 
+func (s *Service) GetProject(ctx context.Context, projectID string) (*Project, error) {
+	return s.repo.GetProject(ctx, projectID)
+}
+
 func (s *Service) GetGoals(ctx context.Context, projectID string) ([]Goal, error) {
 	goals, err := s.repo.GetGoals(ctx, projectID)
 	if err != nil {

@@ -68,7 +68,7 @@ func setProject(service *core.Service, cfg *Config) *cobra.Command {
 				err      error
 			)
 
-			err = loader.Run("Getting projects ...", func() {
+			_ = loader.Run("Getting projects ...", func() {
 				projects, err = service.GetProjects(cmd.Context())
 			})
 			if err != nil {
@@ -134,7 +134,7 @@ func listProjects(service *core.Service, cfg *Config) *cobra.Command {
 				err      error
 			)
 
-			err = loader.Run("Getting projects ...", func() {
+			_ = loader.Run("Getting projects ...", func() {
 				projects, err = service.GetProjects(cmd.Context())
 			})
 			if err != nil {

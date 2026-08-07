@@ -89,7 +89,6 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 			if hasPresetFilter {
 				var (
 					goals []core.Goal
-					err   error
 					query core.GoalQuery
 				)
 
@@ -100,7 +99,8 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 						Impacts: []core.Impact{core.HighImpact},
 						Efforts: []core.Effort{core.LowEffort},
 					}
-					err = loader.Run("Getting Do It Now goals...", func() {
+					var err error
+					_ = loader.Run("Getting Do It Now goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
@@ -113,7 +113,8 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 						Impacts: []core.Impact{core.HighImpact},
 						Efforts: []core.Effort{core.HighEffort},
 					}
-					err = loader.Run("Getting Honest Work goals...", func() {
+					var err error
+					_ = loader.Run("Getting Honest Work goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
@@ -126,7 +127,8 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 						Impacts: []core.Impact{core.LowImpact},
 						Efforts: []core.Effort{core.LowEffort},
 					}
-					err = loader.Run("Getting Snacking goals...", func() {
+					var err error
+					_ = loader.Run("Getting Snacking goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
@@ -139,7 +141,8 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 						Impacts: []core.Impact{core.LowImpact},
 						Efforts: []core.Effort{core.HighEffort},
 					}
-					err = loader.Run("Getting Why? goals...", func() {
+					var err error
+					_ = loader.Run("Getting Why? goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
@@ -151,7 +154,8 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					query = core.GoalQuery{
 						MissingFields: []string{"member", "impact", "effort"},
 					}
-					err = loader.Run("Getting goals with missing details...", func() {
+					var err error
+					_ = loader.Run("Getting goals with missing details...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
@@ -176,7 +180,7 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				query := core.GoalQuery{
 					MissingFields: missingFilters,
 				}
-				err = loader.Run("Filtering goals by missing details...", func() {
+				_ = loader.Run("Filtering goals by missing details...", func() {
 					goals, err = service.QueryGoals(cmd.Context(), pid, query)
 				})
 				if err != nil {
@@ -192,7 +196,7 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				err      error
 			)
 
-			err = loader.Run("Retrieving project goals...", func() {
+			_ = loader.Run("Retrieving project goals...", func() {
 				allGoals, err = service.QueryGoals(cmd.Context(), pid, core.GoalQuery{})
 			})
 			if err != nil {
