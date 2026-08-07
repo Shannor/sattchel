@@ -124,4 +124,3 @@ func TestFileStorageGetGoalsFilterByProject(t *testing.T) {
 		t.Errorf("expected 1 goal 'Goal P2' for project 2, got %v", goalsP2)
 	}
 }
-
