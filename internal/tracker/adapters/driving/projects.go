@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
 
@@ -14,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func projects(service *core.Service, cfg *Config) *cobra.Command {
+func projects(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "project [next]",
 		Aliases: []string{"p"},
@@ -27,14 +28,14 @@ func projects(service *core.Service, cfg *Config) *cobra.Command {
      satt tracker project update [id]
      `,
 	}
-	cmd.AddCommand(createProject(service, cfg))
-	cmd.AddCommand(listProjects(service, cfg))
-	cmd.AddCommand(projectDetails(service, cfg))
-	cmd.AddCommand(updateProject(service, cfg))
+	cmd.AddCommand(createProject(service, cfg, writer))
+	cmd.AddCommand(listProjects(service, cfg, writer))
+	cmd.AddCommand(projectDetails(service, cfg, writer))
+	cmd.AddCommand(updateProject(service, cfg, writer))
 	return cmd
 }
 
-func createProject(service *core.Service, cfg *Config) *cobra.Command {
+func createProject(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	description := ""
 	cmd := &cobra.Command{
 		Use:   "create [name]",
@@ -79,7 +80,7 @@ func createProject(service *core.Service, cfg *Config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("Project %s created successfully\n", p.Label)
+			writer.Success(fmt.Sprintf("Project %s created successfully", p.Label))
 			_ = cfg.SetCurrentProjectID(p.ID)
 			return nil
 		},
@@ -88,7 +89,7 @@ func createProject(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func listProjects(service *core.Service, cfg *Config) *cobra.Command {
+func listProjects(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
 		stdoutFlag  bool
 		setActiveID string
@@ -125,7 +126,7 @@ func listProjects(service *core.Service, cfg *Config) *cobra.Command {
 				if err := cfg.SetCurrentProjectID(setActiveID); err != nil {
 					return fmt.Errorf("failed to save active project: %w", err)
 				}
-				fmt.Printf("Active project set to: %s (%s)\n", targetProj.Label, targetProj.ID)
+				writer.Success(fmt.Sprintf("Active project set to: %s (%s)", targetProj.Label, targetProj.ID))
 				return nil
 			}
 
@@ -142,7 +143,7 @@ func listProjects(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			if len(projects) == 0 {
-				fmt.Println("No projects found")
+				writer.Info("No projects found")
 				return nil
 			}
 
@@ -223,7 +224,7 @@ func listProjects(service *core.Service, cfg *Config) *cobra.Command {
 						break
 					}
 				}
-				fmt.Printf("Active project set to: %s (%s)\n", cleanName, selected.ValueStr)
+				writer.Success(fmt.Sprintf("Active project set to: %s (%s)", cleanName, selected.ValueStr))
 			}
 
 			return nil
@@ -238,7 +239,7 @@ func listProjects(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func projectDetails(service *core.Service, cfg *Config) *cobra.Command {
+func projectDetails(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
 		projectID  string
 		stdoutFlag bool
@@ -283,6 +284,7 @@ If no projectId is provided, the current active project will be used.`,
 				if err != nil {
 					return fmt.Errorf("failed to write to file %s: %w", toFile, err)
 				}
+				writer.Success(fmt.Sprintf("Project details written to %s successfully", toFile))
 				return nil
 			}
 
@@ -304,7 +306,7 @@ If no projectId is provided, the current active project will be used.`,
 	return cmd
 }
 
-func updateProject(service *core.Service, cfg *Config) *cobra.Command {
+func updateProject(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
 		name        string
 		description string
@@ -333,7 +335,6 @@ If no flags/arguments are provided, it will prompt for the details interactively
 				return fmt.Errorf("no active project configured and no projectId provided")
 			}
 
-			// Retrieve current project details
 			var (
 				proj *core.Project
 				err  error
@@ -345,12 +346,14 @@ If no flags/arguments are provided, it will prompt for the details interactively
 				return err
 			}
 
-			// If flags are provided for name or description, use them.
-			// Otherwise (similar to create flow when name is not provided), prompt for them!
-			if !cmd.Flags().Changed("name") && !cmd.Flags().Changed("description") {
+			if !cmd.Flags().Changed("name") {
 				name = proj.Label
+			}
+			if !cmd.Flags().Changed("description") {
 				description = proj.Description
+			}
 
+			if !cmd.Flags().Changed("name") && !cmd.Flags().Changed("description") {
 				err = huh.NewForm(
 					huh.NewGroup(
 						huh.NewInput().
@@ -370,15 +373,6 @@ If no flags/arguments are provided, it will prompt for the details interactively
 				if err != nil {
 					return err
 				}
-			} else {
-				// If name flag was not explicitly provided but description was, keep old name
-				if !cmd.Flags().Changed("name") {
-					name = proj.Label
-				}
-				// If description flag was not explicitly provided but name was, keep old description
-				if !cmd.Flags().Changed("description") {
-					description = proj.Description
-				}
 			}
 
 			updated, err := service.UpdateProject(cmd.Context(), pid, name, description)
@@ -386,7 +380,7 @@ If no flags/arguments are provided, it will prompt for the details interactively
 				return err
 			}
 
-			fmt.Printf("Project %s updated successfully\n", updated.Label)
+			writer.Success(fmt.Sprintf("Project %s updated successfully", updated.Label))
 			return nil
 		},
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

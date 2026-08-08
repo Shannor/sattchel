@@ -126,16 +126,16 @@ func init() {
 
 	opService := setupOptimizely(v)
 
-	rootCmd.AddCommand(setupTracker(v))
+	rootCmd.AddCommand(setupTracker(v, writer))
 	rootCmd.AddCommand(optimizelyDriving.NewCommand(opService, v, writer, styles))
 	rootCmd.AddCommand(update.NewCommand(writer))
 }
 
-func setupTracker(v *viper.Viper) *cobra.Command {
+func setupTracker(v *viper.Viper, writer printer.Writer) *cobra.Command {
 	path := filepath.Join(config.ResolvedConfigDir, "tracker.json")
 	fileStorage := trackerDriven.NewFileStorage(path, nil)
 	trackerService := core.NewService(fileStorage)
-	return trackerDriving.NewCommand(trackerService, v)
+	return trackerDriving.NewCommand(trackerService, v, writer)
 }
 
 func setupOptimizely(v *viper.Viper) *optimizelyCore.Service {

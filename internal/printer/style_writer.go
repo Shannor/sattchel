@@ -11,6 +11,7 @@ type Writer interface {
 	Info(msg string)
 	Success(msg string)
 	Error(msg string)
+	Warn(msg string)
 }
 
 type StyleWriter struct {
@@ -46,16 +47,20 @@ func (w *StyleWriter) getStyles() tui.Styles {
 
 func (w *StyleWriter) Info(msg string) {
 	styles := w.getStyles()
-	fmt.Fprintln(os.Stdout, styles.Info.Render(msg))
+	_, _ = fmt.Fprintln(os.Stdout, styles.Info.Render(msg))
+}
+
+func (w *StyleWriter) Warn(msg string) {
+	styles := w.getStyles()
+	_, _ = fmt.Fprintln(os.Stdout, styles.Warning.Render(msg))
 }
 
 func (w *StyleWriter) Success(msg string) {
 	styles := w.getStyles()
-	fmt.Fprintln(os.Stdout, styles.Success.Render(msg))
+	_, _ = fmt.Fprintln(os.Stdout, styles.Success.Render(msg))
 }
 
 func (w *StyleWriter) Error(msg string) {
 	styles := w.getStyles()
-	// TODO: Add a check for if the message starts with Error/error and add it if not
-	fmt.Fprintln(os.Stderr, styles.Error.Render(msg))
+	_, _ = fmt.Fprintln(os.Stderr, styles.Error.Render(msg))
 }
