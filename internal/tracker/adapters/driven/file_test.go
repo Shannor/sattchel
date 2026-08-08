@@ -124,3 +124,53 @@ func TestFileStorageGetGoalsFilterByProject(t *testing.T) {
 		t.Errorf("expected 1 goal 'Goal P2' for project 2, got %v", goalsP2)
 	}
 }
+
+func TestFileStorageExportImport(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath1 := filepath.Join(tempDir, "tracker1.json")
+	dbPath2 := filepath.Join(tempDir, "tracker2.json")
+	exportPath := filepath.Join(tempDir, "export.json")
+
+	storage1 := driven.NewFileStorage(dbPath1, nil)
+	ctx := context.Background()
+
+	p, err := storage1.CreateProject(ctx, &core.Project{Label: "Project Export"})
+	if err != nil {
+		t.Fatalf("failed to create project: %v", err)
+	}
+
+	_, err = storage1.CreateGoal(ctx, p.ID, &core.Goal{Name: "Goal Export", ProjectID: p.ID})
+	if err != nil {
+		t.Fatalf("failed to create goal: %v", err)
+	}
+
+	// 1. Export
+	err = storage1.Export(ctx, exportPath)
+	if err != nil {
+		t.Fatalf("failed to export: %v", err)
+	}
+
+	// 2. Import into a new storage
+	storage2 := driven.NewFileStorage(dbPath2, nil)
+	err = storage2.Import(ctx, exportPath)
+	if err != nil {
+		t.Fatalf("failed to import: %v", err)
+	}
+
+	// 3. Verify
+	projects, err := storage2.GetProjects(ctx)
+	if err != nil {
+		t.Fatalf("failed to get projects: %v", err)
+	}
+	if len(projects) != 1 || projects[0].Label != "Project Export" {
+		t.Errorf("expected project label 'Project Export', got %v", projects)
+	}
+
+	goals, err := storage2.GetGoals(ctx, p.ID)
+	if err != nil {
+		t.Fatalf("failed to get goals: %v", err)
+	}
+	if len(goals) != 1 || goals[0].Name != "Goal Export" {
+		t.Errorf("expected goal name 'Goal Export', got %v", goals)
+	}
+}

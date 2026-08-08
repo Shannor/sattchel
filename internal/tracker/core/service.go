@@ -401,3 +401,17 @@ func (s *Service) UpdateGoal(ctx context.Context, goalID string, name string, op
 	}
 	return result, nil
 }
+
+func (s *Service) Export(ctx context.Context, filepath string) error {
+	if filepath == "" {
+		return fmt.Errorf("%w - filepath", ErrMissingRequiredFields)
+	}
+	return s.repo.Export(ctx, filepath)
+}
+
+func (s *Service) Import(ctx context.Context, filepath string) error {
+	if filepath == "" {
+		return fmt.Errorf("%w - filepath", ErrMissingRequiredFields)
+	}
+	return s.repo.Import(ctx, filepath)
+}

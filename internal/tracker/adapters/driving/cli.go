@@ -18,5 +18,7 @@ func NewCommand(service *core.Service, v *viper.Viper) *cobra.Command {
 	cmd.AddCommand(goals(service, cfg))
 	cmd.AddCommand(members(service, cfg))
 	cmd.AddCommand(visualizeProject(service, cfg))
+	cmd.AddCommand(exportCmd(service))
+	cmd.AddCommand(importCmd(service))
 	return cmd
 }
