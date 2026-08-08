@@ -2,7 +2,6 @@ package driving
 
 import (
 	"context"
-	"fmt"
 	"sattchel/internal/tracker/core"
 
 	"github.com/spf13/cobra"
@@ -15,7 +14,7 @@ func getProjectCompletions(service *core.Service) []string {
 	}
 	var completions []string
 	for _, p := range projects {
-		completions = append(completions, fmt.Sprintf("%s\t%s", p.ID, p.Label))
+		completions = append(completions, cobra.CompletionWithDesc(p.ID, p.Label))
 	}
 	return completions
 }
@@ -30,7 +29,7 @@ func getGoalCompletions(service *core.Service, pid string) []string {
 	}
 	var completions []string
 	for _, g := range goals {
-		completions = append(completions, fmt.Sprintf("%s\t%s", g.ID, g.Name))
+		completions = append(completions, cobra.CompletionWithDesc(g.ID, g.Name))
 	}
 	return completions
 }
@@ -42,7 +41,7 @@ func getMemberCompletions(service *core.Service) []string {
 	}
 	var completions []string
 	for _, m := range members {
-		completions = append(completions, fmt.Sprintf("%s\t%s", m.ID, m.Name))
+		completions = append(completions, cobra.CompletionWithDesc(m.ID, m.Name))
 	}
 	return completions
 }

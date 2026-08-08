@@ -22,7 +22,7 @@ func NewCommand(writer printer.Writer) *cobra.Command {
 				update config.UpdateInformation
 				err    error
 			)
-			err = loader.Run("Checking for updates ...", func() {
+			_ = loader.Run("Checking for updates ...", func() {
 				update, err = updater.RunUpdate(force)
 			})
 			if err != nil {

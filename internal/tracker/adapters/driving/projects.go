@@ -104,7 +104,7 @@ func listProjects(service *core.Service, cfg *Config) *cobra.Command {
 					err      error
 				)
 
-				err = loader.Run("Getting projects ...", func() {
+				_ = loader.Run("Getting projects ...", func() {
 					projects, err = service.GetProjects(cmd.Context())
 				})
 				if err != nil {
@@ -338,7 +338,7 @@ If no flags/arguments are provided, it will prompt for the details interactively
 				proj *core.Project
 				err  error
 			)
-			err = loader.Run("Retrieving project details...", func() {
+			_ = loader.Run("Retrieving project details...", func() {
 				proj, err = service.GetProject(cmd.Context(), pid)
 			})
 			if err != nil {

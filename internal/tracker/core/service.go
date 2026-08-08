@@ -275,6 +275,7 @@ func (s *Service) GetProject(ctx context.Context, projectID string) (*Project, e
 	return s.repo.GetProject(ctx, projectID)
 }
 
+
 func (s *Service) UpdateProject(ctx context.Context, id string, name string, description string) (*Project, error) {
 	if id == "" {
 		return nil, fmt.Errorf("%w - project ID", ErrMissingRequiredFields)

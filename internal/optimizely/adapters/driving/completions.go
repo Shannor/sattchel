@@ -2,7 +2,6 @@ package driving
 
 import (
 	"context"
-	"fmt"
 	"sattchel/internal/optimizely/core"
 	"sort"
 	"strings"
@@ -18,7 +17,7 @@ func getProjectCompletions(config *Config) []string {
 	}
 	var completions []string
 	for _, p := range cfg.Projects {
-		completions = append(completions, fmt.Sprintf("%s\t%s", p.ID, p.Name))
+		completions = append(completions, cobra.CompletionWithDesc(p.ID, p.Label))
 	}
 	sort.Strings(completions)
 	return completions
@@ -57,7 +56,7 @@ func getFlagKeyCompletions(service *core.Service, config *Config, projectIDs []s
 
 	keys := make([]string, 0, len(seen))
 	for key, name := range seen {
-		keys = append(keys, fmt.Sprintf("%s\t%s", key, name))
+		keys = append(keys, cobra.CompletionWithDesc(key, name))
 	}
 	sort.Strings(keys)
 	return keys
@@ -73,7 +72,7 @@ func registerProjectFlagCompletion(cmd *cobra.Command, config *Config, flagNames
 
 func registerSourceProjectCompletion(cmd *cobra.Command, config *Config) {
 	_ = cmd.RegisterFlagCompletionFunc("source", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		results := []string{"all\tUnion mode across target projects"}
+		results := []string{cobra.CompletionWithDesc("all", "Union mode across target projects")}
 		results = append(results, getProjectCompletions(config)...)
 		return results, cobra.ShellCompDirectiveNoFileComp
 	})
