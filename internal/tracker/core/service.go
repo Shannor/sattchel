@@ -271,6 +271,42 @@ func (s *Service) GetProjects(ctx context.Context) ([]Project, error) {
 	return projects, nil
 }
 
+func (s *Service) GetProject(ctx context.Context, projectID string) (*Project, error) {
+	return s.repo.GetProject(ctx, projectID)
+}
+
+func (s *Service) UpdateProject(ctx context.Context, id string, name string, description string) (*Project, error) {
+	if id == "" {
+		return nil, fmt.Errorf("%w - project ID", ErrMissingRequiredFields)
+	}
+
+	var result *Project
+	err := s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		current, err := s.repo.GetProject(txCtx, id)
+		if err != nil {
+			return err
+		}
+
+		if name != "" {
+			current.Label = name
+		}
+		if description != "" {
+			current.Description = description
+		}
+
+		p, err := s.repo.UpdateProject(txCtx, current)
+		if err != nil {
+			return err
+		}
+		result = p
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func (s *Service) GetGoals(ctx context.Context, projectID string) ([]Goal, error) {
 	goals, err := s.repo.GetGoals(ctx, projectID)
 	if err != nil {
