@@ -23,6 +23,8 @@ type mockTrackerRepository struct {
 	getMembersFunc    func(ctx context.Context) ([]Member, error)
 	updateMemberFunc  func(ctx context.Context, member *Member) (*Member, error)
 	deleteMemberFunc  func(ctx context.Context, memberID string) error
+	exportFunc        func(ctx context.Context, filepath string) error
+	importFunc        func(ctx context.Context, filepath string) error
 }
 
 func (m *mockTrackerRepository) CreateProject(ctx context.Context, project *Project) (*Project, error) {
@@ -119,6 +121,20 @@ func (m *mockTrackerRepository) UpdateMember(ctx context.Context, member *Member
 func (m *mockTrackerRepository) DeleteMember(ctx context.Context, memberID string) error {
 	if m.deleteMemberFunc != nil {
 		return m.deleteMemberFunc(ctx, memberID)
+	}
+	return nil
+}
+
+func (m *mockTrackerRepository) Export(ctx context.Context, filepath string) error {
+	if m.exportFunc != nil {
+		return m.exportFunc(ctx, filepath)
+	}
+	return nil
+}
+
+func (m *mockTrackerRepository) Import(ctx context.Context, filepath string) error {
+	if m.importFunc != nil {
+		return m.importFunc(ctx, filepath)
 	}
 	return nil
 }

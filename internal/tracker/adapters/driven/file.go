@@ -77,17 +77,81 @@ func (db *DB) clone() *DB {
 	return clone
 }
 
-// NewFileStorage builds a FileStorage backed by path. The DB is loaded lazily
-// on first use. Pass a non-nil db to seed an in-memory state without reading
-// from disk.
-func NewFileStorage(path string, db *DB) core.TrackerRepository {
+func resolvePath(path string) string {
 	if strings.HasPrefix(path, "~/") {
 		home, err := os.UserHomeDir()
 		if err == nil {
 			path = filepath.Join(home, path[2:])
 		}
 	}
-	return &FileStorage{path: os.ExpandEnv(path), db: db}
+	return os.ExpandEnv(path)
+}
+
+// NewFileStorage builds a FileStorage backed by path. The DB is loaded lazily
+// on first use. Pass a non-nil db to seed an in-memory state without reading
+// from disk.
+func NewFileStorage(path string, db *DB) core.TrackerRepository {
+	return &FileStorage{path: resolvePath(path), db: db}
+}
+
+// Export writes the database contents to the specified path.
+func (s *FileStorage) Export(ctx context.Context, filepathStr string) error {
+	unlock := s.lock(ctx)
+	defer unlock()
+	if err := s.ensureLoaded(); err != nil {
+		return err
+	}
+
+	destPath := resolvePath(filepathStr)
+	dir := filepath.Dir(destPath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("create dir: %w", err)
+	}
+
+	tmp := destPath + ".tmp"
+	f, err := os.Create(tmp)
+	if err != nil {
+		return fmt.Errorf("create tmp: %w", err)
+	}
+	enc := json.NewEncoder(f)
+	enc.SetIndent("", "  ")
+	if err := enc.Encode(s.db); err != nil {
+		f.Close()
+		os.Remove(tmp)
+		return fmt.Errorf("encode db: %w", err)
+	}
+	if err := f.Close(); err != nil {
+		os.Remove(tmp)
+		return fmt.Errorf("close tmp: %w", err)
+	}
+	if err := os.Rename(tmp, destPath); err != nil {
+		return fmt.Errorf("rename tmp: %w", err)
+	}
+	return nil
+}
+
+// Import reads the database from the specified path, validates it, and replaces the current database.
+func (s *FileStorage) Import(ctx context.Context, filepathStr string) error {
+	unlock := s.lock(ctx)
+	defer unlock()
+
+	srcPath := resolvePath(filepathStr)
+	data, err := os.ReadFile(srcPath)
+	if err != nil {
+		return fmt.Errorf("read import file: %w", err)
+	}
+
+	db := newDB()
+	if err := json.Unmarshal(data, &db); err != nil {
+		return fmt.Errorf("decode import file: %w", err)
+	}
+	ensureMaps(db)
+
+	s.db = db
+	if err := s.flush(); err != nil {
+		return fmt.Errorf("flush imported db: %w", err)
+	}
+	return nil
 }
 
 // txKey is used to mark a context as being within a transaction.

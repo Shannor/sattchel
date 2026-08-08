@@ -32,6 +32,9 @@ type TrackerRepository interface {
 	GetMembers(ctx context.Context) ([]Member, error)
 	UpdateMember(ctx context.Context, member *Member) (*Member, error)
 	DeleteMember(ctx context.Context, memberID string) error
+
+	Export(ctx context.Context, filepath string) error
+	Import(ctx context.Context, filepath string) error
 }
 
 // UOW represents a unit of work. It will be used to group any writes
