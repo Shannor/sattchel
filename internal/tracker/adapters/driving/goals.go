@@ -27,6 +27,7 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
        satt tracker goals list
        satt tracker goals move <childId> <newParentId>
        satt tracker goals update <id>
+       satt tracker goals delete <id>
        satt tracker goals view <id>
        satt tracker goals triage
        `,
@@ -35,6 +36,7 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
 	cmd.AddCommand(setGoal(service, cfg))
 	cmd.AddCommand(listGoals(service, cfg))
 	cmd.AddCommand(moveGoal(service, cfg))
+	cmd.AddCommand(deleteGoal(service, cfg))
 	cmd.AddCommand(viewGoal(service, cfg))
 	cmd.AddCommand(updateGoal(service, cfg))
 	cmd.AddCommand(triageGoals(service, cfg))
@@ -581,6 +583,56 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 		return []string{string(core.LinkOptional), string(core.LinkRequired)}, cobra.ShellCompDirectiveNoFileComp
 	})
 	_ = cmd.MarkFlagRequired("relationship")
+	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
+	return cmd
+}
+
+func deleteGoal(service *core.Service, cfg *Config) *cobra.Command {
+	projectID := ""
+
+	cmd := &cobra.Command{
+		Use:          "delete <id>",
+		Aliases:      []string{"remove", "rm"},
+		Short:        "Delete a goal",
+		Args:         cobra.ExactArgs(1),
+		SilenceUsage: true,
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			if len(args) != 0 {
+				return nil, cobra.ShellCompDirectiveNoFileComp
+			}
+			pid := getActiveProjectID(cmd, cfg, projectID)
+			return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			pid := getActiveProjectID(cmd, cfg, projectID)
+			if pid == "" {
+				return fmt.Errorf("no project selected")
+			}
+
+			goalID := args[0]
+			var err error
+			runErr := loader.Run("Deleting goal...", func() {
+				err = service.DeleteGoal(cmd.Context(), pid, goalID)
+			})
+			if runErr != nil {
+				return runErr
+			}
+			if err != nil {
+				return err
+			}
+
+			if cfg.CurrentGoalID() == goalID {
+				_ = cfg.SetCurrentGoalID("")
+			}
+
+			fmt.Fprintf(cmd.OutOrStdout(), "Goal %s deleted successfully\n", goalID)
+			return nil
+		},
+	}
+
+	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})

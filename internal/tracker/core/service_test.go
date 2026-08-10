@@ -18,6 +18,7 @@ type mockTrackerRepository struct {
 	getGoalsFunc      func(ctx context.Context, projectID string) ([]Goal, error)
 	getGoalFunc       func(ctx context.Context, goalID string) (*Goal, error)
 	updateGoalFunc    func(ctx context.Context, goal *Goal) (*Goal, error)
+	deleteGoalFunc    func(ctx context.Context, goalID string) error
 	queryGoalsFunc    func(ctx context.Context, projectID string, query *GoalQuery) ([]Goal, error)
 	createMemberFunc  func(ctx context.Context, member *Member) (*Member, error)
 	getMemberFunc     func(ctx context.Context, memberID string) (*Member, error)
@@ -89,6 +90,13 @@ func (m *mockTrackerRepository) UpdateGoal(ctx context.Context, goal *Goal) (*Go
 		return m.updateGoalFunc(ctx, goal)
 	}
 	return nil, nil
+}
+
+func (m *mockTrackerRepository) DeleteGoal(ctx context.Context, goalID string) error {
+	if m.deleteGoalFunc != nil {
+		return m.deleteGoalFunc(ctx, goalID)
+	}
+	return nil
 }
 
 func (m *mockTrackerRepository) QueryGoals(ctx context.Context, projectID string, query *GoalQuery) ([]Goal, error) {
@@ -884,6 +892,103 @@ func TestMemberCRUD(t *testing.T) {
 		}
 		if deletedID != "m-test" {
 			t.Errorf("expected deleted ID 'm-test', got '%s'", deletedID)
+		}
+	})
+}
+
+func TestServiceDeleteGoal(t *testing.T) {
+	t.Run("successful leaf delete", func(t *testing.T) {
+		var (
+			updatedParent *Goal
+			deletedGoalID string
+		)
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID, RootGoalID: "g-root"}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				switch goalID {
+				case "g-child":
+					return &Goal{ID: "g-child", ProjectID: "p-1", Parent: &Link{TargetID: "g-root"}}, nil
+				case "g-root":
+					return &Goal{ID: "g-root", ProjectID: "p-1", Children: []Goal{{ID: "g-child"}}}, nil
+				default:
+					return nil, errors.New("not found")
+				}
+			},
+			updateGoalFunc: func(ctx context.Context, goal *Goal) (*Goal, error) {
+				updatedParent = goal
+				return goal, nil
+			},
+			deleteGoalFunc: func(ctx context.Context, goalID string) error {
+				deletedGoalID = goalID
+				return nil
+			},
+		}
+
+		s := NewService(repo)
+		if err := s.DeleteGoal(context.Background(), "p-1", "g-child"); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if updatedParent == nil {
+			t.Fatal("expected parent to be updated")
+		}
+		if len(updatedParent.Children) != 0 {
+			t.Fatalf("expected parent children to be empty, got %d", len(updatedParent.Children))
+		}
+		if deletedGoalID != "g-child" {
+			t.Fatalf("expected deleted goal id g-child, got %q", deletedGoalID)
+		}
+	})
+
+	t.Run("cannot delete root goal", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID, RootGoalID: "g-root"}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				return &Goal{ID: goalID, ProjectID: "p-1"}, nil
+			},
+		}
+
+		s := NewService(repo)
+		err := s.DeleteGoal(context.Background(), "p-1", "g-root")
+		if !errors.Is(err, ErrCannotDeleteRoot) {
+			t.Fatalf("expected ErrCannotDeleteRoot, got %v", err)
+		}
+	})
+
+	t.Run("cannot delete goal with children", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID, RootGoalID: "g-root"}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				return &Goal{ID: goalID, ProjectID: "p-1", Parent: &Link{TargetID: "g-root"}, Children: []Goal{{ID: "g-child"}}}, nil
+			},
+		}
+
+		s := NewService(repo)
+		err := s.DeleteGoal(context.Background(), "p-1", "g-parent")
+		if !errors.Is(err, ErrInvalidRequest) {
+			t.Fatalf("expected ErrInvalidRequest, got %v", err)
+		}
+	})
+
+	t.Run("goal must belong to project", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID, RootGoalID: "g-root"}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				return &Goal{ID: goalID, ProjectID: "p-2", Parent: &Link{TargetID: "g-root"}}, nil
+			},
+		}
+
+		s := NewService(repo)
+		err := s.DeleteGoal(context.Background(), "p-1", "g-child")
+		if !errors.Is(err, ErrInvalidRequest) {
+			t.Fatalf("expected ErrInvalidRequest, got %v", err)
 		}
 	})
 }
