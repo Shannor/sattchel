@@ -26,6 +26,8 @@ type TrackerRepository interface {
 	GetGoal(ctx context.Context, goalID string) (*Goal, error)
 	// UpdateGoal updates a goal, will only update the fields that are not empty
 	UpdateGoal(ctx context.Context, goal *Goal) (*Goal, error)
+	// DeleteGoal deletes a single goal
+	DeleteGoal(ctx context.Context, goalID string) error
 	// QueryGoals method to search for particular goals based on criteria
 	QueryGoals(ctx context.Context, projectID string, query *GoalQuery) ([]Goal, error)
 

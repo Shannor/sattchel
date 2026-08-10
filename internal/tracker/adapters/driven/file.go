@@ -551,6 +551,33 @@ func (s *FileStorage) UpdateGoal(ctx context.Context, goal *core.Goal) (*core.Go
 	return &current, nil
 }
 
+func (s *FileStorage) DeleteGoal(ctx context.Context, goalID string) error {
+	unlock := s.lock(ctx)
+	defer unlock()
+	if err := s.ensureLoaded(); err != nil {
+		return err
+	}
+
+	goal, ok := s.db.Goals[goalID]
+	if !ok {
+		return fmt.Errorf("goal %s: %w", goalID, ErrNotFound)
+	}
+
+	if goal.HasMember() {
+		goalIDs := slices.DeleteFunc(s.db.GoalsByMembers[goal.Member.ID], func(id string) bool {
+			return id == goalID
+		})
+		if len(goalIDs) == 0 {
+			delete(s.db.GoalsByMembers, goal.Member.ID)
+		} else {
+			s.db.GoalsByMembers[goal.Member.ID] = goalIDs
+		}
+	}
+
+	delete(s.db.Goals, goalID)
+	return s.flushMaybe(ctx)
+}
+
 func (s *FileStorage) CreateGoal(ctx context.Context, projectID string, goal *core.Goal) (*core.Goal, error) {
 	if goal == nil {
 		return nil, errors.New("nil goal")
