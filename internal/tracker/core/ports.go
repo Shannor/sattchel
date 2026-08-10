@@ -15,6 +15,8 @@ type TrackerRepository interface {
 	GetProject(ctx context.Context, projectID string) (*Project, error)
 	// UpdateProject updates a project, will only update the fields that are not empty
 	UpdateProject(ctx context.Context, project *Project) (*Project, error)
+	// DeleteProject deletes a project
+	DeleteProject(ctx context.Context, projectID string) error
 
 	// CreateGoal creates a new goal for a project
 	CreateGoal(ctx context.Context, projectID string, goal *Goal) (*Goal, error)
