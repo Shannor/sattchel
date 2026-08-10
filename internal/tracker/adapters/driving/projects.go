@@ -26,12 +26,16 @@ func projects(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
      satt tracker project list
      satt tracker project details
      satt tracker project update [id]
+     satt tracker project merge <source_project_id> <merge_project_id>
+     satt tracker project split <source_project_id>
      `,
 	}
 	cmd.AddCommand(createProject(service, cfg, writer))
 	cmd.AddCommand(listProjects(service, cfg, writer))
 	cmd.AddCommand(projectDetails(service, cfg, writer))
 	cmd.AddCommand(updateProject(service, cfg, writer))
+	cmd.AddCommand(mergeProjectsCmd(service, cfg, writer))
+	cmd.AddCommand(splitProjectCmd(service, cfg, writer))
 	return cmd
 }
 
@@ -393,6 +397,271 @@ If no flags/arguments are provided, it will prompt for the details interactively
 
 	cmd.Flags().StringVar(&name, "name", "", "New name of the project")
 	cmd.Flags().StringVarP(&description, "description", "d", "", "New description of the project")
+
+	return cmd
+}
+
+func mergeProjectsCmd(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
+	var parentGoalID string
+
+	cmd := &cobra.Command{
+		Use:   "merge [source_project_id] [merge_project_id]",
+		Short: "Merge another project into the source project",
+		Long: `Merge two projects. The merge project will be absorbed into the source project.
+The root goal of the merge project will be attached under the specified parent goal (or the root goal of the source project by default).
+All goals and member associations will be moved and preserved. The merge project will be deleted.
+   Examples:
+     satt tracker project merge <source_project_id> <merge_project_id>
+     satt tracker project merge <source_project_id> <merge_project_id> --parent-goal-id <goal_id>
+     `,
+		Args:         cobra.MaximumNArgs(2),
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			var sourceProjID string
+			var mergeProjID string
+
+			if len(args) > 0 {
+				sourceProjID = args[0]
+			}
+			if len(args) > 1 {
+				mergeProjID = args[1]
+			}
+
+			// Interactive mode if arguments are missing
+			if sourceProjID == "" || mergeProjID == "" {
+				projects, err := service.GetProjects(cmd.Context())
+				if err != nil {
+					return err
+				}
+				if len(projects) < 2 {
+					return fmt.Errorf("need at least 2 projects to perform a merge, got %d", len(projects))
+				}
+
+				var sourceOptions []huh.Option[string]
+				for _, p := range projects {
+					sourceOptions = append(sourceOptions, huh.NewOption(p.Label, p.ID))
+				}
+
+				if sourceProjID == "" {
+					err := huh.NewForm(
+						huh.NewGroup(
+							huh.NewSelect[string]().
+								Title("Select Source Project (the project to merge INTO)").
+								Options(sourceOptions...).
+								Value(&sourceProjID),
+						),
+					).Run()
+					if err != nil {
+						return err
+					}
+				}
+
+				// Filter out the source project for the merge options
+				var mergeOptions []huh.Option[string]
+				for _, p := range projects {
+					if p.ID != sourceProjID {
+						mergeOptions = append(mergeOptions, huh.NewOption(p.Label, p.ID))
+					}
+				}
+
+				if mergeProjID == "" {
+					err := huh.NewForm(
+						huh.NewGroup(
+							huh.NewSelect[string]().
+								Title("Select Project to Merge (the project that will be absorbed)").
+								Options(mergeOptions...).
+								Value(&mergeProjID),
+						),
+					).Run()
+					if err != nil {
+						return err
+					}
+				}
+			}
+
+			if sourceProjID == mergeProjID {
+				return fmt.Errorf("cannot merge a project into itself")
+			}
+
+			// Perform merge
+			var runErr error
+			_ = loader.Run("Merging projects...", func() {
+				runErr = service.MergeProjects(cmd.Context(), sourceProjID, mergeProjID, parentGoalID)
+			})
+			if runErr != nil {
+				return runErr
+			}
+
+			writer.Success("Projects merged successfully")
+			return nil
+		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			if len(args) == 0 {
+				return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+			}
+			if len(args) == 1 {
+				// filter completions to not include the first arg
+				completions := getProjectCompletions(service)
+				var filtered []string
+				for _, c := range completions {
+					if !strings.HasPrefix(c, args[0]+"\t") {
+						filtered = append(filtered, c)
+					}
+				}
+				return filtered, cobra.ShellCompDirectiveNoFileComp
+			}
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		},
+	}
+
+	cmd.Flags().StringVar(&parentGoalID, "parent-goal-id", "", "Parent goal ID where the merge project should land")
+	_ = cmd.RegisterFlagCompletionFunc("parent-goal-id", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		// Complete with goals from the source project (which is the first arg, or current active project)
+		sourceProjID := ""
+		if len(args) > 0 {
+			sourceProjID = args[0]
+		} else {
+			sourceProjID = cfg.CurrentProjectID()
+		}
+		return getGoalCompletions(service, sourceProjID), cobra.ShellCompDirectiveNoFileComp
+	})
+
+	return cmd
+}
+
+func splitProjectCmd(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
+	var splitGoalID string
+	var newProjectName string
+
+	cmd := &cobra.Command{
+		Use:   "split [source_project_id]",
+		Short: "Split a project into two projects starting from a specific goal",
+		Long: `Split a project. You choose a source project, a goal to split on, and a name for the new project.
+The split goal and all of its descendant goals, along with member assignments, will be moved to the new project.
+The split goal will become the root goal of the new project.
+   Examples:
+     satt tracker project split <source_project_id> --goal <goal_id> --name <new_project_name>
+     `,
+		Args:         cobra.MaximumNArgs(1),
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			sourceProjID := ""
+			if len(args) > 0 {
+				sourceProjID = args[0]
+			}
+			if sourceProjID == "" {
+				sourceProjID = cfg.CurrentProjectID()
+			}
+
+			// Interactive project selection if still empty
+			if sourceProjID == "" {
+				projects, err := service.GetProjects(cmd.Context())
+				if err != nil {
+					return err
+				}
+				if len(projects) == 0 {
+					return fmt.Errorf("no projects found")
+				}
+
+				var projectOptions []huh.Option[string]
+				for _, p := range projects {
+					projectOptions = append(projectOptions, huh.NewOption(p.Label, p.ID))
+				}
+
+				err = huh.NewForm(
+					huh.NewGroup(
+						huh.NewSelect[string]().
+							Title("Select Source Project to Split").
+							Options(projectOptions...).
+							Value(&sourceProjID),
+					),
+				).Run()
+				if err != nil {
+					return err
+				}
+			}
+
+			// If goal or name is missing, prompt
+			if splitGoalID == "" {
+				goals, err := service.GetGoals(cmd.Context(), sourceProjID)
+				if err != nil {
+					return err
+				}
+				if len(goals) == 0 {
+					return fmt.Errorf("selected project has no goals to split")
+				}
+
+				var goalOptions []huh.Option[string]
+				for _, g := range goals {
+					goalOptions = append(goalOptions, huh.NewOption(g.Name, g.ID))
+				}
+
+				err = huh.NewForm(
+					huh.NewGroup(
+						huh.NewSelect[string]().
+							Title("Select Goal to Split (this goal and its children will move to the new project)").
+							Options(goalOptions...).
+							Value(&splitGoalID),
+					),
+				).Run()
+				if err != nil {
+					return err
+				}
+			}
+
+			if newProjectName == "" {
+				err := huh.NewForm(
+					huh.NewGroup(
+						huh.NewInput().
+							Title("New Project Name").
+							Value(&newProjectName).
+							Validate(func(str string) error {
+								if strings.TrimSpace(str) == "" {
+									return fmt.Errorf("project name is required")
+								}
+								return nil
+							}),
+					),
+				).Run()
+				if err != nil {
+					return err
+				}
+			}
+
+			var (
+				newProj *core.Project
+				err     error
+			)
+			_ = loader.Run("Splitting project...", func() {
+				newProj, err = service.SplitProject(cmd.Context(), sourceProjID, splitGoalID, newProjectName)
+			})
+			if err != nil {
+				return err
+			}
+
+			writer.Success(fmt.Sprintf("Project split successfully. New project %s created.", newProj.Label))
+			return nil
+		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			if len(args) == 0 {
+				return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+			}
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		},
+	}
+
+	cmd.Flags().StringVar(&splitGoalID, "goal", "", "Goal ID that needs to be split (this goal and its descendants will be moved)")
+	cmd.Flags().StringVar(&newProjectName, "name", "", "Name of the new project")
+
+	_ = cmd.RegisterFlagCompletionFunc("goal", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		sourceProjID := ""
+		if len(args) > 0 {
+			sourceProjID = args[0]
+		} else {
+			sourceProjID = cfg.CurrentProjectID()
+		}
+		return getGoalCompletions(service, sourceProjID), cobra.ShellCompDirectiveNoFileComp
+	})
 
 	return cmd
 }

@@ -390,6 +390,19 @@ func (s *FileStorage) UpdateProject(ctx context.Context, project *core.Project) 
 
 }
 
+func (s *FileStorage) DeleteProject(ctx context.Context, projectID string) error {
+	unlock := s.lock(ctx)
+	defer unlock()
+	if err := s.ensureLoaded(); err != nil {
+		return err
+	}
+	if _, ok := s.db.Projects[projectID]; !ok {
+		return fmt.Errorf("project %s: %w", projectID, ErrNotFound)
+	}
+	delete(s.db.Projects, projectID)
+	return s.flushMaybe(ctx)
+}
+
 func (s *FileStorage) GetGoals(ctx context.Context, projectID string) ([]core.Goal, error) {
 	unlock := s.lock(ctx)
 	defer unlock()

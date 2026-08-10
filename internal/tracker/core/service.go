@@ -275,7 +275,6 @@ func (s *Service) GetProject(ctx context.Context, projectID string) (*Project, e
 	return s.repo.GetProject(ctx, projectID)
 }
 
-
 func (s *Service) UpdateProject(ctx context.Context, id string, name string, description string) (*Project, error) {
 	if id == "" {
 		return nil, fmt.Errorf("%w - project ID", ErrMissingRequiredFields)
@@ -300,6 +299,206 @@ func (s *Service) UpdateProject(ctx context.Context, id string, name string, des
 			return err
 		}
 		result = p
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// MergeProjects merges the mergeProject into the sourceProject. All goals of the mergeProject
+// are transferred under the specified parentGoalID of the sourceProject (or the sourceProject's root goal if parentGoalID is empty).
+// The mergeProject is then deleted.
+func (s *Service) MergeProjects(ctx context.Context, sourceProjectID string, mergeProjectID string, parentGoalID string) error {
+	if sourceProjectID == "" || mergeProjectID == "" {
+		return fmt.Errorf("%w - source and merge project IDs are required", ErrMissingRequiredFields)
+	}
+	if sourceProjectID == mergeProjectID {
+		return fmt.Errorf("%w - cannot merge project with itself", ErrInvalidRequest)
+	}
+
+	return s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		sourceProj, err := s.repo.GetProject(txCtx, sourceProjectID)
+		if err != nil {
+			return err
+		}
+		mergeProj, err := s.repo.GetProject(txCtx, mergeProjectID)
+		if err != nil {
+			return err
+		}
+
+		mergeRootGoalID := mergeProj.RootGoalID
+		if mergeRootGoalID != "" {
+			mergeGoals, err := s.repo.GetGoals(txCtx, mergeProjectID)
+			if err != nil {
+				return err
+			}
+
+			var mergeRoot *Goal
+			idx := slices.IndexFunc(mergeGoals, func(a Goal) bool {
+				return a.ID == mergeRootGoalID
+			})
+			if idx == -1 {
+				return fmt.Errorf("root goal of merge project not found in goals")
+			}
+			mergeRoot = &mergeGoals[idx]
+
+			var parentGoalIDToUse string
+			if parentGoalID != "" {
+				parentGoalIDToUse = parentGoalID
+			} else {
+				parentGoalIDToUse = sourceProj.RootGoalID
+			}
+
+			if parentGoalIDToUse != "" {
+				parentGoal, err := s.repo.GetGoal(txCtx, parentGoalIDToUse)
+				if err != nil {
+					return err
+				}
+				if parentGoal.ProjectID != sourceProjectID {
+					return fmt.Errorf("%w - parent goal does not belong to the source project", ErrInvalidRequest)
+				}
+
+				err = parentGoal.AttachChild(mergeRoot, LinkOptional, "Merged from project: "+mergeProj.Label)
+				if err != nil {
+					return err
+				}
+
+				parentGoal, err = s.repo.UpdateGoal(txCtx, parentGoal)
+				if err != nil {
+					return err
+				}
+			} else {
+				sourceProj.SetRoot(*mergeRoot)
+				_, err = s.repo.UpdateProject(txCtx, sourceProj)
+				if err != nil {
+					return err
+				}
+			}
+
+			for i := range mergeGoals {
+				mergeGoals[i].ProjectID = sourceProjectID
+				_, err = s.repo.UpdateGoal(txCtx, &mergeGoals[i])
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		err = s.repo.DeleteProject(txCtx, mergeProjectID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
+// SplitProject splits a sourceProject starting from a splitGoalID, creating a new project with the provided newProjectName.
+// The splitGoalID and all its descendants are moved to the new project.
+func (s *Service) SplitProject(ctx context.Context, sourceProjectID string, splitGoalID string, newProjectName string) (*Project, error) {
+	if sourceProjectID == "" || splitGoalID == "" || newProjectName == "" {
+		return nil, fmt.Errorf("%w - source project ID, split goal ID, and new project name are required", ErrMissingRequiredFields)
+	}
+
+	var result *Project
+	err := s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		sourceProj, err := s.repo.GetProject(txCtx, sourceProjectID)
+		if err != nil {
+			return err
+		}
+
+		splitGoal, err := s.repo.GetGoal(txCtx, splitGoalID)
+		if err != nil {
+			return err
+		}
+		if splitGoal.ProjectID != sourceProjectID {
+			return fmt.Errorf("%w - split goal does not belong to the source project", ErrInvalidRequest)
+		}
+
+		projects, err := s.repo.GetProjects(txCtx)
+		if err != nil {
+			return err
+		}
+
+		newProj := &Project{
+			Label: newProjectName,
+		}
+		label := newProj.NormalizedLabel()
+		for _, p := range projects {
+			if p.NormalizedLabel() == label {
+				return fmt.Errorf("project %s: %w", label, ErrProjectAlreadyExists)
+			}
+		}
+
+		newProj, err = s.repo.CreateProject(txCtx, newProj)
+		if err != nil {
+			return err
+		}
+
+		if splitGoal.HasParent() {
+			parentGoal, err := s.repo.GetGoal(txCtx, splitGoal.Parent.TargetID)
+			if err != nil {
+				return err
+			}
+			err = parentGoal.DetachChild(splitGoal)
+			if err != nil {
+				return err
+			}
+			_, err = s.repo.UpdateGoal(txCtx, parentGoal)
+			if err != nil {
+				return err
+			}
+			splitGoal.Parent = nil
+		} else if splitGoalID == sourceProj.RootGoalID {
+			sourceProj.RootGoalID = ""
+			_, err = s.repo.UpdateProject(txCtx, sourceProj)
+			if err != nil {
+				return err
+			}
+		}
+
+		newProj.SetRoot(*splitGoal)
+		newProj, err = s.repo.UpdateProject(txCtx, newProj)
+		if err != nil {
+			return err
+		}
+
+		sourceGoals, err := s.repo.GetGoals(txCtx, sourceProjectID)
+		if err != nil {
+			return err
+		}
+
+		parentToChildren := make(map[string][]Goal)
+		for _, g := range sourceGoals {
+			if g.HasParent() {
+				parentToChildren[g.Parent.TargetID] = append(parentToChildren[g.Parent.TargetID], g)
+			}
+		}
+
+		var collectDescendants func(id string) []Goal
+		collectDescendants = func(id string) []Goal {
+			var list []Goal
+			for _, child := range parentToChildren[id] {
+				list = append(list, child)
+				list = append(list, collectDescendants(child.ID)...)
+			}
+			return list
+		}
+
+		descendants := collectDescendants(splitGoalID)
+		allMovedGoals := append([]Goal{*splitGoal}, descendants...)
+
+		for _, g := range allMovedGoals {
+			g.ProjectID = newProj.ID
+			_, err = s.repo.UpdateGoal(txCtx, &g)
+			if err != nil {
+				return err
+			}
+		}
+
+		result = newProj
 		return nil
 	})
 	if err != nil {

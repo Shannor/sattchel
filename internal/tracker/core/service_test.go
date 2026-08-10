@@ -13,6 +13,7 @@ type mockTrackerRepository struct {
 	getProjectsFunc   func(ctx context.Context) ([]Project, error)
 	getProjectFunc    func(ctx context.Context, projectID string) (*Project, error)
 	updateProjectFunc func(ctx context.Context, project *Project) (*Project, error)
+	deleteProjectFunc func(ctx context.Context, projectID string) error
 	createGoalFunc    func(ctx context.Context, projectID string, goal *Goal) (*Goal, error)
 	getGoalsFunc      func(ctx context.Context, projectID string) ([]Goal, error)
 	getGoalFunc       func(ctx context.Context, goalID string) (*Goal, error)
@@ -53,6 +54,13 @@ func (m *mockTrackerRepository) UpdateProject(ctx context.Context, project *Proj
 		return m.updateProjectFunc(ctx, project)
 	}
 	return nil, nil
+}
+
+func (m *mockTrackerRepository) DeleteProject(ctx context.Context, projectID string) error {
+	if m.deleteProjectFunc != nil {
+		return m.deleteProjectFunc(ctx, projectID)
+	}
+	return nil
 }
 
 func (m *mockTrackerRepository) CreateGoal(ctx context.Context, projectID string, goal *Goal) (*Goal, error) {
@@ -906,6 +914,220 @@ func TestServiceUpdateGoal(t *testing.T) {
 		}
 		if updated.Name != "New Name" || updated.Description != "New Desc" || updated.Effort != LowEffort || updated.Member.ID != "m-test" {
 			t.Errorf("unexpected updated goal: %+v", updated)
+		}
+	})
+}
+
+func TestServiceMergeProjects(t *testing.T) {
+	t.Run("validation and self-merge errors", func(t *testing.T) {
+		s := NewService(&mockTrackerRepository{})
+		err := s.MergeProjects(context.Background(), "", "p-2", "")
+		if !errors.Is(err, ErrMissingRequiredFields) {
+			t.Errorf("expected ErrMissingRequiredFields, got %v", err)
+		}
+		err = s.MergeProjects(context.Background(), "p-1", "p-1", "")
+		if !errors.Is(err, ErrInvalidRequest) {
+			t.Errorf("expected ErrInvalidRequest, got %v", err)
+		}
+	})
+
+	t.Run("successful merge with parent goal", func(t *testing.T) {
+		sourceProj := &Project{ID: "p-src", Label: "Source Project", RootGoalID: "g-src-root"}
+		mergeProj := &Project{ID: "p-mrg", Label: "Merge Project", RootGoalID: "g-mrg-root"}
+		srcRootGoal := &Goal{ID: "g-src-root", ProjectID: "p-src", Name: "Src Root"}
+		mrgRootGoal := &Goal{ID: "g-mrg-root", ProjectID: "p-mrg", Name: "Mrg Root", Status: GoalInProgress, Member: &Member{ID: "m-1"}}
+		mrgChildGoal := &Goal{ID: "g-mrg-child", ProjectID: "p-mrg", Name: "Mrg Child", Status: GoalCompleted, Parent: &Link{TargetID: "g-mrg-root"}}
+
+		goals := map[string]*Goal{
+			"g-src-root":  srcRootGoal,
+			"g-mrg-root":  mrgRootGoal,
+			"g-mrg-child": mrgChildGoal,
+		}
+
+		var deletedProjectID string
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, id string) (*Project, error) {
+				if id == "p-src" {
+					return sourceProj, nil
+				}
+				if id == "p-mrg" {
+					return mergeProj, nil
+				}
+				return nil, errors.New("not found")
+			},
+			getGoalFunc: func(ctx context.Context, id string) (*Goal, error) {
+				if g, ok := goals[id]; ok {
+					return g, nil
+				}
+				return nil, errors.New("not found")
+			},
+			getGoalsFunc: func(ctx context.Context, projectID string) ([]Goal, error) {
+				var res []Goal
+				for _, g := range goals {
+					if g.ProjectID == projectID {
+						res = append(res, *g)
+					}
+				}
+				return res, nil
+			},
+			updateGoalFunc: func(ctx context.Context, goal *Goal) (*Goal, error) {
+				goals[goal.ID] = goal
+				return goal, nil
+			},
+			deleteProjectFunc: func(ctx context.Context, id string) error {
+				deletedProjectID = id
+				return nil
+			},
+		}
+
+		s := NewService(repo)
+		err := s.MergeProjects(context.Background(), "p-src", "p-mrg", "g-src-root")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		// Verify mergeRoot was attached as child of srcRootGoal
+		updatedSrcRoot := goals["g-src-root"]
+		updatedMrgRoot := goals["g-mrg-root"]
+		updatedMrgChild := goals["g-mrg-child"]
+
+		if len(updatedSrcRoot.Children) != 1 || updatedSrcRoot.Children[0].ID != "g-mrg-root" {
+			t.Errorf("expected g-mrg-root to be child of g-src-root, got: %+v", updatedSrcRoot.Children)
+		}
+		if updatedMrgRoot.Parent == nil || updatedMrgRoot.Parent.TargetID != "g-src-root" {
+			t.Errorf("expected parent of g-mrg-root to be g-src-root, got parent: %+v", updatedMrgRoot.Parent)
+		}
+
+		// Verify project IDs updated
+		if updatedMrgRoot.ProjectID != "p-src" {
+			t.Errorf("expected g-mrg-root ProjectID to be p-src, got %q", updatedMrgRoot.ProjectID)
+		}
+		if updatedMrgChild.ProjectID != "p-src" {
+			t.Errorf("expected g-mrg-child ProjectID to be p-src, got %q", updatedMrgChild.ProjectID)
+		}
+
+		// Verify status and member preserved
+		if updatedMrgRoot.Status != GoalInProgress {
+			t.Errorf("expected status of g-mrg-root to be in-progress, got %q", updatedMrgRoot.Status)
+		}
+		if updatedMrgChild.Status != GoalCompleted {
+			t.Errorf("expected status of g-mrg-child to be completed, got %q", updatedMrgChild.Status)
+		}
+		if updatedMrgRoot.Member == nil || updatedMrgRoot.Member.ID != "m-1" {
+			t.Errorf("expected member of g-mrg-root to be preserved, got %+v", updatedMrgRoot.Member)
+		}
+
+		// Verify deleted project ID
+		if deletedProjectID != "p-mrg" {
+			t.Errorf("expected project p-mrg to be deleted, got %q", deletedProjectID)
+		}
+	})
+}
+
+func TestServiceSplitProject(t *testing.T) {
+	t.Run("successful split on child goal", func(t *testing.T) {
+		sourceProj := &Project{ID: "p-src", Label: "Source Project", RootGoalID: "g-src-root"}
+		srcRootGoal := &Goal{ID: "g-src-root", ProjectID: "p-src", Name: "Src Root"}
+		splitGoal := &Goal{ID: "g-split", ProjectID: "p-src", Name: "Split Goal", Status: GoalInProgress, Member: &Member{ID: "m-2"}, Parent: &Link{TargetID: "g-src-root"}}
+		splitChild := &Goal{ID: "g-child", ProjectID: "p-src", Name: "Split Child", Status: GoalCompleted, Parent: &Link{TargetID: "g-split"}}
+
+		// Root has child
+		srcRootGoal.Children = append(srcRootGoal.Children, *splitGoal)
+
+		goals := map[string]*Goal{
+			"g-src-root": srcRootGoal,
+			"g-split":    splitGoal,
+			"g-child":    splitChild,
+		}
+
+		var createdProject *Project
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, id string) (*Project, error) {
+				if id == "p-src" {
+					return sourceProj, nil
+				}
+				return nil, errors.New("not found")
+			},
+			getProjectsFunc: func(ctx context.Context) ([]Project, error) {
+				return []Project{*sourceProj}, nil
+			},
+			createProjectFunc: func(ctx context.Context, p *Project) (*Project, error) {
+				p.ID = "p-new"
+				createdProject = p
+				return p, nil
+			},
+			updateProjectFunc: func(ctx context.Context, p *Project) (*Project, error) {
+				return p, nil
+			},
+			getGoalFunc: func(ctx context.Context, id string) (*Goal, error) {
+				if g, ok := goals[id]; ok {
+					return g, nil
+				}
+				return nil, errors.New("not found")
+			},
+			getGoalsFunc: func(ctx context.Context, projectID string) ([]Goal, error) {
+				var res []Goal
+				for _, g := range goals {
+					if g.ProjectID == projectID {
+						res = append(res, *g)
+					}
+				}
+				return res, nil
+			},
+			updateGoalFunc: func(ctx context.Context, goal *Goal) (*Goal, error) {
+				goals[goal.ID] = goal
+				return goal, nil
+			},
+		}
+
+		s := NewService(repo)
+		newProj, err := s.SplitProject(context.Background(), "p-src", "g-split", "New Split Project")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if createdProject == nil || createdProject.Label != "New Split Project" {
+			t.Errorf("expected new project to be created with label 'New Split Project', got: %+v", createdProject)
+		}
+
+		if newProj.ID != "p-new" || newProj.Label != "New Split Project" {
+			t.Errorf("unexpected created project: %+v", newProj)
+		}
+
+		// Check root goal of new project
+		if newProj.RootGoalID != "g-split" {
+			t.Errorf("expected root goal of new project to be g-split, got %q", newProj.RootGoalID)
+		}
+
+		updatedSrcRoot := goals["g-src-root"]
+		updatedSplitGoal := goals["g-split"]
+		updatedSplitChild := goals["g-child"]
+
+		// Verify splitGoal was detached from srcRootGoal
+		if len(updatedSrcRoot.Children) != 0 {
+			t.Errorf("expected srcRootGoal to have 0 children, got %d", len(updatedSrcRoot.Children))
+		}
+		if updatedSplitGoal.Parent != nil {
+			t.Errorf("expected splitGoal to have no parent, got %+v", updatedSplitGoal.Parent)
+		}
+
+		// Verify project IDs updated
+		if updatedSplitGoal.ProjectID != "p-new" {
+			t.Errorf("expected splitGoal ProjectID to be p-new, got %q", updatedSplitGoal.ProjectID)
+		}
+		if updatedSplitChild.ProjectID != "p-new" {
+			t.Errorf("expected splitChild ProjectID to be p-new, got %q", updatedSplitChild.ProjectID)
+		}
+
+		// Verify status and member preserved
+		if updatedSplitGoal.Status != GoalInProgress {
+			t.Errorf("expected status of splitGoal to be in-progress, got %q", updatedSplitGoal.Status)
+		}
+		if updatedSplitChild.Status != GoalCompleted {
+			t.Errorf("expected status of splitChild to be completed, got %q", updatedSplitChild.Status)
+		}
+		if updatedSplitGoal.Member == nil || updatedSplitGoal.Member.ID != "m-2" {
+			t.Errorf("expected member of splitGoal to be preserved, got %+v", updatedSplitGoal.Member)
 		}
 	})
 }
