@@ -417,10 +417,12 @@ func confirmSyncApply(changeCount int) (bool, error) {
 	confirmed := false
 	err := tui.NewForm(
 		huh.NewGroup(
-			huh.NewConfirm().
+			huh.NewSelect[bool]().
 				Title(fmt.Sprintf("Apply %d Optimizely sync change(s)?", changeCount)).
-				Affirmative("Apply").
-				Negative("Cancel").
+				Options(
+					huh.NewOption("Yes", true),
+					huh.NewOption("No", false),
+				).
 				Value(&confirmed),
 		),
 	).Run()
