@@ -1151,6 +1151,9 @@ func TestServiceSplitProject(t *testing.T) {
 				if id == "p-src" {
 					return sourceProj, nil
 				}
+				if createdProject != nil && id == createdProject.ID {
+					return createdProject, nil
+				}
 				return nil, errors.New("not found")
 			},
 			getProjectsFunc: func(ctx context.Context) ([]Project, error) {
@@ -1186,7 +1189,7 @@ func TestServiceSplitProject(t *testing.T) {
 		}
 
 		s := NewService(repo)
-		newProj, err := s.SplitProject(context.Background(), "p-src", "g-split", "New Split Project")
+		newProj, err := s.SplitProject(context.Background(), "p-src", "", "g-split", "", "New Split Project")
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
@@ -1222,6 +1225,122 @@ func TestServiceSplitProject(t *testing.T) {
 		}
 		if updatedSplitChild.ProjectID != "p-new" {
 			t.Errorf("expected splitChild ProjectID to be p-new, got %q", updatedSplitChild.ProjectID)
+		}
+
+		// Verify status and member preserved
+		if updatedSplitGoal.Status != GoalInProgress {
+			t.Errorf("expected status of splitGoal to be in-progress, got %q", updatedSplitGoal.Status)
+		}
+		if updatedSplitChild.Status != GoalCompleted {
+			t.Errorf("expected status of splitChild to be completed, got %q", updatedSplitChild.Status)
+		}
+		if updatedSplitGoal.Member == nil || updatedSplitGoal.Member.ID != "m-2" {
+			t.Errorf("expected member of splitGoal to be preserved, got %+v", updatedSplitGoal.Member)
+		}
+	})
+}
+
+func TestServiceSplitProjectToExisting(t *testing.T) {
+	t.Run("successful move to existing project under its root", func(t *testing.T) {
+		sourceProj := &Project{ID: "p-src", Label: "Source Project", RootGoalID: "g-src-root"}
+		targetProj := &Project{ID: "p-tgt", Label: "Target Project", RootGoalID: "g-tgt-root"}
+
+		srcRootGoal := &Goal{ID: "g-src-root", ProjectID: "p-src", Name: "Src Root"}
+		tgtRootGoal := &Goal{ID: "g-tgt-root", ProjectID: "p-tgt", Name: "Tgt Root"}
+
+		splitGoal := &Goal{ID: "g-split", ProjectID: "p-src", Name: "Split Goal", Status: GoalInProgress, Member: &Member{ID: "m-2"}, Parent: &Link{TargetID: "g-src-root"}}
+		splitChild := &Goal{ID: "g-child", ProjectID: "p-src", Name: "Split Child", Status: GoalCompleted, Parent: &Link{TargetID: "g-split"}}
+
+		// Setup parent children
+		srcRootGoal.Children = append(srcRootGoal.Children, *splitGoal)
+		splitGoal.Children = append(splitGoal.Children, *splitChild)
+
+		goals := map[string]*Goal{
+			"g-src-root": srcRootGoal,
+			"g-tgt-root": tgtRootGoal,
+			"g-split":    splitGoal,
+			"g-child":    splitChild,
+		}
+
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, id string) (*Project, error) {
+				if id == "p-src" {
+					return sourceProj, nil
+				}
+				if id == "p-tgt" {
+					return targetProj, nil
+				}
+				return nil, errors.New("not found")
+			},
+			updateProjectFunc: func(ctx context.Context, p *Project) (*Project, error) {
+				if p.ID == "p-src" {
+					sourceProj = p
+				}
+				if p.ID == "p-tgt" {
+					targetProj = p
+				}
+				return p, nil
+			},
+			getGoalFunc: func(ctx context.Context, id string) (*Goal, error) {
+				if g, ok := goals[id]; ok {
+					return g, nil
+				}
+				return nil, errors.New("not found")
+			},
+			getGoalsFunc: func(ctx context.Context, projectID string) ([]Goal, error) {
+				var res []Goal
+				for _, g := range goals {
+					if g.ProjectID == projectID {
+						res = append(res, *g)
+					}
+				}
+				return res, nil
+			},
+			updateGoalFunc: func(ctx context.Context, goal *Goal) (*Goal, error) {
+				goals[goal.ID] = goal
+				return goal, nil
+			},
+		}
+
+		s := NewService(repo)
+		updatedTgtProj, err := s.SplitProject(context.Background(), "p-src", "p-tgt", "g-split", "", "")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if updatedTgtProj.ID != "p-tgt" {
+			t.Errorf("expected return project to be p-tgt, got %+v", updatedTgtProj)
+		}
+
+		updatedSrcRoot := goals["g-src-root"]
+		updatedTgtRoot := goals["g-tgt-root"]
+		updatedSplitGoal := goals["g-split"]
+		updatedSplitChild := goals["g-child"]
+
+		// Verify splitGoal was detached from srcRootGoal
+		if len(updatedSrcRoot.Children) != 0 {
+			t.Errorf("expected srcRootGoal to have 0 children, got %d", len(updatedSrcRoot.Children))
+		}
+
+		// Verify splitGoal was attached to tgtRootGoal
+		if len(updatedTgtRoot.Children) != 1 || updatedTgtRoot.Children[0].ID != "g-split" {
+			t.Errorf("expected tgtRootGoal to have g-split as child, got: %+v", updatedTgtRoot.Children)
+		}
+		if updatedSplitGoal.Parent == nil || updatedSplitGoal.Parent.TargetID != "g-tgt-root" {
+			t.Errorf("expected splitGoal parent to be g-tgt-root, got %+v", updatedSplitGoal.Parent)
+		}
+
+		// Verify project IDs updated
+		if updatedSplitGoal.ProjectID != "p-tgt" {
+			t.Errorf("expected splitGoal ProjectID to be p-tgt, got %q", updatedSplitGoal.ProjectID)
+		}
+		if updatedSplitChild.ProjectID != "p-tgt" {
+			t.Errorf("expected splitChild ProjectID to be p-tgt, got %q", updatedSplitChild.ProjectID)
+		}
+
+		// Verify child's project ID inside splitGoal.Children was also updated
+		if len(updatedSplitGoal.Children) != 1 || updatedSplitGoal.Children[0].ProjectID != "p-tgt" {
+			t.Errorf("expected splitGoal children[0] ProjectID to be p-tgt, got %+v", updatedSplitGoal.Children)
 		}
 
 		// Verify status and member preserved

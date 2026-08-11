@@ -9,6 +9,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -30,6 +32,11 @@ func TestProjectsCLI(t *testing.T) {
 	repo := driven.NewFileStorage(dbPath, nil)
 	service := core.NewService(repo)
 	v := viper.New()
+	configPath := filepath.Join(tempDir, "config.yml")
+	v.SetConfigFile(configPath)
+	v.Set("tracker", map[string]any{})
+	_ = v.WriteConfigAs(configPath)
+
 	cfg, err := LoadConfig(v)
 	if err != nil {
 		t.Fatalf("failed to load config: %v", err)
@@ -39,6 +46,17 @@ func TestProjectsCLI(t *testing.T) {
 	cmd := projects(service, cfg, writer)
 
 	executeCmd := func(args ...string) (string, error) {
+		var resetFlags func(*cobra.Command)
+		resetFlags = func(c *cobra.Command) {
+			c.Flags().VisitAll(func(f *pflag.Flag) {
+				_ = f.Value.Set(f.DefValue)
+			})
+			for _, sub := range c.Commands() {
+				resetFlags(sub)
+			}
+		}
+		resetFlags(cmd)
+
 		buf := new(bytes.Buffer)
 		cmd.SetOut(buf)
 		cmd.SetErr(buf)
@@ -124,7 +142,7 @@ func TestProjectsCLI(t *testing.T) {
 		t.Fatalf("Goal B ID not found")
 	}
 
-	_, err = executeCmd("split", projA.ID, "--goal", goalBID, "--name", "Split Proj C")
+	_, err = executeCmd("split", projA.ID, "--goal", goalBID, "--new", "Split Proj C")
 	if err != nil {
 		t.Fatalf("split failed: %v", err)
 	}
@@ -140,5 +158,42 @@ func TestProjectsCLI(t *testing.T) {
 	}
 	if len(projs) != 2 {
 		t.Errorf("expected 2 projects, got: %d", len(projs))
+	}
+
+	// 4. Move Goal B from Split Proj C back to Proj A under Goal A
+	writer.successMsgs = nil
+	// Find Split Proj C
+	var projC core.Project
+	for _, p := range projs {
+		if p.Label == "Split Proj C" {
+			projC = p
+		}
+	}
+	if projC.ID == "" {
+		t.Fatalf("Split Proj C not found")
+	}
+
+	_, err = executeCmd("split", projC.ID, "--goal", goalBID, "--to", projA.ID, "--parent", gA.ID)
+	if err != nil {
+		t.Fatalf("split move-goal failed: %v", err)
+	}
+
+	if len(writer.successMsgs) == 0 || !strings.Contains(writer.successMsgs[0], "Goal moved successfully") {
+		t.Errorf("expected success message, got: %v", writer.successMsgs)
+	}
+
+	// Verify goals in Proj A
+	goals, err = service.GetGoals(context.Background(), projA.ID)
+	if err != nil {
+		t.Fatalf("failed to get goals: %v", err)
+	}
+	if len(goals) != 2 {
+		t.Errorf("expected Proj A to have 2 goals after move, got: %d", len(goals))
+	}
+
+	// 5. Verify error when both --new and --to are provided
+	_, err = executeCmd("split", projC.ID, "--goal", goalBID, "--to", projA.ID, "--new", "Invalid Proj")
+	if err == nil || !strings.Contains(err.Error(), "cannot specify both --new and --to") {
+		t.Errorf("expected error containing 'cannot specify both --new and --to', got: %v", err)
 	}
 }

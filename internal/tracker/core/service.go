@@ -396,16 +396,58 @@ func (s *Service) MergeProjects(ctx context.Context, sourceProjectID string, mer
 	})
 }
 
-// SplitProject splits a sourceProject starting from a splitGoalID, creating a new project with the provided newProjectName.
-// The splitGoalID and all its descendants are moved to the new project.
-func (s *Service) SplitProject(ctx context.Context, sourceProjectID string, splitGoalID string, newProjectName string) (*Project, error) {
-	if sourceProjectID == "" || splitGoalID == "" || newProjectName == "" {
-		return nil, fmt.Errorf("%w - source project ID, split goal ID, and new project name are required", ErrMissingRequiredFields)
+// SplitProject splits a sourceProject starting from a splitGoalID, either creating a new project with the provided newProjectName, or moving it to an existing targetProjectID.
+// The splitGoalID and all its descendants are moved to the target project.
+// If newProjectName is provided, a new project with that name is created first.
+// If targetProjectID is provided, it moves the goal to that existing project.
+// If targetParentGoalID is provided, the moved goal is attached under it. Otherwise, it is attached under the target project's root goal.
+// TODO: Will come back to clean this up. It can be better organized.
+func (s *Service) SplitProject(ctx context.Context, sourceProjectID string, targetProjectID string, splitGoalID string, targetParentGoalID string, newProjectName string) (*Project, error) {
+	if sourceProjectID == "" || splitGoalID == "" {
+		return nil, fmt.Errorf("%w - source project ID and split goal ID are required", ErrMissingRequiredFields)
+	}
+	if targetProjectID == "" && newProjectName == "" {
+		return nil, fmt.Errorf("%w - target project ID or new project name is required", ErrMissingRequiredFields)
+	}
+	if targetProjectID != "" && sourceProjectID == targetProjectID {
+		return nil, fmt.Errorf("%w - source and target projects must be different", ErrInvalidRequest)
 	}
 
 	var result *Project
 	err := s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		var targetProjIDToUse string
+
+		if newProjectName != "" {
+			projects, err := s.repo.GetProjects(txCtx)
+			if err != nil {
+				return err
+			}
+
+			newProj := &Project{
+				Label: newProjectName,
+			}
+			label := newProj.NormalizedLabel()
+			for _, p := range projects {
+				if p.NormalizedLabel() == label {
+					return fmt.Errorf("project %s: %w", label, ErrProjectAlreadyExists)
+				}
+			}
+
+			newProj, err = s.repo.CreateProject(txCtx, newProj)
+			if err != nil {
+				return err
+			}
+			targetProjIDToUse = newProj.ID
+		} else {
+			targetProjIDToUse = targetProjectID
+		}
+
 		sourceProj, err := s.repo.GetProject(txCtx, sourceProjectID)
+		if err != nil {
+			return err
+		}
+
+		targetProj, err := s.repo.GetProject(txCtx, targetProjIDToUse)
 		if err != nil {
 			return err
 		}
@@ -418,26 +460,7 @@ func (s *Service) SplitProject(ctx context.Context, sourceProjectID string, spli
 			return fmt.Errorf("%w - split goal does not belong to the source project", ErrInvalidRequest)
 		}
 
-		projects, err := s.repo.GetProjects(txCtx)
-		if err != nil {
-			return err
-		}
-
-		newProj := &Project{
-			Label: newProjectName,
-		}
-		label := newProj.NormalizedLabel()
-		for _, p := range projects {
-			if p.NormalizedLabel() == label {
-				return fmt.Errorf("project %s: %w", label, ErrProjectAlreadyExists)
-			}
-		}
-
-		newProj, err = s.repo.CreateProject(txCtx, newProj)
-		if err != nil {
-			return err
-		}
-
+		// Detach from current parent in source project
 		if splitGoal.HasParent() {
 			parentGoal, err := s.repo.GetGoal(txCtx, splitGoal.Parent.TargetID)
 			if err != nil {
@@ -460,10 +483,42 @@ func (s *Service) SplitProject(ctx context.Context, sourceProjectID string, spli
 			}
 		}
 
-		newProj.SetRoot(*splitGoal)
-		newProj, err = s.repo.UpdateProject(txCtx, newProj)
-		if err != nil {
-			return err
+		// Attach to parent in target project
+		var parentGoalIDToUse string
+		if targetParentGoalID != "" {
+			parentGoalIDToUse = targetParentGoalID
+		} else {
+			parentGoalIDToUse = targetProj.RootGoalID
+		}
+
+		if parentGoalIDToUse != "" {
+			parentGoal, err := s.repo.GetGoal(txCtx, parentGoalIDToUse)
+			if err != nil {
+				return err
+			}
+			if parentGoal.ProjectID != targetProjIDToUse {
+				return fmt.Errorf("%w - target parent goal does not belong to the target project", ErrInvalidRequest)
+			}
+
+			// Pre-set the ProjectID to target project so the copy attached to parentGoal has the right project ID
+			splitGoal.ProjectID = targetProj.ID
+
+			err = parentGoal.AttachChild(splitGoal, LinkOptional, "Moved from project: "+sourceProj.Label)
+			if err != nil {
+				return err
+			}
+
+			_, err = s.repo.UpdateGoal(txCtx, parentGoal)
+			if err != nil {
+				return err
+			}
+		} else {
+			splitGoal.ProjectID = targetProj.ID
+			targetProj.SetRoot(*splitGoal)
+			targetProj, err = s.repo.UpdateProject(txCtx, targetProj)
+			if err != nil {
+				return err
+			}
 		}
 
 		sourceGoals, err := s.repo.GetGoals(txCtx, sourceProjectID)
@@ -492,14 +547,17 @@ func (s *Service) SplitProject(ctx context.Context, sourceProjectID string, spli
 		allMovedGoals := append([]Goal{*splitGoal}, descendants...)
 
 		for _, g := range allMovedGoals {
-			g.ProjectID = newProj.ID
+			g.ProjectID = targetProj.ID
+			for i := range g.Children {
+				g.Children[i].ProjectID = targetProj.ID
+			}
 			_, err = s.repo.UpdateGoal(txCtx, &g)
 			if err != nil {
 				return err
 			}
 		}
 
-		result = newProj
+		result = targetProj
 		return nil
 	})
 	if err != nil {
