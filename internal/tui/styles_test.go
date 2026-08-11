@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"image/color"
 	"strconv"
 	"testing"
 )
@@ -82,5 +83,31 @@ func TestHuhTheme(t *testing.T) {
 		if stylesLight == nil {
 			t.Errorf("expected non-nil styles for light mode in theme %s", theme)
 		}
+	}
+}
+
+func TestDefaultHuhThemeDarkContrast(t *testing.T) {
+	defer SetTheme("default")
+	SetTheme("default")
+
+	stylesDark := HuhTheme().Theme(true)
+	if stylesDark == nil {
+		t.Fatal("expected non-nil styles for dark mode")
+	}
+
+	assertStyleForeground(t, stylesDark.Focused.UnselectedOption.GetForeground(), color.RGBA{R: 0xF8, G: 0xF8, B: 0xF2, A: 0xFF}, "unselected option")
+	assertStyleForeground(t, stylesDark.Focused.SelectedOption.GetForeground(), color.RGBA{R: 0xFF, G: 0xB8, B: 0x6C, A: 0xFF}, "selected option")
+}
+
+func assertStyleForeground(t *testing.T, got color.Color, want color.RGBA, label string) {
+	t.Helper()
+
+	if got == nil {
+		t.Fatalf("expected %s foreground to be set", label)
+	}
+
+	r, g, b, a := got.RGBA()
+	if uint8(r>>8) != want.R || uint8(g>>8) != want.G || uint8(b>>8) != want.B || uint8(a>>8) != want.A {
+		t.Fatalf("expected %s color %v, got RGBA(%d, %d, %d, %d)", label, want, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
 	}
 }

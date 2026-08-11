@@ -148,6 +148,69 @@ func GruvboxStyles(isDark bool) Styles {
 	}
 }
 
+// ThemeDefaultStyles returns a new huh.Styles configured for the default theme.
+func ThemeDefaultStyles(isDark bool) *huh.Styles {
+	t := huh.ThemeBase(isDark)
+
+	var bg, fg, muted, red, green, blue, orange, selection color.Color
+
+	if isDark {
+		bg = lipgloss.Color("#282A36")
+		fg = lipgloss.Color("#F8F8F2")
+		muted = lipgloss.Color("#94A3B8")
+		red = lipgloss.Color("#FF5555")
+		green = lipgloss.Color("#50FA7B")
+		blue = lipgloss.Color("#8BE9FD")
+		orange = lipgloss.Color("#FFB86C")
+		selection = lipgloss.Color("#44475A")
+	} else {
+		bg = lipgloss.Color("#F8F9FA")
+		fg = lipgloss.Color("#212529")
+		muted = lipgloss.Color("#6C757D")
+		red = lipgloss.Color("#D90429")
+		green = lipgloss.Color("#008000")
+		blue = lipgloss.Color("#0077B6")
+		orange = lipgloss.Color("#E67E22")
+		selection = lipgloss.Color("#DEE2E6")
+	}
+
+	t.Focused.Base = t.Focused.Base.BorderForeground(selection)
+	t.Focused.Card = t.Focused.Base
+	t.Focused.Title = t.Focused.Title.Foreground(blue).Bold(true)
+	t.Focused.NoteTitle = t.Focused.NoteTitle.Foreground(blue).Bold(true)
+	t.Focused.Description = t.Focused.Description.Foreground(muted)
+	t.Focused.ErrorIndicator = t.Focused.ErrorIndicator.Foreground(red)
+	t.Focused.Directory = t.Focused.Directory.Foreground(blue)
+	t.Focused.File = t.Focused.File.Foreground(fg)
+	t.Focused.ErrorMessage = t.Focused.ErrorMessage.Foreground(red)
+	t.Focused.SelectSelector = t.Focused.SelectSelector.Foreground(orange)
+	t.Focused.NextIndicator = t.Focused.NextIndicator.Foreground(orange)
+	t.Focused.PrevIndicator = t.Focused.PrevIndicator.Foreground(orange)
+	t.Focused.Option = t.Focused.Option.Foreground(fg)
+	t.Focused.MultiSelectSelector = t.Focused.MultiSelectSelector.Foreground(orange)
+	t.Focused.SelectedOption = t.Focused.SelectedOption.Foreground(orange).Bold(true)
+	t.Focused.SelectedPrefix = t.Focused.SelectedPrefix.Foreground(green)
+	t.Focused.UnselectedOption = t.Focused.UnselectedOption.Foreground(fg)
+	t.Focused.UnselectedPrefix = t.Focused.UnselectedPrefix.Foreground(muted)
+	t.Focused.FocusedButton = t.Focused.FocusedButton.Foreground(bg).Background(orange).Bold(true)
+	t.Focused.BlurredButton = t.Focused.BlurredButton.Foreground(fg).Background(selection)
+
+	t.Focused.TextInput.Cursor = t.Focused.TextInput.Cursor.Foreground(orange)
+	t.Focused.TextInput.Placeholder = t.Focused.TextInput.Placeholder.Foreground(muted)
+	t.Focused.TextInput.Prompt = t.Focused.TextInput.Prompt.Foreground(orange)
+
+	t.Blurred = t.Focused
+	t.Blurred.Base = t.Blurred.Base.BorderStyle(lipgloss.HiddenBorder())
+	t.Blurred.Card = t.Blurred.Base
+	t.Blurred.NextIndicator = lipgloss.NewStyle()
+	t.Blurred.PrevIndicator = lipgloss.NewStyle()
+
+	t.Group.Title = t.Focused.Title
+	t.Group.Description = t.Focused.Description
+
+	return t
+}
+
 // ThemeGruvboxStyles returns a new huh.Styles configured for the Gruvbox theme.
 func ThemeGruvboxStyles(isDark bool) *huh.Styles {
 	t := huh.ThemeBase(isDark)
@@ -188,7 +251,7 @@ func ThemeGruvboxStyles(isDark bool) *huh.Styles {
 	t.Focused.PrevIndicator = t.Focused.PrevIndicator.Foreground(orange)
 	t.Focused.Option = t.Focused.Option.Foreground(fg)
 	t.Focused.MultiSelectSelector = t.Focused.MultiSelectSelector.Foreground(orange)
-	t.Focused.SelectedOption = t.Focused.SelectedOption.Foreground(green)
+	t.Focused.SelectedOption = t.Focused.SelectedOption.Foreground(orange).Bold(true)
 	t.Focused.SelectedPrefix = t.Focused.SelectedPrefix.Foreground(green)
 	t.Focused.UnselectedOption = t.Focused.UnselectedOption.Foreground(fg)
 	t.Focused.UnselectedPrefix = t.Focused.UnselectedPrefix.Foreground(gray)
@@ -217,7 +280,7 @@ func HuhTheme() huh.Theme {
 	case ThemeGruvbox:
 		return huh.ThemeFunc(ThemeGruvboxStyles)
 	default:
-		return huh.ThemeFunc(huh.ThemeCharm)
+		return huh.ThemeFunc(ThemeDefaultStyles)
 	}
 }
 
