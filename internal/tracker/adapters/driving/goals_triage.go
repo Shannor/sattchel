@@ -46,6 +46,13 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 
 			styles := tui.AutoStyles()
 
+			// Fetch the project label once for the header
+			var project *core.Project
+			_ = loader.Run("Loading project info...", func() {
+				project, _ = service.GetProject(cmd.Context(), pid)
+			})
+			projLabel := projectLabel(project, pid)
+
 			// Determine if we should only display a specific category or filter
 			hasPresetFilter := cmd.Flags().Changed("preset")
 			hasMissingFilter := cmd.Flags().Changed("missing")
@@ -55,9 +62,20 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				if stdoutFlag {
 					if isMissingCat {
 						mFields := getMissingFields(&g)
-						return fmt.Sprintf("  - %s: %s (Missing: %s)", g.ID, g.Name, strings.Join(mFields, ", "))
+						return fmt.Sprintf("  - %s (Missing: %s) [%s]", g.Name, strings.Join(mFields, ", "), g.ID)
 					}
-					return fmt.Sprintf("  - %s: %s", g.ID, g.Name)
+					var parts []string
+					if g.Status != "" {
+						parts = append(parts, string(g.Status))
+					}
+					if g.Member != nil && g.Member.Name != "" {
+						parts = append(parts, "@"+g.Member.Name)
+					}
+					line := fmt.Sprintf("  - %s [%s]", g.Name, g.ID)
+					if len(parts) > 0 {
+						line += " (" + strings.Join(parts, ", ") + ")"
+					}
+					return line
 				}
 
 				idStr := styles.Muted.Render(g.ID)
@@ -65,9 +83,33 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				if isMissingCat {
 					mFields := getMissingFields(&g)
 					mStr := styles.Warning.Render(fmt.Sprintf("(Missing: %s)", strings.Join(mFields, ", ")))
-					return fmt.Sprintf("  - %s: %s %s", idStr, nameStr, mStr)
+					return fmt.Sprintf("  - %s %s [%s]", nameStr, mStr, idStr)
 				}
-				return fmt.Sprintf("  - %s: %s", idStr, nameStr)
+				var meta []string
+				if g.Status != "" {
+					var statusStyle lipgloss.Style
+					switch g.Status {
+					case core.GoalCompleted:
+						statusStyle = styles.Success.Bold(true)
+					case core.GoalInProgress:
+						statusStyle = styles.Info.Bold(true)
+					case core.GoalCancelled:
+						statusStyle = styles.Muted.Bold(true)
+					case core.GoalOpen:
+						statusStyle = styles.Info
+					default:
+						statusStyle = styles.Warning
+					}
+					meta = append(meta, statusStyle.Render(string(g.Status)))
+				}
+				if g.Member != nil && g.Member.Name != "" {
+					meta = append(meta, styles.Info.Render("@"+g.Member.Name))
+				}
+				line := fmt.Sprintf("  - %s [%s]", nameStr, idStr)
+				if len(meta) > 0 {
+					line += "  " + strings.Join(meta, styles.Muted.Render(" • "))
+				}
+				return line
 			}
 
 			// Helper function to print a group of goals
@@ -91,6 +133,7 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				var (
 					goals []core.Goal
 					query core.GoalQuery
+					err   error
 				)
 
 				p := strings.ToLower(strings.TrimSpace(preset))
@@ -100,56 +143,56 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 						Impacts: []core.Impact{core.HighImpact},
 						Efforts: []core.Effort{core.LowEffort},
 					}
-					var err error
 					_ = loader.Run("Getting Do It Now goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
 						return err
 					}
-					printGroup("🚀 DO IT NOW (High Impact, Low Effort)", styles.Success, goals, false)
+					printTriageHeader(projLabel, styles, stdoutFlag)
+					printGroup("DO IT NOW (High Impact, Low Effort)", styles.Success, goals, false)
 
 				case "honest-work":
 					query = core.GoalQuery{
 						Impacts: []core.Impact{core.HighImpact},
 						Efforts: []core.Effort{core.HighEffort},
 					}
-					var err error
 					_ = loader.Run("Getting Honest Work goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
 						return err
 					}
-					printGroup("🛠️ HONEST WORK (High Impact, High Effort)", styles.Info, goals, false)
+					printTriageHeader(projLabel, styles, stdoutFlag)
+					printGroup("HONEST WORK (High Impact, High Effort)", styles.Info, goals, false)
 
 				case "snacking":
 					query = core.GoalQuery{
 						Impacts: []core.Impact{core.LowImpact},
 						Efforts: []core.Effort{core.LowEffort},
 					}
-					var err error
 					_ = loader.Run("Getting Snacking goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
 						return err
 					}
-					printGroup("🍿 SNACKING (Low Impact, Low Effort)", styles.Success, goals, false)
+					printTriageHeader(projLabel, styles, stdoutFlag)
+					printGroup("SNACKING (Low Impact, Low Effort)", styles.Success, goals, false)
 
 				case "why":
 					query = core.GoalQuery{
 						Impacts: []core.Impact{core.LowImpact},
 						Efforts: []core.Effort{core.HighEffort},
 					}
-					var err error
 					_ = loader.Run("Getting Why? goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
 					if err != nil {
 						return err
 					}
-					printGroup("⚠️ WHY? (Low Impact, High Effort)", styles.Warning, goals, false)
+					printTriageHeader(projLabel, styles, stdoutFlag)
+					printGroup("WHY? (Low Impact, High Effort)", styles.Warning, goals, false)
 
 				case "missing":
 					query = core.GoalQuery{
@@ -162,7 +205,8 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					if err != nil {
 						return err
 					}
-					printGroup("🔧 MISSING IMPORTANT DETAILS", styles.Error, goals, true)
+					printTriageHeader(projLabel, styles, stdoutFlag)
+					printGroup("MISSING IMPORTANT DETAILS", styles.Error, goals, true)
 
 				default:
 					return fmt.Errorf("unknown preset: %s (supported: do-it-now, honest-work, snacking, why, missing)", preset)
@@ -187,7 +231,8 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				if err != nil {
 					return err
 				}
-				printGroup("🔧 GOALS MISSING SPECIFIED DETAILS", styles.Error, goals, true)
+				printTriageHeader(projLabel, styles, stdoutFlag)
+				printGroup("GOALS MISSING SPECIFIED DETAILS", styles.Error, goals, true)
 				return nil
 			}
 
@@ -235,19 +280,13 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				}
 			}
 
-			if stdoutFlag {
-				fmt.Println("==== Triage Dashboard ====")
-				fmt.Println()
-			} else {
-				dashboardTitle := styles.Title.Render(" ==== TRIAGE DASHBOARD ==== ")
-				fmt.Println("\n" + dashboardTitle + "\n")
-			}
+			printTriageHeader(projLabel, styles, stdoutFlag)
 
-			printGroup("🚀 DO IT NOW (High Impact, Low Effort)", styles.Success, doItNow, false)
-			printGroup("🛠️ HONEST WORK (High Impact, High Effort)", styles.Info, honestWork, false)
-			printGroup("🍿 SNACKING (Low Impact, Low Effort)", styles.Success, snacking, false)
-			printGroup("⚠️ WHY? (Low Impact, High Effort)", styles.Warning, why, false)
-			printGroup("🔧 MISSING IMPORTANT DETAILS", styles.Error, missing, true)
+			printGroup("DO IT NOW (High Impact, Low Effort)", styles.Success, doItNow, false)
+			printGroup("HONEST WORK (High Impact, High Effort)", styles.Info, honestWork, false)
+			printGroup("SNACKING (Low Impact, Low Effort)", styles.Success, snacking, false)
+			printGroup("WHY? (Low Impact, High Effort)", styles.Warning, why, false)
+			printGroup("MISSING IMPORTANT DETAILS", styles.Error, missing, true)
 
 			return nil
 		},
@@ -273,6 +312,21 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 	})
 
 	return cmd
+}
+
+func printTriageHeader(projLabel string, styles tui.Styles, stdoutFlag bool) {
+	if stdoutFlag {
+		fmt.Printf("%s Triage Report\n\n", projLabel)
+	} else {
+		fmt.Println(styles.Title.Render(projLabel + " Triage Report" + "\n"))
+	}
+}
+
+func projectLabel(project *core.Project, pid string) string {
+	if project != nil && project.Label != "" {
+		return project.Label
+	}
+	return pid
 }
 
 func getMissingFields(g *core.Goal) []string {

@@ -36,6 +36,7 @@ func projects(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 	cmd.AddCommand(updateProject(service, cfg, writer))
 	cmd.AddCommand(mergeProjectsCmd(service, cfg, writer))
 	cmd.AddCommand(splitProjectCmd(service, cfg, writer))
+	cmd.AddCommand(deleteProjectCmd(service, cfg, writer))
 	return cmd
 }
 
@@ -794,5 +795,41 @@ If moving to an existing project, by default the goal is attached under its root
 		return getGoalCompletions(service, toProjID), cobra.ShellCompDirectiveNoFileComp
 	})
 
+	return cmd
+}
+
+func deleteProjectCmd(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:          "delete [id]",
+		Short:        "Delete an existing project and its goals",
+		Aliases:      []string{"remove", "rm"},
+		Args:         cobra.ExactArgs(1),
+		SilenceUsage: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			id := args[0]
+			err := service.DeleteProject(cmd.Context(), id)
+			if err != nil {
+				return err
+			}
+			writer.Success(fmt.Sprintf("Project %s and all its goals deleted successfully", id))
+
+			// If we deleted the active project, clear the currentProjectId and currentGoalId
+			if cfg.CurrentProjectID() == id {
+				if err := cfg.SetCurrentProjectID(""); err != nil {
+					writer.Warn(fmt.Sprintf("Failed to clear current project ID: %s", err))
+				}
+				if err := cfg.SetCurrentGoalID(""); err != nil {
+					writer.Warn(fmt.Sprintf("Failed to clear current goal ID: %s", err))
+				}
+			}
+			return nil
+		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			if len(args) == 0 {
+				return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+			}
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		},
+	}
 	return cmd
 }
