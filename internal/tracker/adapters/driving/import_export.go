@@ -2,12 +2,13 @@ package driving
 
 import (
 	"fmt"
+	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
 
 	"github.com/spf13/cobra"
 )
 
-func exportCmd(service *core.Service) *cobra.Command {
+func exportCmd(service *core.Service, writer printer.Writer) *cobra.Command {
 	return &cobra.Command{
 		Use:   "export [filepath]",
 		Short: "Export tracker data to a file (defaults to ./tracker.json)",
@@ -21,13 +22,13 @@ func exportCmd(service *core.Service) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("Tracker data successfully exported to %s\n", filePath)
+			writer.Success(fmt.Sprintf("Tracker data successfully exported to %s", filePath))
 			return nil
 		},
 	}
 }
 
-func importCmd(service *core.Service) *cobra.Command {
+func importCmd(service *core.Service, writer printer.Writer) *cobra.Command {
 	return &cobra.Command{
 		Use:   "import [filepath]",
 		Short: "Import tracker data from a file (defaults to ./tracker.json)",
@@ -41,7 +42,7 @@ func importCmd(service *core.Service) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("Tracker data successfully imported from %s\n", filePath)
+			writer.Success(fmt.Sprintf("Tracker data successfully imported from %s", filePath))
 			return nil
 		},
 	}

@@ -148,7 +148,7 @@ func ChooseGoal(goals []core.Goal, title string, currentGoalID string, filterFn 
 		selectField = selectField.Validate(validateFn)
 	}
 
-	err := huh.NewForm(
+	err := NewForm(
 		huh.NewGroup(selectField),
 	).WithShowHelp(true).Run()
 	if err != nil {

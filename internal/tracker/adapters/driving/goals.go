@@ -2,6 +2,7 @@ package driving
 
 import (
 	"fmt"
+	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
 	"sattchel/pkg/set"
@@ -15,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func goals(service *core.Service, cfg *Config) *cobra.Command {
+func goals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "goals [verb]",
 		Short:   "Manage goals",
@@ -32,18 +33,18 @@ func goals(service *core.Service, cfg *Config) *cobra.Command {
        satt tracker goals triage
        `,
 	}
-	cmd.AddCommand(addGoal(service, cfg))
-	cmd.AddCommand(setGoal(service, cfg))
-	cmd.AddCommand(listGoals(service, cfg))
-	cmd.AddCommand(moveGoal(service, cfg))
-	cmd.AddCommand(deleteGoal(service, cfg))
-	cmd.AddCommand(viewGoal(service, cfg))
-	cmd.AddCommand(updateGoal(service, cfg))
-	cmd.AddCommand(triageGoals(service, cfg))
+	cmd.AddCommand(addGoal(service, cfg, writer))
+	cmd.AddCommand(setGoal(service, cfg, writer))
+	cmd.AddCommand(listGoals(service, cfg, writer))
+	cmd.AddCommand(moveGoal(service, cfg, writer))
+	cmd.AddCommand(deleteGoal(service, cfg, writer))
+	cmd.AddCommand(viewGoal(service, cfg, writer))
+	cmd.AddCommand(updateGoal(service, cfg, writer))
+	cmd.AddCommand(triageGoals(service, cfg, writer))
 	return cmd
 }
 
-func addGoal(service *core.Service, cfg *Config) *cobra.Command {
+func addGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	description := ""
 	parentID := ""
 	projectID := ""
@@ -94,7 +95,7 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("Goal %s created successfully\n", goal.Name)
+			writer.Success(fmt.Sprintf("Goal %s created successfully", goal.Name))
 			if changeCurrent || !goal.HasParent() {
 				_ = cfg.SetCurrentGoalID(goal.ID)
 			}
@@ -144,7 +145,7 @@ func addGoal(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func setGoal(service *core.Service, cfg *Config) *cobra.Command {
+func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	projectID := ""
 
 	cmd := &cobra.Command{
@@ -190,7 +191,7 @@ func setGoal(service *core.Service, cfg *Config) *cobra.Command {
 			idx := slices.IndexFunc(goals, func(g core.Goal) bool { return g.ID == selectedID })
 			g := goals[idx]
 
-			fmt.Printf("Active goal set to: %s (%s)\n", g.Name, g.ID)
+			writer.Success(fmt.Sprintf("Active goal set to: %s (%s)", g.Name, g.ID))
 			return nil
 		},
 	}
@@ -202,7 +203,7 @@ func setGoal(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func listGoals(service *core.Service, cfg *Config) *cobra.Command {
+func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	projectID := ""
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -239,7 +240,7 @@ func listGoals(service *core.Service, cfg *Config) *cobra.Command {
 				if project != nil && project.Label != "" {
 					p = project.Label
 				}
-				fmt.Printf("No goals found for project %s\n", p)
+				writer.Info(fmt.Sprintf("No goals found for project %s", p))
 				return nil
 			}
 
@@ -431,7 +432,7 @@ func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.St
 	return nodeTrees[root.Goal.ID]
 }
 
-func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
+func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
 		relationship = core.LinkOptional
 		projectID    string
@@ -572,7 +573,7 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return err
 			}
 
-			fmt.Printf("Goal %q (%s) moved successfully under parent %s\n", movedGoal.Name, movedGoal.ID, newParentID)
+			writer.Success(fmt.Sprintf("Goal %q (%s) moved successfully under parent %s", movedGoal.Name, movedGoal.ID, newParentID))
 			return nil
 		},
 	}
@@ -589,7 +590,7 @@ func moveGoal(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func deleteGoal(service *core.Service, cfg *Config) *cobra.Command {
+func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	projectID := ""
 
 	cmd := &cobra.Command{
@@ -627,7 +628,7 @@ func deleteGoal(service *core.Service, cfg *Config) *cobra.Command {
 				_ = cfg.SetCurrentGoalID("")
 			}
 
-			fmt.Fprintf(cmd.OutOrStdout(), "Goal %s deleted successfully\n", goalID)
+			writer.Success(fmt.Sprintf("Goal %s deleted successfully", goalID))
 			return nil
 		},
 	}
@@ -639,7 +640,7 @@ func deleteGoal(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
+func viewGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	projectID := ""
 
 	cmd := &cobra.Command{
@@ -723,7 +724,7 @@ func viewGoal(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func updateGoal(service *core.Service, cfg *Config) *cobra.Command {
+func updateGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
 		name        string
 		description string
@@ -769,7 +770,7 @@ func updateGoal(service *core.Service, cfg *Config) *cobra.Command {
 				return err
 			}
 
-			fmt.Printf("Goal %q (%s) updated successfully\n", goal.Name, goal.ID)
+			writer.Success(fmt.Sprintf("Goal %q (%s) updated successfully", goal.Name, goal.ID))
 			return nil
 		},
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

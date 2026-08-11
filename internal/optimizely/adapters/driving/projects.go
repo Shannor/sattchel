@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sattchel/internal/optimizely/core"
 	"sattchel/internal/printer"
+	"sattchel/internal/tui"
 	"sattchel/pkg/set"
 	"slices"
 	"strings"
@@ -96,7 +97,7 @@ func setProjects(s *core.Service, config *Config, writer printer.Writer) *cobra.
 				}
 			}
 
-			err = huh.NewForm(
+			err = tui.NewForm(
 				huh.NewGroup(
 					huh.NewMultiSelect[string]().
 						Title("Available Projects").
@@ -155,12 +156,15 @@ func listProjects(s *core.Service, config *Config, writer printer.Writer) *cobra
 				return strings.Compare(i.Name, j.Name)
 			})
 
+			styles := tui.AutoStyles()
 			for _, project := range projects {
+				nameStr := styles.Text.Render(project.Name)
+				idStr := styles.Muted.Render(project.ID)
 				activeMarker := ""
 				if project.IsActive {
-					activeMarker = " (active)"
+					activeMarker = styles.Success.Render(" (active)")
 				}
-				fmt.Printf("- %s: %s%s\n", project.Name, project.ID, activeMarker)
+				writer.Info(fmt.Sprintf("- %s: %s%s", nameStr, idStr, activeMarker))
 			}
 			return nil
 		},

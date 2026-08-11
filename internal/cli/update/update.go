@@ -29,10 +29,10 @@ func NewCommand(writer printer.Writer) *cobra.Command {
 				return err
 			}
 			if update.NeedToUpdate {
-				msg := fmt.Sprintf("Updated to %s successfully. (previous: %s)\n", update.NewVersion, update.CurrentVersion)
+				msg := fmt.Sprintf("Updated to %s successfully (previous: %s)", update.NewVersion, update.CurrentVersion)
 				writer.Success(msg)
 			} else {
-				writer.Info("Version is up to date\n")
+				writer.Info("Version is up to date")
 			}
 			return nil
 		},

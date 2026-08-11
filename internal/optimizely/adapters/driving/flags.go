@@ -252,13 +252,7 @@ func listFlags(s *core.Service, config *Config, writer printer.Writer) *cobra.Co
 				}
 				for _, f := range flagList {
 					if g, ok := groups[f.Key]; ok {
-						found := false
-						for _, p := range g.Projects {
-							if p == pName {
-								found = true
-								break
-							}
-						}
+						found := slices.Contains(g.Projects, pName)
 						if !found {
 							g.Projects = append(g.Projects, pName)
 						}

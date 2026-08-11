@@ -16,10 +16,10 @@ func NewCommand(service *core.Service, v *viper.Viper, writer printer.Writer) *c
 		Aliases: []string{"tr"},
 	}
 	cmd.AddCommand(projects(service, cfg, writer))
-	cmd.AddCommand(goals(service, cfg))
-	cmd.AddCommand(members(service, cfg))
+	cmd.AddCommand(goals(service, cfg, writer))
+	cmd.AddCommand(members(service, cfg, writer))
 	cmd.AddCommand(visualizeProject(service, cfg))
-	cmd.AddCommand(exportCmd(service))
-	cmd.AddCommand(importCmd(service))
+	cmd.AddCommand(exportCmd(service, writer))
+	cmd.AddCommand(importCmd(service, writer))
 	return cmd
 }

@@ -1,6 +1,8 @@
 package tui
 
 import (
+	"os"
+
 	"charm.land/bubbles/v2/list"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
@@ -35,6 +37,10 @@ func NewListSelect(title string, options []ListOption) ListSelectModel {
 	// Create default delegate (handles multiline Title + Description rendering)
 	delegate := list.NewDefaultDelegate()
 
+	// Initialize delegate styles based on terminal background
+	hasDark := lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
+	delegate.Styles = list.NewDefaultItemStyles(hasDark)
+
 	// Customize delegate styles using Sattchel TUI styles
 	s := AutoStyles()
 
@@ -51,6 +57,16 @@ func NewListSelect(title string, options []ListOption) ListSelectModel {
 		Foreground(s.Text.GetForeground())
 	delegate.Styles.NormalDesc = delegate.Styles.NormalDesc.
 		Foreground(s.Muted.GetForeground())
+
+	// Dimmed styles (when filtering is active)
+	delegate.Styles.DimmedTitle = delegate.Styles.DimmedTitle.
+		Foreground(s.Muted.GetForeground())
+	delegate.Styles.DimmedDesc = delegate.Styles.DimmedDesc.
+		Foreground(s.Muted.GetForeground())
+
+	// Filter match highlighting (success color)
+	delegate.Styles.FilterMatch = delegate.Styles.FilterMatch.
+		Foreground(s.Success.GetForeground())
 
 	l := list.New(items, delegate, 0, 0)
 	l.Title = title

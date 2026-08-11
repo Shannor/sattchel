@@ -4,7 +4,10 @@ import (
 	"os"
 	"time"
 
+	"sattchel/internal/tui"
+
 	"charm.land/huh/v2/spinner"
+	"charm.land/lipgloss/v2"
 	"github.com/mattn/go-isatty"
 )
 
@@ -35,8 +38,16 @@ func RunWithThreshold(title string, threshold time.Duration, action func()) erro
 	case <-done:
 		return nil
 	case <-time.After(threshold):
+		s := tui.AutoStyles()
+		spinnerTheme := spinner.ThemeFunc(func(isDark bool) *spinner.Styles {
+			return &spinner.Styles{
+				Spinner: lipgloss.NewStyle().Foreground(s.Success.GetForeground()),
+				Title:   lipgloss.NewStyle().Foreground(s.Text.GetForeground()),
+			}
+		})
 		return spinner.New().
 			Title(title).
+			WithTheme(spinnerTheme).
 			Action(func() {
 				<-done
 			}).Run()

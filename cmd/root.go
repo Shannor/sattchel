@@ -24,6 +24,7 @@ import (
 
 var updateCh <-chan config.UpdateInformation
 var verbose bool
+var v *viper.Viper
 
 // defaultTTL the amount of time we'll hold the cache locally
 const defaultTTL = 1 * time.Hour
@@ -44,6 +45,15 @@ var rootCmd = &cobra.Command{
 		log.SetLevel(logLevel)
 		log.SetReportTimestamp(false)
 		log.SetReportCaller(verbose)
+
+		theme := ""
+		if v != nil {
+			theme = v.GetString("theme")
+		}
+		if theme == "" {
+			theme = os.Getenv("SATT_THEME")
+		}
+		tui.SetTheme(theme)
 
 		if isCompletionCommand(cmd) {
 			updateCh = nil
@@ -116,19 +126,30 @@ func init() {
 		return err
 	})
 
-	v, err := config.Init()
+	var err error
+	v, err = config.Init()
 	if err != nil {
 		panic(err)
 	}
 
-	styles := tui.DefaultStyles(true)
+	setupTheme()
 	writer := printer.NewStyleWriter()
 
 	opService := setupOptimizely(v)
 
+	// Register primary commands
 	rootCmd.AddCommand(setupTracker(v, writer))
-	rootCmd.AddCommand(optimizelyDriving.NewCommand(opService, v, writer, styles))
+	rootCmd.AddCommand(optimizelyDriving.NewCommand(opService, v, writer))
 	rootCmd.AddCommand(update.NewCommand(writer))
+	rootCmd.AddCommand(newThemeCmd(writer))
+}
+
+func setupTheme() {
+	theme := v.GetString("theme")
+	if theme == "" {
+		theme = os.Getenv("SATT_THEME")
+	}
+	tui.SetTheme(theme)
 }
 
 func setupTracker(v *viper.Viper, writer printer.Writer) *cobra.Command {
