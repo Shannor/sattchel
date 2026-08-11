@@ -14,6 +14,10 @@ export class MindMap {
 		this.api = api;
 		this.drawer = drawer;
 		this.goalsMap = {};
+		// Stable side assignments for direct children of root.
+		// Keyed by goal ID → 'left' | 'right'. Written once and never
+		// overwritten so drag-drop re-renders don't reshuffle the tree.
+		this.rootChildSides = {};
 
 		// Instantiate modules
 		this.renderer = new Renderer(
@@ -84,8 +88,9 @@ export class MindMap {
 			}
 		});
 
-		// Calculate positions
-		Layout.compute(this.goalsMap, roots);
+		// Calculate positions, passing the stable side map so re-renders
+		// don't reshuffle root children between left and right.
+		Layout.compute(this.goalsMap, roots, this.rootChildSides);
 
 		// Render nodes and links
 		this.renderer.render(this.goalsMap);

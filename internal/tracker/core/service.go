@@ -63,6 +63,45 @@ func (s *Service) CreateProject(ctx context.Context, name string, description st
 	return result, nil
 }
 
+func (s *Service) DeleteProject(ctx context.Context, projectID string) error {
+	if projectID == "" {
+		return fmt.Errorf("%w - project ID is required", ErrMissingRequiredFields)
+	}
+
+	return s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		// Verify project exists
+		project, err := s.repo.GetProject(txCtx, projectID)
+		if err != nil {
+			return err
+		}
+		if project == nil {
+			return fmt.Errorf("project %s not found", projectID)
+		}
+
+		// Get all goals belonging to this project
+		goals, err := s.repo.GetGoals(txCtx, projectID)
+		if err != nil {
+			return err
+		}
+
+		// Delete all goals belonging to the project
+		for _, goal := range goals {
+			err = s.repo.DeleteGoal(txCtx, goal.ID)
+			if err != nil {
+				return err
+			}
+		}
+
+		// Delete the project itself
+		err = s.repo.DeleteProject(txCtx, projectID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
 func (s *Service) CreateGoal(ctx context.Context, projectID string, goalName string, options GoalOptions) (*Goal, error) {
 	if projectID == "" {
 		return nil, fmt.Errorf("%w - project ID", ErrMissingRequiredFields)

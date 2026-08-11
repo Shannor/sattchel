@@ -95,7 +95,7 @@ func addGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 			if err != nil {
 				return err
 			}
-			writer.Success(fmt.Sprintf("Goal %s created successfully", goal.Name))
+			writer.Success(fmt.Sprintf("Goal %s (%s) created successfully", goal.Name, goal.ID))
 			if changeCurrent || !goal.HasParent() {
 				_ = cfg.SetCurrentGoalID(goal.ID)
 			}
@@ -204,7 +204,14 @@ func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 }
 
 func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
-	projectID := ""
+	var (
+		projectID string
+		statuses  []string
+		impacts   []string
+		efforts   []string
+		memberIDs []string
+		flatMode  bool
+	)
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List Goals",
@@ -244,6 +251,42 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 				return nil
 			}
 
+			// Build the active-filter set — only populated when flags were explicitly set.
+			hasFilters := cmd.Flags().Changed("status") ||
+				cmd.Flags().Changed("impact") ||
+				cmd.Flags().Changed("effort") ||
+				cmd.Flags().Changed("member")
+
+			statusSet := set.NewFrom(statuses)
+			impactSet := set.NewFrom(impacts)
+			effortSet := set.NewFrom(efforts)
+			memberSet := set.NewFrom(memberIDs)
+
+			matchesFilter := func(g *core.Goal) bool {
+				if !hasFilters {
+					return true
+				}
+				if cmd.Flags().Changed("status") && !statusSet.Contains(string(g.Status)) {
+					return false
+				}
+				if cmd.Flags().Changed("impact") && !impactSet.Contains(string(g.Impact)) {
+					return false
+				}
+				if cmd.Flags().Changed("effort") && !effortSet.Contains(string(g.Effort)) {
+					return false
+				}
+				if cmd.Flags().Changed("member") {
+					mid := ""
+					if g.Member != nil {
+						mid = g.Member.ID
+					}
+					if !memberSet.Contains(mid) {
+						return false
+					}
+				}
+				return true
+			}
+
 			currentGoalID := cfg.CurrentGoalID()
 			styles := tui.AutoStyles()
 			enumeratorStyle := lipgloss.NewStyle().Foreground(styles.Success.GetForeground()).MarginRight(1)
@@ -256,10 +299,32 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 			} else if pid != "" {
 				headerTitle = pid
 			}
+
+			// --flat: skip the tree and just print matching goals as a flat list.
+			if flatMode {
+				t := tree.Root(styles.Title.Render(headerTitle))
+				for i := range goals {
+					g := &goals[i]
+					if !matchesFilter(g) {
+						continue
+					}
+					t = t.Child(renderGoalLine(g, currentGoalID, styles, false))
+				}
+				fmt.Println(t.
+					Enumerator(tree.RoundedEnumerator).
+					EnumeratorStyle(enumeratorStyle).
+					RootStyle(rootStyle).
+					ItemStyle(itemStyle).
+					String())
+				return nil
+			}
+
+			// Default: tree view. Non-matching goals are dimmed but still shown
+			// so the structure stays readable.
 			t := tree.Root(styles.Title.Render(headerTitle))
 			roots := buildGoalTree(goals)
 			for _, root := range roots {
-				t = t.Child(renderGoalTreeIterative(root, currentGoalID, styles))
+				t = t.Child(renderGoalTreeIterative(root, currentGoalID, styles, hasFilters, matchesFilter))
 			}
 
 			fmt.Println(t.
@@ -273,8 +338,26 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	cmd.Flags().StringSliceVarP(&statuses, "status", "s", nil, "Filter by status (draft, open, in-progress, completed, cancelled). Comma-separated or repeated.")
+	cmd.Flags().StringSliceVarP(&impacts, "impact", "i", nil, "Filter by impact (low, medium, high). Comma-separated or repeated.")
+	cmd.Flags().StringSliceVarP(&efforts, "effort", "e", nil, "Filter by effort (low, medium, high). Comma-separated or repeated.")
+	cmd.Flags().StringSliceVarP(&memberIDs, "member", "m", nil, "Filter by member ID. Comma-separated or repeated.")
+	cmd.Flags().BoolVarP(&flatMode, "flat", "f", false, "Show only matching goals as a flat list instead of the full tree")
+
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("status", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{"draft", "open", "in-progress", "completed", "cancelled"}, cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("impact", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{string(core.LowImpact), string(core.MediumImpact), string(core.HighImpact)}, cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("effort", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{string(core.LowEffort), string(core.MediumEffort), string(core.HighEffort)}, cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("member", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return getMemberCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
 	return cmd
 }
@@ -325,7 +408,85 @@ func buildGoalTree(goals []core.Goal) []*GoalNode {
 	return roots
 }
 
-func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.Styles) *tree.Tree {
+// renderGoalLine builds the styled single-line string for one goal card.
+// dimmed=true renders the goal in muted colours for the tree-filter view.
+func renderGoalLine(g *core.Goal, currentGoalID string, styles tui.Styles, dimmed bool) string {
+	var nameText string
+	if g.ID == currentGoalID {
+		nameText = styles.Success.Bold(true).Render("★ " + g.Name)
+	} else if dimmed {
+		nameText = styles.Muted.Render(g.Name)
+	} else {
+		nameText = styles.Text.Bold(true).Render(g.Name)
+	}
+
+	if dimmed {
+		return nameText
+	}
+
+	var details []string
+	// Status
+	if g.Status != "" {
+		var statusStyle lipgloss.Style
+		switch g.Status {
+		case core.GoalCompleted:
+			statusStyle = styles.Success.Bold(true)
+		case core.GoalInProgress:
+			statusStyle = styles.Info.Bold(true)
+		case core.GoalCancelled:
+			statusStyle = styles.Muted.Bold(true)
+		case core.GoalOpen:
+			statusStyle = styles.Info
+		default:
+			statusStyle = styles.Warning
+		}
+		details = append(details, statusStyle.Render(string(g.Status)))
+	}
+
+	// Impact
+	if g.Impact != "" && g.Impact != core.UnknownImpact {
+		var impactStyle lipgloss.Style
+		switch g.Impact {
+		case core.HighImpact:
+			impactStyle = styles.Success.Bold(true)
+		case core.MediumImpact:
+			impactStyle = styles.Info
+		case core.LowImpact:
+			impactStyle = styles.Muted
+		default:
+			impactStyle = styles.Warning
+		}
+		details = append(details, fmt.Sprintf("impact: %s", impactStyle.Render(string(g.Impact))))
+	}
+
+	// Effort
+	if g.Effort != "" && g.Effort != core.UnknownEffort {
+		var effortStyle lipgloss.Style
+		switch g.Effort {
+		case core.LowEffort:
+			effortStyle = styles.Success
+		case core.MediumEffort:
+			effortStyle = styles.Info
+		case core.HighEffort:
+			effortStyle = styles.Error
+		default:
+			effortStyle = styles.Warning
+		}
+		details = append(details, fmt.Sprintf("effort: %s", effortStyle.Render(string(g.Effort))))
+	}
+
+	// Member
+	if g.Member != nil && g.Member.Name != "" {
+		details = append(details, styles.Info.Render("@"+g.Member.Name))
+	}
+
+	if len(details) > 0 {
+		return fmt.Sprintf("%s \u2014 %s", nameText, strings.Join(details, styles.Muted.Render(" \u2022 ")))
+	}
+	return nameText
+}
+
+func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.Styles, hasFilters bool, matchesFilter func(*core.Goal) bool) *tree.Tree {
 	stack1 := []*GoalNode{root}
 	var stack2 []*GoalNode
 
@@ -346,76 +507,8 @@ func renderGoalTreeIterative(root *GoalNode, currentGoalID string, styles tui.St
 		curr := stack2[len(stack2)-1]
 		stack2 = stack2[:len(stack2)-1]
 
-		var nameText string
-		if curr.Goal.ID == currentGoalID {
-			nameText = styles.Success.Bold(true).Render("★ " + curr.Goal.Name)
-		} else {
-			nameText = styles.Text.Bold(true).Render(curr.Goal.Name)
-		}
-
-		var details []string
-
-		// Status
-		if curr.Goal.Status != "" {
-			var statusStyle lipgloss.Style
-			switch curr.Goal.Status {
-			case core.GoalCompleted:
-				statusStyle = styles.Success.Bold(true)
-			case core.GoalInProgress:
-				statusStyle = styles.Info.Bold(true)
-			case core.GoalCancelled:
-				statusStyle = styles.Muted.Bold(true)
-			case core.GoalOpen:
-				statusStyle = styles.Info
-			default:
-				statusStyle = styles.Warning
-			}
-			details = append(details, statusStyle.Render(string(curr.Goal.Status)))
-		}
-
-		// Impact
-		if curr.Goal.Impact != "" && curr.Goal.Impact != core.UnknownImpact {
-			var impactStyle lipgloss.Style
-			switch curr.Goal.Impact {
-			case core.HighImpact:
-				impactStyle = styles.Success.Bold(true)
-			case core.MediumImpact:
-				impactStyle = styles.Info
-			case core.LowImpact:
-				impactStyle = styles.Muted
-			default:
-				impactStyle = styles.Warning
-			}
-			details = append(details, fmt.Sprintf("impact: %s", impactStyle.Render(string(curr.Goal.Impact))))
-		}
-
-		// Effort
-		if curr.Goal.Effort != "" && curr.Goal.Effort != core.UnknownEffort {
-			var effortStyle lipgloss.Style
-			switch curr.Goal.Effort {
-			case core.LowEffort:
-				effortStyle = styles.Success
-			case core.MediumEffort:
-				effortStyle = styles.Info
-			case core.HighEffort:
-				effortStyle = styles.Error
-			default:
-				effortStyle = styles.Warning
-			}
-			details = append(details, fmt.Sprintf("effort: %s", effortStyle.Render(string(curr.Goal.Effort))))
-		}
-
-		// Member
-		if curr.Goal.Member != nil && curr.Goal.Member.Name != "" {
-			details = append(details, styles.Info.Render("@"+curr.Goal.Member.Name))
-		}
-
-		var title string
-		if len(details) > 0 {
-			title = fmt.Sprintf("%s — %s", nameText, strings.Join(details, styles.Muted.Render(" • ")))
-		} else {
-			title = nameText
-		}
+		dimmed := hasFilters && !matchesFilter(curr.Goal)
+		title := renderGoalLine(curr.Goal, currentGoalID, styles, dimmed)
 
 		t := tree.Root(title)
 
