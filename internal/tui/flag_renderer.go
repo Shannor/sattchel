@@ -27,7 +27,7 @@ type ReportOptions struct {
 
 func marshalJSON(v any) string {
 	// If it's already a Go map/slice/etc, marshal directly.
-	if _, ok := v.(map[string]interface{}); ok {
+	if _, ok := v.(map[string]any); ok {
 		b, err := json.MarshalIndent(v, "", "  ")
 		if err != nil {
 			return fmt.Sprintf("%v", v)

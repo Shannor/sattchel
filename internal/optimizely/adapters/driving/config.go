@@ -3,27 +3,28 @@ package driving
 import (
 	"context"
 	"fmt"
+	"sattchel/internal/printer"
 	"sattchel/internal/tui"
 	"strconv"
+	"strings"
 	"time"
 
-	tea "charm.land/bubbletea/v2"
 	"charm.land/huh/v2"
 	"github.com/spf13/cobra"
 )
 
-func configCmd(config *Config, styles tui.Styles) *cobra.Command {
+func configCmd(config *Config, writer printer.Writer) *cobra.Command {
 	var configCmd = &cobra.Command{
 		Use:          "config",
 		Short:        "Manage optimizely configs",
 		SilenceUsage: true,
 	}
-	configCmd.AddCommand(setConfig(config))
-	configCmd.AddCommand(getConfig(config, styles))
+	configCmd.AddCommand(setConfig(config, writer))
+	configCmd.AddCommand(getConfig(config))
 	return configCmd
 }
 
-func setConfig(config *Config) *cobra.Command {
+func setConfig(config *Config, writer printer.Writer) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set",
 		Short: "Set Optimizely configuration values",
@@ -34,7 +35,7 @@ func setConfig(config *Config) *cobra.Command {
 		Args:         cobra.NoArgs,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			err := noChoiceConfig(cmd.Context(), config)
+			err := noChoiceConfig(cmd.Context(), config, writer)
 			if err != nil {
 				return fmt.Errorf("failed to set config: %w", err)
 			}
@@ -43,7 +44,7 @@ func setConfig(config *Config) *cobra.Command {
 	}
 }
 
-func getConfig(config *Config, styles tui.Styles) *cobra.Command {
+func getConfig(config *Config) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get",
 		Short: "Get Optimizely configuration values",
@@ -58,15 +59,16 @@ func getConfig(config *Config, styles tui.Styles) *cobra.Command {
 			if err != nil {
 				return err
 			}
+			styles := tui.AutoStyles()
 			fmt.Println(renderConfig(cfg, styles))
 			return nil
 		},
 	}
 }
 
-func noChoiceConfig(ctx context.Context, config *Config) error {
+func noChoiceConfig(ctx context.Context, config *Config, writer printer.Writer) error {
 	choice := ""
-	err := huh.NewForm(
+	err := tui.NewForm(
 		huh.NewGroup(
 			huh.NewSelect[string]().
 				Title("Pick a config to set").
@@ -81,51 +83,70 @@ func noChoiceConfig(ctx context.Context, config *Config) error {
 		return fmt.Errorf("failed to select: %w", err)
 	}
 
-	// TODO: Convert to using a full form since it isn't as dynamic
+	var apiKey string
+	var cacheTTL string
+
 	switch choice {
 	case "apiKey":
-		value, err := tea.NewProgram(tui.NewTextPrompt(tui.InputConfig{
-			Placeholder: "Insert API Key",
-		})).Run()
+		err := tui.NewForm(
+			huh.NewGroup(
+				huh.NewInput().
+					Title("API Key").
+					Placeholder("Insert API Key").
+					Value(&apiKey).
+					Validate(func(s string) error {
+						if strings.TrimSpace(s) == "" {
+							return fmt.Errorf("API Key cannot be empty")
+						}
+						return nil
+					}),
+			),
+		).Run()
 		if err != nil {
-			return fmt.Errorf("failed to run program: %w", err)
+			return err
 		}
-		if v, ok := value.(tui.InputModel); ok {
-			if v.Value() == "" {
-				return fmt.Errorf("value cannot be empty")
-			}
-			_, err = config.Update(func(cfg *Configuration) error {
-				cfg.APIKey = v.Value()
-				return nil
-			})
-			if err != nil {
-				return fmt.Errorf("failed to set config: %w", err)
-			}
+
+		_, err = config.Update(func(cfg *Configuration) error {
+			cfg.APIKey = apiKey
+			return nil
+		})
+		if err != nil {
+			return fmt.Errorf("failed to set config: %w", err)
 		}
+		writer.Success("API Key updated successfully")
+
 	case "cacheTTLMinutes":
-		value, err := tea.NewProgram(tui.NewTextPrompt(tui.InputConfig{
-			Placeholder: "Insert time in minutes",
-			Header:      "Provide cache TTL in minutes. ex (10 = 10 minutes)",
-		})).Run()
+		err := tui.NewForm(
+			huh.NewGroup(
+				huh.NewInput().
+					Title("Provide cache TTL in minutes (e.g. 10)").
+					Placeholder("Insert time in minutes").
+					Value(&cacheTTL).
+					Validate(func(s string) error {
+						if strings.TrimSpace(s) == "" {
+							return fmt.Errorf("cache TTL cannot be empty")
+						}
+						val, err := strconv.Atoi(s)
+						if err != nil || val <= 0 {
+							return fmt.Errorf("must be a positive integer")
+						}
+						return nil
+					}),
+			),
+		).Run()
 		if err != nil {
-			return fmt.Errorf("failed to run program: %w", err)
+			return err
 		}
-		if v, ok := value.(tui.InputModel); ok {
-			if v.Value() == "" {
-				return fmt.Errorf("value cannot be empty")
-			}
-			_, err = config.Update(func(cfg *Configuration) error {
-				v, err := strconv.Atoi(v.Value())
-				if err != nil {
-					return err
-				}
-				cfg.CacheTTLMinutes = int64(time.Duration(v) * time.Minute)
-				return nil
-			})
-			if err != nil {
-				return fmt.Errorf("failed to set config: %w", err)
-			}
+
+		val, _ := strconv.Atoi(cacheTTL)
+		_, err = config.Update(func(cfg *Configuration) error {
+			cfg.CacheTTLMinutes = int64(time.Duration(val) * time.Minute)
+			return nil
+		})
+		if err != nil {
+			return fmt.Errorf("failed to set config: %w", err)
 		}
+		writer.Success(fmt.Sprintf("Cache TTL updated successfully to %d minutes", val))
 	}
 	return nil
 }

@@ -59,7 +59,7 @@ func createProject(service *core.Service, cfg *Config, writer printer.Writer) *c
 			}
 
 			if name == "" {
-				err := huh.NewForm(
+				err := tui.NewForm(
 					huh.NewGroup(
 						huh.NewInput().
 							Title("Project Name").
@@ -358,7 +358,7 @@ If no flags/arguments are provided, it will prompt for the details interactively
 			}
 
 			if !cmd.Flags().Changed("name") && !cmd.Flags().Changed("description") {
-				err = huh.NewForm(
+				err = tui.NewForm(
 					huh.NewGroup(
 						huh.NewInput().
 							Title("Project Name").
@@ -443,7 +443,7 @@ All goals and member associations will be moved and preserved. The merge project
 				}
 
 				if sourceProjID == "" {
-					err := huh.NewForm(
+					err := tui.NewForm(
 						huh.NewGroup(
 							huh.NewSelect[string]().
 								Title("Select Source Project (the project to merge INTO)").
@@ -465,7 +465,7 @@ All goals and member associations will be moved and preserved. The merge project
 				}
 
 				if mergeProjID == "" {
-					err := huh.NewForm(
+					err := tui.NewForm(
 						huh.NewGroup(
 							huh.NewSelect[string]().
 								Title("Select Project to Merge (the project that will be absorbed)").
@@ -488,7 +488,7 @@ All goals and member associations will be moved and preserved. The merge project
 				sourceGoals, err := service.GetGoals(cmd.Context(), sourceProjID)
 				if err == nil && len(sourceGoals) > 0 {
 					var attachToParent bool
-					err = huh.NewForm(
+					err = tui.NewForm(
 						huh.NewGroup(
 							huh.NewSelect[bool]().
 								Title("Do you want to attach the merged project under a specific parent goal in the source project?").
@@ -616,7 +616,7 @@ If moving to an existing project, by default the goal is attached under its root
 					projectOptions = append(projectOptions, huh.NewOption(p.Label, p.ID))
 				}
 
-				err = huh.NewForm(
+				err = tui.NewForm(
 					huh.NewGroup(
 						huh.NewSelect[string]().
 							Title("Select Source Project").
@@ -648,7 +648,7 @@ If moving to an existing project, by default the goal is attached under its root
 			// If target destination is missing, prompt
 			if targetProjectID == "" && newProjectName == "" {
 				var action string
-				err := huh.NewForm(
+				err := tui.NewForm(
 					huh.NewGroup(
 						huh.NewSelect[string]().
 							Title("Select Destination Type").
@@ -664,7 +664,7 @@ If moving to an existing project, by default the goal is attached under its root
 				}
 
 				if action == "new" {
-					err = huh.NewForm(
+					err = tui.NewForm(
 						huh.NewGroup(
 							huh.NewInput().
 								Title("New Project Name").
@@ -697,7 +697,7 @@ If moving to an existing project, by default the goal is attached under its root
 						projectOptions = append(projectOptions, huh.NewOption(p.Label, p.ID))
 					}
 
-					err = huh.NewForm(
+					err = tui.NewForm(
 						huh.NewGroup(
 							huh.NewSelect[string]().
 								Title("Select Target Project").
@@ -720,7 +720,7 @@ If moving to an existing project, by default the goal is attached under its root
 				targetGoals, err := service.GetGoals(cmd.Context(), targetProjectID)
 				if err == nil && len(targetGoals) > 0 {
 					var attachToParent bool
-					err = huh.NewForm(
+					err = tui.NewForm(
 						huh.NewGroup(
 							huh.NewSelect[bool]().
 								Title("Do you want to attach the goal under a specific parent goal in the target project?").

@@ -5,22 +5,23 @@ import (
 	"os"
 	"path/filepath"
 	"sattchel/internal/config"
+	"sattchel/internal/printer"
 
 	"github.com/spf13/cobra"
 )
 
-func cache(cfgStore *Config) *cobra.Command {
+func cache(cfgStore *Config, writer printer.Writer) *cobra.Command {
 	var cacheCmd = &cobra.Command{
 		Use:          "cache",
 		Short:        "Manage Optimizely cache",
 		SilenceUsage: true,
 	}
 
-	cacheCmd.AddCommand(clearCache(cfgStore))
+	cacheCmd.AddCommand(clearCache(cfgStore, writer))
 	return cacheCmd
 }
 
-func clearCache(cfgStore *Config) *cobra.Command {
+func clearCache(cfgStore *Config, writer printer.Writer) *cobra.Command {
 	return &cobra.Command{
 		Use:   "clear",
 		Short: "Wipe all local Optimizely cache files from disk",
@@ -39,7 +40,7 @@ func clearCache(cfgStore *Config) *cobra.Command {
 
 			allFiles := append(files1, files2...)
 			if len(allFiles) == 0 {
-				fmt.Println("No Optimizely cache files found to clear.")
+				writer.Info("No Optimizely cache files found to clear.")
 				return nil
 			}
 
@@ -47,13 +48,13 @@ func clearCache(cfgStore *Config) *cobra.Command {
 			for _, file := range allFiles {
 				if err := os.Remove(file); err == nil {
 					deletedCount++
-					fmt.Printf("Cleared cache file: %s\n", filepath.Base(file))
+					writer.Success(fmt.Sprintf("Cleared cache file: %s", filepath.Base(file)))
 				} else if !os.IsNotExist(err) {
-					fmt.Printf("Warning: failed to delete cache file %s: %v\n", file, err)
+					writer.Warn(fmt.Sprintf("Warning: failed to delete cache file %s: %v", file, err))
 				}
 			}
 
-			fmt.Printf("Successfully cleared %d local cache file(s).\n", deletedCount)
+			writer.Success(fmt.Sprintf("Successfully cleared %d local cache file(s).", deletedCount))
 			return nil
 		},
 	}

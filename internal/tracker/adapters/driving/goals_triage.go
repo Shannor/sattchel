@@ -2,6 +2,7 @@ package driving
 
 import (
 	"fmt"
+	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
 	"sattchel/pkg/loader"
@@ -11,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func triageGoals(service *core.Service, cfg *Config) *cobra.Command {
+func triageGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
 		projectID      string
 		preset         string

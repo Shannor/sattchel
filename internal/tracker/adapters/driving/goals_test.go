@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"path/filepath"
+	"sattchel/internal/printer"
 	"sattchel/internal/tracker/adapters/driven"
 	"sattchel/internal/tracker/core"
 	"strings"
@@ -36,14 +37,16 @@ func TestGoalsCLI(t *testing.T) {
 		t.Fatalf("failed to create child goal: %v", err)
 	}
 
-	cmd := goals(service, cfg)
+	buf := new(bytes.Buffer)
+	writer := printer.NewStyleWriterWithWriters(buf, buf)
+	cmd := goals(service, cfg, writer)
 	executeCmd := func(args ...string) (string, error) {
-		buf := new(bytes.Buffer)
+		buf.Reset()
 		cmd.SetOut(buf)
 		cmd.SetErr(buf)
 		cmd.SetArgs(args)
 		err := cmd.ExecuteContext(context.Background())
-		return buf.String(), err
+		return stripANSI(buf.String()), err
 	}
 
 	out, err := executeCmd("delete", childGoal.ID, "--projectId", project.ID)

@@ -2,6 +2,7 @@ package driving
 
 import (
 	"fmt"
+	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
 	"sattchel/pkg/loader"
@@ -9,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func members(service *core.Service, cfg *Config) *cobra.Command {
+func members(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "member",
 		Aliases: []string{"m", "members"},
@@ -23,15 +24,15 @@ func members(service *core.Service, cfg *Config) *cobra.Command {
      satt tracker member delete <id>
 `,
 	}
-	cmd.AddCommand(createMember(service, cfg))
-	cmd.AddCommand(getMember(service, cfg))
-	cmd.AddCommand(listMembers(service, cfg))
-	cmd.AddCommand(updateMember(service, cfg))
-	cmd.AddCommand(deleteMember(service, cfg))
+	cmd.AddCommand(createMember(service, cfg, writer))
+	cmd.AddCommand(getMember(service, cfg, writer))
+	cmd.AddCommand(listMembers(service, cfg, writer))
+	cmd.AddCommand(updateMember(service, cfg, writer))
+	cmd.AddCommand(deleteMember(service, cfg, writer))
 	return cmd
 }
 
-func createMember(service *core.Service, cfg *Config) *cobra.Command {
+func createMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var email string
 	cmd := &cobra.Command{
 		Use:          "create <name>",
@@ -52,7 +53,7 @@ func createMember(service *core.Service, cfg *Config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Fprintf(cmd.OutOrStdout(), "Member created successfully:\nID: %s\nName: %s\nEmail: %s\n", member.ID, member.Name, member.Email)
+			writer.Success(fmt.Sprintf("Member %s (%s) created successfully", member.Name, member.ID))
 			return nil
 		},
 	}
@@ -60,7 +61,7 @@ func createMember(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func getMember(service *core.Service, cfg *Config) *cobra.Command {
+func getMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:          "get <id>",
 		Aliases:      []string{"view", "show"},
@@ -80,14 +81,18 @@ func getMember(service *core.Service, cfg *Config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Fprintf(cmd.OutOrStdout(), "ID: %s\nName: %s\nEmail: %s\n", member.ID, member.Name, member.Email)
+			var emailStr string
+			if member.Email != "" {
+				emailStr = fmt.Sprintf(" - %s", member.Email)
+			}
+			writer.Info(fmt.Sprintf("Member: %s (%s)%s", member.Name, member.ID, emailStr))
 			return nil
 		},
 	}
 	return cmd
 }
 
-func listMembers(service *core.Service, cfg *Config) *cobra.Command {
+func listMembers(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:          "list",
 		Short:        "List all members",
@@ -106,7 +111,7 @@ func listMembers(service *core.Service, cfg *Config) *cobra.Command {
 				return err
 			}
 			if len(members) == 0 {
-				fmt.Fprintln(cmd.OutOrStdout(), "No members found")
+				writer.Info("No members found")
 				return nil
 			}
 
@@ -130,11 +135,11 @@ func listMembers(service *core.Service, cfg *Config) *cobra.Command {
 				if selected != nil {
 					for _, m := range members {
 						if m.ID == selected.ValueStr {
+							var emailStr string
 							if m.Email != "" {
-								fmt.Fprintf(cmd.OutOrStdout(), "ID: %s\nName: %s\nEmail: %s\n", m.ID, m.Name, m.Email)
-							} else {
-								fmt.Fprintf(cmd.OutOrStdout(), "ID: %s\nName: %s\n", m.ID, m.Name)
+								emailStr = fmt.Sprintf(" - %s", m.Email)
 							}
+							writer.Info(fmt.Sprintf("Member: %s (%s)%s", m.Name, m.ID, emailStr))
 							break
 						}
 					}
@@ -143,11 +148,11 @@ func listMembers(service *core.Service, cfg *Config) *cobra.Command {
 			}
 
 			for _, m := range members {
+				var emailStr string
 				if m.Email != "" {
-					fmt.Fprintf(cmd.OutOrStdout(), "- %s (%s) - %s\n", m.Name, m.ID, m.Email)
-				} else {
-					fmt.Fprintf(cmd.OutOrStdout(), "- %s (%s)\n", m.Name, m.ID)
+					emailStr = fmt.Sprintf(" - %s", m.Email)
 				}
+				writer.Info(fmt.Sprintf("- %s (%s)%s", m.Name, m.ID, emailStr))
 			}
 			return nil
 		},
@@ -155,7 +160,7 @@ func listMembers(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func updateMember(service *core.Service, cfg *Config) *cobra.Command {
+func updateMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var name string
 	var email string
 	cmd := &cobra.Command{
@@ -199,7 +204,7 @@ func updateMember(service *core.Service, cfg *Config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Fprintf(cmd.OutOrStdout(), "Member updated successfully:\nID: %s\nName: %s\nEmail: %s\n", member.ID, member.Name, member.Email)
+			writer.Success(fmt.Sprintf("Member %s (%s) updated successfully", member.Name, member.ID))
 			return nil
 		},
 	}
@@ -208,7 +213,7 @@ func updateMember(service *core.Service, cfg *Config) *cobra.Command {
 	return cmd
 }
 
-func deleteMember(service *core.Service, cfg *Config) *cobra.Command {
+func deleteMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:          "delete <id>",
 		Aliases:      []string{"remove", "rm"},
@@ -227,7 +232,7 @@ func deleteMember(service *core.Service, cfg *Config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Fprintf(cmd.OutOrStdout(), "Member %s deleted successfully\n", id)
+			writer.Success(fmt.Sprintf("Member %s deleted successfully", id))
 			return nil
 		},
 	}

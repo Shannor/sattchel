@@ -415,7 +415,7 @@ func confirmSyncApply(changeCount int) (bool, error) {
 		return false, fmt.Errorf("--yes is required when applying sync in a non-interactive environment")
 	}
 	confirmed := false
-	err := huh.NewForm(
+	err := tui.NewForm(
 		huh.NewGroup(
 			huh.NewConfirm().
 				Title(fmt.Sprintf("Apply %d Optimizely sync change(s)?", changeCount)).
