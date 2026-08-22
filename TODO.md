@@ -30,3 +30,6 @@
   - Need to research if special logging is needed for CLIs. I assume not.
 - [ ] Introduce a state machine for Goal Status transitions
   - [ ] Introduce limits on what can chnage in certain statuses  
+- [ ] Split up documentation for each tool in the CLI
+  - [ ] Tracker 
+  - [ ] Optimizely

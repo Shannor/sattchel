@@ -263,3 +263,30 @@ func TestGoalOptionsHelpers(t *testing.T) {
 		}
 	})
 }
+
+func TestMatchesQuery(t *testing.T) {
+	g := Goal{
+		Name:        "Build Frontend Dashboard",
+		Description: "Create interactive UI using React",
+	}
+
+	tests := []struct {
+		name  string
+		query string
+		want  bool
+	}{
+		{"empty query", "", true},
+		{"exact name match", "Build Frontend Dashboard", true},
+		{"partial name match case insensitive", "frontend", true},
+		{"description match case insensitive", "react", true},
+		{"no match", "backend", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := g.MatchesQuery(tt.query); got != tt.want {
+				t.Errorf("MatchesQuery(%q) = %t; want %t", tt.query, got, tt.want)
+			}
+		})
+	}
+}

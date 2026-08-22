@@ -341,12 +341,13 @@ func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 
 func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
-		projectID string
-		statuses  []string
-		impacts   []string
-		efforts   []string
-		memberIDs []string
-		flatMode  bool
+		projectID   string
+		statuses    []string
+		impacts     []string
+		efforts     []string
+		memberIDs   []string
+		filterQuery string
+		flatMode    bool
 	)
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -391,7 +392,8 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 			hasFilters := cmd.Flags().Changed("status") ||
 				cmd.Flags().Changed("impact") ||
 				cmd.Flags().Changed("effort") ||
-				cmd.Flags().Changed("member")
+				cmd.Flags().Changed("member") ||
+				cmd.Flags().Changed("filter")
 
 			statusSet := set.NewFrom(statuses)
 			impactSet := set.NewFrom(impacts)
@@ -401,6 +403,11 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 			matchesFilter := func(g *core.Goal) bool {
 				if !hasFilters {
 					return true
+				}
+				if cmd.Flags().Changed("filter") && filterQuery != "" {
+					if !g.MatchesQuery(filterQuery) {
+						return false
+					}
 				}
 				if cmd.Flags().Changed("status") && !statusSet.Contains(string(g.Status)) {
 					return false
@@ -474,11 +481,12 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	cmd.Flags().StringVarP(&filterQuery, "filter", "f", "", "Filter goals by name/label query")
 	cmd.Flags().StringSliceVarP(&statuses, "status", "s", nil, "Filter by status (draft, open, in-progress, completed, cancelled). Comma-separated or repeated.")
 	cmd.Flags().StringSliceVarP(&impacts, "impact", "i", nil, "Filter by impact (low, medium, high). Comma-separated or repeated.")
 	cmd.Flags().StringSliceVarP(&efforts, "effort", "e", nil, "Filter by effort (low, medium, high). Comma-separated or repeated.")
 	cmd.Flags().StringSliceVarP(&memberIDs, "member", "m", nil, "Filter by member ID. Comma-separated or repeated.")
-	cmd.Flags().BoolVarP(&flatMode, "flat", "f", false, "Show only matching goals as a flat list instead of the full tree")
+	cmd.Flags().BoolVar(&flatMode, "flat", false, "Show only matching goals as a flat list instead of the full tree")
 
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp

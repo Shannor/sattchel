@@ -217,8 +217,18 @@ func (g *Goal) DetachChild(child *Goal) error {
 	return nil
 }
 
+// MatchesQuery returns true if the goal's name or description contains the query string (case-insensitive).
+func (g *Goal) MatchesQuery(query string) bool {
+	if query == "" {
+		return true
+	}
+	q := strings.ToLower(query)
+	return strings.Contains(strings.ToLower(g.Name), q) || strings.Contains(strings.ToLower(g.Description), q)
+}
+
 // GoalQuery optional query options
 type GoalQuery struct {
+	Query         string
 	ParentID      string
 	MemberIDs     []string
 	Impacts       []Impact

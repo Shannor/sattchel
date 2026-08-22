@@ -432,6 +432,11 @@ func (s *FileStorage) QueryGoals(ctx context.Context, projectID string, query *c
 			continue
 		}
 		if query != nil {
+			if query.Query != "" {
+				if !goal.MatchesQuery(query.Query) {
+					continue
+				}
+			}
 			if query.ParentID != "" {
 				if goal.Parent == nil || goal.Parent.TargetID != query.ParentID {
 					continue

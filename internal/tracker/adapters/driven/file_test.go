@@ -125,6 +125,46 @@ func TestFileStorageGetGoalsFilterByProject(t *testing.T) {
 	}
 }
 
+func TestFileStorageQueryGoalsFilterByText(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath := filepath.Join(tempDir, "tracker.json")
+
+	storage := driven.NewFileStorage(dbPath, nil)
+	ctx := context.Background()
+
+	p, err := storage.CreateProject(ctx, &core.Project{Label: "Project Query"})
+	if err != nil {
+		t.Fatalf("failed to create project: %v", err)
+	}
+
+	_, err = storage.CreateGoal(ctx, p.ID, &core.Goal{Name: "Refactor Database Schema", ProjectID: p.ID})
+	if err != nil {
+		t.Fatalf("failed to create goal 1: %v", err)
+	}
+	_, err = storage.CreateGoal(ctx, p.ID, &core.Goal{Name: "Build Auth Flow", Description: "OIDC integration", ProjectID: p.ID})
+	if err != nil {
+		t.Fatalf("failed to create goal 2: %v", err)
+	}
+
+	// Query by name substring
+	results, err := storage.QueryGoals(ctx, p.ID, &core.GoalQuery{Query: "Database"})
+	if err != nil {
+		t.Fatalf("QueryGoals failed: %v", err)
+	}
+	if len(results) != 1 || results[0].Name != "Refactor Database Schema" {
+		t.Errorf("expected 1 result 'Refactor Database Schema', got %v", results)
+	}
+
+	// Query by description substring
+	resultsDesc, err := storage.QueryGoals(ctx, p.ID, &core.GoalQuery{Query: "OIDC"})
+	if err != nil {
+		t.Fatalf("QueryGoals failed: %v", err)
+	}
+	if len(resultsDesc) != 1 || resultsDesc[0].Name != "Build Auth Flow" {
+		t.Errorf("expected 1 result 'Build Auth Flow', got %v", resultsDesc)
+	}
+}
+
 func TestFileStorageExportImport(t *testing.T) {
 	tempDir := t.TempDir()
 	dbPath1 := filepath.Join(tempDir, "tracker1.json")
