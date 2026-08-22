@@ -1,8 +1,6 @@
 package tui
 
 import (
-	"os"
-
 	"charm.land/bubbles/v2/list"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
@@ -38,7 +36,7 @@ func NewListSelect(title string, options []ListOption) ListSelectModel {
 	delegate := list.NewDefaultDelegate()
 
 	// Initialize delegate styles based on terminal background
-	hasDark := lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
+	hasDark := IsDarkTerminal()
 	delegate.Styles = list.NewDefaultItemStyles(hasDark)
 
 	// Customize delegate styles using Sattchel TUI styles

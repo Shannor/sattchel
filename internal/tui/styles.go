@@ -3,6 +3,9 @@ package tui
 import (
 	"image/color"
 	"os"
+	"strconv"
+	"strings"
+	"sync"
 
 	"charm.land/huh/v2"
 	"charm.land/lipgloss/v2"
@@ -18,7 +21,12 @@ const (
 	ThemeGruvbox ThemeType = "gruvbox"
 )
 
-var currentTheme ThemeType = ThemeDefault
+var (
+	currentTheme   ThemeType = ThemeDefault
+	configuredMode string
+	isDarkCached   bool
+	isDarkOnce     sync.Once
+)
 
 // SetTheme sets the active theme for the TUI components.
 func SetTheme(theme string) {
@@ -28,6 +36,17 @@ func SetTheme(theme string) {
 	default:
 		currentTheme = ThemeDefault
 	}
+}
+
+// SetColorMode sets an explicit color mode ("dark" or "light") for the TUI components.
+func SetColorMode(mode string) {
+	configuredMode = mode
+	ResetDarkTerminalCache()
+}
+
+// ResetDarkTerminalCache clears the cached dark terminal detection.
+func ResetDarkTerminalCache() {
+	isDarkOnce = sync.Once{}
 }
 
 // GetTheme returns the currently configured theme.
@@ -46,10 +65,60 @@ type Styles struct {
 	Title   lipgloss.Style
 }
 
+// IsDarkTerminal returns whether the terminal is detected to have a dark background.
+// It checks explicit settings first (SetColorMode, SATT_COLOR_MODE, SATT_MODE, COLORFGBG),
+// then falls back to lipgloss.HasDarkBackground(os.Stdin, os.Stdout).
+// The result is detected once and cached to avoid repeated terminal queries during TUI rendering.
+func IsDarkTerminal() bool {
+	isDarkOnce.Do(func() {
+		isDarkCached = detectIsDarkTerminal()
+	})
+	return isDarkCached
+}
+
+func detectIsDarkTerminal() bool {
+	if configuredMode != "" {
+		switch strings.ToLower(configuredMode) {
+		case "dark", "darkmode", "1", "true":
+			return true
+		case "light", "lightmode", "0", "false":
+			return false
+		}
+	}
+
+	for _, envKey := range []string{"SATT_COLOR_MODE", "SATT_MODE"} {
+		if mode := os.Getenv(envKey); mode != "" {
+			switch strings.ToLower(mode) {
+			case "dark", "darkmode", "1", "true":
+				return true
+			case "light", "lightmode", "0", "false":
+				return false
+			}
+		}
+	}
+
+	if fgbg := os.Getenv("COLORFGBG"); fgbg != "" {
+		parts := strings.Split(fgbg, ";")
+		if len(parts) >= 2 {
+			bgStr := strings.TrimSpace(parts[len(parts)-1])
+			if bgNum, err := strconv.Atoi(bgStr); err == nil {
+				if (bgNum >= 0 && bgNum <= 6) || bgNum == 8 || (bgNum >= 232 && bgNum <= 243) {
+					return true
+				}
+				if bgNum == 7 || bgNum == 15 || (bgNum >= 244 && bgNum <= 255) {
+					return false
+				}
+			}
+		}
+	}
+
+	return lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
+}
+
 // AutoStyles creates the styles by automatically detecting the terminal's background
 // and using the active theme.
 func AutoStyles() Styles {
-	hasDark := lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
+	hasDark := IsDarkTerminal()
 	return GetStyles(currentTheme, hasDark)
 }
 
@@ -148,6 +217,69 @@ func GruvboxStyles(isDark bool) Styles {
 	}
 }
 
+// ThemeDefaultStyles returns a new huh.Styles configured for the default theme.
+func ThemeDefaultStyles(isDark bool) *huh.Styles {
+	t := huh.ThemeBase(isDark)
+
+	var bg, fg, muted, red, green, blue, orange, selection color.Color
+
+	if isDark {
+		bg = lipgloss.Color("#282A36")
+		fg = lipgloss.Color("#F8F8F2")
+		muted = lipgloss.Color("#94A3B8")
+		red = lipgloss.Color("#FF5555")
+		green = lipgloss.Color("#50FA7B")
+		blue = lipgloss.Color("#8BE9FD")
+		orange = lipgloss.Color("#FFB86C")
+		selection = lipgloss.Color("#44475A")
+	} else {
+		bg = lipgloss.Color("#F8F9FA")
+		fg = lipgloss.Color("#212529")
+		muted = lipgloss.Color("#6C757D")
+		red = lipgloss.Color("#D90429")
+		green = lipgloss.Color("#008000")
+		blue = lipgloss.Color("#0077B6")
+		orange = lipgloss.Color("#E67E22")
+		selection = lipgloss.Color("#DEE2E6")
+	}
+
+	t.Focused.Base = t.Focused.Base.BorderForeground(selection)
+	t.Focused.Card = t.Focused.Base
+	t.Focused.Title = t.Focused.Title.Foreground(blue).Bold(true)
+	t.Focused.NoteTitle = t.Focused.NoteTitle.Foreground(blue).Bold(true)
+	t.Focused.Description = t.Focused.Description.Foreground(muted)
+	t.Focused.ErrorIndicator = t.Focused.ErrorIndicator.Foreground(red)
+	t.Focused.Directory = t.Focused.Directory.Foreground(blue)
+	t.Focused.File = t.Focused.File.Foreground(fg)
+	t.Focused.ErrorMessage = t.Focused.ErrorMessage.Foreground(red)
+	t.Focused.SelectSelector = t.Focused.SelectSelector.Foreground(orange)
+	t.Focused.NextIndicator = t.Focused.NextIndicator.Foreground(orange)
+	t.Focused.PrevIndicator = t.Focused.PrevIndicator.Foreground(orange)
+	t.Focused.Option = t.Focused.Option.Foreground(fg)
+	t.Focused.MultiSelectSelector = t.Focused.MultiSelectSelector.Foreground(orange)
+	t.Focused.SelectedOption = t.Focused.SelectedOption.Foreground(orange).Bold(true)
+	t.Focused.SelectedPrefix = t.Focused.SelectedPrefix.Foreground(green)
+	t.Focused.UnselectedOption = t.Focused.UnselectedOption.Foreground(fg)
+	t.Focused.UnselectedPrefix = t.Focused.UnselectedPrefix.Foreground(muted)
+	t.Focused.FocusedButton = t.Focused.FocusedButton.Foreground(bg).Background(orange).Bold(true)
+	t.Focused.BlurredButton = t.Focused.BlurredButton.Foreground(fg).Background(selection)
+
+	t.Focused.TextInput.Cursor = t.Focused.TextInput.Cursor.Foreground(orange)
+	t.Focused.TextInput.Placeholder = t.Focused.TextInput.Placeholder.Foreground(muted)
+	t.Focused.TextInput.Prompt = t.Focused.TextInput.Prompt.Foreground(orange)
+
+	t.Blurred = t.Focused
+	t.Blurred.Base = t.Blurred.Base.BorderStyle(lipgloss.HiddenBorder())
+	t.Blurred.Card = t.Blurred.Base
+	t.Blurred.NextIndicator = lipgloss.NewStyle()
+	t.Blurred.PrevIndicator = lipgloss.NewStyle()
+
+	t.Group.Title = t.Focused.Title
+	t.Group.Description = t.Focused.Description
+
+	return t
+}
+
 // ThemeGruvboxStyles returns a new huh.Styles configured for the Gruvbox theme.
 func ThemeGruvboxStyles(isDark bool) *huh.Styles {
 	t := huh.ThemeBase(isDark)
@@ -157,7 +289,7 @@ func ThemeGruvboxStyles(isDark bool) *huh.Styles {
 	if isDark {
 		bg = lipgloss.Color("#282828")        // bg0
 		fg = lipgloss.Color("#ebdbb2")        // fg1
-		gray = lipgloss.Color("#928374")      // gray
+		gray = lipgloss.Color("#a89984")      // fg4
 		red = lipgloss.Color("#fb4934")       // bright red
 		green = lipgloss.Color("#b8bb26")     // bright green
 		blue = lipgloss.Color("#83a598")      // bright blue
@@ -188,7 +320,7 @@ func ThemeGruvboxStyles(isDark bool) *huh.Styles {
 	t.Focused.PrevIndicator = t.Focused.PrevIndicator.Foreground(orange)
 	t.Focused.Option = t.Focused.Option.Foreground(fg)
 	t.Focused.MultiSelectSelector = t.Focused.MultiSelectSelector.Foreground(orange)
-	t.Focused.SelectedOption = t.Focused.SelectedOption.Foreground(green)
+	t.Focused.SelectedOption = t.Focused.SelectedOption.Foreground(orange).Bold(true)
 	t.Focused.SelectedPrefix = t.Focused.SelectedPrefix.Foreground(green)
 	t.Focused.UnselectedOption = t.Focused.UnselectedOption.Foreground(fg)
 	t.Focused.UnselectedPrefix = t.Focused.UnselectedPrefix.Foreground(gray)
@@ -213,11 +345,16 @@ func ThemeGruvboxStyles(isDark bool) *huh.Styles {
 
 // HuhTheme returns the appropriate huh.Theme for the active theme.
 func HuhTheme() huh.Theme {
+	isDark := IsDarkTerminal()
 	switch currentTheme {
 	case ThemeGruvbox:
-		return huh.ThemeFunc(ThemeGruvboxStyles)
+		return huh.ThemeFunc(func(_ bool) *huh.Styles {
+			return ThemeGruvboxStyles(isDark)
+		})
 	default:
-		return huh.ThemeFunc(huh.ThemeCharm)
+		return huh.ThemeFunc(func(_ bool) *huh.Styles {
+			return ThemeDefaultStyles(isDark)
+		})
 	}
 }
 
