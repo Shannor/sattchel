@@ -129,6 +129,7 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 			}
 
 			// 1. Specific preset filtering requested
+			defaultGoalStatuses := []core.GoalStatus{core.GoalDraft, core.GoalOpen, core.GoalInProgress, core.GoalCancelled}
 			if hasPresetFilter {
 				var (
 					goals []core.Goal
@@ -139,10 +140,11 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 				p := strings.ToLower(strings.TrimSpace(preset))
 				switch p {
 				case "do-it-now":
-					query = triageQuery(core.GoalQuery{
-						Impacts: []core.Impact{core.HighImpact},
-						Efforts: []core.Effort{core.LowEffort},
-					})
+					query = core.GoalQuery{
+						Impacts:  []core.Impact{core.HighImpact},
+						Efforts:  []core.Effort{core.LowEffort},
+						Statuses: defaultGoalStatuses,
+					}
 					_ = loader.Run("Getting Do It Now goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
@@ -153,10 +155,11 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					printGroup("DO IT NOW (High Impact, Low Effort)", styles.Success, goals, false)
 
 				case "honest-work":
-					query = triageQuery(core.GoalQuery{
-						Impacts: []core.Impact{core.HighImpact},
-						Efforts: []core.Effort{core.HighEffort},
-					})
+					query = core.GoalQuery{
+						Impacts:  []core.Impact{core.HighImpact},
+						Efforts:  []core.Effort{core.HighEffort},
+						Statuses: defaultGoalStatuses,
+					}
 					_ = loader.Run("Getting Honest Work goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
@@ -167,10 +170,11 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					printGroup("HONEST WORK (High Impact, High Effort)", styles.Info, goals, false)
 
 				case "snacking":
-					query = triageQuery(core.GoalQuery{
-						Impacts: []core.Impact{core.LowImpact},
-						Efforts: []core.Effort{core.LowEffort},
-					})
+					query = core.GoalQuery{
+						Impacts:  []core.Impact{core.LowImpact},
+						Efforts:  []core.Effort{core.LowEffort},
+						Statuses: defaultGoalStatuses,
+					}
 					_ = loader.Run("Getting Snacking goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
@@ -181,10 +185,11 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					printGroup("SNACKING (Low Impact, Low Effort)", styles.Success, goals, false)
 
 				case "why":
-					query = triageQuery(core.GoalQuery{
-						Impacts: []core.Impact{core.LowImpact},
-						Efforts: []core.Effort{core.HighEffort},
-					})
+					query = core.GoalQuery{
+						Impacts:  []core.Impact{core.LowImpact},
+						Efforts:  []core.Effort{core.HighEffort},
+						Statuses: defaultGoalStatuses,
+					}
 					_ = loader.Run("Getting Why? goals...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
 					})
@@ -195,9 +200,10 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					printGroup("WHY? (Low Impact, High Effort)", styles.Warning, goals, false)
 
 				case "missing":
-					query = triageQuery(core.GoalQuery{
+					query = core.GoalQuery{
 						MissingFields: []string{"member", "impact", "effort"},
-					})
+						Statuses:      defaultGoalStatuses,
+					}
 					var err error
 					_ = loader.Run("Getting goals with missing details...", func() {
 						goals, err = service.QueryGoals(cmd.Context(), pid, query)
@@ -222,9 +228,10 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					err   error
 				)
 
-				query := triageQuery(core.GoalQuery{
+				query := core.GoalQuery{
 					MissingFields: missingFilters,
-				})
+					Statuses:      defaultGoalStatuses,
+				}
 				_ = loader.Run("Filtering goals by missing details...", func() {
 					goals, err = service.QueryGoals(cmd.Context(), pid, query)
 				})
@@ -243,7 +250,9 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 			)
 
 			_ = loader.Run("Retrieving project goals...", func() {
-				allGoals, err = service.QueryGoals(cmd.Context(), pid, triageQuery(core.GoalQuery{}))
+				allGoals, err = service.QueryGoals(cmd.Context(), pid, core.GoalQuery{
+					Statuses: defaultGoalStatuses,
+				})
 			})
 			if err != nil {
 				return err
@@ -327,16 +336,6 @@ func projectLabel(project *core.Project, pid string) string {
 		return project.Label
 	}
 	return pid
-}
-
-func triageQuery(query core.GoalQuery) core.GoalQuery {
-	query.Statuses = []core.GoalStatus{
-		core.GoalDraft,
-		core.GoalOpen,
-		core.GoalInProgress,
-		core.GoalCancelled,
-	}
-	return query
 }
 
 func getMissingFields(g *core.Goal) []string {

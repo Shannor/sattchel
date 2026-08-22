@@ -1,16 +1,17 @@
 package driving
 
 import (
+	"context"
 	"fmt"
 	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
+	"sattchel/pkg/loader"
 	"sattchel/pkg/set"
 	"slices"
 	"strings"
 
-	"sattchel/pkg/loader"
-
+	"charm.land/huh/v2"
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/tree"
 	"github.com/spf13/cobra"
@@ -54,27 +55,35 @@ func addGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 	memberID := ""
 	changeCurrent := false
 	cmd := &cobra.Command{
-		Use:   "add <name>",
+		Use:   "add [name]",
 		Short: "Add a new goal",
 		Long: `Add a new goal.
 	Will create a new goal. If it's the root goal it will automatically get set as current'.
 	For each goal after it will stay pointing at root unless you provide a parent or flag on creation to change it.
+
+	If no name is provided, an interactive form will be shown.
+
    Examples:
      satt tracker goal add short
      satt tracker goal add "Long Title with Spaces"
+     satt tracker goal add
      `,
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 0 {
-				return fmt.Errorf("goal name is required")
-			}
-
 			pid := projectID
 			if !cmd.Flags().Changed("projectId") {
 				if lastProj := cfg.CurrentProjectID(); lastProj != "" {
 					pid = lastProj
 				}
+			}
+			if pid == "" {
+				return fmt.Errorf("no project selected")
+			}
+
+			// If no name provided, show interactive form
+			if len(args) == 0 {
+				return addGoalInteractive(cmd.Context(), service, cfg, pid)
 			}
 
 			parent := parentID
@@ -143,6 +152,133 @@ func addGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 		return getMemberCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
 	return cmd
+}
+
+func addGoalInteractive(ctx context.Context, service *core.Service, cfg *Config, pid string) error {
+	// Fetch available goals for parent selection
+	var goals []core.Goal
+	var err error
+	_ = loader.Run("Loading goals ...", func() {
+		goals, err = service.GetGoals(ctx, pid)
+	})
+	if err != nil {
+		return err
+	}
+
+	// Fetch available members
+	var members []core.Member
+	_ = loader.Run("Loading members ...", func() {
+		members, err = service.GetMembers(ctx)
+	})
+	if err != nil {
+		return err
+	}
+
+	// Determine default parent
+	defaultParent := ""
+	if lastGoal := cfg.CurrentGoalID(); lastGoal != "" {
+		defaultParent = lastGoal
+	}
+
+	var (
+		goalName        string
+		description     string
+		parentID        string
+		impactVal       string
+		effortVal       string
+		memberIDVal     string
+		relationshipVal string
+		setCurrent      bool
+	)
+
+	// Build parent options
+	var parentOptions []huh.Option[string]
+	for _, g := range goals {
+		opt := huh.NewOption(g.Name, g.ID)
+		if g.ID == defaultParent {
+			opt = opt.Selected(true)
+		}
+		parentOptions = append(parentOptions, opt)
+	}
+
+	// Build member options
+	var memberOptions []huh.Option[string]
+	memberOptions = append(memberOptions, huh.NewOption("Unassigned", ""))
+	for _, m := range members {
+		memberOptions = append(memberOptions, huh.NewOption(m.Name, m.ID))
+	}
+
+	impactOptions := []huh.Option[string]{
+		huh.NewOption("Low", string(core.LowImpact)),
+		huh.NewOption("Medium", string(core.MediumImpact)),
+		huh.NewOption("High", string(core.HighImpact)),
+	}
+	effortOptions := []huh.Option[string]{
+		huh.NewOption("Low", string(core.LowEffort)),
+		huh.NewOption("Medium", string(core.MediumEffort)),
+		huh.NewOption("High", string(core.HighEffort)),
+	}
+	relOptions := []huh.Option[string]{
+		huh.NewOption("Optional", string(core.LinkOptional)),
+		huh.NewOption("Required", string(core.LinkRequired)),
+	}
+
+	impactVal = string(core.UnknownImpact)
+	effortVal = string(core.UnknownEffort)
+	relationshipVal = string(core.LinkOptional)
+
+	form := tui.NewForm(
+		huh.NewGroup(
+			huh.NewInput().Title("Goal Name").Prompt(":").Validate(func(val string) error {
+				if val == "" {
+					return fmt.Errorf("goal name is required")
+				}
+				return nil
+			}).Value(&goalName),
+		).WithHeight(12),
+		huh.NewGroup(
+			huh.NewInput().Title("Description").Prompt(":").Placeholder("(Optional)").Value(&description),
+		).WithHeight(12),
+		huh.NewGroup(
+			huh.NewSelect[string]().Title("Parent Goal").Options(parentOptions...).Value(&parentID),
+		).WithHeight(12),
+		huh.NewGroup(
+			huh.NewSelect[string]().Title("Impact").Options(impactOptions...).Value(&impactVal),
+			huh.NewSelect[string]().Title("Effort").Options(effortOptions...).Value(&effortVal),
+		).WithHeight(12),
+		huh.NewGroup(
+			huh.NewSelect[string]().Title("Member").Options(memberOptions...).Value(&memberIDVal),
+			huh.NewSelect[string]().Title("Relationship").Options(relOptions...).Value(&relationshipVal),
+		).WithHeight(12),
+		huh.NewGroup(
+			huh.NewConfirm().Title("Set as current goal?").Value(&setCurrent),
+		).WithHeight(6),
+	)
+
+	if err := form.Run(); err != nil {
+		return err
+	}
+
+	options := core.GoalOptions{
+		ParentID:         parentID,
+		Description:      description,
+		Effort:           core.Effort(effortVal),
+		Impact:           core.Impact(impactVal),
+		MemberID:         memberIDVal,
+		LinkRelationship: core.LinkRelationship(relationshipVal),
+	}
+
+	goal, err := service.CreateGoal(ctx, pid, goalName, options)
+	if err != nil {
+		return err
+	}
+
+	if setCurrent || !goal.HasParent() {
+		_ = cfg.SetCurrentGoalID(goal.ID)
+	}
+
+	fmt.Printf("Goal %s (%s) created successfully\n", goal.Name, goal.ID)
+	return nil
 }
 
 func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {

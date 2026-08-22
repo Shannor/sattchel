@@ -99,6 +99,57 @@ func TestDefaultHuhThemeDarkContrast(t *testing.T) {
 	assertStyleForeground(t, stylesDark.Focused.SelectedOption.GetForeground(), color.RGBA{R: 0xFF, G: 0xB8, B: 0x6C, A: 0xFF}, "selected option")
 }
 
+func TestGruvboxHuhThemeOrange(t *testing.T) {
+	defer SetTheme("default")
+	SetTheme("gruvbox")
+
+	styles := ThemeGruvboxStyles(true)
+	if styles == nil {
+		t.Fatal("expected non-nil styles for gruvbox dark mode")
+	}
+
+	// Gruvbox bright orange #fe8019 -> R: 0xFE, G: 0x80, B: 0x19
+	assertStyleForeground(t, styles.Focused.SelectedOption.GetForeground(), color.RGBA{R: 0xFE, G: 0x80, B: 0x19, A: 0xFF}, "gruvbox selected option orange")
+}
+
+func TestIsDarkTerminalEnvOverride(t *testing.T) {
+	t.Run("SATT_COLOR_MODE=dark", func(t *testing.T) {
+		ResetDarkTerminalCache()
+		t.Setenv("SATT_COLOR_MODE", "dark")
+		if !IsDarkTerminal() {
+			t.Error("expected IsDarkTerminal to return true for SATT_COLOR_MODE=dark")
+		}
+	})
+
+	t.Run("SATT_COLOR_MODE=light", func(t *testing.T) {
+		ResetDarkTerminalCache()
+		t.Setenv("SATT_COLOR_MODE", "light")
+		if IsDarkTerminal() {
+			t.Error("expected IsDarkTerminal to return false for SATT_COLOR_MODE=light")
+		}
+	})
+
+	t.Run("COLORFGBG=15;0", func(t *testing.T) {
+		ResetDarkTerminalCache()
+		t.Setenv("SATT_COLOR_MODE", "")
+		t.Setenv("SATT_MODE", "")
+		t.Setenv("COLORFGBG", "15;0")
+		if !IsDarkTerminal() {
+			t.Error("expected IsDarkTerminal to return true for COLORFGBG=15;0")
+		}
+	})
+
+	t.Run("COLORFGBG=0;15", func(t *testing.T) {
+		ResetDarkTerminalCache()
+		t.Setenv("SATT_COLOR_MODE", "")
+		t.Setenv("SATT_MODE", "")
+		t.Setenv("COLORFGBG", "0;15")
+		if IsDarkTerminal() {
+			t.Error("expected IsDarkTerminal to return false for COLORFGBG=0;15")
+		}
+	})
+}
+
 func assertStyleForeground(t *testing.T, got color.Color, want color.RGBA, label string) {
 	t.Helper()
 

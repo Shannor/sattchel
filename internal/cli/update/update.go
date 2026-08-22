@@ -12,22 +12,28 @@ import (
 var force bool
 
 func NewCommand(writer printer.Writer) *cobra.Command {
-	updater := config.NewUpdater()
-	command := cobra.Command{
+	command := &cobra.Command{
 		Use:     "update",
 		Short:   "Update the CLI to the latest version",
 		Aliases: []string{"u"},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			var (
-				update config.UpdateInformation
-				err    error
-			)
+			updater := config.NewUpdater()
+			var update config.UpdateInformation
+			var err error
+
 			_ = loader.Run("Checking for updates ...", func() {
-				update, err = updater.RunUpdate(force)
+				update = <-updater.CheckForUpdate()
 			})
+
+			if update.NeedToUpdate || force {
+				_ = loader.Run("Updating ...", func() {
+					update, err = updater.RunUpdate(force)
+				})
+			}
 			if err != nil {
 				return err
 			}
+
 			if update.NeedToUpdate {
 				msg := fmt.Sprintf("Updated to %s successfully (previous: %s)", update.NewVersion, update.CurrentVersion)
 				writer.Success(msg)
@@ -38,5 +44,5 @@ func NewCommand(writer printer.Writer) *cobra.Command {
 		},
 	}
 	command.Flags().BoolVarP(&force, "force", "f", false, "force an update")
-	return &command
+	return command
 }

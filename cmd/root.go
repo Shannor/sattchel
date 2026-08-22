@@ -46,15 +46,7 @@ var rootCmd = &cobra.Command{
 		log.SetReportTimestamp(false)
 		log.SetReportCaller(verbose)
 
-		theme := ""
-		if v != nil {
-			theme = v.GetString("theme")
-		}
-		if theme == "" {
-			theme = os.Getenv("SATT_THEME")
-		}
-		tui.SetTheme(theme)
-
+		setupTheme(v)
 		if isCompletionCommand(cmd) {
 			updateCh = nil
 			return
@@ -132,9 +124,8 @@ func init() {
 		panic(err)
 	}
 
-	setupTheme()
+	setupTheme(v)
 	writer := printer.NewStyleWriter()
-
 	opService := setupOptimizely(v)
 
 	// Register primary commands
@@ -144,12 +135,10 @@ func init() {
 	rootCmd.AddCommand(newThemeCmd(writer))
 }
 
-func setupTheme() {
-	theme := v.GetString("theme")
-	if theme == "" {
-		theme = os.Getenv("SATT_THEME")
-	}
+func setupTheme(v *viper.Viper) {
+	theme, mode := getModes(v)
 	tui.SetTheme(theme)
+	tui.SetColorMode(mode)
 }
 
 func setupTracker(v *viper.Viper, writer printer.Writer) *cobra.Command {
@@ -157,6 +146,28 @@ func setupTracker(v *viper.Viper, writer printer.Writer) *cobra.Command {
 	fileStorage := trackerDriven.NewFileStorage(path, nil)
 	trackerService := core.NewService(fileStorage)
 	return trackerDriving.NewCommand(trackerService, v, writer)
+}
+
+func getModes(v *viper.Viper) (string, string) {
+	theme := ""
+	mode := ""
+	if v != nil {
+		theme = v.GetString("theme")
+		mode = v.GetString("color_mode")
+		if mode == "" {
+			mode = v.GetString("mode")
+		}
+	}
+	if theme == "" {
+		theme = os.Getenv("SATT_THEME")
+	}
+	if mode == "" {
+		mode = os.Getenv("SATT_COLOR_MODE")
+		if mode == "" {
+			mode = os.Getenv("SATT_MODE")
+		}
+	}
+	return theme, mode
 }
 
 func setupOptimizely(v *viper.Viper) *optimizelyCore.Service {
