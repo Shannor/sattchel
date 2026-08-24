@@ -5,7 +5,6 @@ import (
 	"sattchel/internal/tracker/core"
 	"strings"
 
-	"charm.land/huh/v2"
 	"charm.land/lipgloss/v2"
 	"golang.org/x/exp/slices"
 )
@@ -15,147 +14,153 @@ type GoalNode struct {
 	Children []*GoalNode
 }
 
-func buildGoalTree(goals []core.Goal) []*GoalNode {
-	nodes := make(map[string]*GoalNode)
-	for i := range goals {
-		g := &goals[i]
-		nodes[g.ID] = &GoalNode{Goal: g}
-	}
-
-	var roots []*GoalNode
-	for _, node := range nodes {
-		if node.Goal.Parent == nil || node.Goal.Parent.TargetID == "" {
-			roots = append(roots, node)
-		} else {
-			parent, ok := nodes[node.Goal.Parent.TargetID]
-			if ok {
-				parent.Children = append(parent.Children, node)
-			} else {
-				roots = append(roots, node)
-			}
-		}
-	}
-
-	slices.SortFunc(roots, func(i, j *GoalNode) int {
-		return strings.Compare(i.Goal.Name, j.Goal.Name)
+// ChooseGoal displays an interactive filterable select list to choose a goal.
+func ChooseGoal(goals []core.Goal, title string, currentGoalID string, filterFn func(*core.Goal) bool, validateFn func(string) error) (string, error) {
+	sortedGoals := slices.Clone(goals)
+	slices.SortFunc(sortedGoals, func(i, j core.Goal) int {
+		return strings.Compare(strings.ToLower(i.Name), strings.ToLower(j.Name))
 	})
 
-	var sortChildren func(n *GoalNode)
-	sortChildren = func(n *GoalNode) {
-		slices.SortFunc(n.Children, func(i, j *GoalNode) int {
-			return strings.Compare(i.Goal.Name, j.Goal.Name)
-		})
-		for _, child := range n.Children {
-			sortChildren(child)
-		}
-	}
-	for _, root := range roots {
-		sortChildren(root)
-	}
-
-	return roots
-}
-
-// ChooseGoal displays an interactive select form to choose a goal from a tree representation of goals.
-func ChooseGoal(goals []core.Goal, title string, currentGoalID string, filterFn func(*core.Goal) (bool, bool), validateFn func(string) error) (string, error) {
-	roots := buildGoalTree(goals)
-
-	type stackElement struct {
-		node   *GoalNode
-		indent string
-		isLast bool
-	}
-
-	var (
-		selectedID string
-		options    []huh.Option[string]
-	)
-
-	stack := make([]stackElement, 0)
-	for i := len(roots) - 1; i >= 0; i-- {
-		stack = append(stack, stackElement{
-			node:   roots[i],
-			indent: "",
-			isLast: i == len(roots)-1,
-		})
-	}
-
-	for len(stack) > 0 {
-		curr := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-
-		include := true
-		traverseChildren := true
-		if filterFn != nil {
-			include, traverseChildren = filterFn(curr.node.Goal)
-		}
-
-		if !include && !traverseChildren {
+	var listOpts []ListOption
+	for i := range sortedGoals {
+		g := &sortedGoals[i]
+		if filterFn != nil && !filterFn(g) {
 			continue
 		}
 
-		if include {
-			marker := ""
-			if len(curr.indent) > 0 {
-				if curr.isLast {
-					marker = "└─ "
-				} else {
-					marker = "├─ "
-				}
-			}
-
-			label := curr.indent + marker + curr.node.Goal.Name
-			option := huh.NewOption(label, curr.node.Goal.ID)
-			if curr.node.Goal.ID == currentGoalID {
-				option = option.Selected(true)
-				selectedID = curr.node.Goal.ID
-			}
-			options = append(options, option)
+		var descParts []string
+		if g.ID == currentGoalID {
+			descParts = append(descParts, "★ active")
 		}
-
-		if traverseChildren {
-			childIndent := curr.indent
-			if len(curr.indent) > 0 {
-				if curr.isLast {
-					childIndent += "   "
-				} else {
-					childIndent += "│  "
-				}
-			} else {
-				childIndent = "  "
+		if g.IsRoot() {
+			descParts = append(descParts, "root")
+		} else if g.HasParent() {
+			rel := core.LinkOptional
+			if g.Parent != nil && g.Parent.Relationship != "" {
+				rel = g.Parent.Relationship
 			}
-
-			for i := len(curr.node.Children) - 1; i >= 0; i-- {
-				stack = append(stack, stackElement{
-					node:   curr.node.Children[i],
-					indent: childIndent,
-					isLast: i == len(curr.node.Children)-1,
-				})
-			}
+			descParts = append(descParts, fmt.Sprintf("link: %s", rel))
 		}
+		if g.Status != "" {
+			descParts = append(descParts, string(g.Status))
+		}
+		if g.Member != nil && g.Member.Name != "" {
+			descParts = append(descParts, "@"+g.Member.Name)
+		}
+		descParts = append(descParts, fmt.Sprintf("id: %s", g.ID))
+
+		listOpts = append(listOpts, ListOption{
+			TitleStr:       g.Name,
+			DescriptionStr: strings.Join(descParts, " • "),
+			ValueStr:       g.ID,
+		})
 	}
 
-	if len(options) == 0 {
+	if len(listOpts) == 0 {
 		return "", fmt.Errorf("no options available")
 	}
 
-	selectField := huh.NewSelect[string]().
-		Title(title).
-		Options(options...).
-		Value(&selectedID)
-
-	if validateFn != nil {
-		selectField = selectField.Validate(validateFn)
-	}
-
-	err := NewForm(
-		huh.NewGroup(selectField),
-	).WithShowHelp(true).Run()
+	selected, err := Choose(title, listOpts)
 	if err != nil {
 		return "", err
 	}
+	if selected == nil {
+		return "", fmt.Errorf("no goal selected")
+	}
 
-	return selectedID, nil
+	if validateFn != nil {
+		if err := validateFn(selected.ValueStr); err != nil {
+			return "", err
+		}
+	}
+
+	return selected.ValueStr, nil
+}
+
+// ChooseProject displays an interactive filterable select list to choose a project.
+func ChooseProject(projects []core.Project, title string, currentProjectID string) (string, error) {
+	sortedProjects := slices.Clone(projects)
+	slices.SortFunc(sortedProjects, func(i, j core.Project) int {
+		return strings.Compare(strings.ToLower(i.Label), strings.ToLower(j.Label))
+	})
+
+	var listOpts []ListOption
+	for i := range sortedProjects {
+		p := &sortedProjects[i]
+		var descParts []string
+		if p.ID == currentProjectID {
+			descParts = append(descParts, "★ active")
+		}
+		if p.Description != "" {
+			descParts = append(descParts, p.Description)
+		}
+		descParts = append(descParts, fmt.Sprintf("id: %s", p.ID))
+
+		listOpts = append(listOpts, ListOption{
+			TitleStr:       p.Label,
+			DescriptionStr: strings.Join(descParts, " • "),
+			ValueStr:       p.ID,
+		})
+	}
+
+	if len(listOpts) == 0 {
+		return "", fmt.Errorf("no options available")
+	}
+
+	selected, err := Choose(title, listOpts)
+	if err != nil {
+		return "", err
+	}
+	if selected == nil {
+		return "", fmt.Errorf("no project selected")
+	}
+
+	return selected.ValueStr, nil
+}
+
+// ChooseMember displays an interactive filterable select list to choose a member.
+func ChooseMember(members []core.Member, title string, includeUnassigned bool) (string, error) {
+	sortedMembers := slices.Clone(members)
+	slices.SortFunc(sortedMembers, func(i, j core.Member) int {
+		return strings.Compare(strings.ToLower(i.Name), strings.ToLower(j.Name))
+	})
+
+	var listOpts []ListOption
+	if includeUnassigned {
+		listOpts = append(listOpts, ListOption{
+			TitleStr:       "Unassigned",
+			DescriptionStr: "Do not assign to a member",
+			ValueStr:       "",
+		})
+	}
+	for i := range sortedMembers {
+		m := &sortedMembers[i]
+		var descParts []string
+		if m.Email != "" {
+			descParts = append(descParts, m.Email)
+		}
+		descParts = append(descParts, fmt.Sprintf("id: %s", m.ID))
+
+		listOpts = append(listOpts, ListOption{
+			TitleStr:       m.Name,
+			DescriptionStr: strings.Join(descParts, " • "),
+			ValueStr:       m.ID,
+		})
+	}
+
+	if len(listOpts) == 0 {
+		return "", fmt.Errorf("no members available")
+	}
+
+	selected, err := Choose(title, listOpts)
+	if err != nil {
+		return "", err
+	}
+	if selected == nil {
+		return "", fmt.Errorf("no member selected")
+	}
+
+	return selected.ValueStr, nil
 }
 
 // RenderGoalDetails formats a Goal entity into a beautiful, styled string using Lipgloss tables.
@@ -177,9 +182,16 @@ func RenderGoalDetails(goal *core.Goal, parent *core.Goal) string {
 		descVal = styles.Text.Render(descVal)
 	}
 
-	parentVal := styles.Muted.Render("None")
+	parentVal := styles.Muted.Render("None (root)")
 	if parent != nil {
 		parentVal = fmt.Sprintf("%s (%s)", styles.Text.Render(parent.Name), styles.Muted.Render(parent.ID))
+		if goal.Parent != nil && goal.Parent.Relationship != "" {
+			relStyle := styles.Muted
+			if goal.Parent.Relationship == core.LinkRequired {
+				relStyle = styles.Warning.Bold(true)
+			}
+			parentVal += fmt.Sprintf(" [%s]", relStyle.Render(string(goal.Parent.Relationship)))
+		}
 	}
 
 	memberVal := styles.Muted.Render("Unassigned")
@@ -217,7 +229,11 @@ func RenderGoalDetails(goal *core.Goal, parent *core.Goal) string {
 			}
 			relVal := styles.Text.Render("-")
 			if ch.Parent != nil && ch.Parent.Relationship != "" {
-				relVal = styles.Text.Render(string(ch.Parent.Relationship))
+				if ch.Parent.Relationship == core.LinkRequired {
+					relVal = styles.Warning.Bold(true).Render(string(ch.Parent.Relationship))
+				} else {
+					relVal = styles.Muted.Render(string(ch.Parent.Relationship))
+				}
 			}
 			childRows = append(childRows, []string{
 				styles.Text.Render(ch.ID),

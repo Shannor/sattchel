@@ -65,6 +65,10 @@ export class Renderer {
 				// Orthogonal routing: Horizontal -> Vertical -> Horizontal
 				const pathStr = `M ${startX} ${startY} H ${x_mid} V ${endY} H ${endX}`;
 
+				const relType =
+					child.parent && child.parent.relationship
+						? child.parent.relationship
+						: "optional";
 				const path = document.createElementNS(
 					"http://www.w3.org/2000/svg",
 					"path",
@@ -72,7 +76,7 @@ export class Renderer {
 				path.setAttribute("d", pathStr);
 				path.setAttribute(
 					"class",
-					`connection status-${normalizeStatus(child.status)}`,
+					`connection status-${normalizeStatus(child.status)} link-${relType}`,
 				);
 				this.linksContainer.appendChild(path);
 
@@ -139,6 +143,15 @@ export class Renderer {
 				rootCardTitle.setAttribute("title", node.name);
 				rootCardTitle.textContent = node.name;
 				rootCard.appendChild(rootCardTitle);
+
+				const rootBadge = document.createElementNS(
+					"http://www.w3.org/1999/xhtml",
+					"span",
+				);
+				rootBadge.setAttribute("class", "badge root-badge");
+				rootBadge.textContent = "root";
+				rootCard.appendChild(rootBadge);
+
 				fo.appendChild(rootCard);
 			} else {
 				const triage = getTriageCategory(impactStr, effortStr);
@@ -185,6 +198,17 @@ export class Renderer {
 					triageBadge.setAttribute("class", `badge triage-${triage.class}`);
 					triageBadge.textContent = triage.name;
 					goalMeta.appendChild(triageBadge);
+				}
+
+				if (node.parent && node.parent.targetId) {
+					const relType = node.parent.relationship || "optional";
+					const linkBadge = document.createElementNS(
+						"http://www.w3.org/1999/xhtml",
+						"span",
+					);
+					linkBadge.setAttribute("class", `badge link-badge link-${relType}`);
+					linkBadge.textContent = relType;
+					goalMeta.appendChild(linkBadge);
 				}
 
 				if (impactStr !== "unknown") {

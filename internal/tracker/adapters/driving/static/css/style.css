@@ -89,6 +89,16 @@ body {
 	opacity: 0.8;
 }
 
+.connection.link-optional {
+	stroke-dasharray: 6 4;
+}
+
+.connection.link-required {
+	stroke-dasharray: none;
+	stroke-width: 2.5px;
+	stroke: #f59e0b;
+}
+
 .solder-pad {
 	fill: #111317;
 	stroke: #9ca3af; /* Silver solder trace ring */
@@ -229,9 +239,22 @@ body {
 	letter-spacing: 0.5px;
 }
 
-.badge.status-completed {
-	color: var(--status-completed);
-	background: rgba(16, 185, 129, 0.15);
+.badge.link-badge.link-required {
+	color: #f59e0b;
+	background: rgba(245, 158, 11, 0.2);
+	border: 1px solid rgba(245, 158, 11, 0.4);
+}
+.badge.link-badge.link-optional {
+	color: #9ca3af;
+	background: rgba(107, 114, 128, 0.15);
+	border: 1px solid rgba(107, 114, 128, 0.3);
+}
+.badge.root-badge {
+	color: #818cf8;
+	background: rgba(99, 102, 241, 0.2);
+	border: 1px solid rgba(99, 102, 241, 0.4);
+	margin-top: 4px;
+	display: inline-block;
 }
 .badge.status-in-progress {
 	color: var(--status-in-progress);

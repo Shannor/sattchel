@@ -191,42 +191,6 @@ func addGoalInteractive(ctx context.Context, service *core.Service, cfg *Config,
 		setCurrent      bool
 	)
 
-	// Build parent options
-	var parentOptions []huh.Option[string]
-	for _, g := range goals {
-		opt := huh.NewOption(g.Name, g.ID)
-		if g.ID == defaultParent {
-			opt = opt.Selected(true)
-		}
-		parentOptions = append(parentOptions, opt)
-	}
-
-	// Build member options
-	var memberOptions []huh.Option[string]
-	memberOptions = append(memberOptions, huh.NewOption("Unassigned", ""))
-	for _, m := range members {
-		memberOptions = append(memberOptions, huh.NewOption(m.Name, m.ID))
-	}
-
-	impactOptions := []huh.Option[string]{
-		huh.NewOption("Low", string(core.LowImpact)),
-		huh.NewOption("Medium", string(core.MediumImpact)),
-		huh.NewOption("High", string(core.HighImpact)),
-	}
-	effortOptions := []huh.Option[string]{
-		huh.NewOption("Low", string(core.LowEffort)),
-		huh.NewOption("Medium", string(core.MediumEffort)),
-		huh.NewOption("High", string(core.HighEffort)),
-	}
-	relOptions := []huh.Option[string]{
-		huh.NewOption("Optional", string(core.LinkOptional)),
-		huh.NewOption("Required", string(core.LinkRequired)),
-	}
-
-	impactVal = string(core.UnknownImpact)
-	effortVal = string(core.UnknownEffort)
-	relationshipVal = string(core.LinkOptional)
-
 	form := tui.NewForm(
 		huh.NewGroup(
 			huh.NewInput().Title("Goal Name").Prompt(":").Validate(func(val string) error {
@@ -239,25 +203,64 @@ func addGoalInteractive(ctx context.Context, service *core.Service, cfg *Config,
 		huh.NewGroup(
 			huh.NewInput().Title("Description").Prompt(":").Placeholder("(Optional)").Value(&description),
 		).WithHeight(12),
-		huh.NewGroup(
-			huh.NewSelect[string]().Title("Parent Goal").Options(parentOptions...).Value(&parentID),
-		).WithHeight(12),
-		huh.NewGroup(
-			huh.NewSelect[string]().Title("Impact").Options(impactOptions...).Value(&impactVal),
-			huh.NewSelect[string]().Title("Effort").Options(effortOptions...).Value(&effortVal),
-		).WithHeight(12),
-		huh.NewGroup(
-			huh.NewSelect[string]().Title("Member").Options(memberOptions...).Value(&memberIDVal),
-			huh.NewSelect[string]().Title("Relationship").Options(relOptions...).Value(&relationshipVal),
-		).WithHeight(12),
-		huh.NewGroup(
-			huh.NewConfirm().Title("Set as current goal?").Value(&setCurrent),
-		).WithHeight(6),
 	)
 
 	if err := form.Run(); err != nil {
 		return err
 	}
+
+	if len(goals) > 0 {
+		selectedParent, err := tui.ChooseGoal(goals, "Select Parent Goal", defaultParent, nil, nil)
+		if err == nil {
+			parentID = selectedParent
+		}
+	}
+
+	impactOpts := []tui.ListOption{
+		{TitleStr: "Unknown", DescriptionStr: "Not assessed yet", ValueStr: string(core.UnknownImpact)},
+		{TitleStr: "Low", DescriptionStr: "Low impact on overall project", ValueStr: string(core.LowImpact)},
+		{TitleStr: "Medium", DescriptionStr: "Medium impact on project", ValueStr: string(core.MediumImpact)},
+		{TitleStr: "High", DescriptionStr: "High impact on project", ValueStr: string(core.HighImpact)},
+	}
+	selectedImpact, err := tui.Choose("Select Impact", impactOpts)
+	if err == nil && selectedImpact != nil {
+		impactVal = selectedImpact.ValueStr
+	}
+
+	effortOpts := []tui.ListOption{
+		{TitleStr: "Unknown", DescriptionStr: "Not assessed yet", ValueStr: string(core.UnknownEffort)},
+		{TitleStr: "Low", DescriptionStr: "Quick task / low effort", ValueStr: string(core.LowEffort)},
+		{TitleStr: "Medium", DescriptionStr: "Moderate effort required", ValueStr: string(core.MediumEffort)},
+		{TitleStr: "High", DescriptionStr: "Significant effort required", ValueStr: string(core.HighEffort)},
+	}
+	selectedEffort, err := tui.Choose("Select Effort", effortOpts)
+	if err == nil && selectedEffort != nil {
+		effortVal = selectedEffort.ValueStr
+	}
+
+	if len(members) > 0 {
+		selectedMember, err := tui.ChooseMember(members, "Select Assigned Member", true)
+		if err == nil {
+			memberIDVal = selectedMember
+		}
+	}
+
+	if parentID != "" {
+		relOpts := []tui.ListOption{
+			{TitleStr: "Optional", DescriptionStr: "Child goal is optional", ValueStr: string(core.LinkOptional)},
+			{TitleStr: "Required", DescriptionStr: "Child goal is required before parent completion", ValueStr: string(core.LinkRequired)},
+		}
+		selectedRel, err := tui.Choose("Select Link Relationship", relOpts)
+		if err == nil && selectedRel != nil {
+			relationshipVal = selectedRel.ValueStr
+		}
+	}
+
+	_ = tui.NewForm(
+		huh.NewGroup(
+			huh.NewConfirm().Title("Set as current goal?").Value(&setCurrent),
+		).WithHeight(6),
+	).Run()
 
 	options := core.GoalOptions{
 		ParentID:         parentID,
@@ -341,13 +344,14 @@ func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 
 func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var (
-		projectID   string
-		statuses    []string
-		impacts     []string
-		efforts     []string
-		memberIDs   []string
-		filterQuery string
-		flatMode    bool
+		projectID     string
+		statuses      []string
+		impacts       []string
+		efforts       []string
+		relationships []string
+		memberIDs     []string
+		filterQuery   string
+		flatMode      bool
 	)
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -392,12 +396,14 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 			hasFilters := cmd.Flags().Changed("status") ||
 				cmd.Flags().Changed("impact") ||
 				cmd.Flags().Changed("effort") ||
+				cmd.Flags().Changed("relationship") ||
 				cmd.Flags().Changed("member") ||
 				cmd.Flags().Changed("filter")
 
 			statusSet := set.NewFrom(statuses)
 			impactSet := set.NewFrom(impacts)
 			effortSet := set.NewFrom(efforts)
+			relationshipSet := set.NewFrom(relationships)
 			memberSet := set.NewFrom(memberIDs)
 
 			matchesFilter := func(g *core.Goal) bool {
@@ -417,6 +423,18 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 				}
 				if cmd.Flags().Changed("effort") && !effortSet.Contains(string(g.Effort)) {
 					return false
+				}
+				if cmd.Flags().Changed("relationship") {
+					rel := ""
+					if g.Parent != nil && g.Parent.TargetID != "" {
+						rel = string(g.Parent.Relationship)
+						if rel == "" {
+							rel = string(core.LinkOptional)
+						}
+					}
+					if !relationshipSet.Contains(rel) {
+						return false
+					}
 				}
 				if cmd.Flags().Changed("member") {
 					mid := ""
@@ -453,7 +471,7 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 					}
 					t = t.Child(renderGoalLine(g, currentGoalID, styles, false))
 				}
-				fmt.Println(t.
+				fmt.Fprintln(cmd.OutOrStdout(), t.
 					Enumerator(tree.RoundedEnumerator).
 					EnumeratorStyle(enumeratorStyle).
 					RootStyle(rootStyle).
@@ -470,7 +488,7 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 				t = t.Child(renderGoalTreeIterative(root, currentGoalID, styles, hasFilters, matchesFilter))
 			}
 
-			fmt.Println(t.
+			fmt.Fprintln(cmd.OutOrStdout(), t.
 				Enumerator(tree.RoundedEnumerator).
 				EnumeratorStyle(enumeratorStyle).
 				RootStyle(rootStyle).
@@ -485,6 +503,7 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 	cmd.Flags().StringSliceVarP(&statuses, "status", "s", nil, "Filter by status (draft, open, in-progress, completed, cancelled). Comma-separated or repeated.")
 	cmd.Flags().StringSliceVarP(&impacts, "impact", "i", nil, "Filter by impact (low, medium, high). Comma-separated or repeated.")
 	cmd.Flags().StringSliceVarP(&efforts, "effort", "e", nil, "Filter by effort (low, medium, high). Comma-separated or repeated.")
+	cmd.Flags().StringSliceVarP(&relationships, "relationship", "r", nil, "Filter by link relationship (required, optional). Comma-separated or repeated.")
 	cmd.Flags().StringSliceVarP(&memberIDs, "member", "m", nil, "Filter by member ID. Comma-separated or repeated.")
 	cmd.Flags().BoolVar(&flatMode, "flat", false, "Show only matching goals as a flat list instead of the full tree")
 
@@ -493,6 +512,9 @@ func listGoals(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 	})
 	_ = cmd.RegisterFlagCompletionFunc("status", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"draft", "open", "in-progress", "completed", "cancelled"}, cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = cmd.RegisterFlagCompletionFunc("relationship", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{string(core.LinkOptional), string(core.LinkRequired)}, cobra.ShellCompDirectiveNoFileComp
 	})
 	_ = cmd.RegisterFlagCompletionFunc("impact", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{string(core.LowImpact), string(core.MediumImpact), string(core.HighImpact)}, cobra.ShellCompDirectiveNoFileComp
@@ -587,7 +609,22 @@ func renderGoalLine(g *core.Goal, currentGoalID string, styles tui.Styles, dimme
 		details = append(details, statusStyle.Render(string(g.Status)))
 	}
 
-	// Impact
+	if g.IsRoot() {
+		details = append(details, styles.Title.Bold(true).Render("root"))
+	} else if g.Parent != nil && g.Parent.TargetID != "" {
+		rel := g.Parent.Relationship
+		if rel == "" {
+			rel = core.LinkOptional
+		}
+		var relStyle lipgloss.Style
+		if rel == core.LinkRequired {
+			relStyle = styles.Warning.Bold(true)
+		} else {
+			relStyle = styles.Muted
+		}
+		details = append(details, fmt.Sprintf("%s", relStyle.Render(string(rel))))
+	}
+
 	if g.Impact != "" && g.Impact != core.UnknownImpact {
 		var impactStyle lipgloss.Style
 		switch g.Impact {
@@ -676,12 +713,13 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 	)
 
 	cmd := &cobra.Command{
-		Use:     "move <childId> <newParentId>",
+		Use:     "move [childId] [newParentId]",
 		Short:   "Move a goal to a new parent",
 		Aliases: []string{"mv"},
 		Long: `Move a goal to a new parent.
-   If childId and newParentId are not provided, it will prompt for them interactively.
+   If childId and newParentId are not provided, an interactive prompt will be displayed.
    Examples:
+     satt tracker goals move
      satt tracker goals move <childId> <newParentId> -r <relationship>
      `,
 		Args:         cobra.MaximumNArgs(2),
@@ -728,12 +766,7 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 			return nil, cobra.ShellCompDirectiveNoFileComp
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			pid := projectID
-			if !cmd.Flags().Changed("projectId") {
-				if lastProj := cfg.CurrentProjectID(); lastProj != "" {
-					pid = lastProj
-				}
-			}
+			pid := getActiveProjectID(cmd, cfg, projectID)
 			if pid == "" {
 				return fmt.Errorf("no project selected")
 			}
@@ -772,7 +805,8 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 			}
 
 			if childID == "" {
-				childID, err = tui.ChooseGoal(goals, "Select Goal to Move", "", nil, func(val string) error {
+				currentGoalID := cfg.CurrentGoalID()
+				childID, err = tui.ChooseGoal(goals, "Select Goal to Move", currentGoalID, nil, func(val string) error {
 					if val == rootGoal.ID {
 						return fmt.Errorf("the root goal cannot be moved")
 					}
@@ -787,17 +821,32 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 			if err != nil {
 				return err
 			}
+			if len(allowedGoals) == 0 {
+				return fmt.Errorf("no valid parent goals available to move this goal under")
+			}
 			allowedSet := set.NewFromFunc(allowedGoals, func(g core.Goal) string { return g.ID })
 			if newParentID == "" {
-				newParentID, err = tui.ChooseGoal(goals, "Select New Parent Goal", "", func(g *core.Goal) (bool, bool) {
-					if allowedSet.Contains(g.ID) {
-						return true, true
-					}
-					return false, false
+				newParentID, err = tui.ChooseGoal(goals, "Select New Parent Goal", "", func(g *core.Goal) bool {
+					return allowedSet.Contains(g.ID)
 				}, nil)
 				if err != nil {
 					return err
 				}
+			}
+
+			if !cmd.Flags().Changed("relationship") && len(args) == 0 {
+				relOptions := []tui.ListOption{
+					{TitleStr: "Optional", DescriptionStr: "Child goal is optional", ValueStr: string(core.LinkOptional)},
+					{TitleStr: "Required", DescriptionStr: "Child goal is required before parent completion", ValueStr: string(core.LinkRequired)},
+				}
+				selectedRel, err := tui.Choose("Select Link Relationship", relOptions)
+				if err != nil {
+					return err
+				}
+				if selectedRel == nil {
+					return fmt.Errorf("no relationship selected")
+				}
+				relationship = core.LinkRelationship(selectedRel.ValueStr)
 			}
 
 			var movedGoal *core.Goal
@@ -820,7 +869,6 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 	_ = cmd.RegisterFlagCompletionFunc("relationship", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{string(core.LinkOptional), string(core.LinkRequired)}, cobra.ShellCompDirectiveNoFileComp
 	})
-	_ = cmd.MarkFlagRequired("relationship")
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})

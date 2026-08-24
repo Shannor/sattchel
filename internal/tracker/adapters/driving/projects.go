@@ -438,42 +438,23 @@ All goals and member associations will be moved and preserved. The merge project
 					return fmt.Errorf("need at least 2 projects to perform a merge, got %d", len(projects))
 				}
 
-				var sourceOptions []huh.Option[string]
-				for _, p := range projects {
-					sourceOptions = append(sourceOptions, huh.NewOption(p.Label, p.ID))
-				}
-
 				if sourceProjID == "" {
-					err := tui.NewForm(
-						huh.NewGroup(
-							huh.NewSelect[string]().
-								Title("Select Source Project (the project to merge INTO)").
-								Options(sourceOptions...).
-								Value(&sourceProjID),
-						),
-					).Run()
+					sourceProjID, err = tui.ChooseProject(projects, "Select Source Project (the project to merge INTO)", "")
 					if err != nil {
 						return err
 					}
 				}
 
 				// Filter out the source project for the merge options
-				var mergeOptions []huh.Option[string]
+				var remainingProjects []core.Project
 				for _, p := range projects {
 					if p.ID != sourceProjID {
-						mergeOptions = append(mergeOptions, huh.NewOption(p.Label, p.ID))
+						remainingProjects = append(remainingProjects, p)
 					}
 				}
 
 				if mergeProjID == "" {
-					err := tui.NewForm(
-						huh.NewGroup(
-							huh.NewSelect[string]().
-								Title("Select Project to Merge (the project that will be absorbed)").
-								Options(mergeOptions...).
-								Value(&mergeProjID),
-						),
-					).Run()
+					mergeProjID, err = tui.ChooseProject(remainingProjects, "Select Project to Merge (the project that will be absorbed)", "")
 					if err != nil {
 						return err
 					}
@@ -488,23 +469,15 @@ All goals and member associations will be moved and preserved. The merge project
 			if parentGoalID == "" && cmd.Flags().Changed("parent-goal-id") == false {
 				sourceGoals, err := service.GetGoals(cmd.Context(), sourceProjID)
 				if err == nil && len(sourceGoals) > 0 {
-					var attachToParent bool
-					err = tui.NewForm(
-						huh.NewGroup(
-							huh.NewSelect[bool]().
-								Title("Do you want to attach the merged project under a specific parent goal in the source project?").
-								Description("If not, it will be attached under the source project's root goal").
-								Options(
-									huh.NewOption("Yes, select a parent goal", true),
-									huh.NewOption("No, attach under the root goal", false),
-								).
-								Value(&attachToParent),
-						),
-					).Run()
+					attachOpts := []tui.ListOption{
+						{TitleStr: "No, attach under the root goal", DescriptionStr: "Root goal of source project", ValueStr: "false"},
+						{TitleStr: "Yes, select a parent goal", DescriptionStr: "Choose specific parent in source project", ValueStr: "true"},
+					}
+					selectedAttach, err := tui.Choose("Attach under a specific parent goal in source project?", attachOpts)
 					if err != nil {
 						return err
 					}
-					if attachToParent {
+					if selectedAttach != nil && selectedAttach.ValueStr == "true" {
 						parentGoalID, err = tui.ChooseGoal(sourceGoals, "Select Parent Goal in Source Project", "", nil, nil)
 						if err != nil {
 							return err
@@ -612,19 +585,7 @@ If moving to an existing project, by default the goal is attached under its root
 					return fmt.Errorf("no projects found")
 				}
 
-				var projectOptions []huh.Option[string]
-				for _, p := range projects {
-					projectOptions = append(projectOptions, huh.NewOption(p.Label, p.ID))
-				}
-
-				err = tui.NewForm(
-					huh.NewGroup(
-						huh.NewSelect[string]().
-							Title("Select Source Project").
-							Options(projectOptions...).
-							Value(&sourceProjID),
-					),
-				).Run()
+				sourceProjID, err = tui.ChooseProject(projects, "Select Source Project", "")
 				if err != nil {
 					return err
 				}
@@ -648,21 +609,18 @@ If moving to an existing project, by default the goal is attached under its root
 
 			// If target destination is missing, prompt
 			if targetProjectID == "" && newProjectName == "" {
-				var action string
-				err := tui.NewForm(
-					huh.NewGroup(
-						huh.NewSelect[string]().
-							Title("Select Destination Type").
-							Options(
-								huh.NewOption("Split into a new project", "new"),
-								huh.NewOption("Move to an existing project", "existing"),
-							).
-							Value(&action),
-					),
-				).Run()
+				actionOpts := []tui.ListOption{
+					{TitleStr: "Split into a new project", DescriptionStr: "Create a new project for this goal hierarchy", ValueStr: "new"},
+					{TitleStr: "Move to an existing project", DescriptionStr: "Move goal hierarchy under an existing project", ValueStr: "existing"},
+				}
+				selectedAction, err := tui.Choose("Select Destination Type", actionOpts)
 				if err != nil {
 					return err
 				}
+				if selectedAction == nil {
+					return fmt.Errorf("no destination type selected")
+				}
+				action := selectedAction.ValueStr
 
 				if action == "new" {
 					err = tui.NewForm(
@@ -690,22 +648,15 @@ If moving to an existing project, by default the goal is attached under its root
 						return fmt.Errorf("need at least one other project to move goal to")
 					}
 
-					var projectOptions []huh.Option[string]
+					var targetProjects []core.Project
 					for _, p := range projects {
 						if p.ID == sourceProjID {
 							continue
 						}
-						projectOptions = append(projectOptions, huh.NewOption(p.Label, p.ID))
+						targetProjects = append(targetProjects, p)
 					}
 
-					err = tui.NewForm(
-						huh.NewGroup(
-							huh.NewSelect[string]().
-								Title("Select Target Project").
-								Options(projectOptions...).
-								Value(&targetProjectID),
-						),
-					).Run()
+					targetProjectID, err = tui.ChooseProject(targetProjects, "Select Target Project", "")
 					if err != nil {
 						return err
 					}
@@ -720,23 +671,15 @@ If moving to an existing project, by default the goal is attached under its root
 			if newProjectName == "" && targetParentGoalID == "" && cmd.Flags().Changed("parent") == false {
 				targetGoals, err := service.GetGoals(cmd.Context(), targetProjectID)
 				if err == nil && len(targetGoals) > 0 {
-					var attachToParent bool
-					err = tui.NewForm(
-						huh.NewGroup(
-							huh.NewSelect[bool]().
-								Title("Do you want to attach the goal under a specific parent goal in the target project?").
-								Description("If not, it will be attached under the target project's root goal").
-								Options(
-									huh.NewOption("Yes, select a parent goal", true),
-									huh.NewOption("No, attach under the root goal", false),
-								).
-								Value(&attachToParent),
-						),
-					).Run()
+					attachOpts := []tui.ListOption{
+						{TitleStr: "No, attach under the root goal", DescriptionStr: "Root goal of target project", ValueStr: "false"},
+						{TitleStr: "Yes, select a parent goal", DescriptionStr: "Choose specific parent in target project", ValueStr: "true"},
+					}
+					selectedAttach, err := tui.Choose("Attach goal under a specific parent in target project?", attachOpts)
 					if err != nil {
 						return err
 					}
-					if attachToParent {
+					if selectedAttach != nil && selectedAttach.ValueStr == "true" {
 						targetParentGoalID, err = tui.ChooseGoal(targetGoals, "Select Target Parent Goal", "", nil, nil)
 						if err != nil {
 							return err

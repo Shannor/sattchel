@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"path/filepath"
+	"regexp"
 	"sattchel/internal/printer"
 	"sattchel/internal/tracker/adapters/driven"
 	"sattchel/internal/tracker/core"
@@ -111,22 +112,8 @@ func TestMemberCLI(t *testing.T) {
 	}
 }
 
+var ansiRegexp = regexp.MustCompile(`\x1b\[[0-9;]*[a-zA-Z]`)
+
 func stripANSI(s string) string {
-	var sb strings.Builder
-	inEscape := false
-	for i := 0; i < len(s); i++ {
-		c := s[i]
-		if c == 0x1b {
-			inEscape = true
-			continue
-		}
-		if inEscape {
-			if (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') {
-				inEscape = false
-			}
-			continue
-		}
-		sb.WriteByte(c)
-	}
-	return sb.String()
+	return ansiRegexp.ReplaceAllString(s, "")
 }

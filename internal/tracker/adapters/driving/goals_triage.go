@@ -102,6 +102,21 @@ Missing Fields check can also be targeted specifically with the --missing flag.`
 					}
 					meta = append(meta, statusStyle.Render(string(g.Status)))
 				}
+				if g.IsRoot() {
+					meta = append(meta, styles.Title.Bold(true).Render("root"))
+				} else if g.Parent != nil && g.Parent.TargetID != "" {
+					rel := g.Parent.Relationship
+					if rel == "" {
+						rel = core.LinkOptional
+					}
+					var relStyle lipgloss.Style
+					if rel == core.LinkRequired {
+						relStyle = styles.Warning.Bold(true)
+					} else {
+						relStyle = styles.Muted
+					}
+					meta = append(meta, fmt.Sprintf("link: %s", relStyle.Render(string(rel))))
+				}
 				if g.Member != nil && g.Member.Name != "" {
 					meta = append(meta, styles.Info.Render("@"+g.Member.Name))
 				}

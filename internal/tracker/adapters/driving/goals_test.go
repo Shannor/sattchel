@@ -70,3 +70,79 @@ func TestGoalsCLI(t *testing.T) {
 		t.Fatal("expected deleting the root goal to fail")
 	}
 }
+
+func TestListGoalsLinkRelationship(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath := filepath.Join(tempDir, "tracker.json")
+	repo := driven.NewFileStorage(dbPath, nil)
+	service := core.NewService(repo)
+	v := viper.New()
+	cfg, err := LoadConfig(v)
+	if err != nil {
+		t.Fatalf("failed to load config: %v", err)
+	}
+
+	project, err := service.CreateProject(context.Background(), "Proj B", "")
+	if err != nil {
+		t.Fatalf("failed to create project: %v", err)
+	}
+	rootGoal, err := service.CreateGoal(context.Background(), project.ID, "Root Goal", core.GoalOptions{})
+	if err != nil {
+		t.Fatalf("failed to create root goal: %v", err)
+	}
+	_, err = service.CreateGoal(context.Background(), project.ID, "Req Child Goal", core.GoalOptions{
+		ParentID:         rootGoal.ID,
+		LinkRelationship: core.LinkRequired,
+	})
+	if err != nil {
+		t.Fatalf("failed to create required child goal: %v", err)
+	}
+	_, err = service.CreateGoal(context.Background(), project.ID, "Opt Child Goal", core.GoalOptions{
+		ParentID:         rootGoal.ID,
+		LinkRelationship: core.LinkOptional,
+	})
+	if err != nil {
+		t.Fatalf("failed to create optional child goal: %v", err)
+	}
+
+	buf := new(bytes.Buffer)
+	writer := printer.NewStyleWriterWithWriters(buf, buf)
+	cmd := goals(service, cfg, writer)
+
+	buf.Reset()
+	cmd.SetOut(buf)
+	cmd.SetErr(buf)
+	cmd.SetArgs([]string{"list", "--projectId", project.ID})
+	err = cmd.ExecuteContext(context.Background())
+	if err != nil {
+		t.Fatalf("list command failed: %v", err)
+	}
+
+	out := stripANSI(buf.String())
+	if !strings.Contains(out, "root") {
+		t.Errorf("expected list output to contain 'root', got:\n%s", out)
+	}
+	if !strings.Contains(out, "required") {
+		t.Errorf("expected list output to contain 'required', got:\n%s", out)
+	}
+	if !strings.Contains(out, "optional") {
+		t.Errorf("expected list output to contain 'optional', got:\n%s", out)
+	}
+
+	buf.Reset()
+	cmd.SetOut(buf)
+	cmd.SetErr(buf)
+	cmd.SetArgs([]string{"list", "--projectId", project.ID, "--relationship", "required", "--flat"})
+	err = cmd.ExecuteContext(context.Background())
+	if err != nil {
+		t.Fatalf("list command with relationship filter failed: %v", err)
+	}
+
+	flatOut := stripANSI(buf.String())
+	if !strings.Contains(flatOut, "Req Child Goal") {
+		t.Errorf("expected flat filtered output to contain 'Req Child Goal', got:\n%s", flatOut)
+	}
+	if strings.Contains(flatOut, "Opt Child Goal") {
+		t.Errorf("expected flat filtered output to NOT contain 'Opt Child Goal', got:\n%s", flatOut)
+	}
+}
