@@ -1,6 +1,8 @@
 package tui
 
 import (
+	"errors"
+
 	"charm.land/bubbles/v2/list"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
@@ -18,11 +20,15 @@ func (o ListOption) Title() string       { return o.TitleStr }
 func (o ListOption) Description() string { return o.DescriptionStr }
 func (o ListOption) FilterValue() string { return o.TitleStr + " " + o.DescriptionStr }
 
+// ErrUserAborted is returned when the user cancels a list selection.
+var ErrUserAborted = errors.New("user aborted")
+
 // ListSelectModel is the Bubble Tea model for selecting an item from a list.
 type ListSelectModel struct {
 	list     list.Model
 	selected *ListOption
 	quitting bool
+	aborted  bool
 }
 
 // NewListSelect initializes and returns a ListSelectModel.
@@ -109,6 +115,7 @@ func (m ListSelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "esc", "ctrl+c":
+			m.aborted = true
 			m.quitting = true
 			return m, tea.Quit
 		}
@@ -127,16 +134,24 @@ func (m ListSelectModel) View() tea.View {
 	return tea.NewView(docStyle.Render(m.list.View()))
 }
 
-// Selected returns the selected ListOption, or nil if none was selected or user canceled.
+// Selected returns the selected ListOption, or nil if none was selected.
 func (m ListSelectModel) Selected() *ListOption {
 	return m.selected
+}
+
+// Result returns the selected ListOption, or ErrUserAborted if the user canceled.
+func (m ListSelectModel) Result() (*ListOption, error) {
+	if m.aborted || m.selected == nil {
+		return nil, ErrUserAborted
+	}
+	return m.selected, nil
 }
 
 // docStyle defines the outer margins/padding of the list UI.
 var docStyle = lipgloss.NewStyle().Margin(1, 2)
 
 // Choose runs the list selection program and returns the selected ListOption.
-// If the user cancels or closes, it returns nil, nil.
+// If the user cancels or closes without a selection, it returns ErrUserAborted.
 func Choose(title string, options []ListOption) (*ListOption, error) {
 	p := tea.NewProgram(NewListSelect(title, options))
 	m, err := p.Run()
@@ -144,7 +159,7 @@ func Choose(title string, options []ListOption) (*ListOption, error) {
 		return nil, err
 	}
 	if model, ok := m.(ListSelectModel); ok {
-		return model.Selected(), nil
+		return model.Result()
 	}
-	return nil, nil
+	return nil, ErrUserAborted
 }

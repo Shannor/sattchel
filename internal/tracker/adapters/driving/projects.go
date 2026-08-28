@@ -477,7 +477,10 @@ All goals and member associations will be moved and preserved. The merge project
 					if err != nil {
 						return err
 					}
-					if selectedAttach != nil && selectedAttach.ValueStr == "true" {
+					if selectedAttach == nil {
+						return fmt.Errorf("no attach option selected")
+					}
+					if selectedAttach.ValueStr == "true" {
 						parentGoalID, err = tui.ChooseGoal(sourceGoals, "Select Parent Goal in Source Project", "", nil, nil)
 						if err != nil {
 							return err
@@ -679,7 +682,10 @@ If moving to an existing project, by default the goal is attached under its root
 					if err != nil {
 						return err
 					}
-					if selectedAttach != nil && selectedAttach.ValueStr == "true" {
+					if selectedAttach == nil {
+						return fmt.Errorf("no attach option selected")
+					}
+					if selectedAttach.ValueStr == "true" {
 						targetParentGoalID, err = tui.ChooseGoal(targetGoals, "Select Target Parent Goal", "", nil, nil)
 						if err != nil {
 							return err

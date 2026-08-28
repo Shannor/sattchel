@@ -696,6 +696,77 @@ func (s *Service) DeleteGoal(ctx context.Context, projectID string, goalID strin
 	})
 }
 
+func (s *Service) DeleteGoalRecursive(ctx context.Context, projectID string, goalID string) error {
+	if projectID == "" {
+		return fmt.Errorf("%w - project ID", ErrMissingRequiredFields)
+	}
+	if goalID == "" {
+		return fmt.Errorf("%w - goal ID", ErrMissingRequiredFields)
+	}
+
+	return s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		project, err := s.repo.GetProject(txCtx, projectID)
+		if err != nil {
+			return err
+		}
+
+		goal, err := s.repo.GetGoal(txCtx, goalID)
+		if err != nil {
+			return err
+		}
+		if goal.ProjectID != projectID {
+			return fmt.Errorf("goal %s does not belong to project %s: %w", goalID, projectID, ErrInvalidRequest)
+		}
+		if goalID == project.RootGoalID || goal.IsRoot() {
+			return ErrCannotDeleteRoot
+		}
+
+		projectGoals, err := s.repo.GetGoals(txCtx, projectID)
+		if err != nil {
+			return err
+		}
+
+		if goal.HasParent() {
+			parent, err := s.repo.GetGoal(txCtx, goal.Parent.TargetID)
+			if err != nil {
+				return err
+			}
+			if err := parent.DetachChild(goal); err != nil {
+				return err
+			}
+			if _, err := s.repo.UpdateGoal(txCtx, parent); err != nil {
+				return err
+			}
+		}
+
+		parentToChildren := make(map[string][]Goal)
+		for _, g := range projectGoals {
+			if g.HasParent() {
+				parentToChildren[g.Parent.TargetID] = append(parentToChildren[g.Parent.TargetID], g)
+			}
+		}
+
+		var collectDeleteOrder func(id string) []string
+		collectDeleteOrder = func(id string) []string {
+			var ids []string
+			for _, child := range parentToChildren[id] {
+				ids = append(ids, collectDeleteOrder(child.ID)...)
+				ids = append(ids, child.ID)
+			}
+			return ids
+		}
+
+		deleteOrder := append(collectDeleteOrder(goalID), goalID)
+		for _, id := range deleteOrder {
+			if err := s.repo.DeleteGoal(txCtx, id); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+}
+
 func (s *Service) CreateMember(ctx context.Context, name string, email string) (*Member, error) {
 	if name == "" {
 		return nil, fmt.Errorf("%w - name", ErrMissingRequiredFields)
