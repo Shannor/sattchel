@@ -54,15 +54,16 @@ func collectGoalAndDescendantIDs(goals []core.Goal, goalID string) []string {
 		return nil
 	}
 
-	ids := []string{goalID}
-	var collect func(parentID string)
-	collect = func(parentID string) {
-		for _, child := range parentToChildren[parentID] {
-			ids = append(ids, child.ID)
-			collect(child.ID)
+	ids := make([]string, 0, len(goals))
+	stack := []string{goalID}
+	for len(stack) > 0 {
+		id := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		ids = append(ids, id)
+		for _, child := range parentToChildren[id] {
+			stack = append(stack, child.ID)
 		}
 	}
-	collect(goalID)
 	return ids
 }
 
