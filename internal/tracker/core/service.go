@@ -651,6 +651,29 @@ func (s *Service) GetGoal(ctx context.Context, goalID string) (*Goal, error) {
 	return s.repo.GetGoal(ctx, goalID)
 }
 
+func collectGoalDeleteOrder(goals []Goal, rootGoalID string) []string {
+	parentToChildren := make(map[string][]Goal)
+	for _, g := range goals {
+		if g.HasParent() {
+			parentToChildren[g.Parent.TargetID] = append(parentToChildren[g.Parent.TargetID], g)
+		}
+	}
+
+	stack := []string{rootGoalID}
+	visitOrder := make([]string, 0, len(goals))
+	for len(stack) > 0 {
+		id := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		visitOrder = append(visitOrder, id)
+		for _, child := range parentToChildren[id] {
+			stack = append(stack, child.ID)
+		}
+	}
+
+	slices.Reverse(visitOrder)
+	return visitOrder
+}
+
 func (s *Service) DeleteGoal(ctx context.Context, projectID string, goalID string) error {
 	if projectID == "" {
 		return fmt.Errorf("%w - project ID", ErrMissingRequiredFields)
@@ -693,6 +716,59 @@ func (s *Service) DeleteGoal(ctx context.Context, projectID string, goalID strin
 		}
 
 		return s.repo.DeleteGoal(txCtx, goalID)
+	})
+}
+
+func (s *Service) DeleteGoalRecursive(ctx context.Context, projectID string, goalID string) error {
+	if projectID == "" {
+		return fmt.Errorf("%w - project ID", ErrMissingRequiredFields)
+	}
+	if goalID == "" {
+		return fmt.Errorf("%w - goal ID", ErrMissingRequiredFields)
+	}
+
+	return s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		project, err := s.repo.GetProject(txCtx, projectID)
+		if err != nil {
+			return err
+		}
+
+		goal, err := s.repo.GetGoal(txCtx, goalID)
+		if err != nil {
+			return err
+		}
+		if goal.ProjectID != projectID {
+			return fmt.Errorf("goal %s does not belong to project %s: %w", goalID, projectID, ErrInvalidRequest)
+		}
+		if goalID == project.RootGoalID || goal.IsRoot() {
+			return ErrCannotDeleteRoot
+		}
+
+		projectGoals, err := s.repo.GetGoals(txCtx, projectID)
+		if err != nil {
+			return err
+		}
+
+		if goal.HasParent() {
+			parent, err := s.repo.GetGoal(txCtx, goal.Parent.TargetID)
+			if err != nil {
+				return err
+			}
+			if err := parent.DetachChild(goal); err != nil {
+				return err
+			}
+			if _, err := s.repo.UpdateGoal(txCtx, parent); err != nil {
+				return err
+			}
+		}
+
+		for _, id := range collectGoalDeleteOrder(projectGoals, goalID) {
+			if err := s.repo.DeleteGoal(txCtx, id); err != nil {
+				return err
+			}
+		}
+
+		return nil
 	})
 }
 

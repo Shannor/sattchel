@@ -991,6 +991,63 @@ func TestServiceDeleteGoal(t *testing.T) {
 			t.Fatalf("expected ErrInvalidRequest, got %v", err)
 		}
 	})
+
+	t.Run("recursive delete removes descendants and parent", func(t *testing.T) {
+		var (
+			updatedParent  *Goal
+			deletedGoalIDs []string
+		)
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID, RootGoalID: "g-root"}, nil
+			},
+			getGoalFunc: func(ctx context.Context, goalID string) (*Goal, error) {
+				switch goalID {
+				case "g-parent":
+					return &Goal{ID: "g-parent", ProjectID: "p-1", Parent: &Link{TargetID: "g-root"}, Children: []Goal{{ID: "g-child"}}}, nil
+				case "g-child":
+					return &Goal{ID: "g-child", ProjectID: "p-1", Parent: &Link{TargetID: "g-parent"}, Children: []Goal{{ID: "g-grandchild"}}}, nil
+				case "g-grandchild":
+					return &Goal{ID: "g-grandchild", ProjectID: "p-1", Parent: &Link{TargetID: "g-child"}}, nil
+				case "g-root":
+					return &Goal{ID: "g-root", ProjectID: "p-1", Children: []Goal{{ID: "g-parent"}}}, nil
+				default:
+					return nil, errors.New("not found")
+				}
+			},
+			getGoalsFunc: func(ctx context.Context, projectID string) ([]Goal, error) {
+				return []Goal{
+					{ID: "g-root", ProjectID: "p-1", Children: []Goal{{ID: "g-parent"}}},
+					{ID: "g-parent", ProjectID: "p-1", Parent: &Link{TargetID: "g-root"}, Children: []Goal{{ID: "g-child"}}},
+					{ID: "g-child", ProjectID: "p-1", Parent: &Link{TargetID: "g-parent"}, Children: []Goal{{ID: "g-grandchild"}}},
+					{ID: "g-grandchild", ProjectID: "p-1", Parent: &Link{TargetID: "g-child"}},
+				}, nil
+			},
+			updateGoalFunc: func(ctx context.Context, goal *Goal) (*Goal, error) {
+				updatedParent = goal
+				return goal, nil
+			},
+			deleteGoalFunc: func(ctx context.Context, goalID string) error {
+				deletedGoalIDs = append(deletedGoalIDs, goalID)
+				return nil
+			},
+		}
+
+		s := NewService(repo)
+		if err := s.DeleteGoalRecursive(context.Background(), "p-1", "g-parent"); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if updatedParent == nil {
+			t.Fatal("expected parent to be updated")
+		}
+		if len(updatedParent.Children) != 0 {
+			t.Fatalf("expected root children to be empty, got %d", len(updatedParent.Children))
+		}
+		expectedDeleteOrder := []string{"g-grandchild", "g-child", "g-parent"}
+		if !reflect.DeepEqual(deletedGoalIDs, expectedDeleteOrder) {
+			t.Fatalf("expected delete order %v, got %v", expectedDeleteOrder, deletedGoalIDs)
+		}
+	})
 }
 
 func TestServiceUpdateGoal(t *testing.T) {

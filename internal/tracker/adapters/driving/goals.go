@@ -2,6 +2,7 @@ package driving
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
@@ -16,6 +17,34 @@ import (
 	"charm.land/lipgloss/v2/tree"
 	"github.com/spf13/cobra"
 )
+
+var chooseGoalForDelete = tui.ChooseGoal
+var confirmRecursiveGoalDelete = promptConfirmRecursiveGoalDelete
+
+func promptConfirmRecursiveGoalDelete(goal *core.Goal) (bool, error) {
+	if !loader.IsTerminal() {
+		return false, fmt.Errorf("recursive delete confirmation requires an interactive terminal")
+	}
+
+	title := fmt.Sprintf("Delete goal %q?", goal.Name)
+	if goal.HasChildren() {
+		title = fmt.Sprintf("Delete goal %q and its descendants?", goal.Name)
+	}
+
+	confirmed := false
+	err := tui.NewForm(
+		huh.NewGroup(
+			huh.NewSelect[bool]().
+				Title(title).
+				Options(
+					huh.NewOption("Yes", true),
+					huh.NewOption("No", false),
+				).
+				Value(&confirmed),
+		),
+	).Run()
+	return confirmed, err
+}
 
 func goals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
@@ -211,7 +240,11 @@ func addGoalInteractive(ctx context.Context, service *core.Service, cfg *Config,
 
 	if len(goals) > 0 {
 		selectedParent, err := tui.ChooseGoal(goals, "Select Parent Goal", defaultParent, nil, nil)
-		if err == nil {
+		if err != nil {
+			if !errors.Is(err, tui.ErrUserAborted) {
+				return err
+			}
+		} else {
 			parentID = selectedParent
 		}
 	}
@@ -223,7 +256,11 @@ func addGoalInteractive(ctx context.Context, service *core.Service, cfg *Config,
 		{TitleStr: "High", DescriptionStr: "High impact on project", ValueStr: string(core.HighImpact)},
 	}
 	selectedImpact, err := tui.Choose("Select Impact", impactOpts)
-	if err == nil && selectedImpact != nil {
+	if err != nil {
+		if !errors.Is(err, tui.ErrUserAborted) {
+			return err
+		}
+	} else {
 		impactVal = selectedImpact.ValueStr
 	}
 
@@ -234,13 +271,21 @@ func addGoalInteractive(ctx context.Context, service *core.Service, cfg *Config,
 		{TitleStr: "High", DescriptionStr: "Significant effort required", ValueStr: string(core.HighEffort)},
 	}
 	selectedEffort, err := tui.Choose("Select Effort", effortOpts)
-	if err == nil && selectedEffort != nil {
+	if err != nil {
+		if !errors.Is(err, tui.ErrUserAborted) {
+			return err
+		}
+	} else {
 		effortVal = selectedEffort.ValueStr
 	}
 
 	if len(members) > 0 {
 		selectedMember, err := tui.ChooseMember(members, "Select Assigned Member", true)
-		if err == nil {
+		if err != nil {
+			if !errors.Is(err, tui.ErrUserAborted) {
+				return err
+			}
+		} else {
 			memberIDVal = selectedMember
 		}
 	}
@@ -251,16 +296,24 @@ func addGoalInteractive(ctx context.Context, service *core.Service, cfg *Config,
 			{TitleStr: "Required", DescriptionStr: "Child goal is required before parent completion", ValueStr: string(core.LinkRequired)},
 		}
 		selectedRel, err := tui.Choose("Select Link Relationship", relOpts)
-		if err == nil && selectedRel != nil {
+		if err != nil {
+			if !errors.Is(err, tui.ErrUserAborted) {
+				return err
+			}
+		} else {
 			relationshipVal = selectedRel.ValueStr
 		}
 	}
 
-	_ = tui.NewForm(
+	if err := tui.NewForm(
 		huh.NewGroup(
 			huh.NewConfirm().Title("Set as current goal?").Value(&setCurrent),
 		).WithHeight(6),
-	).Run()
+	).Run(); err != nil {
+		if !errors.Is(err, huh.ErrUserAborted) {
+			return err
+		}
+	}
 
 	options := core.GoalOptions{
 		ParentID:         parentID,
@@ -876,13 +929,16 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 }
 
 func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
-	projectID := ""
+	var (
+		projectID string
+		recursive bool
+	)
 
 	cmd := &cobra.Command{
-		Use:          "delete <id>",
+		Use:          "delete [id]",
 		Aliases:      []string{"remove", "rm"},
 		Short:        "Delete a goal",
-		Args:         cobra.ExactArgs(1),
+		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			if len(args) != 0 {
@@ -897,9 +953,74 @@ func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 				return fmt.Errorf("no project selected")
 			}
 
-			goalID := args[0]
-			var err error
+			goalID := ""
+			if len(args) > 0 {
+				goalID = args[0]
+			}
+
+			var (
+				goals []core.Goal
+				err   error
+			)
+			if goalID == "" || recursive {
+				_ = loader.Run("Getting goals ...", func() {
+					goals, err = service.GetGoals(cmd.Context(), pid)
+				})
+				if err != nil {
+					return err
+				}
+				if len(goals) == 0 {
+					return fmt.Errorf("no goals found for project %s", pid)
+				}
+			}
+
+			if goalID == "" {
+				goalID, err = chooseGoalForDelete(goals, "Select Goal to Delete", cfg.CurrentGoalID(), func(g *core.Goal) bool {
+					return !g.IsRoot()
+				}, nil)
+				if err != nil {
+					return err
+				}
+			}
+
+			var (
+				selectedGoal             *core.Goal
+				currentGoalNeedsRecheck bool
+			)
+			if recursive {
+				for i := range goals {
+					if goals[i].ID == goalID {
+						selectedGoal = &goals[i]
+						break
+					}
+				}
+				if selectedGoal == nil {
+					return fmt.Errorf("goal %s not found in project %s", goalID, pid)
+				}
+
+				currentGoalID := cfg.CurrentGoalID()
+				if currentGoalID != "" && currentGoalID != goalID {
+					currentGoal, getErr := service.GetGoal(cmd.Context(), currentGoalID)
+					if getErr == nil && currentGoal != nil && currentGoal.ProjectID == pid {
+						currentGoalNeedsRecheck = true
+					}
+				}
+
+				confirmed, err := confirmRecursiveGoalDelete(selectedGoal)
+				if err != nil {
+					return err
+				}
+				if !confirmed {
+					writer.Info("Recursive delete cancelled")
+					return nil
+				}
+			}
+
 			runErr := loader.Run("Deleting goal...", func() {
+				if recursive {
+					err = service.DeleteGoalRecursive(cmd.Context(), pid, goalID)
+					return
+				}
 				err = service.DeleteGoal(cmd.Context(), pid, goalID)
 			})
 			if runErr != nil {
@@ -909,23 +1030,36 @@ func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 				return err
 			}
 
-			if cfg.CurrentGoalID() == goalID {
-				_ = cfg.SetCurrentGoalID("")
+			if currentGoalID := cfg.CurrentGoalID(); currentGoalID != "" {
+				switch {
+				case currentGoalID == goalID:
+					_ = cfg.SetCurrentGoalID("")
+				case recursive && currentGoalNeedsRecheck:
+					currentGoal, getErr := service.GetGoal(cmd.Context(), currentGoalID)
+					if getErr != nil || currentGoal == nil {
+						_ = cfg.SetCurrentGoalID("")
+					}
+				}
 			}
 
+			if recursive {
+				writer.Success(fmt.Sprintf("Goal %s and its descendants deleted successfully", goalID))
+				return nil
+			}
 			writer.Success(fmt.Sprintf("Goal %s deleted successfully", goalID))
 			return nil
 		},
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. If not provided, the default project will be used")
+	cmd.Flags().BoolVarP(&recursive, "recursive", "r", false, "Delete the selected goal and all of its descendants")
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
 	return cmd
 }
 
-func viewGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
+func viewGoal(service *core.Service, cfg *Config, _ printer.Writer) *cobra.Command {
 	projectID := ""
 
 	cmd := &cobra.Command{
