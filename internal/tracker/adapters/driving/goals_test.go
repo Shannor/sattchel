@@ -114,12 +114,15 @@ func TestGoalsCLI(t *testing.T) {
 		}
 
 		originalConfirmRecursiveGoalDelete := confirmRecursiveGoalDelete
-		confirmRecursiveGoalDelete = func(goalName string, descendantCount int) (bool, error) {
-			if goalName != parentGoal.Name {
-				t.Fatalf("expected goal name %q, got %q", parentGoal.Name, goalName)
+		confirmRecursiveGoalDelete = func(goal *core.Goal) (bool, error) {
+			if goal == nil {
+				t.Fatal("expected goal to confirm")
 			}
-			if descendantCount != 1 {
-				t.Fatalf("expected 1 descendant, got %d", descendantCount)
+			if goal.Name != parentGoal.Name {
+				t.Fatalf("expected goal name %q, got %q", parentGoal.Name, goal.Name)
+			}
+			if !goal.HasChildren() {
+				t.Fatal("expected goal to report children")
 			}
 			return true, nil
 		}
@@ -137,7 +140,7 @@ func TestGoalsCLI(t *testing.T) {
 			t.Fatalf("recursive delete failed: %v", err)
 		}
 		out := stripANSI(buf.String())
-		if !strings.Contains(out, "and 1 descendant(s) deleted successfully") {
+		if !strings.Contains(out, "and its descendants deleted successfully") {
 			t.Fatalf("unexpected output from recursive delete: %q", out)
 		}
 
@@ -186,7 +189,7 @@ func TestGoalsCLI(t *testing.T) {
 		}
 
 		originalConfirmRecursiveGoalDelete := confirmRecursiveGoalDelete
-		confirmRecursiveGoalDelete = func(goalName string, descendantCount int) (bool, error) {
+		confirmRecursiveGoalDelete = func(goal *core.Goal) (bool, error) {
 			return false, nil
 		}
 		defer func() { confirmRecursiveGoalDelete = originalConfirmRecursiveGoalDelete }()
@@ -249,7 +252,7 @@ func TestGoalsCLI(t *testing.T) {
 		}
 
 		originalConfirmRecursiveGoalDelete := confirmRecursiveGoalDelete
-		confirmRecursiveGoalDelete = func(goalName string, descendantCount int) (bool, error) {
+		confirmRecursiveGoalDelete = func(goal *core.Goal) (bool, error) {
 			return false, huh.ErrUserAborted
 		}
 		defer func() { confirmRecursiveGoalDelete = originalConfirmRecursiveGoalDelete }()

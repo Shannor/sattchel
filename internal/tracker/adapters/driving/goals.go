@@ -21,16 +21,21 @@ import (
 var chooseGoalForDelete = tui.ChooseGoal
 var confirmRecursiveGoalDelete = promptConfirmRecursiveGoalDelete
 
-func promptConfirmRecursiveGoalDelete(goalName string, descendantCount int) (bool, error) {
+func promptConfirmRecursiveGoalDelete(goal *core.Goal) (bool, error) {
 	if !loader.IsTerminal() {
 		return false, fmt.Errorf("recursive delete confirmation requires an interactive terminal")
+	}
+
+	title := fmt.Sprintf("Delete goal %q?", goal.Name)
+	if goal.HasChildren() {
+		title = fmt.Sprintf("Delete goal %q and its descendants?", goal.Name)
 	}
 
 	confirmed := false
 	err := tui.NewForm(
 		huh.NewGroup(
 			huh.NewSelect[bool]().
-				Title(fmt.Sprintf("Delete goal %q and %d descendant(s)?", goalName, descendantCount)).
+				Title(title).
 				Options(
 					huh.NewOption("Yes", true),
 					huh.NewOption("No", false),
@@ -39,32 +44,6 @@ func promptConfirmRecursiveGoalDelete(goalName string, descendantCount int) (boo
 		),
 	).Run()
 	return confirmed, err
-}
-
-func collectGoalAndDescendantIDs(goals []core.Goal, goalID string) []string {
-	goalsByID := make(map[string]core.Goal, len(goals))
-	parentToChildren := make(map[string][]core.Goal)
-	for _, goal := range goals {
-		goalsByID[goal.ID] = goal
-		if goal.HasParent() {
-			parentToChildren[goal.Parent.TargetID] = append(parentToChildren[goal.Parent.TargetID], goal)
-		}
-	}
-	if _, ok := goalsByID[goalID]; !ok {
-		return nil
-	}
-
-	ids := make([]string, 0, len(goals))
-	stack := []string{goalID}
-	for len(stack) > 0 {
-		id := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		ids = append(ids, id)
-		for _, child := range parentToChildren[id] {
-			stack = append(stack, child.ID)
-		}
-	}
-	return ids
 }
 
 func goals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
@@ -1004,22 +983,30 @@ func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 				}
 			}
 
-			deletedGoalIDs := []string{goalID}
+			var (
+				selectedGoal             *core.Goal
+				currentGoalNeedsRecheck bool
+			)
 			if recursive {
-				deletedGoalIDs = collectGoalAndDescendantIDs(goals, goalID)
-				if len(deletedGoalIDs) == 0 {
-					deletedGoalIDs = []string{goalID}
-				}
-
-				goalName := goalID
-				for _, goal := range goals {
-					if goal.ID == goalID {
-						goalName = goal.Name
+				for i := range goals {
+					if goals[i].ID == goalID {
+						selectedGoal = &goals[i]
 						break
 					}
 				}
+				if selectedGoal == nil {
+					return fmt.Errorf("goal %s not found in project %s", goalID, pid)
+				}
 
-				confirmed, err := confirmRecursiveGoalDelete(goalName, len(deletedGoalIDs)-1)
+				currentGoalID := cfg.CurrentGoalID()
+				if currentGoalID != "" && currentGoalID != goalID {
+					currentGoal, getErr := service.GetGoal(cmd.Context(), currentGoalID)
+					if getErr == nil && currentGoal != nil && currentGoal.ProjectID == pid {
+						currentGoalNeedsRecheck = true
+					}
+				}
+
+				confirmed, err := confirmRecursiveGoalDelete(selectedGoal)
 				if err != nil {
 					return err
 				}
@@ -1043,13 +1030,20 @@ func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 				return err
 			}
 
-			deletedSet := set.NewFromFunc(deletedGoalIDs, func(id string) string { return id })
-			if currentGoalID := cfg.CurrentGoalID(); currentGoalID != "" && deletedSet.Contains(currentGoalID) {
-				_ = cfg.SetCurrentGoalID("")
+			if currentGoalID := cfg.CurrentGoalID(); currentGoalID != "" {
+				switch {
+				case currentGoalID == goalID:
+					_ = cfg.SetCurrentGoalID("")
+				case recursive && currentGoalNeedsRecheck:
+					currentGoal, getErr := service.GetGoal(cmd.Context(), currentGoalID)
+					if getErr != nil || currentGoal == nil {
+						_ = cfg.SetCurrentGoalID("")
+					}
+				}
 			}
 
 			if recursive {
-				writer.Success(fmt.Sprintf("Goal %s and %d descendant(s) deleted successfully", goalID, len(deletedGoalIDs)-1))
+				writer.Success(fmt.Sprintf("Goal %s and its descendants deleted successfully", goalID))
 				return nil
 			}
 			writer.Success(fmt.Sprintf("Goal %s deleted successfully", goalID))

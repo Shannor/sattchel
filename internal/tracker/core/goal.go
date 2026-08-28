@@ -158,6 +158,10 @@ func (g *Goal) IsRoot() bool {
 	return g.Parent == nil || g.Parent.TargetID == ""
 }
 
+func (g *Goal) HasChildren() bool {
+	return len(g.Children) > 0
+}
+
 func (g *Goal) IsDoItNow() bool {
 	return g.Impact == HighImpact && g.Effort == LowEffort
 }
