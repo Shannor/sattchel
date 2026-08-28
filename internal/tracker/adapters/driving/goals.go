@@ -984,7 +984,7 @@ func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 			}
 
 			var (
-				selectedGoal             *core.Goal
+				selectedGoal            *core.Goal
 				currentGoalNeedsRecheck bool
 			)
 			if recursive {
