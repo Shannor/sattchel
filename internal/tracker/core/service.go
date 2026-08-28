@@ -651,6 +651,29 @@ func (s *Service) GetGoal(ctx context.Context, goalID string) (*Goal, error) {
 	return s.repo.GetGoal(ctx, goalID)
 }
 
+func collectGoalDeleteOrder(goals []Goal, rootGoalID string) []string {
+	parentToChildren := make(map[string][]Goal)
+	for _, g := range goals {
+		if g.HasParent() {
+			parentToChildren[g.Parent.TargetID] = append(parentToChildren[g.Parent.TargetID], g)
+		}
+	}
+
+	stack := []string{rootGoalID}
+	visitOrder := make([]string, 0, len(goals))
+	for len(stack) > 0 {
+		id := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		visitOrder = append(visitOrder, id)
+		for _, child := range parentToChildren[id] {
+			stack = append(stack, child.ID)
+		}
+	}
+
+	slices.Reverse(visitOrder)
+	return visitOrder
+}
+
 func (s *Service) DeleteGoal(ctx context.Context, projectID string, goalID string) error {
 	if projectID == "" {
 		return fmt.Errorf("%w - project ID", ErrMissingRequiredFields)
@@ -739,25 +762,7 @@ func (s *Service) DeleteGoalRecursive(ctx context.Context, projectID string, goa
 			}
 		}
 
-		parentToChildren := make(map[string][]Goal)
-		for _, g := range projectGoals {
-			if g.HasParent() {
-				parentToChildren[g.Parent.TargetID] = append(parentToChildren[g.Parent.TargetID], g)
-			}
-		}
-
-		var collectDeleteOrder func(id string) []string
-		collectDeleteOrder = func(id string) []string {
-			var ids []string
-			for _, child := range parentToChildren[id] {
-				ids = append(ids, collectDeleteOrder(child.ID)...)
-				ids = append(ids, child.ID)
-			}
-			return ids
-		}
-
-		deleteOrder := append(collectDeleteOrder(goalID), goalID)
-		for _, id := range deleteOrder {
+		for _, id := range collectGoalDeleteOrder(projectGoals, goalID) {
 			if err := s.repo.DeleteGoal(txCtx, id); err != nil {
 				return err
 			}
