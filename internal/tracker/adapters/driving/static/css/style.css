@@ -139,9 +139,13 @@ body {
 	padding: 16px;
 	width: 100%;
 	height: 100%;
+	box-sizing: border-box;
+	min-width: 0;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: flex-start;
+	gap: 8px;
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
@@ -211,6 +215,10 @@ body {
 }
 
 .goal-title {
+	display: block;
+	width: 100%;
+	min-width: 0;
+	flex: 0 0 auto;
 	font-family: var(--font-title);
 	font-size: 15px;
 	font-weight: 600;
@@ -219,13 +227,17 @@ body {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	margin-bottom: 8px;
+	margin: 0;
 }
 
 .goal-meta {
 	display: flex;
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
 	gap: 6px;
 	flex-wrap: wrap;
+	align-content: flex-start;
 }
 
 .badge {
@@ -601,11 +613,7 @@ body {
 }
 
 .root-card {
-	background: linear-gradient(
-		135deg,
-		#1e1b4b,
-		#2e1065
-	); /* Deep indigo/violet */
+	background: linear-gradient(135deg, #1e1b4b, #2e1065); /* Deep indigo/violet */
 	border: 2px solid #818cf8; /* Bright glowing border */
 	border-radius: 14px;
 	width: 100%;
