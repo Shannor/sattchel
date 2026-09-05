@@ -18,12 +18,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var chooseGoalForDelete = tui.ChooseGoal
+var chooseGoalForDelete = promptChooseGoalForDelete
 var confirmRecursiveGoalDelete = promptConfirmRecursiveGoalDelete
+
+func promptChooseGoalForDelete(goals []core.Goal, title string, currentGoalID string, filterFn func(*core.Goal) bool, validateFn func(string) error) (string, error) {
+	if !loader.IsTerminal() {
+		return "", fmt.Errorf("goal ID is required in non-interactive mode")
+	}
+	return tui.ChooseGoal(goals, title, currentGoalID, filterFn, validateFn)
+}
 
 func promptConfirmRecursiveGoalDelete(goal *core.Goal) (bool, error) {
 	if !loader.IsTerminal() {
-		return false, fmt.Errorf("recursive delete confirmation requires an interactive terminal")
+		return true, nil
 	}
 
 	title := fmt.Sprintf("Delete goal %q?", goal.Name)
@@ -100,18 +107,16 @@ func addGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			pid := projectID
-			if !cmd.Flags().Changed("projectId") {
-				if lastProj := cfg.CurrentProjectID(); lastProj != "" {
-					pid = lastProj
-				}
-			}
-			if pid == "" {
-				return fmt.Errorf("no project selected")
+			pid, err := ensureProjectID(cmd, service, cfg, projectID)
+			if err != nil {
+				return err
 			}
 
 			// If no name provided, show interactive form
 			if len(args) == 0 {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("goal name is required in non-interactive mode")
+				}
 				return addGoalInteractive(cmd.Context(), service, cfg, pid)
 			}
 
@@ -341,22 +346,18 @@ func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 	projectID := ""
 
 	cmd := &cobra.Command{
-		Use:   "set",
-		Short: "Set Active Goal",
+		Use:          "set [id]",
+		Short:        "Set Active Goal",
+		Args:         cobra.MaximumNArgs(1),
+		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			pid := projectID
-			if !cmd.Flags().Changed("projectId") {
-				if lastProj := cfg.CurrentProjectID(); lastProj != "" {
-					pid = lastProj
-				}
-			}
-			if pid == "" {
-				return fmt.Errorf("no project selected")
+			pid, err := ensureProjectID(cmd, service, cfg, projectID)
+			if err != nil {
+				return err
 			}
 
 			var (
 				goals []core.Goal
-				err   error
 			)
 
 			_ = loader.Run("Getting goals ...", func() {
@@ -370,10 +371,20 @@ func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 				return fmt.Errorf("no goals found for project %s", pid)
 			}
 
-			currentGoalID := cfg.CurrentGoalID()
-			selectedID, err := tui.ChooseGoal(goals, "Select Active Goal", currentGoalID, nil, nil)
-			if err != nil {
-				return err
+			selectedID := ""
+			if len(args) > 0 {
+				selectedID = args[0]
+			}
+
+			if selectedID == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("goal ID is required in non-interactive mode")
+				}
+				currentGoalID := cfg.CurrentGoalID()
+				selectedID, err = tui.ChooseGoal(goals, "Select Active Goal", currentGoalID, nil, nil)
+				if err != nil {
+					return err
+				}
 			}
 
 			if err := cfg.SetCurrentGoalID(selectedID); err != nil {
@@ -381,6 +392,9 @@ func setGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 			}
 
 			idx := slices.IndexFunc(goals, func(g core.Goal) bool { return g.ID == selectedID })
+			if idx == -1 {
+				return fmt.Errorf("goal with ID %q not found in project %s", selectedID, pid)
+			}
 			g := goals[idx]
 
 			writer.Success(fmt.Sprintf("Active goal set to: %s (%s)", g.Name, g.ID))
@@ -819,9 +833,9 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 			return nil, cobra.ShellCompDirectiveNoFileComp
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			pid := getActiveProjectID(cmd, cfg, projectID)
-			if pid == "" {
-				return fmt.Errorf("no project selected")
+			pid, err := ensureProjectID(cmd, service, cfg, projectID)
+			if err != nil {
+				return err
 			}
 
 			var childID string
@@ -834,9 +848,12 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 				newParentID = args[1]
 			}
 
+			if (childID == "" || newParentID == "") && !loader.IsTerminal() {
+				return fmt.Errorf("both childId and newParentId are required in non-interactive mode")
+			}
+
 			var (
 				goals []core.Goal
-				err   error
 			)
 			_ = loader.Run("Getting goals ...", func() {
 				goals, err = service.GetGoals(cmd.Context(), pid)
@@ -887,7 +904,7 @@ func moveGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 				}
 			}
 
-			if !cmd.Flags().Changed("relationship") && len(args) == 0 {
+			if !cmd.Flags().Changed("relationship") && len(args) == 0 && loader.IsTerminal() {
 				relOptions := []tui.ListOption{
 					{TitleStr: "Optional", DescriptionStr: "Child goal is optional", ValueStr: string(core.LinkOptional)},
 					{TitleStr: "Required", DescriptionStr: "Child goal is required before parent completion", ValueStr: string(core.LinkRequired)},
@@ -948,9 +965,9 @@ func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 			return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			pid := getActiveProjectID(cmd, cfg, projectID)
-			if pid == "" {
-				return fmt.Errorf("no project selected")
+			pid, err := ensureProjectID(cmd, service, cfg, projectID)
+			if err != nil {
+				return err
 			}
 
 			goalID := ""
@@ -960,7 +977,6 @@ func deleteGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 
 			var (
 				goals []core.Goal
-				err   error
 			)
 			if goalID == "" || recursive {
 				_ = loader.Run("Getting goals ...", func() {
@@ -1081,13 +1097,12 @@ func viewGoal(service *core.Service, cfg *Config, _ printer.Writer) *cobra.Comma
 			return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			pid := getActiveProjectID(cmd, cfg, projectID)
-			if pid == "" {
-				return fmt.Errorf("no project selected")
+			pid, err := ensureProjectID(cmd, service, cfg, projectID)
+			if err != nil {
+				return err
 			}
 
 			var (
-				err        error
 				selectedID string
 				goals      []core.Goal
 				parent     *core.Goal
@@ -1095,6 +1110,9 @@ func viewGoal(service *core.Service, cfg *Config, _ printer.Writer) *cobra.Comma
 			if len(args) > 0 {
 				selectedID = args[0]
 			} else {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("goal ID is required in non-interactive mode")
+				}
 				_ = loader.Run("Getting goals ...", func() {
 					goals, err = service.GetGoals(cmd.Context(), pid)
 				})
@@ -1151,25 +1169,63 @@ func updateGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 		impact      string
 		memberID    string
 		status      string
+		projectID   string
 	)
 
 	cmd := &cobra.Command{
-		Use:          "update <id>",
+		Use:          "update [id]",
 		Aliases:      []string{"edit"},
 		Short:        "Update a goal's details",
-		Args:         cobra.ExactArgs(1),
+		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id := args[0]
+			id := ""
+			if len(args) > 0 {
+				id = args[0]
+			}
 
-			// Check if at least one flag was set
-			if !cmd.Flags().Changed("name") &&
-				!cmd.Flags().Changed("description") &&
-				!cmd.Flags().Changed("effort") &&
-				!cmd.Flags().Changed("impact") &&
-				!cmd.Flags().Changed("memberId") &&
-				!cmd.Flags().Changed("status") {
-				return fmt.Errorf("at least one flag must be specified for update")
+			if id == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("goal ID is required in non-interactive mode")
+				}
+				pid, err := ensureProjectID(cmd, service, cfg, projectID)
+				if err != nil {
+					return err
+				}
+				var goals []core.Goal
+				_ = loader.Run("Getting goals ...", func() {
+					goals, err = service.GetGoals(cmd.Context(), pid)
+				})
+				if err != nil {
+					return err
+				}
+				if len(goals) == 0 {
+					return fmt.Errorf("no goals found for project %s", pid)
+				}
+				selectedID, err := tui.ChooseGoal(goals, "Select Goal to Update", cfg.CurrentGoalID(), nil, nil)
+				if err != nil {
+					return err
+				}
+				id = selectedID
+			}
+
+			hasFlags := cmd.Flags().Changed("name") ||
+				cmd.Flags().Changed("description") ||
+				cmd.Flags().Changed("effort") ||
+				cmd.Flags().Changed("impact") ||
+				cmd.Flags().Changed("memberId") ||
+				cmd.Flags().Changed("status")
+
+			if !hasFlags {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("at least one flag must be specified for update in non-interactive mode")
+				}
+				updatedGoal, err := updateGoalInteractive(cmd.Context(), service, id)
+				if err != nil {
+					return err
+				}
+				writer.Success(fmt.Sprintf("Goal %q (%s) updated successfully", updatedGoal.Name, updatedGoal.ID))
+				return nil
 			}
 
 			options := core.GoalOptions{
@@ -1196,11 +1252,12 @@ func updateGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 			if len(args) != 0 {
 				return nil, cobra.ShellCompDirectiveNoFileComp
 			}
-			pid := getActiveProjectID(cmd, cfg, "")
+			pid := getActiveProjectID(cmd, cfg, projectID)
 			return getGoalCompletions(service, pid), cobra.ShellCompDirectiveNoFileComp
 		},
 	}
 
+	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goal. Default: active project")
 	cmd.Flags().StringVar(&name, "name", "", "New name of the goal")
 	cmd.Flags().StringVarP(&description, "description", "d", "", "New description of the goal")
 	cmd.Flags().StringVarP(&effort, "effort", "e", "", "New effort level of the goal")
@@ -1239,4 +1296,92 @@ func updateGoal(service *core.Service, cfg *Config, writer printer.Writer) *cobr
 	})
 
 	return cmd
+}
+
+func updateGoalInteractive(ctx context.Context, service *core.Service, goalID string) (*core.Goal, error) {
+	var currentGoal *core.Goal
+	var err error
+	_ = loader.Run("Fetching goal details...", func() {
+		currentGoal, err = service.GetGoal(ctx, goalID)
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	name := currentGoal.Name
+	description := currentGoal.Description
+	effortVal := string(currentGoal.Effort)
+	impactVal := string(currentGoal.Impact)
+	memberIDVal := ""
+	if currentGoal.Member != nil {
+		memberIDVal = currentGoal.Member.ID
+	}
+	statusVal := string(currentGoal.Status)
+
+	form := tui.NewForm(
+		huh.NewGroup(
+			huh.NewInput().Title("Goal Name").Value(&name).Validate(func(val string) error {
+				if strings.TrimSpace(val) == "" {
+					return fmt.Errorf("goal name is required")
+				}
+				return nil
+			}),
+			huh.NewInput().Title("Description").Value(&description),
+		),
+	)
+	if err := form.Run(); err != nil {
+		return nil, err
+	}
+
+	statusOpts := []tui.ListOption{
+		{TitleStr: "Draft", ValueStr: string(core.GoalDraft)},
+		{TitleStr: "Open", ValueStr: string(core.GoalOpen)},
+		{TitleStr: "In Progress", ValueStr: string(core.GoalInProgress)},
+		{TitleStr: "Completed", ValueStr: string(core.GoalCompleted)},
+		{TitleStr: "Cancelled", ValueStr: string(core.GoalCancelled)},
+	}
+	if selStatus, err := tui.Choose("Select Status", statusOpts); err == nil && selStatus != nil {
+		statusVal = selStatus.ValueStr
+	}
+
+	impactOpts := []tui.ListOption{
+		{TitleStr: "Unknown", ValueStr: string(core.UnknownImpact)},
+		{TitleStr: "Low", ValueStr: string(core.LowImpact)},
+		{TitleStr: "Medium", ValueStr: string(core.MediumImpact)},
+		{TitleStr: "High", ValueStr: string(core.HighImpact)},
+	}
+	if selImpact, err := tui.Choose("Select Impact", impactOpts); err == nil && selImpact != nil {
+		impactVal = selImpact.ValueStr
+	}
+
+	effortOpts := []tui.ListOption{
+		{TitleStr: "Unknown", ValueStr: string(core.UnknownEffort)},
+		{TitleStr: "Low", ValueStr: string(core.LowEffort)},
+		{TitleStr: "Medium", ValueStr: string(core.MediumEffort)},
+		{TitleStr: "High", ValueStr: string(core.HighEffort)},
+	}
+	if selEffort, err := tui.Choose("Select Effort", effortOpts); err == nil && selEffort != nil {
+		effortVal = selEffort.ValueStr
+	}
+
+	members, _ := service.GetMembers(ctx)
+	if len(members) > 0 {
+		if selMember, err := tui.ChooseMember(members, "Select Assigned Member", true); err == nil {
+			memberIDVal = selMember
+		}
+	}
+
+	options := core.GoalOptions{
+		Description: description,
+		Effort:      core.Effort(effortVal),
+		Impact:      core.Impact(impactVal),
+		MemberID:    memberIDVal,
+		Status:      core.GoalStatus(statusVal),
+	}
+
+	var updated *core.Goal
+	_ = loader.Run("Updating goal...", func() {
+		updated, err = service.UpdateGoal(ctx, goalID, name, options)
+	})
+	return updated, err
 }

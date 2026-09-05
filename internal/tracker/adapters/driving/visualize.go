@@ -25,14 +25,9 @@ Examples:
 		Args:         cobra.NoArgs,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			pid := projectID
-			if !cmd.Flags().Changed("projectId") {
-				if lastProj := cfg.CurrentProjectID(); lastProj != "" {
-					pid = lastProj
-				}
-			}
-			if pid == "" {
-				return fmt.Errorf("no project selected")
+			pid, err := ensureProjectID(cmd, service, cfg, projectID)
+			if err != nil {
+				return err
 			}
 
 			fmt.Println("Getting goals ...")

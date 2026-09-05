@@ -60,6 +60,9 @@ func createProject(service *core.Service, cfg *Config, writer printer.Writer) *c
 			}
 
 			if name == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("project name is required in non-interactive mode")
+				}
 				err := tui.NewForm(
 					huh.NewGroup(
 						huh.NewInput().
@@ -251,18 +254,24 @@ func viewProject(service *core.Service, cfg *Config, writer printer.Writer) *cob
 		toFile     string
 	)
 	cmd := &cobra.Command{
-		Use:     "view",
+		Use:     "view [id]",
 		Aliases: []string{"v"},
 		Short:   "View details of a project",
 		Long: `View details of a project, including goals, status, and members.
 If no projectId is provided, the current active project will be used.`,
+		Args:         cobra.MaximumNArgs(1),
+		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			pid := projectID
-			if pid == "" {
-				pid = cfg.CurrentProjectID()
+			if pid == "" && len(args) > 0 {
+				pid = args[0]
 			}
 			if pid == "" {
-				return fmt.Errorf("no active project configured and no --projectId flag provided")
+				var err error
+				pid, err = ensureProjectID(cmd, service, cfg, "")
+				if err != nil {
+					return err
+				}
 			}
 
 			var (
@@ -293,7 +302,7 @@ If no projectId is provided, the current active project will be used.`,
 				return nil
 			}
 
-			if stdoutFlag {
+			if stdoutFlag || !loader.IsTerminal() {
 				fmt.Print(content)
 				return nil
 			}
@@ -334,10 +343,11 @@ If no flags/arguments are provided, it will prompt for the details interactively
 				pid = args[0]
 			}
 			if pid == "" {
-				pid = cfg.CurrentProjectID()
-			}
-			if pid == "" {
-				return fmt.Errorf("no active project configured and no projectId provided")
+				var err error
+				pid, err = ensureProjectID(cmd, service, cfg, "")
+				if err != nil {
+					return err
+				}
 			}
 
 			var (
@@ -359,6 +369,9 @@ If no flags/arguments are provided, it will prompt for the details interactively
 			}
 
 			if !cmd.Flags().Changed("name") && !cmd.Flags().Changed("description") {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("at least one flag (--name or --description) must be specified for update in non-interactive mode")
+				}
 				err = tui.NewForm(
 					huh.NewGroup(
 						huh.NewInput().
@@ -430,6 +443,9 @@ All goals and member associations will be moved and preserved. The merge project
 
 			// Interactive mode if arguments are missing
 			if sourceProjID == "" || mergeProjID == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("both source_project_id and merge_project_id are required in non-interactive mode")
+				}
 				projects, err := service.GetProjects(cmd.Context())
 				if err != nil {
 					return err
@@ -466,7 +482,7 @@ All goals and member associations will be moved and preserved. The merge project
 			}
 
 			// Interactive parent selection if parentGoalID is empty and flag was not explicitly set
-			if parentGoalID == "" && cmd.Flags().Changed("parent-goal-id") == false {
+			if parentGoalID == "" && !cmd.Flags().Changed("parent-goal-id") && loader.IsTerminal() {
 				sourceGoals, err := service.GetGoals(cmd.Context(), sourceProjID)
 				if err == nil && len(sourceGoals) > 0 {
 					attachOpts := []tui.ListOption{
@@ -574,28 +590,18 @@ If moving to an existing project, by default the goal is attached under its root
 				sourceProjID = args[0]
 			}
 			if sourceProjID == "" {
-				sourceProjID = cfg.CurrentProjectID()
-			}
-
-			// Interactive project selection if still empty
-			// TODO: This logic is probably repeated in other commands
-			if sourceProjID == "" {
-				projects, err := service.GetProjects(cmd.Context())
-				if err != nil {
-					return err
-				}
-				if len(projects) == 0 {
-					return fmt.Errorf("no projects found")
-				}
-
-				sourceProjID, err = tui.ChooseProject(projects, "Select Source Project", "")
+				var err error
+				sourceProjID, err = ensureProjectID(cmd, service, cfg, "")
 				if err != nil {
 					return err
 				}
 			}
 
-			// If goal is missing, prompt
+			// If goal is missing, prompt or fail
 			if splitGoalID == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("goal ID (--goal) is required in non-interactive mode")
+				}
 				goals, err := service.GetGoals(cmd.Context(), sourceProjID)
 				if err != nil {
 					return err
@@ -610,8 +616,11 @@ If moving to an existing project, by default the goal is attached under its root
 				}
 			}
 
-			// If target destination is missing, prompt
+			// If target destination is missing, prompt or fail
 			if targetProjectID == "" && newProjectName == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("target project (--to) or new project name (--new) is required in non-interactive mode")
+				}
 				actionOpts := []tui.ListOption{
 					{TitleStr: "Split into a new project", DescriptionStr: "Create a new project for this goal hierarchy", ValueStr: "new"},
 					{TitleStr: "Move to an existing project", DescriptionStr: "Move goal hierarchy under an existing project", ValueStr: "existing"},
@@ -671,7 +680,7 @@ If moving to an existing project, by default the goal is attached under its root
 			}
 
 			// Interactive target parent selection if not provided and destination is an existing project
-			if newProjectName == "" && targetParentGoalID == "" && cmd.Flags().Changed("parent") == false {
+			if newProjectName == "" && targetParentGoalID == "" && !cmd.Flags().Changed("parent") && loader.IsTerminal() {
 				targetGoals, err := service.GetGoals(cmd.Context(), targetProjectID)
 				if err == nil && len(targetGoals) > 0 {
 					attachOpts := []tui.ListOption{
@@ -752,10 +761,35 @@ func deleteProjectCmd(service *core.Service, cfg *Config, writer printer.Writer)
 		Use:          "delete [id]",
 		Short:        "Delete an existing project and its goals",
 		Aliases:      []string{"remove", "rm"},
-		Args:         cobra.ExactArgs(1),
+		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id := args[0]
+			id := ""
+			if len(args) > 0 {
+				id = args[0]
+			}
+			if id == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("project ID is required in non-interactive mode")
+				}
+				var projects []core.Project
+				var err error
+				_ = loader.Run("Getting projects ...", func() {
+					projects, err = service.GetProjects(cmd.Context())
+				})
+				if err != nil {
+					return err
+				}
+				if len(projects) == 0 {
+					return fmt.Errorf("no projects found")
+				}
+				selectedID, err := tui.ChooseProject(projects, "Select Project to Delete", cfg.CurrentProjectID())
+				if err != nil {
+					return err
+				}
+				id = selectedID
+			}
+
 			err := service.DeleteProject(cmd.Context(), id)
 			if err != nil {
 				return err

@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
+	"sattchel/internal/tui"
+	"sattchel/pkg/loader"
 
+	"charm.land/huh/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -17,6 +20,17 @@ func exportCmd(service *core.Service, writer printer.Writer) *cobra.Command {
 			filePath := "tracker.json"
 			if len(args) > 0 {
 				filePath = args[0]
+			} else if loader.IsTerminal() {
+				err := tui.NewForm(
+					huh.NewGroup(
+						huh.NewInput().
+							Title("Export File Path").
+							Value(&filePath),
+					),
+				).Run()
+				if err != nil {
+					return err
+				}
 			}
 			err := service.Export(cmd.Context(), filePath)
 			if err != nil {
@@ -37,6 +51,17 @@ func importCmd(service *core.Service, writer printer.Writer) *cobra.Command {
 			filePath := "tracker.json"
 			if len(args) > 0 {
 				filePath = args[0]
+			} else if loader.IsTerminal() {
+				err := tui.NewForm(
+					huh.NewGroup(
+						huh.NewInput().
+							Title("Import File Path").
+							Value(&filePath),
+					),
+				).Run()
+				if err != nil {
+					return err
+				}
 			}
 			err := service.Import(cmd.Context(), filePath)
 			if err != nil {
