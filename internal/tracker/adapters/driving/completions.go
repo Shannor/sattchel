@@ -2,7 +2,10 @@ package driving
 
 import (
 	"context"
+	"fmt"
 	"sattchel/internal/tracker/core"
+	"sattchel/internal/tui"
+	"sattchel/pkg/loader"
 
 	"github.com/spf13/cobra"
 )
@@ -59,4 +62,26 @@ func getActiveProjectID(cmd *cobra.Command, cfg *Config, projectIDFlag string) s
 		return lastProj
 	}
 	return ""
+}
+
+func ensureProjectID(cmd *cobra.Command, service *core.Service, cfg *Config, projectIDFlag string) (string, error) {
+	pid := getActiveProjectID(cmd, cfg, projectIDFlag)
+	if pid != "" {
+		return pid, nil
+	}
+	if !loader.IsTerminal() {
+		return "", fmt.Errorf("no active project configured and no --projectId flag provided")
+	}
+	projects, err := service.GetProjects(cmd.Context())
+	if err != nil {
+		return "", err
+	}
+	if len(projects) == 0 {
+		return "", fmt.Errorf("no projects found")
+	}
+	selectedID, err := tui.ChooseProject(projects, "Select Project", "")
+	if err != nil {
+		return "", err
+	}
+	return selectedID, nil
 }

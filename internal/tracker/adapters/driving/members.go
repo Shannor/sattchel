@@ -2,11 +2,14 @@ package driving
 
 import (
 	"fmt"
+	"strings"
+
 	"sattchel/internal/printer"
 	"sattchel/internal/tracker/core"
 	"sattchel/internal/tui"
 	"sattchel/pkg/loader"
 
+	"charm.land/huh/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -35,13 +38,42 @@ func members(service *core.Service, cfg *Config, writer printer.Writer) *cobra.C
 func createMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	var email string
 	cmd := &cobra.Command{
-		Use:          "create <name>",
+		Use:          "create [name]",
 		Aliases:      []string{"add"},
 		Short:        "Create a new member",
-		Args:         cobra.ExactArgs(1),
+		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			name := args[0]
+			name := ""
+			if len(args) > 0 {
+				name = args[0]
+			}
+
+			if name == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("member name is required in non-interactive mode")
+				}
+				err := tui.NewForm(
+					huh.NewGroup(
+						huh.NewInput().
+							Title("Member Name").
+							Value(&name).
+							Validate(func(str string) error {
+								if strings.TrimSpace(str) == "" {
+									return fmt.Errorf("member name is required")
+								}
+								return nil
+							}),
+						huh.NewInput().
+							Title("Email").
+							Value(&email),
+					),
+				).Run()
+				if err != nil {
+					return err
+				}
+			}
+
 			var member *core.Member
 			var err error
 			runErr := loader.Run("Creating member...", func() {
@@ -63,13 +95,39 @@ func createMember(service *core.Service, cfg *Config, writer printer.Writer) *co
 
 func getMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:          "get <id>",
+		Use:          "get [id]",
 		Aliases:      []string{"view", "show"},
 		Short:        "Get a member's details",
-		Args:         cobra.ExactArgs(1),
+		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id := args[0]
+			id := ""
+			if len(args) > 0 {
+				id = args[0]
+			}
+			if id == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("member ID is required in non-interactive mode")
+				}
+				var members []core.Member
+				var err error
+				_ = loader.Run("Getting members list...", func() {
+					members, err = service.GetMembers(cmd.Context())
+				})
+				if err != nil {
+					return err
+				}
+				if len(members) == 0 {
+					writer.Info("No members found")
+					return nil
+				}
+				selectedID, err := tui.ChooseMember(members, "Select Member to View", false)
+				if err != nil {
+					return err
+				}
+				id = selectedID
+			}
+
 			var member *core.Member
 			var err error
 			runErr := loader.Run("Getting member details...", func() {
@@ -93,6 +151,7 @@ func getMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra
 }
 
 func listMembers(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
+	var stdoutFlag bool
 	cmd := &cobra.Command{
 		Use:          "list",
 		Short:        "List all members",
@@ -115,33 +174,19 @@ func listMembers(service *core.Service, cfg *Config, writer printer.Writer) *cob
 				return nil
 			}
 
-			if loader.IsTerminal() {
-				var options []tui.ListOption
-				for _, m := range members {
-					desc := m.ID
-					if m.Email != "" {
-						desc = fmt.Sprintf("%s — %s", m.Email, m.ID)
-					}
-					options = append(options, tui.ListOption{
-						TitleStr:       m.Name,
-						DescriptionStr: desc,
-						ValueStr:       m.ID,
-					})
-				}
-				selected, err := tui.Choose("Select Member to View", options)
+			if loader.IsTerminal() && !stdoutFlag {
+				selectedID, err := tui.ChooseMember(members, "Select Member to View", false)
 				if err != nil {
 					return err
 				}
-				if selected != nil {
-					for _, m := range members {
-						if m.ID == selected.ValueStr {
-							var emailStr string
-							if m.Email != "" {
-								emailStr = fmt.Sprintf(" - %s", m.Email)
-							}
-							writer.Info(fmt.Sprintf("Member: %s (%s)%s", m.Name, m.ID, emailStr))
-							break
+				for _, m := range members {
+					if m.ID == selectedID {
+						var emailStr string
+						if m.Email != "" {
+							emailStr = fmt.Sprintf(" - %s", m.Email)
 						}
+						writer.Info(fmt.Sprintf("Member: %s (%s)%s", m.Name, m.ID, emailStr))
+						break
 					}
 				}
 				return nil
@@ -157,6 +202,7 @@ func listMembers(service *core.Service, cfg *Config, writer printer.Writer) *cob
 			return nil
 		},
 	}
+	cmd.Flags().BoolVar(&stdoutFlag, "stdout", false, "Output plain text instead of interactive selector")
 	return cmd
 }
 
@@ -164,16 +210,38 @@ func updateMember(service *core.Service, cfg *Config, writer printer.Writer) *co
 	var name string
 	var email string
 	cmd := &cobra.Command{
-		Use:          "update <id>",
+		Use:          "update [id]",
 		Aliases:      []string{"edit"},
 		Short:        "Update a member's details",
-		Args:         cobra.ExactArgs(1),
+		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id := args[0]
+			id := ""
+			if len(args) > 0 {
+				id = args[0]
+			}
+			if id == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("member ID is required in non-interactive mode")
+				}
+				members, err := service.GetMembers(cmd.Context())
+				if err != nil {
+					return err
+				}
+				if len(members) == 0 {
+					return fmt.Errorf("no members found")
+				}
+				selectedID, err := tui.ChooseMember(members, "Select Member to Update", false)
+				if err != nil {
+					return err
+				}
+				id = selectedID
+			}
 
 			if !cmd.Flags().Changed("name") && !cmd.Flags().Changed("email") {
-				return fmt.Errorf("at least one of --name or --email must be specified for update")
+				if !loader.IsTerminal() {
+					return fmt.Errorf("at least one of --name or --email must be specified for update in non-interactive mode")
+				}
 			}
 
 			var member *core.Member
@@ -188,11 +256,37 @@ func updateMember(service *core.Service, cfg *Config, writer printer.Writer) *co
 				return err
 			}
 
-			if cmd.Flags().Changed("name") {
+			if !cmd.Flags().Changed("name") && !cmd.Flags().Changed("email") {
+				name = member.Name
+				email = member.Email
+				err = tui.NewForm(
+					huh.NewGroup(
+						huh.NewInput().
+							Title("Member Name").
+							Value(&name).
+							Validate(func(str string) error {
+								if strings.TrimSpace(str) == "" {
+									return fmt.Errorf("member name is required")
+								}
+								return nil
+							}),
+						huh.NewInput().
+							Title("Email").
+							Value(&email),
+					),
+				).Run()
+				if err != nil {
+					return err
+				}
 				member.Name = name
-			}
-			if cmd.Flags().Changed("email") {
 				member.Email = email
+			} else {
+				if cmd.Flags().Changed("name") {
+					member.Name = name
+				}
+				if cmd.Flags().Changed("email") {
+					member.Email = email
+				}
 			}
 
 			runErr = loader.Run("Updating member...", func() {
@@ -215,13 +309,34 @@ func updateMember(service *core.Service, cfg *Config, writer printer.Writer) *co
 
 func deleteMember(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:          "delete <id>",
+		Use:          "delete [id]",
 		Aliases:      []string{"remove", "rm"},
 		Short:        "Delete a member",
-		Args:         cobra.ExactArgs(1),
+		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id := args[0]
+			id := ""
+			if len(args) > 0 {
+				id = args[0]
+			}
+			if id == "" {
+				if !loader.IsTerminal() {
+					return fmt.Errorf("member ID is required in non-interactive mode")
+				}
+				members, err := service.GetMembers(cmd.Context())
+				if err != nil {
+					return err
+				}
+				if len(members) == 0 {
+					return fmt.Errorf("no members found")
+				}
+				selectedID, err := tui.ChooseMember(members, "Select Member to Delete", false)
+				if err != nil {
+					return err
+				}
+				id = selectedID
+			}
+
 			var err error
 			runErr := loader.Run("Deleting member...", func() {
 				err = service.DeleteMember(cmd.Context(), id)
