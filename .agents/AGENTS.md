@@ -6,12 +6,21 @@
 
 ### CLI Format: The "Modern Cloud / Noun-Verb" Style (Structured Subcommands)
 
-Examples: 
+Examples:
+
 - docker container create
 - gh issue list
-- aws ec2 start-instances 
+- aws ec2 start-instances
 - kubectl get pods
 
 Important Notes:
+
 - How it works: Highly structured tree hierarchy. First command is the resource (Noun), second command is the action (Verb):  tool <noun> <verb> [flags] .
 - All commands should support a interactive mode for a user and non-interactive for scripting and automation uses cases.
+
+### Driving Adapter File Structure: Action-Per-File
+
+When driving adapter files grow long, introduce a file per action:
+
+- `<resource>.go` contains only the root resource Cobra command setup and subcommand registration.
+- Subcommands/actions live in separate files named `<resource>_<action>.go` (e.g., `goals_add.go`, `goals_delete.go`, `projects_create.go`).

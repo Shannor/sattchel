@@ -6,12 +6,13 @@
 
 ---
 
-The main Architecture Patterns attempted was Domain Driven Design (DDD) 
+The main Architecture Patterns attempted was Domain Driven Design (DDD)
+
 - Service Layer
-    - Where the domain logic should live and stop. Things above this would be the UI/CLI/Consumer Layer.
+  - Where the domain logic should live and stop. Things above this would be the UI/CLI/Consumer Layer.
 - Data Mapper(s) Pattern
-    - Focuses on how the data is returned from a Data Source. Data source could be a 3rd Party, Database, Local File system, etc.
-    - Based on the pure description of this. It should be interacted with a Query Critera Constructor by the Domain Layer.
+  - Focuses on how the data is returned from a Data Source. Data source could be a 3rd Party, Database, Local File system, etc.
+  - Based on the pure description of this. It should be interacted with a Query Critera Constructor by the Domain Layer.
 - Module Pattern
 - Dependency Injection
 
@@ -24,27 +25,27 @@ what patterns can work or can be modified to fit my needs.
 
 ---
 
-Played around with DDD for about a month and a half and then worked pulled me away. 
-I was starting to get a decent understanding of DDD and how it could be applied to my project. 
+Played around with DDD for about a month and a half and then worked pulled me away.
+I was starting to get a decent understanding of DDD and how it could be applied to my project.
 However, I realized that my project was not complex enough to warrant the use of DDD and doesn't really fit the use case.
 I decided to pivot away from DDD and focus on other patterns and ideas.
 
 My thought process now is that I'll need to simplify the logic, but some patterns actually are pretty clean after implementation.
-I do like the idea of Data Mappers which are similar to what I used to call Data Access Objects (DAOs) back in the OOP days. 
+I do like the idea of Data Mappers which are similar to what I used to call Data Access Objects (DAOs) back in the OOP days.
 They aren't exactly the same, but the idea is useful. I may keep them I haven't decided yet.
 
-I've decided to care less about Styling and TUI stuff for now. The package is more annoying to work with than I expected. 
-So ugly things for now until I'm getting useful functionality. 
+I've decided to care less about Styling and TUI stuff for now. The package is more annoying to work with than I expected.
+So ugly things for now until I'm getting useful functionality.
 
 Going forward, my goals are:
-1. Focus on only two CLI groups Optimizely and what I'm calling "Tracker" for now. 
-2. Find a different pattern that I've never done and work with it. I was looking at [ hexagonal architecture (ports and adapters) ](https://alistair.cockburn.us/hexagonal-architecture).
-3. Still try to keep "Domain" models so that if I ever expand to a new source it still works. 
-   1. Probably covered inside of hexagonal architecture probably. 
 
+1. Focus on only two CLI groups Optimizely and what I'm calling "Tracker" for now.
+2. Find a different pattern that I've never done and work with it. I was looking at [hexagonal architecture (ports and adapters)](https://alistair.cockburn.us/hexagonal-architecture).
+3. Still try to keep "Domain" models so that if I ever expand to a new source it still works.
+   1. Probably covered inside of hexagonal architecture probably.
 
-After reading about hex arch, I can tell I've seen some patterns before in the wild without knowning. 
-One thing of note is that it uses similar nomenclature to DDD, however, it means different things. 
+After reading about hex arch, I can tell I've seen some patterns before in the wild without knowning.
+One thing of note is that it uses similar nomenclature to DDD, however, it means different things.
 Most notably being Repository. In DDD a Repository is about reading data in from a source and caching it in memory for
 continuous use during the program actions, but in hex arch it's closer to a Data Mapper idea.
 
@@ -62,10 +63,10 @@ Each Component will look like the following:
 │   │       ├── driving/      # CLI specific controllers for A
 │   │       └── driven/       # DB, API, or File adapters for A
 
-When creating `ports` they should be based on architecutral responsiblity and *not* per domain model. 
+When creating `ports` they should be based on architecutral responsiblity and *not* per domain model.
 Ports are just the interfaces and live inside core.
 
-> Note: In Go, we'll need to flatten core in practice since it would cause circular dependencies. 
+> Note: In Go, we'll need to flatten core in practice since it would cause circular dependencies.
 
 This system is similar to what DDD calls "Transaction Scripts". Since each piece of logic is added
 into a "use case" and executed. It does fit well with CLI to be honest, since that's generally how CLI tools work.
@@ -74,12 +75,13 @@ into a "use case" and executed. It does fit well with CLI to be honest, since th
 ----
 
 CLI Format to used
+
 ### The "Modern Cloud / Noun-Verb" Style (Structured Subcommands)
 
 Examples:  docker container create ,  gh issue list ,  aws ec2 start-instances ,  kubectl get pods
 • How it works: Highly structured tree hierarchy. First command is the resource (Noun), second command is the action (Verb):  tool <noun> <verb> [flags] .
 
-Using this because it's easier to expand later and clearer, even though it's more annoying to type 
+Using this because it's easier to expand later and clearer, even though it's more annoying to type
 
 2026-07-14
 ---
@@ -87,11 +89,22 @@ Using this because it's easier to expand later and clearer, even though it's mor
 ### The importance of DTO's returns
 
 I made some pretty good progress with the Hex Arch pattern and I'm starting to feel the benefits and I do feel like I'm moving faster.
-I've mostly been using AI on the UI part of this project, while business logic has been what I wont let it touch. 
-In that I'm trying to make sure I don't put any business logic inside of the CLI or Web UI. 
+I've mostly been using AI on the UI part of this project, while business logic has been what I wont let it touch.
+In that I'm trying to make sure I don't put any business logic inside of the CLI or Web UI.
 The reason being it would make it hard to change the driving adapters.
 
-Thus DTOs come back into importance. Since this is a CLI I can _cheat_ and use my Go core domain and use
+Thus DTOs come back into importance. Since this is a CLI I can *cheat* and use my Go core domain and use
 the methods on the structs. But, if I had an Web UI that wouldn't be possible. Which means I need to introduce
-DTOs that have enough information for the UI to make decisions with complicated logic. 
+DTOs that have enough information for the UI to make decisions with complicated logic.
 *Or* I need to introduce functions on the service that will do the logic in the core and return a DTO.
+
+2026-09-04
+---
+
+### Driving Adapter File Structure: Action-Per-File
+
+When driving adapter files (CLI subcommand files like `goals.go` or `projects.go`) get long, split actions into dedicated files per action (verb):
+
+- The main resource file (`<resource>.go`, e.g., `goals.go`) defines the root resource Cobra command and registers subcommands.
+- Each action subcommand lives in its own file named `<resource>_<action>.go` (e.g., `goals_add.go`, `goals_delete.go`, `projects_create.go`).
+- Keeps driving adapters modular, clean, and readable as CLI commands grow.
