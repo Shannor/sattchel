@@ -25,6 +25,7 @@ var (
 	ErrMissingRequiredFields = errors.New("missing required fields")
 	ErrCannotMoveRoot        = errors.New("the root goal cannot be moved")
 	ErrCannotDeleteRoot      = errors.New("the root goal cannot be deleted")
+	ErrCannotMergeRoot       = errors.New("the root goal cannot be merged")
 )
 
 func (s *Service) CreateProject(ctx context.Context, name string, description string) (*Project, error) {
@@ -433,6 +434,108 @@ func (s *Service) MergeProjects(ctx context.Context, sourceProjectID string, mer
 
 		return nil
 	})
+}
+
+// MergeGoals merges mergeGoalID into sourceGoalID. All children of mergeGoalID are re-parented to sourceGoalID,
+// and mergeGoalID is deleted. Neither goal can be empty, and mergeGoalID cannot be the root goal.
+func (s *Service) MergeGoals(ctx context.Context, projectID string, sourceGoalID string, mergeGoalID string) (*Goal, error) {
+	if sourceGoalID == "" || mergeGoalID == "" {
+		return nil, fmt.Errorf("%w - source and merge goal IDs are required", ErrMissingRequiredFields)
+	}
+	if sourceGoalID == mergeGoalID {
+		return nil, fmt.Errorf("%w - cannot merge goal with itself", ErrInvalidRequest)
+	}
+
+	var result *Goal
+	err := s.repo.Transaction(ctx, func(txCtx context.Context) error {
+		sourceGoal, err := s.repo.GetGoal(txCtx, sourceGoalID)
+		if err != nil {
+			return err
+		}
+		mergeGoal, err := s.repo.GetGoal(txCtx, mergeGoalID)
+		if err != nil {
+			return err
+		}
+
+		pid := sourceGoal.ProjectID
+		if projectID != "" && pid != projectID {
+			return fmt.Errorf("%w - source goal does not belong to project %s", ErrInvalidRequest, projectID)
+		}
+		if projectID != "" && mergeGoal.ProjectID != projectID {
+			return fmt.Errorf("%w - merge goal does not belong to project %s", ErrInvalidRequest, projectID)
+		}
+
+		if mergeGoal.IsRoot() {
+			return ErrCannotMergeRoot
+		}
+
+		allGoals, err := s.repo.GetGoals(txCtx, pid)
+		if err != nil {
+			return err
+		}
+
+		// Re-parent all immediate children of mergeGoal to sourceGoal
+		for i := range allGoals {
+			g := &allGoals[i]
+			if g.HasParent() && g.Parent.TargetID == mergeGoal.ID {
+				if g.ID == sourceGoal.ID {
+					continue
+				}
+				rel := g.Parent.Relationship
+				if rel == "" {
+					rel = LinkOptional
+				}
+				desc := g.Parent.Description
+				err = sourceGoal.AttachChild(g, rel, desc)
+				if err != nil {
+					return err
+				}
+				_, err = s.repo.UpdateGoal(txCtx, g)
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		// If sourceGoal was a child of mergeGoal, adjust sourceGoal's parent link
+		if sourceGoal.HasParent() && sourceGoal.Parent.TargetID == mergeGoal.ID {
+			if mergeGoal.HasParent() {
+				sourceGoal.Parent.TargetID = mergeGoal.Parent.TargetID
+			} else {
+				sourceGoal.Parent = nil
+			}
+		}
+
+		_, err = s.repo.UpdateGoal(txCtx, sourceGoal)
+		if err != nil {
+			return err
+		}
+
+		// Detach mergeGoal from its parent
+		if mergeGoal.HasParent() {
+			parentOfMerge, err := s.repo.GetGoal(txCtx, mergeGoal.Parent.TargetID)
+			if err == nil && parentOfMerge != nil {
+				_ = parentOfMerge.DetachChild(mergeGoal)
+				_, err = s.repo.UpdateGoal(txCtx, parentOfMerge)
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		// Delete mergeGoal
+		err = s.repo.DeleteGoal(txCtx, mergeGoal.ID)
+		if err != nil {
+			return err
+		}
+
+		result = sourceGoal
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 // SplitProject splits a sourceProject starting from a splitGoalID, either creating a new project with the provided newProjectName, or moving it to an existing targetProjectID.

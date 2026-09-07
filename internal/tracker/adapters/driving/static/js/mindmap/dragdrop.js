@@ -56,7 +56,11 @@ export class DragDrop {
 			await this.mindmap.api.moveGoal(childId, targetId);
 			// Refresh mindmap nodes and connections, restoring the viewport position
 			const goals = await this.mindmap.api.fetchGoals();
-			this.mindmap.render(goals);
+			if (this.mindmap.onGoalsChanged) {
+				this.mindmap.notifyGoalsChanged(goals);
+			} else {
+				this.mindmap.render(goals);
+			}
 			this.mindmap.zoomPan.scale = prevScale;
 			this.mindmap.zoomPan.translateX = prevTx;
 			this.mindmap.zoomPan.translateY = prevTy;

@@ -16,6 +16,35 @@
     <div id="app-header">
       <h1>Goals Mind Map</h1>
       <p>Sattchel Ephemeral Visualizer</p>
+      <div id="filter-bar">
+        <button
+          id="btn-hide-completed"
+          class="filter-btn"
+          title="Toggle Hiding Completed Goals"
+        >
+          Hide Completed
+        </button>
+        <select id="filter-status" class="filter-select">
+          <option value="all">All Statuses</option>
+          <option value="hide-completed">Hide Completed</option>
+          <option value="open">Open</option>
+          <option value="in-progress">In Progress</option>
+          <option value="draft">Draft</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <select id="filter-member" class="filter-select">
+          <option value="all">All Members</option>
+          <option value="unassigned">Unassigned</option>
+        </select>
+        <input
+          id="filter-search"
+          type="text"
+          placeholder="Search goals..."
+          class="filter-input"
+        />
+        <span id="filter-count" class="filter-count"></span>
+      </div>
     </div>
 
     <div id="mindmap-container">
@@ -104,8 +133,18 @@
         </div>
 
         <div class="detail-section">
-          <span class="detail-label">Metrics</span>
+          <span class="detail-label">Status & Metrics</span>
           <div class="info-pill-container">
+            <div class="info-pill">
+              <span class="detail-label" style="font-size: 9px">Status</span>
+              <select id="drawer-status" class="pill-select">
+                <option value="draft">Draft</option>
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
             <div class="info-pill">
               <span class="detail-label" style="font-size: 9px">Impact</span>
               <select id="drawer-impact" class="pill-select">

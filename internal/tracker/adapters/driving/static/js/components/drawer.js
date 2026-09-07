@@ -4,6 +4,7 @@ export class Drawer {
 		this.titleElem = document.getElementById("drawer-title");
 		this.descElem = document.getElementById("drawer-description");
 		this.statusBadge = document.getElementById("drawer-status-badge");
+		this.statusElem = document.getElementById("drawer-status");
 		this.impactElem = document.getElementById("drawer-impact");
 		this.effortElem = document.getElementById("drawer-effort");
 		this.ownerElem = document.getElementById("drawer-owner");
@@ -14,6 +15,9 @@ export class Drawer {
 		this.members = [];
 
 		this.closeBtn.addEventListener("click", () => this.close());
+		if (this.statusElem) {
+			this.statusElem.addEventListener("change", () => this.handleStatusChange());
+		}
 		this.impactElem.addEventListener("change", () => this.handleMetricChange());
 		this.effortElem.addEventListener("change", () => this.handleMetricChange());
 		this.ownerElem.addEventListener("change", () => this.handleMemberChange());
@@ -46,6 +50,28 @@ export class Drawer {
 		});
 
 		this.ownerElem.value = currentValue;
+	}
+
+	async handleStatusChange() {
+		if (!this.currentGoal || !this.onUpdate) return;
+		const newStatus = this.statusElem.value;
+		const currentNorm = this.normalizeStatus(this.currentGoal.status);
+
+		if (newStatus === currentNorm) return;
+
+		try {
+			await this.onUpdate(this.currentGoal.id, {
+				status: newStatus,
+			});
+			this.currentGoal.status = newStatus;
+			const status = this.currentGoal.status || "draft";
+			this.statusBadge.textContent = status;
+			const normalized = this.normalizeStatus(status);
+			this.statusBadge.className = `badge status-${normalized}`;
+		} catch (err) {
+			alert("Failed to update status: " + err.message);
+			this.statusElem.value = currentNorm;
+		}
 	}
 
 	async handleMetricChange() {
@@ -124,6 +150,9 @@ export class Drawer {
 		this.statusBadge.textContent = status;
 		const normalized = this.normalizeStatus(status);
 		this.statusBadge.className = `badge status-${normalized}`;
+		if (this.statusElem) {
+			this.statusElem.value = normalized;
+		}
 
 		this.impactElem.value = goal.impact || "unknown";
 		this.effortElem.value = goal.effort || "unknown";

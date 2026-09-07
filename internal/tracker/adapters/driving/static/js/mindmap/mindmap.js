@@ -19,16 +19,24 @@ export class MindMap {
 		// overwritten so drag-drop re-renders don't reshuffle the tree.
 		this.rootChildSides = {};
 
+		this.onGoalsChanged = null;
+
 		// Instantiate modules
-		this.renderer = new Renderer(
-			this,
-			this.linksContainer,
-			this.nodesContainer,
-		);
+		this.renderer = new Renderer(this, this.linksContainer, this.nodesContainer);
 		this.zoomPan = new ZoomPan(this.container, this.workspace, this.svg);
 		this.dragDrop = new DragDrop(this);
 
 		this.initControls();
+	}
+
+	setOnGoalsChanged(cb) {
+		this.onGoalsChanged = cb;
+	}
+
+	notifyGoalsChanged(goals) {
+		if (this.onGoalsChanged) {
+			this.onGoalsChanged(goals);
+		}
 	}
 
 	initControls() {

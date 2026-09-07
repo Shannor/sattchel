@@ -14,6 +14,13 @@ type MoveRequest struct {
 	NewParentID string `json:"newParentId"`
 }
 
+// MergeGoalRequest represents the payload to merge one goal into another.
+type MergeGoalRequest struct {
+	ProjectID    string `json:"projectId"`
+	SourceGoalID string `json:"sourceGoalId"`
+	MergeGoalID  string `json:"mergeGoalId"`
+}
+
 // UpdateGoalRequest represents the payload to update a goal's details.
 type UpdateGoalRequest struct {
 	GoalID      string          `json:"goalId"`
@@ -94,6 +101,32 @@ func (s *HTTPServer) handleMoveGoal(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		http.Error(w, "failed to move goal: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte(`{"status":"ok"}`))
+}
+
+func (s *HTTPServer) handleMergeGoals(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req MergeGoalRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "bad request: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	_, err := s.service.MergeGoals(r.Context(), req.ProjectID, req.SourceGoalID, req.MergeGoalID)
+	if err != nil {
+		if errors.Is(err, core.ErrCannotMergeRoot) || errors.Is(err, core.ErrInvalidRequest) {
+			http.Error(w, "failed to merge goals: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		http.Error(w, "failed to merge goals: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 

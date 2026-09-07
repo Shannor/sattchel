@@ -18,6 +18,7 @@ func goals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Com
        satt tracker goals set
        satt tracker goals list
        satt tracker goals move <childId> <newParentId>
+       satt tracker goals merge <sourceId> <mergeId>
        satt tracker goals update <id>
        satt tracker goals delete <id>
        satt tracker goals view <id>
@@ -28,6 +29,7 @@ func goals(service *core.Service, cfg *Config, writer printer.Writer) *cobra.Com
 	cmd.AddCommand(setGoal(service, cfg, writer))
 	cmd.AddCommand(listGoals(service, cfg, writer))
 	cmd.AddCommand(moveGoal(service, cfg, writer))
+	cmd.AddCommand(mergeGoals(service, cfg, writer))
 	cmd.AddCommand(deleteGoal(service, cfg, writer))
 	cmd.AddCommand(viewGoal(service, cfg, writer))
 	cmd.AddCommand(updateGoal(service, cfg, writer))

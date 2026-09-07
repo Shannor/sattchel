@@ -1412,3 +1412,100 @@ func TestServiceSplitProjectToExisting(t *testing.T) {
 		}
 	})
 }
+
+func TestServiceMergeGoals(t *testing.T) {
+	t.Run("missing required fields", func(t *testing.T) {
+		s := NewService(&mockTrackerRepository{})
+		_, err := s.MergeGoals(context.Background(), "p-1", "", "g-2")
+		if !errors.Is(err, ErrMissingRequiredFields) {
+			t.Errorf("expected ErrMissingRequiredFields, got %v", err)
+		}
+	})
+
+	t.Run("same goal IDs", func(t *testing.T) {
+		s := NewService(&mockTrackerRepository{})
+		_, err := s.MergeGoals(context.Background(), "p-1", "g-1", "g-1")
+		if !errors.Is(err, ErrInvalidRequest) {
+			t.Errorf("expected ErrInvalidRequest, got %v", err)
+		}
+	})
+
+	t.Run("merging root goal fails", func(t *testing.T) {
+		repo := &mockTrackerRepository{
+			getGoalFunc: func(ctx context.Context, id string) (*Goal, error) {
+				if id == "g-root" {
+					return &Goal{ID: "g-root", ProjectID: "p-1"}, nil
+				}
+				if id == "g-source" {
+					return &Goal{ID: "g-source", ProjectID: "p-1", Parent: &Link{TargetID: "g-root"}}, nil
+				}
+				return nil, errors.New("not found")
+			},
+		}
+		s := NewService(repo)
+		_, err := s.MergeGoals(context.Background(), "p-1", "g-source", "g-root")
+		if !errors.Is(err, ErrCannotMergeRoot) {
+			t.Fatalf("expected ErrCannotMergeRoot, got %v", err)
+		}
+	})
+
+	t.Run("successful goal merge", func(t *testing.T) {
+		deletedGoalID := ""
+		goals := map[string]*Goal{
+			"g-root":   {ID: "g-root", ProjectID: "p-1", Name: "Root"},
+			"g-source": {ID: "g-source", ProjectID: "p-1", Name: "Source Goal", Parent: &Link{TargetID: "g-root"}},
+			"g-merge":  {ID: "g-merge", ProjectID: "p-1", Name: "Merge Goal", Parent: &Link{TargetID: "g-root"}},
+			"g-child":  {ID: "g-child", ProjectID: "p-1", Name: "Child Goal", Parent: &Link{TargetID: "g-merge"}},
+		}
+
+		repo := &mockTrackerRepository{
+			getGoalFunc: func(ctx context.Context, id string) (*Goal, error) {
+				if g, ok := goals[id]; ok {
+					return g, nil
+				}
+				return nil, errors.New("not found")
+			},
+			getGoalsFunc: func(ctx context.Context, projectID string) ([]Goal, error) {
+				var res []Goal
+				for _, g := range goals {
+					if g.ProjectID == projectID {
+						res = append(res, *g)
+					}
+				}
+				return res, nil
+			},
+			updateGoalFunc: func(ctx context.Context, g *Goal) (*Goal, error) {
+				goals[g.ID] = g
+				return g, nil
+			},
+			deleteGoalFunc: func(ctx context.Context, id string) error {
+				deletedGoalID = id
+				delete(goals, id)
+				return nil
+			},
+		}
+
+		s := NewService(repo)
+		merged, err := s.MergeGoals(context.Background(), "p-1", "g-source", "g-merge")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if merged.ID != "g-source" {
+			t.Errorf("expected returned goal to be g-source, got %q", merged.ID)
+		}
+		if deletedGoalID != "g-merge" {
+			t.Errorf("expected g-merge to be deleted, got %q", deletedGoalID)
+		}
+
+		updatedChild := goals["g-child"]
+		if updatedChild == nil || updatedChild.Parent == nil || updatedChild.Parent.TargetID != "g-source" {
+			t.Errorf("expected g-child parent to be g-source, got %+v", updatedChild)
+		}
+
+		updatedSource := goals["g-source"]
+		if len(updatedSource.Children) != 1 || updatedSource.Children[0].ID != "g-child" {
+			t.Errorf("expected g-source to have g-child in Children, got %+v", updatedSource.Children)
+		}
+	})
+}

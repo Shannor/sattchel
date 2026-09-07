@@ -419,3 +419,68 @@ func TestListGoalsLinkRelationship(t *testing.T) {
 		t.Errorf("expected flat filtered output to NOT contain 'Opt Child Goal', got:\n%s", flatOut)
 	}
 }
+
+func TestGoalsMergeCLI(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath := filepath.Join(tempDir, "tracker.json")
+	repo := driven.NewFileStorage(dbPath, nil)
+	service := core.NewService(repo)
+	v := viper.New()
+	cfg, err := LoadConfig(v)
+	if err != nil {
+		t.Fatalf("failed to load config: %v", err)
+	}
+
+	project, err := service.CreateProject(context.Background(), "Proj Merge", "")
+	if err != nil {
+		t.Fatalf("failed to create project: %v", err)
+	}
+	rootGoal, err := service.CreateGoal(context.Background(), project.ID, "Root Goal", core.GoalOptions{})
+	if err != nil {
+		t.Fatalf("failed to create root goal: %v", err)
+	}
+	sourceGoal, err := service.CreateGoal(context.Background(), project.ID, "Source Goal", core.GoalOptions{ParentID: rootGoal.ID})
+	if err != nil {
+		t.Fatalf("failed to create source goal: %v", err)
+	}
+	mergeGoal, err := service.CreateGoal(context.Background(), project.ID, "Merge Goal", core.GoalOptions{ParentID: rootGoal.ID})
+	if err != nil {
+		t.Fatalf("failed to create merge goal: %v", err)
+	}
+	childGoal, err := service.CreateGoal(context.Background(), project.ID, "Child Goal", core.GoalOptions{ParentID: mergeGoal.ID})
+	if err != nil {
+		t.Fatalf("failed to create child goal under merge goal: %v", err)
+	}
+
+	buf := new(bytes.Buffer)
+	writer := printer.NewStyleWriterWithWriters(buf, buf)
+	cmd := goals(service, cfg, writer)
+
+	buf.Reset()
+	cmd.SetOut(buf)
+	cmd.SetErr(buf)
+	cmd.SetArgs([]string{"merge", sourceGoal.ID, mergeGoal.ID, "--projectId", project.ID})
+	err = cmd.ExecuteContext(context.Background())
+	if err != nil {
+		t.Fatalf("goals merge command failed: %v", err)
+	}
+
+	out := stripANSI(buf.String())
+	if !strings.Contains(out, "merged successfully") {
+		t.Errorf("expected output to contain 'merged successfully', got:\n%s", out)
+	}
+
+	updatedChild, err := service.GetGoal(context.Background(), childGoal.ID)
+	if err != nil {
+		t.Fatalf("failed to get child goal: %v", err)
+	}
+	if updatedChild.Parent == nil || updatedChild.Parent.TargetID != sourceGoal.ID {
+		t.Errorf("expected child goal's parent to be sourceGoal (%s), got %+v", sourceGoal.ID, updatedChild.Parent)
+	}
+
+	_, err = service.GetGoal(context.Background(), mergeGoal.ID)
+	if err == nil {
+		t.Errorf("expected mergeGoal (%s) to be deleted, but it still exists", mergeGoal.ID)
+	}
+}
+
