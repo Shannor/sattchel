@@ -64,4 +64,13 @@ export class API {
 		}
 		return await response.json();
 	}
+
+	async fetchProjects() {
+		const response = await fetch("/api/projects");
+		if (!response.ok) {
+			const text = await response.text();
+			throw new Error(text || "Failed to fetch projects");
+		}
+		return await response.json();
+	}
 }

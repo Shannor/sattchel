@@ -9,6 +9,7 @@ class App {
 		this.api = new API(this.projectId);
 		this.drawer = new Drawer();
 
+		this.projects = [];
 		this.allGoals = [];
 		this.members = [];
 		this.filterState = {
@@ -47,10 +48,45 @@ class App {
 	}
 
 	initFilterControls() {
+		const selectProject = document.getElementById("select-project");
 		const btnHideCompleted = document.getElementById("btn-hide-completed");
 		const selectStatus = document.getElementById("filter-status");
 		const selectMember = document.getElementById("filter-member");
 		const inputSearch = document.getElementById("filter-search");
+
+		if (selectProject) {
+			selectProject.addEventListener("change", async (e) => {
+				const newPid = e.target.value;
+				if (!newPid || newPid === this.projectId) return;
+
+				this.projectId = newPid;
+				this.api.projectId = newPid;
+
+				const url = new URL(window.location.href);
+				url.searchParams.set("projectId", newPid);
+				window.history.pushState({}, "", url);
+
+				this.mindmap.rootChildSides = {};
+
+				try {
+					const goals = await this.api.fetchGoals();
+					this.allGoals = goals || [];
+					if (this.drawer && this.drawer.close) {
+						this.drawer.close();
+					}
+					if (this.allGoals.length === 0) {
+						this.mindmap.render([], true);
+						const filterCount = document.getElementById("filter-count");
+						if (filterCount) filterCount.textContent = "0 goals";
+						return;
+					}
+					this.applyFilters(true);
+				} catch (err) {
+					console.error("Failed to load goals for project:", err);
+					alert("Failed to load goals for selected project: " + err.message);
+				}
+			});
+		}
 
 		if (btnHideCompleted) {
 			btnHideCompleted.addEventListener("click", () => {
@@ -110,11 +146,32 @@ class App {
 		}
 	}
 
+	populateProjectFilter(projects) {
+		const selectProject = document.getElementById("select-project");
+		if (!selectProject) return;
+
+		selectProject.textContent = "";
+
+		(projects || []).forEach((p) => {
+			const opt = document.createElement("option");
+			opt.value = p.id;
+			opt.textContent = p.label || p.id;
+			selectProject.appendChild(opt);
+		});
+
+		if (this.projectId) {
+			selectProject.value = this.projectId;
+		} else if (projects && projects.length > 0) {
+			selectProject.value = projects[0].id;
+			this.projectId = projects[0].id;
+			this.api.projectId = projects[0].id;
+		}
+	}
+
 	populateMemberFilter(members) {
 		const selectMember = document.getElementById("filter-member");
 		if (!selectMember) return;
 
-		// Preserve header options
 		selectMember.textContent = "";
 
 		const optAll = document.createElement("option");
@@ -221,7 +278,6 @@ class App {
 	applyFilters(isInitial = false) {
 		if (!this.allGoals) return;
 
-		// Preserve viewport scale and translation if not initial load
 		const prevScale = this.mindmap.zoomPan ? this.mindmap.zoomPan.scale : 1;
 		const prevTx = this.mindmap.zoomPan ? this.mindmap.zoomPan.translateX : 0;
 		const prevTy = this.mindmap.zoomPan ? this.mindmap.zoomPan.translateY : 0;
@@ -253,25 +309,29 @@ class App {
 
 	async init() {
 		try {
-			const [goals, members] = await Promise.all([
+			const [projects, goals, members] = await Promise.all([
+				this.api.fetchProjects(),
 				this.api.fetchGoals(),
 				this.api.fetchMembers(),
 			]);
+			this.projects = projects || [];
 			this.allGoals = goals || [];
 			this.members = members || [];
 
+			this.populateProjectFilter(this.projects);
 			this.drawer.setMembers(this.members);
 			this.populateMemberFilter(this.members);
 
 			if (!goals || goals.length === 0) {
-				alert("No goals found for this project.");
+				const filterCount = document.getElementById("filter-count");
+				if (filterCount) filterCount.textContent = "0 goals";
 				return;
 			}
 
 			this.applyFilters(true);
 		} catch (err) {
 			console.error("Failed to initialize Sattchel Visualizer:", err);
-			alert("Failed to load goals: " + err.message);
+			alert("Failed to load visualizer data: " + err.message);
 		}
 	}
 }

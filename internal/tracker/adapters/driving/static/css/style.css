@@ -48,6 +48,51 @@ body {
 	pointer-events: none;
 }
 
+.header-title-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.project-select {
+	background: rgba(18, 20, 26, 0.85);
+	border: 1px solid var(--card-border);
+	border-radius: 8px;
+	padding: 6px 14px;
+	font-family: var(--font-main);
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--text-primary);
+	outline: none;
+	cursor: pointer;
+	pointer-events: auto;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	-webkit-appearance: none;
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	padding-right: 32px;
+	transition: all 0.2s ease;
+}
+
+.project-select:hover {
+	border-color: rgba(255, 255, 255, 0.25);
+	background-color: rgba(255, 255, 255, 0.08);
+}
+
+.project-select:focus {
+	border-color: var(--accent-primary);
+	box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+}
+
+.project-select option {
+	background-color: #16181e;
+	color: var(--text-primary);
+}
+
 #app-header h1 {
 	font-family: var(--font-title);
 	font-size: 28px;

@@ -33,6 +33,7 @@ func (s *HTTPServer) Start(ctx context.Context, listenAddr string) (string, func
 	mux.HandleFunc("/api/goals/merge", s.handleMergeGoals)
 	mux.HandleFunc("/api/goals/update", s.handleUpdateGoal)
 	mux.HandleFunc("/api/members", s.handleGetMembers)
+	mux.HandleFunc("/api/projects", s.handleGetProjects)
 
 	// 2. Mount UI / Visualizer Page (served from embedded static assets)
 	subFS, err := fs.Sub(staticFS, "static")

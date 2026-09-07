@@ -82,6 +82,25 @@ func (s *HTTPServer) handleGetMembers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (s *HTTPServer) handleGetProjects(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	projects, err := s.service.GetProjects(r.Context())
+	if err != nil {
+		http.Error(w, "failed to get projects: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(projects); err != nil {
+		http.Error(w, "failed to encode response: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func (s *HTTPServer) handleMoveGoal(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)

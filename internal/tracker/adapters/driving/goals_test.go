@@ -483,4 +483,3 @@ func TestGoalsMergeCLI(t *testing.T) {
 		t.Errorf("expected mergeGoal (%s) to be deleted, but it still exists", mergeGoal.ID)
 	}
 }
-
