@@ -53,10 +53,13 @@ func RenderProjectDetails(project *core.Project, goals []core.Goal) string {
 		progressStr = styles.Muted.Render("No goals defined yet")
 	}
 
+	statusVal := renderProjectStatusValue(project.NormalizedStatus(), styles)
+
 	overviewHeaders := []string{"Field", "Value"}
 	overviewRows := [][]string{
 		{"ID", styles.Text.Render(project.ID)},
 		{"Name", styles.Text.Bold(true).Render(project.Label)},
+		{"Status", statusVal},
 		{"Description", descVal},
 		{"Progress", progressStr},
 	}
@@ -175,6 +178,17 @@ func RenderProjectDetails(project *core.Project, goals []core.Goal) string {
 	}
 
 	return sb.String()
+}
+
+func renderProjectStatusValue(status core.ProjectStatus, styles Styles) string {
+	switch status {
+	case core.ProjectComplete:
+		return styles.Success.Bold(true).Render("Complete")
+	case core.ProjectInProgress:
+		return styles.Info.Bold(true).Render("In Progress")
+	default:
+		return styles.Warning.Render("Draft")
+	}
 }
 
 func renderProgressBar(width int, percentage float64, styles Styles) string {

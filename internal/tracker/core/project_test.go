@@ -24,6 +24,40 @@ func TestNormalizedLabel(t *testing.T) {
 	}
 }
 
+func TestNormalizedStatus(t *testing.T) {
+	t.Run("defaults empty status to draft", func(t *testing.T) {
+		p := Project{}
+		if got := p.NormalizedStatus(); got != ProjectDraft {
+			t.Errorf("NormalizedStatus() = %q; want %q", got, ProjectDraft)
+		}
+	})
+
+	t.Run("preserves explicit status", func(t *testing.T) {
+		p := Project{Status: ProjectInProgress}
+		if got := p.NormalizedStatus(); got != ProjectInProgress {
+			t.Errorf("NormalizedStatus() = %q; want %q", got, ProjectInProgress)
+		}
+	})
+}
+
+func TestSetStatus(t *testing.T) {
+	t.Run("empty status becomes draft", func(t *testing.T) {
+		p := Project{}
+		p.SetStatus("")
+		if p.Status != ProjectDraft {
+			t.Errorf("expected Status %q, got %q", ProjectDraft, p.Status)
+		}
+	})
+
+	t.Run("explicit status is stored", func(t *testing.T) {
+		p := Project{}
+		p.SetStatus(ProjectComplete)
+		if p.Status != ProjectComplete {
+			t.Errorf("expected Status %q, got %q", ProjectComplete, p.Status)
+		}
+	})
+}
+
 func TestSetRoot(t *testing.T) {
 	p := Project{}
 	g := Goal{ID: "root-goal-1"}

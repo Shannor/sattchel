@@ -41,6 +41,9 @@ func TestFileStorageTransaction(t *testing.T) {
 	if len(projects) != 1 || projects[0].Label != "Project A" {
 		t.Errorf("expected 1 project labeled 'Project A', got %v", projects)
 	}
+	if projects[0].Status != core.ProjectDraft {
+		t.Errorf("expected project status %q, got %q", core.ProjectDraft, projects[0].Status)
+	}
 
 	// 2. Test Transaction Rollback
 	projID := projects[0].ID
@@ -125,6 +128,35 @@ func TestFileStorageGetGoalsFilterByProject(t *testing.T) {
 	}
 }
 
+func TestFileStorageGetProjectNormalizesEmptyStatus(t *testing.T) {
+	ctx := context.Background()
+	storage := driven.NewFileStorage("", &driven.DB{
+		Version: 1,
+		Projects: map[string]core.Project{
+			"p-1": {ID: "p-1", Label: "Legacy Project"},
+		},
+		Goals:          map[string]core.Goal{},
+		Members:        map[string]core.Member{},
+		GoalsByMembers: map[string][]string{},
+	})
+
+	project, err := storage.GetProject(ctx, "p-1")
+	if err != nil {
+		t.Fatalf("failed to get project: %v", err)
+	}
+	if project.Status != core.ProjectDraft {
+		t.Errorf("expected normalized project status %q, got %q", core.ProjectDraft, project.Status)
+	}
+
+	projects, err := storage.GetProjects(ctx)
+	if err != nil {
+		t.Fatalf("failed to get projects: %v", err)
+	}
+	if len(projects) != 1 || projects[0].Status != core.ProjectDraft {
+		t.Errorf("expected listed project status %q, got %+v", core.ProjectDraft, projects)
+	}
+}
+
 func TestFileStorageQueryGoalsFilterByText(t *testing.T) {
 	tempDir := t.TempDir()
 	dbPath := filepath.Join(tempDir, "tracker.json")
@@ -204,6 +236,9 @@ func TestFileStorageExportImport(t *testing.T) {
 	}
 	if len(projects) != 1 || projects[0].Label != "Project Export" {
 		t.Errorf("expected project label 'Project Export', got %v", projects)
+	}
+	if projects[0].Status != core.ProjectDraft {
+		t.Errorf("expected imported project status %q, got %q", core.ProjectDraft, projects[0].Status)
 	}
 
 	goals, err := storage2.GetGoals(ctx, p.ID)

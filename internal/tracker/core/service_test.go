@@ -186,6 +186,9 @@ func TestServiceCreateProject(t *testing.T) {
 		if p.Label != "New Project" {
 			t.Errorf("expected Label 'New Project', got %q", p.Label)
 		}
+		if p.Status != ProjectDraft {
+			t.Errorf("expected Status %q, got %q", ProjectDraft, p.Status)
+		}
 	})
 
 	t.Run("empty name error", func(t *testing.T) {
@@ -389,9 +392,9 @@ func TestServiceGetProjects(t *testing.T) {
 	repo := &mockTrackerRepository{
 		getProjectsFunc: func(ctx context.Context) ([]Project, error) {
 			return []Project{
-				{Label: "C Project"},
+				{Label: "C Project", Status: ProjectComplete},
 				{Label: "A Project"},
-				{Label: "B Project"},
+				{Label: "B Project", Status: ProjectInProgress},
 			}, nil
 		},
 	}
@@ -411,6 +414,44 @@ func TestServiceGetProjects(t *testing.T) {
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("GetProjects() sorted order = %v; want %v", got, expected)
 	}
+	if projects[0].Status != ProjectDraft {
+		t.Errorf("expected empty project status to normalize to %q, got %q", ProjectDraft, projects[0].Status)
+	}
+}
+
+func TestServiceUpdateProject(t *testing.T) {
+	t.Run("updates project status", func(t *testing.T) {
+		var updatedProject *Project
+		repo := &mockTrackerRepository{
+			getProjectFunc: func(ctx context.Context, projectID string) (*Project, error) {
+				return &Project{ID: projectID, Label: "Roadmap", Status: ProjectDraft}, nil
+			},
+			updateProjectFunc: func(ctx context.Context, project *Project) (*Project, error) {
+				updatedProject = project
+				return project, nil
+			},
+		}
+		s := NewService(repo)
+
+		project, err := s.UpdateProject(context.Background(), "p-1", "", "", ProjectComplete)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if project.Status != ProjectComplete {
+			t.Errorf("expected Status %q, got %q", ProjectComplete, project.Status)
+		}
+		if updatedProject == nil || updatedProject.Status != ProjectComplete {
+			t.Errorf("expected repository update to include status %q, got %+v", ProjectComplete, updatedProject)
+		}
+	})
+
+	t.Run("rejects invalid project status", func(t *testing.T) {
+		s := NewService(&mockTrackerRepository{})
+		_, err := s.UpdateProject(context.Background(), "p-1", "", "", ProjectStatus("archived"))
+		if !errors.Is(err, ErrInvalidRequest) {
+			t.Errorf("expected ErrInvalidRequest, got %v", err)
+		}
+	})
 }
 
 func TestServiceGetGoals(t *testing.T) {
@@ -1254,9 +1295,15 @@ func TestServiceSplitProject(t *testing.T) {
 		if createdProject == nil || createdProject.Label != "New Split Project" {
 			t.Errorf("expected new project to be created with label 'New Split Project', got: %+v", createdProject)
 		}
+		if createdProject != nil && createdProject.Status != ProjectDraft {
+			t.Errorf("expected new split project status %q, got %q", ProjectDraft, createdProject.Status)
+		}
 
 		if newProj.ID != "p-new" || newProj.Label != "New Split Project" {
 			t.Errorf("unexpected created project: %+v", newProj)
+		}
+		if newProj.Status != ProjectDraft {
+			t.Errorf("expected returned split project status %q, got %q", ProjectDraft, newProj.Status)
 		}
 
 		// Check root goal of new project

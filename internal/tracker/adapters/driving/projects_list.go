@@ -15,11 +15,23 @@ func listProjects(service *core.Service, cfg *Config, writer printer.Writer) *co
 	var (
 		stdoutFlag  bool
 		setActiveID string
+		statuses    []string
+		allStatuses bool
 	)
 
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "List Projects and select active project",
+		Short: "List projects and select active project",
+		Long: `List projects and select the active project.
+By default, completed projects are hidden unless --all or --status is provided.
+
+   Examples:
+     satt tracker project list
+     satt tracker project list --all
+     satt tracker project list --status complete
+     satt tracker project list --status draft --status in-progress
+     satt tracker project list --set <id>
+     `,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if setActiveID != "" {
 				var (
@@ -69,14 +81,21 @@ func listProjects(service *core.Service, cfg *Config, writer printer.Writer) *co
 				return nil
 			}
 
+			statusFilterExplicit := cmd.Flags().Changed("status")
+			filtered := filterProjectsForList(projects, statuses, allStatuses, statusFilterExplicit)
+			if len(filtered) == 0 {
+				writer.Info("No projects matched the requested filters. Use --all or --status complete to include completed projects.")
+				return nil
+			}
+
 			currentProjID := cfg.CurrentProjectID()
 			bypassUI := stdoutFlag || !loader.IsTerminal()
 			styles := tui.AutoStyles()
 
 			if bypassUI {
-				headers := []string{"Active", "Name", "ID", "Description"}
+				headers := []string{"Active", "Name", "Status", "ID", "Description"}
 				var rows [][]string
-				for _, project := range projects {
+				for _, project := range filtered {
 					activeStr := ""
 					nameStr := project.Label
 					if project.ID == currentProjID {
@@ -97,30 +116,27 @@ func listProjects(service *core.Service, cfg *Config, writer printer.Writer) *co
 					rows = append(rows, []string{
 						activeStr,
 						nameStr,
+						renderProjectStatus(project, styles),
 						styles.Muted.Render(project.ID),
 						descVal,
 					})
 				}
-				fmt.Println(tui.RenderTable(headers, rows))
+				fmt.Fprintln(cmd.OutOrStdout(), tui.RenderTable(headers, rows))
 				return nil
 			}
 
-			// Interactive selection
 			var options []tui.ListOption
-			for _, project := range projects {
+			for _, project := range filtered {
 				var titleStr string
-				var descStr string
-
 				if project.ID == currentProjID {
 					titleStr = styles.Success.Bold(true).Render("● " + project.Label + " (active)")
-					descStr = styles.Success.Render(project.ID)
 				} else {
 					titleStr = "  " + project.Label
-					descStr = styles.Muted.Render(project.ID)
 				}
 
+				descStr := fmt.Sprintf("%s • %s", renderProjectStatus(project, styles), styles.Muted.Render(project.ID))
 				if project.Description != "" {
-					descStr = descStr + " - " + project.Description
+					descStr += " - " + project.Description
 				}
 
 				options = append(options, tui.ListOption{
@@ -140,7 +156,7 @@ func listProjects(service *core.Service, cfg *Config, writer printer.Writer) *co
 					return fmt.Errorf("failed to save active project: %w", err)
 				}
 				var cleanName string
-				for _, p := range projects {
+				for _, p := range filtered {
 					if p.ID == selected.ValueStr {
 						cleanName = p.Label
 						break
@@ -155,8 +171,54 @@ func listProjects(service *core.Service, cfg *Config, writer printer.Writer) *co
 
 	cmd.Flags().BoolVar(&stdoutFlag, "stdout", false, "Dump list directly to stdout instead of interactive UI")
 	cmd.Flags().StringVarP(&setActiveID, "set", "s", "", "Set the active project by ID (non-interactive)")
+	cmd.Flags().StringSliceVar(&statuses, "status", nil, "Filter by status (draft, in-progress, complete). Comma-separated or repeated.")
+	cmd.Flags().BoolVar(&allStatuses, "all", false, "Include completed projects")
 	_ = cmd.RegisterFlagCompletionFunc("set", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
+	_ = cmd.RegisterFlagCompletionFunc("status", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.ProjectDraft),
+			string(core.ProjectInProgress),
+			string(core.ProjectComplete),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
 	return cmd
+}
+
+func filterProjectsForList(projects []core.Project, statuses []string, includeCompleted bool, statusFilterExplicit bool) []core.Project {
+	statusSet := make(map[core.ProjectStatus]struct{}, len(statuses))
+	for _, status := range statuses {
+		statusSet[core.ProjectStatus(status)] = struct{}{}
+	}
+
+	var filtered []core.Project
+	for _, project := range projects {
+		projectStatus := project.NormalizedStatus()
+		if includeCompleted {
+			filtered = append(filtered, project)
+			continue
+		}
+		if statusFilterExplicit {
+			if _, ok := statusSet[projectStatus]; ok {
+				filtered = append(filtered, project)
+			}
+			continue
+		}
+		if projectStatus != core.ProjectComplete {
+			filtered = append(filtered, project)
+		}
+	}
+	return filtered
+}
+
+func renderProjectStatus(project core.Project, styles tui.Styles) string {
+	switch project.NormalizedStatus() {
+	case core.ProjectComplete:
+		return styles.Success.Bold(true).Render("Complete")
+	case core.ProjectInProgress:
+		return styles.Info.Bold(true).Render("In Progress")
+	default:
+		return styles.Warning.Render("Draft")
+	}
 }

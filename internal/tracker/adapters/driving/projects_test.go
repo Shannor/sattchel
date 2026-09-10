@@ -197,3 +197,192 @@ func TestProjectsCLI(t *testing.T) {
 		t.Errorf("expected error containing 'cannot specify both --new and --to', got: %v", err)
 	}
 }
+
+func TestProjectsListFiltersAndStatusUpdate(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath := filepath.Join(tempDir, "tracker.json")
+	repo := driven.NewFileStorage(dbPath, nil)
+	service := core.NewService(repo)
+	v := viper.New()
+	configPath := filepath.Join(tempDir, "config.yml")
+	v.SetConfigFile(configPath)
+	v.Set("tracker", map[string]any{})
+	_ = v.WriteConfigAs(configPath)
+
+	cfg, err := LoadConfig(v)
+	if err != nil {
+		t.Fatalf("failed to load config: %v", err)
+	}
+
+	writer := &dummyWriter{}
+	cmd := projects(service, cfg, writer)
+
+	executeCmd := func(args ...string) (string, error) {
+		var resetFlags func(*cobra.Command)
+		resetFlags = func(c *cobra.Command) {
+			c.Flags().VisitAll(func(f *pflag.Flag) {
+				_ = f.Value.Set(f.DefValue)
+			})
+			for _, sub := range c.Commands() {
+				resetFlags(sub)
+			}
+		}
+		resetFlags(cmd)
+
+		buf := new(bytes.Buffer)
+		cmd.SetOut(buf)
+		cmd.SetErr(buf)
+		cmd.SetArgs(args)
+		err := cmd.ExecuteContext(context.Background())
+		return buf.String(), err
+	}
+
+	draftProject, err := service.CreateProject(context.Background(), "Draft Project", "")
+	if err != nil {
+		t.Fatalf("failed to create draft project: %v", err)
+	}
+	inProgressProject, err := service.CreateProject(context.Background(), "In Progress Project", "")
+	if err != nil {
+		t.Fatalf("failed to create in-progress project: %v", err)
+	}
+	completeProject, err := service.CreateProject(context.Background(), "Complete Project", "")
+	if err != nil {
+		t.Fatalf("failed to create complete project: %v", err)
+	}
+
+	_, err = executeCmd("update", inProgressProject.ID, "--status", string(core.ProjectInProgress))
+	if err != nil {
+		t.Fatalf("failed to update in-progress project status: %v", err)
+	}
+	_, err = executeCmd("update", completeProject.ID, "--status", string(core.ProjectComplete))
+	if err != nil {
+		t.Fatalf("failed to update complete project status: %v", err)
+	}
+
+	updatedDraft, err := service.GetProject(context.Background(), draftProject.ID)
+	if err != nil {
+		t.Fatalf("failed to get draft project: %v", err)
+	}
+	if updatedDraft.Status != core.ProjectDraft {
+		t.Errorf("expected draft project status %q, got %q", core.ProjectDraft, updatedDraft.Status)
+	}
+
+	updatedComplete, err := service.GetProject(context.Background(), completeProject.ID)
+	if err != nil {
+		t.Fatalf("failed to get complete project: %v", err)
+	}
+	if updatedComplete.Status != core.ProjectComplete {
+		t.Errorf("expected complete project status %q, got %q", core.ProjectComplete, updatedComplete.Status)
+	}
+
+	out, err := executeCmd("list", "--stdout")
+	if err != nil {
+		t.Fatalf("project list failed: %v", err)
+	}
+	if !strings.Contains(out, "Draft Project") {
+		t.Errorf("expected default list to include draft project, got: %q", out)
+	}
+	if !strings.Contains(out, "In Progress Project") {
+		t.Errorf("expected default list to include in-progress project, got: %q", out)
+	}
+	if strings.Contains(out, "Complete Project") {
+		t.Errorf("did not expect default list to include complete project, got: %q", out)
+	}
+
+	out, err = executeCmd("list", "--stdout", "--all")
+	if err != nil {
+		t.Fatalf("project list --all failed: %v", err)
+	}
+	if !strings.Contains(out, "Complete Project") {
+		t.Errorf("expected --all list to include complete project, got: %q", out)
+	}
+
+	out, err = executeCmd("list", "--stdout", "--status", string(core.ProjectComplete))
+	if err != nil {
+		t.Fatalf("project list --status complete failed: %v", err)
+	}
+	if !strings.Contains(out, "Complete Project") {
+		t.Errorf("expected status-filtered list to include complete project, got: %q", out)
+	}
+	if strings.Contains(out, "Draft Project") || strings.Contains(out, "In Progress Project") {
+		t.Errorf("did not expect status-filtered list to include non-complete projects, got: %q", out)
+	}
+}
+
+func TestProjectConvenienceStatusCommands(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath := filepath.Join(tempDir, "tracker.json")
+	repo := driven.NewFileStorage(dbPath, nil)
+	service := core.NewService(repo)
+	v := viper.New()
+	configPath := filepath.Join(tempDir, "config.yml")
+	v.SetConfigFile(configPath)
+	v.Set("tracker", map[string]any{})
+	_ = v.WriteConfigAs(configPath)
+
+	cfg, err := LoadConfig(v)
+	if err != nil {
+		t.Fatalf("failed to load config: %v", err)
+	}
+
+	writer := &dummyWriter{}
+	cmd := projects(service, cfg, writer)
+
+	executeCmd := func(args ...string) (string, error) {
+		var resetFlags func(*cobra.Command)
+		resetFlags = func(c *cobra.Command) {
+			c.Flags().VisitAll(func(f *pflag.Flag) {
+				_ = f.Value.Set(f.DefValue)
+			})
+			for _, sub := range c.Commands() {
+				resetFlags(sub)
+			}
+		}
+		resetFlags(cmd)
+
+		buf := new(bytes.Buffer)
+		cmd.SetOut(buf)
+		cmd.SetErr(buf)
+		cmd.SetArgs(args)
+		err := cmd.ExecuteContext(context.Background())
+		return buf.String(), err
+	}
+
+	project, err := service.CreateProject(context.Background(), "Project Commands", "")
+	if err != nil {
+		t.Fatalf("failed to create project: %v", err)
+	}
+
+	writer.successMsgs = nil
+	_, err = executeCmd("complete", project.ID)
+	if err != nil {
+		t.Fatalf("project complete failed: %v", err)
+	}
+	updatedProject, err := service.GetProject(context.Background(), project.ID)
+	if err != nil {
+		t.Fatalf("failed to get completed project: %v", err)
+	}
+	if updatedProject.Status != core.ProjectComplete {
+		t.Errorf("expected completed status %q, got %q", core.ProjectComplete, updatedProject.Status)
+	}
+	if len(writer.successMsgs) == 0 || !strings.Contains(writer.successMsgs[0], "marked as complete") {
+		t.Errorf("expected complete success message, got: %v", writer.successMsgs)
+	}
+
+	writer.successMsgs = nil
+	_ = cfg.SetCurrentProjectID(project.ID)
+	_, err = executeCmd("reopen")
+	if err != nil {
+		t.Fatalf("project reopen failed: %v", err)
+	}
+	updatedProject, err = service.GetProject(context.Background(), project.ID)
+	if err != nil {
+		t.Fatalf("failed to get reopened project: %v", err)
+	}
+	if updatedProject.Status != core.ProjectInProgress {
+		t.Errorf("expected reopened status %q, got %q", core.ProjectInProgress, updatedProject.Status)
+	}
+	if len(writer.successMsgs) == 0 || !strings.Contains(writer.successMsgs[0], "marked as in-progress") {
+		t.Errorf("expected reopen success message, got: %v", writer.successMsgs)
+	}
+}

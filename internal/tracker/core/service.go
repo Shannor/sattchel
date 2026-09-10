@@ -35,6 +35,7 @@ func (s *Service) CreateProject(ctx context.Context, name string, description st
 	project := &Project{
 		Label:       name,
 		Description: description,
+		Status:      ProjectDraft,
 	}
 
 	var result *Project
@@ -306,6 +307,9 @@ func (s *Service) GetProjects(ctx context.Context) ([]Project, error) {
 	if err != nil {
 		return nil, err
 	}
+	for i := range projects {
+		projects[i].SetStatus(projects[i].NormalizedStatus())
+	}
 	slices.SortFunc(projects, func(i, j Project) int {
 		return strings.Compare(i.Label, j.Label)
 	})
@@ -313,12 +317,20 @@ func (s *Service) GetProjects(ctx context.Context) ([]Project, error) {
 }
 
 func (s *Service) GetProject(ctx context.Context, projectID string) (*Project, error) {
-	return s.repo.GetProject(ctx, projectID)
+	project, err := s.repo.GetProject(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+	project.SetStatus(project.NormalizedStatus())
+	return project, nil
 }
 
-func (s *Service) UpdateProject(ctx context.Context, id string, name string, description string) (*Project, error) {
+func (s *Service) UpdateProject(ctx context.Context, id string, name string, description string, status ProjectStatus) (*Project, error) {
 	if id == "" {
 		return nil, fmt.Errorf("%w - project ID", ErrMissingRequiredFields)
+	}
+	if status != "" && !status.IsValid() {
+		return nil, fmt.Errorf("%w - invalid project status %q", ErrInvalidRequest, status)
 	}
 
 	var result *Project
@@ -327,12 +339,16 @@ func (s *Service) UpdateProject(ctx context.Context, id string, name string, des
 		if err != nil {
 			return err
 		}
+		current.SetStatus(current.NormalizedStatus())
 
 		if name != "" {
 			current.Label = name
 		}
 		if description != "" {
 			current.Description = description
+		}
+		if status != "" {
+			current.SetStatus(status)
 		}
 
 		p, err := s.repo.UpdateProject(txCtx, current)
@@ -566,7 +582,8 @@ func (s *Service) SplitProject(ctx context.Context, sourceProjectID string, targ
 			}
 
 			newProj := &Project{
-				Label: newProjectName,
+				Label:  newProjectName,
+				Status: ProjectDraft,
 			}
 			label := newProj.NormalizedLabel()
 			for _, p := range projects {

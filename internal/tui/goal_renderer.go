@@ -91,6 +91,7 @@ func ChooseProject(projects []core.Project, title string, currentProjectID strin
 		if p.ID == currentProjectID {
 			descParts = append(descParts, "★ active")
 		}
+		descParts = append(descParts, projectStatusLabel(p.NormalizedStatus()))
 		if p.Description != "" {
 			descParts = append(descParts, p.Description)
 		}
@@ -116,6 +117,17 @@ func ChooseProject(projects []core.Project, title string, currentProjectID strin
 	}
 
 	return selected.ValueStr, nil
+}
+
+func projectStatusLabel(status core.ProjectStatus) string {
+	switch status {
+	case core.ProjectComplete:
+		return "complete"
+	case core.ProjectInProgress:
+		return "in progress"
+	default:
+		return "draft"
+	}
 }
 
 // ChooseMember displays an interactive filterable select list to choose a member.

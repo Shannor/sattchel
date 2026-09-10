@@ -331,6 +331,7 @@ func (s *FileStorage) CreateProject(ctx context.Context, project *core.Project) 
 	}
 
 	project.ID = uuid.NewString()
+	project.SetStatus(project.NormalizedStatus())
 	s.db.Projects[project.ID] = *project
 	if err := s.flushMaybe(ctx); err != nil {
 		delete(s.db.Projects, project.ID)
@@ -348,6 +349,7 @@ func (s *FileStorage) GetProjects(ctx context.Context) ([]core.Project, error) {
 
 	var results []core.Project
 	for _, project := range s.db.Projects {
+		project.SetStatus(project.NormalizedStatus())
 		results = append(results, project)
 	}
 	return results, nil
@@ -361,6 +363,7 @@ func (s *FileStorage) GetProject(ctx context.Context, projectID string) (*core.P
 	}
 
 	if project, ok := s.db.Projects[projectID]; ok {
+		project.SetStatus(project.NormalizedStatus())
 		return &project, nil
 	}
 
@@ -380,6 +383,7 @@ func (s *FileStorage) UpdateProject(ctx context.Context, project *core.Project) 
 
 	current.Label = project.Label
 	current.Description = project.Description
+	current.Status = project.NormalizedStatus()
 	current.RootGoalID = project.RootGoalID
 	s.db.Projects[project.ID] = current
 

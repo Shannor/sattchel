@@ -17,6 +17,7 @@ func updateProject(service *core.Service, cfg *Config, writer printer.Writer) *c
 	var (
 		name        string
 		description string
+		status      string
 	)
 
 	cmd := &cobra.Command{
@@ -27,6 +28,7 @@ If no flags/arguments are provided, it will prompt for the details interactively
    Examples:
      satt tracker project update <id> --name "New Name"
      satt tracker project update --name "New Name" -d "New Description"
+     satt tracker project update <id> --status complete
      `,
 		Args:         cobra.MaximumNArgs(1),
 		SilenceUsage: true,
@@ -60,10 +62,14 @@ If no flags/arguments are provided, it will prompt for the details interactively
 			if !cmd.Flags().Changed("description") {
 				description = proj.Description
 			}
+			if !cmd.Flags().Changed("status") {
+				status = string(proj.NormalizedStatus())
+			}
 
-			if !cmd.Flags().Changed("name") && !cmd.Flags().Changed("description") {
+			hasFlags := cmd.Flags().Changed("name") || cmd.Flags().Changed("description") || cmd.Flags().Changed("status")
+			if !hasFlags {
 				if !loader.IsTerminal() {
-					return fmt.Errorf("at least one flag (--name or --description) must be specified for update in non-interactive mode")
+					return fmt.Errorf("at least one flag (--name, --description, or --status) must be specified for update in non-interactive mode")
 				}
 				err = tui.NewForm(
 					huh.NewGroup(
@@ -84,9 +90,22 @@ If no flags/arguments are provided, it will prompt for the details interactively
 				if err != nil {
 					return err
 				}
+
+				statusOpts := []tui.ListOption{
+					{TitleStr: "Draft", ValueStr: string(core.ProjectDraft)},
+					{TitleStr: "In Progress", ValueStr: string(core.ProjectInProgress)},
+					{TitleStr: "Complete", ValueStr: string(core.ProjectComplete)},
+				}
+				selStatus, err := tui.Choose("Select Status", statusOpts)
+				if err != nil {
+					return err
+				}
+				if selStatus != nil {
+					status = selStatus.ValueStr
+				}
 			}
 
-			updated, err := service.UpdateProject(cmd.Context(), pid, name, description)
+			updated, err := service.UpdateProject(cmd.Context(), pid, name, description, core.ProjectStatus(status))
 			if err != nil {
 				return err
 			}
@@ -104,6 +123,14 @@ If no flags/arguments are provided, it will prompt for the details interactively
 
 	cmd.Flags().StringVar(&name, "name", "", "New name of the project")
 	cmd.Flags().StringVarP(&description, "description", "d", "", "New description of the project")
+	cmd.Flags().StringVar(&status, "status", "", "New status of the project")
+	_ = cmd.RegisterFlagCompletionFunc("status", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			string(core.ProjectDraft),
+			string(core.ProjectInProgress),
+			string(core.ProjectComplete),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
 
 	return cmd
 }

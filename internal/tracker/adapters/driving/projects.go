@@ -14,10 +14,15 @@ func projects(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 		Short:   "Manage projects",
 		Long: `Manage projects.
    Examples:
-     satt tracker project create <name> 
+     satt tracker project create <name>
      satt tracker project list
+     satt tracker project list --all
+     satt tracker project list --status complete
      satt tracker project view
      satt tracker project update [id]
+     satt tracker project update [id] --status complete
+     satt tracker project complete [id]
+     satt tracker project reopen [id]
      satt tracker project merge <source_project_id> <merge_project_id>
      satt tracker project split <source_project_id>
      `,
@@ -26,6 +31,8 @@ func projects(service *core.Service, cfg *Config, writer printer.Writer) *cobra.
 	cmd.AddCommand(listProjects(service, cfg, writer))
 	cmd.AddCommand(viewProject(service, cfg, writer))
 	cmd.AddCommand(updateProject(service, cfg, writer))
+	cmd.AddCommand(completeProjectCmd(service, cfg, writer))
+	cmd.AddCommand(reopenProjectCmd(service, cfg, writer))
 	cmd.AddCommand(mergeProjectsCmd(service, cfg, writer))
 	cmd.AddCommand(splitProjectCmd(service, cfg, writer))
 	cmd.AddCommand(deleteProjectCmd(service, cfg, writer))

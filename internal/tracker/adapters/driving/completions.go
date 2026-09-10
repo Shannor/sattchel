@@ -17,7 +17,7 @@ func getProjectCompletions(service *core.Service) []string {
 	}
 	var completions []string
 	for _, p := range projects {
-		completions = append(completions, cobra.CompletionWithDesc(p.ID, p.Label))
+		completions = append(completions, cobra.CompletionWithDesc(p.ID, fmt.Sprintf("%s (%s)", p.Label, p.NormalizedStatus())))
 	}
 	return completions
 }

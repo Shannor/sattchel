@@ -70,7 +70,7 @@ func TestNonInteractiveModeErrors(t *testing.T) {
 
 		cmd := projects(service, cfg, writer)
 		_, err = execCmd(cmd, "update", p.ID)
-		if err == nil || !strings.Contains(err.Error(), "at least one flag (--name or --description) must be specified for update in non-interactive mode") {
+		if err == nil || !strings.Contains(err.Error(), "at least one flag (--name, --description, or --status) must be specified for update in non-interactive mode") {
 			t.Errorf("expected non-interactive project update error, got: %v", err)
 		}
 	})
@@ -101,6 +101,24 @@ func TestNonInteractiveModeErrors(t *testing.T) {
 		_, err := execCmd(cmd, "delete")
 		if err == nil || !strings.Contains(err.Error(), "project ID is required in non-interactive mode") {
 			t.Errorf("expected non-interactive project delete error, got: %v", err)
+		}
+	})
+
+	t.Run("projects complete without ID or active project", func(t *testing.T) {
+		_ = cfg.SetCurrentProjectID("")
+		cmd := projects(service, cfg, writer)
+		_, err := execCmd(cmd, "complete")
+		if err == nil || !strings.Contains(err.Error(), "no active project configured and no --projectId flag provided") {
+			t.Errorf("expected non-interactive project complete error, got: %v", err)
+		}
+	})
+
+	t.Run("projects reopen without ID or active project", func(t *testing.T) {
+		_ = cfg.SetCurrentProjectID("")
+		cmd := projects(service, cfg, writer)
+		_, err := execCmd(cmd, "reopen")
+		if err == nil || !strings.Contains(err.Error(), "no active project configured and no --projectId flag provided") {
+			t.Errorf("expected non-interactive project reopen error, got: %v", err)
 		}
 	})
 
