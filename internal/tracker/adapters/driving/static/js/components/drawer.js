@@ -10,6 +10,11 @@ export class Drawer {
 		this.ownerElem = document.getElementById("drawer-owner");
 		this.idElem = document.getElementById("drawer-id");
 		this.closeBtn = this.element.querySelector(".close-btn");
+
+		this.copyIdBtn = document.getElementById("drawer-copy-id-btn");
+		this.copyDescBtn = document.getElementById("drawer-copy-desc-btn");
+		this.copyAllBtn = document.getElementById("drawer-copy-all-btn");
+
 		this.onUpdate = null;
 		this.currentGoal = null;
 		this.members = [];
@@ -21,6 +26,117 @@ export class Drawer {
 		this.impactElem.addEventListener("change", () => this.handleMetricChange());
 		this.effortElem.addEventListener("change", () => this.handleMetricChange());
 		this.ownerElem.addEventListener("change", () => this.handleMemberChange());
+		if (this.descElem) {
+			this.descElem.addEventListener("change", () =>
+				this.handleDescriptionChange(),
+			);
+			this.descElem.addEventListener("blur", () => this.handleDescriptionChange());
+			this.descElem.addEventListener("keydown", (e) => {
+				if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+					this.descElem.blur();
+				}
+			});
+		}
+
+		if (this.copyIdBtn) {
+			this.copyIdBtn.addEventListener("click", () => this.copyId());
+		}
+		if (this.idElem) {
+			this.idElem.addEventListener("click", () => this.copyId());
+		}
+		if (this.copyDescBtn) {
+			this.copyDescBtn.addEventListener("click", () => this.copyDescription());
+		}
+		if (this.copyAllBtn) {
+			this.copyAllBtn.addEventListener("click", () => this.copyAllDetails());
+		}
+	}
+
+	async copyToClipboard(text) {
+		if (!text) return false;
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			try {
+				await navigator.clipboard.writeText(text);
+				return true;
+			} catch {
+				// Fall back to execCommand below
+			}
+		}
+		const textArea = document.createElement("textarea");
+		textArea.value = text;
+		textArea.style.position = "fixed";
+		textArea.style.opacity = "0";
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+		let success = false;
+		try {
+			success = document.execCommand("copy");
+		} catch {
+			success = false;
+		}
+		document.body.removeChild(textArea);
+		return success;
+	}
+
+	showCopyFeedback(btnElem, targetElem, originalBtnText) {
+		if (btnElem) {
+			btnElem.classList.add("copied");
+			const span = btnElem.querySelector("span");
+			if (span) span.textContent = "Copied!";
+		}
+		if (targetElem) {
+			targetElem.classList.add("copied");
+		}
+		setTimeout(() => {
+			if (btnElem) {
+				btnElem.classList.remove("copied");
+				const span = btnElem.querySelector("span");
+				if (span && originalBtnText) span.textContent = originalBtnText;
+			}
+			if (targetElem) {
+				targetElem.classList.remove("copied");
+			}
+		}, 1500);
+	}
+
+	async copyId() {
+		if (!this.currentGoal || !this.currentGoal.id) return;
+		const ok = await this.copyToClipboard(this.currentGoal.id);
+		if (ok) {
+			this.showCopyFeedback(this.copyIdBtn, this.idElem, "Copy ID");
+		}
+	}
+
+	async copyDescription() {
+		if (!this.currentGoal) return;
+		const desc =
+			(this.descElem ? this.descElem.value : "") ||
+			this.currentGoal.description ||
+			"";
+		const ok = await this.copyToClipboard(desc);
+		if (ok) {
+			this.showCopyFeedback(this.copyDescBtn, this.descElem, "Copy");
+		}
+	}
+
+	async copyAllDetails() {
+		if (!this.currentGoal) return;
+		const g = this.currentGoal;
+		const ownerName = g.member ? g.member.name : "Unassigned";
+		const lines = [
+			`ID: ${g.id || ""}`,
+			`Title: ${g.name || ""}`,
+			`Status: ${g.status || "draft"}`,
+			`Impact: ${g.impact || "unknown"}`,
+			`Effort: ${g.effort || "unknown"}`,
+			`Owner: ${ownerName}`,
+			`Description: ${g.description || "No description provided."}`,
+		];
+		const ok = await this.copyToClipboard(lines.join("\n"));
+		if (ok) {
+			this.showCopyFeedback(this.copyAllBtn, null, "Copy All");
+		}
 	}
 
 	setOnUpdate(onUpdate) {
@@ -50,6 +166,24 @@ export class Drawer {
 		});
 
 		this.ownerElem.value = currentValue;
+	}
+
+	async handleDescriptionChange() {
+		if (!this.currentGoal || !this.onUpdate) return;
+		const newDesc = this.descElem.value;
+		const currentDesc = this.currentGoal.description || "";
+
+		if (newDesc === currentDesc) return;
+
+		try {
+			await this.onUpdate(this.currentGoal.id, {
+				description: newDesc,
+			});
+			this.currentGoal.description = newDesc;
+		} catch (err) {
+			alert("Failed to update description: " + err.message);
+			this.descElem.value = this.currentGoal.description || "";
+		}
 	}
 
 	async handleStatusChange() {
@@ -138,12 +272,8 @@ export class Drawer {
 
 		this.titleElem.textContent = goal.name || "";
 
-		if (goal.description) {
-			this.descElem.textContent = goal.description;
-			this.descElem.classList.remove("muted-text");
-		} else {
-			this.descElem.textContent = "No description provided.";
-			this.descElem.classList.add("muted-text");
+		if (this.descElem) {
+			this.descElem.value = goal.description || "";
 		}
 
 		const status = goal.status || "draft";

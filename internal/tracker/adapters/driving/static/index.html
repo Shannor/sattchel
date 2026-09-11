@@ -129,14 +129,35 @@
           <span id="drawer-status-badge" class="badge">Status</span>
           <h2 id="drawer-title" style="margin-top: 8px">Goal Title</h2>
         </div>
-        <button class="close-btn">&times;</button>
+        <div class="drawer-header-actions">
+          <button id="drawer-copy-all-btn" class="copy-btn" title="Copy all goal details">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy All</span>
+          </button>
+          <button class="close-btn" title="Close">&times;</button>
+        </div>
       </div>
       <div class="drawer-content">
         <div class="detail-section">
-          <span class="detail-label">Description</span>
-          <div id="drawer-description" class="detail-desc">
-            No description provided.
+          <div class="detail-label-row">
+            <span class="detail-label">Description</span>
+            <button id="drawer-copy-desc-btn" class="copy-btn" title="Copy description">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
           </div>
+          <textarea
+            id="drawer-description"
+            class="detail-desc-input"
+            placeholder="Add a description..."
+            rows="4"
+          ></textarea>
         </div>
 
         <div class="detail-section">
@@ -181,11 +202,20 @@
         </div>
 
         <div class="detail-section">
-          <span class="detail-label">Identifier</span>
+          <div class="detail-label-row">
+            <span class="detail-label">Identifier</span>
+            <button id="drawer-copy-id-btn" class="copy-btn" title="Copy Goal ID">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy ID</span>
+            </button>
+          </div>
           <div
             id="drawer-id"
-            class="detail-value"
-            style="font-family: monospace; color: var(--text-secondary)"
+            class="detail-value copyable-id"
+            title="Click to copy ID"
           >
             ID
           </div>
