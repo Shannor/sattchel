@@ -22,18 +22,31 @@ class App {
 		this.drawer.setOnUpdate(async (goalId, options) => {
 			await this.api.updateGoal(goalId, options);
 			const goals = await this.api.fetchGoals();
-			this.allGoals = goals;
+			this.allGoals = goals || [];
 
-			const updatedGoal = goals.find((g) => g.id === goalId);
-			if (
-				updatedGoal &&
-				this.drawer.currentGoal &&
-				this.drawer.currentGoal.id === goalId
-			) {
-				this.drawer.show(updatedGoal);
+			const updatedGoal = this.allGoals.find((g) => g.id === goalId);
+			if (updatedGoal) {
+				if (
+					this.drawer.currentGoal &&
+					this.drawer.currentGoal.id === goalId
+				) {
+					this.drawer.show(updatedGoal);
+				}
+
+				const isFilteringActive =
+					this.filterState.hideCompleted ||
+					this.filterState.statusFilter !== "all" ||
+					this.filterState.memberFilter !== "all" ||
+					this.filterState.searchQuery !== "";
+
+				if (isFilteringActive) {
+					this.applyFilters(false);
+				} else {
+					this.mindmap.patchGoal(updatedGoal);
+				}
+			} else {
+				this.applyFilters(false);
 			}
-
-			this.applyFilters(false);
 		});
 
 		// Initialize mindmap component
@@ -62,9 +75,13 @@ class App {
 				this.projectId = newPid;
 				this.api.projectId = newPid;
 
-				const url = new URL(window.location.href);
-				url.searchParams.set("projectId", newPid);
-				window.history.pushState({}, "", url);
+				try {
+					const url = new URL(window.location.href);
+					url.searchParams.set("projectId", newPid);
+					window.history.pushState({}, "", url);
+				} catch {
+					// Ignore URL parsing errors
+				}
 
 				this.mindmap.rootChildSides = {};
 

@@ -117,10 +117,15 @@ export class MindMap {
 		const existing = this.goalsMap[updatedGoal.id];
 		if (!existing) return;
 		// Merge fields that affect card appearance
+		existing.name = updatedGoal.name;
+		existing.description = updatedGoal.description;
 		existing.status = updatedGoal.status;
 		existing.impact = updatedGoal.impact;
 		existing.effort = updatedGoal.effort;
 		existing.member = updatedGoal.member;
+		if (updatedGoal.parent) {
+			existing.parent = updatedGoal.parent;
+		}
 		this.renderer.refreshCard(existing);
 	}
 }

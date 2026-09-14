@@ -315,6 +315,17 @@ export class Renderer {
 			meta.appendChild(triageBadge);
 		}
 
+		if (node.parent && node.parent.targetId) {
+			const relType = node.parent.relationship || "optional";
+			const linkBadge = document.createElementNS(
+				"http://www.w3.org/1999/xhtml",
+				"span",
+			);
+			linkBadge.setAttribute("class", `badge link-badge link-${relType}`);
+			linkBadge.textContent = relType;
+			meta.appendChild(linkBadge);
+		}
+
 		if (impactStr !== "unknown") {
 			const impactBadge = document.createElementNS(
 				"http://www.w3.org/1999/xhtml",
