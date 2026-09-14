@@ -50,8 +50,7 @@ export class Drawer {
 		this.handleOutsideClick = (e) => {
 			if (!this.element.classList.contains("open")) return;
 			if (this.element.contains(e.target)) return;
-			if (e.target.closest(".goal-card") || e.target.closest(".root-card"))
-				return;
+			if (e.target.closest(".goal-card") || e.target.closest(".root-card")) return;
 			this.close();
 		};
 		document.addEventListener("click", this.handleOutsideClick);
