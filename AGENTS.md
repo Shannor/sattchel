@@ -21,4 +21,4 @@ CLI tool with `satt` as the command.
 
 ## Git & Release Rules
 
-- **Never Overwrite Tags**: Never push to or re-point an existing Git tag. Always create a new version tag for new changes or releases.
+- **Tagging Rules**: Never create or push a Git tag unless explicitly instructed by the user. When instructed to tag, never push to or overwrite an existing Git tag; always create a new version tag.

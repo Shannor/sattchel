@@ -3,7 +3,7 @@
 - Use the Makefile for building the application.
 - When working locally, the CLI artifact will be `./bin/satt` and the local config will be in `dev-config/`
 - Do not give error variables custom names (e.g. runErr, getGoalsErr). They must always be named `err`.
-- Never push to or overwrite an existing Git tag. Always create a new version tag for new changes or releases.
+- Never create or push a Git tag unless explicitly instructed by the user. When instructed to tag, never overwrite or re-point an existing Git tag; always create a new version tag.
 
 ### CLI Format: The "Modern Cloud / Noun-Verb" Style (Structured Subcommands)
 
