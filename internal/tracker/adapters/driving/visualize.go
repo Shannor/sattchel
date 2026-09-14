@@ -13,6 +13,8 @@ import (
 
 func visualizeProject(service *core.Service, cfg *Config) *cobra.Command {
 	projectID := ""
+	port := 8765
+	noOpen := false
 
 	cmd := &cobra.Command{
 		Use:   "visualize",
@@ -21,6 +23,8 @@ func visualizeProject(service *core.Service, cfg *Config) *cobra.Command {
 Automatically opens the mind map in your default browser.
 Examples:
   satt tracker visualize
+  satt tracker visualize --port 8765
+  satt tracker visualize --no-open
   `,
 		Args:         cobra.NoArgs,
 		SilenceUsage: true,
@@ -41,7 +45,12 @@ Examples:
 
 			fmt.Println("Starting visualizer server ...")
 			server := NewHTTPServer(service)
-			addr, shutdown, err := server.Start(cmd.Context(), "127.0.0.1:0")
+			listenAddr := fmt.Sprintf("127.0.0.1:%d", port)
+			addr, shutdown, err := server.Start(cmd.Context(), listenAddr)
+			if err != nil && port != 0 {
+				// Fallback to ephemeral port if requested port is unavailable
+				addr, shutdown, err = server.Start(cmd.Context(), "127.0.0.1:0")
+			}
 			if err != nil {
 				return fmt.Errorf("failed to start server: %w", err)
 			}
@@ -49,8 +58,10 @@ Examples:
 			url := fmt.Sprintf("http://%s?projectId=%s", addr, pid)
 
 			fmt.Printf("Visualizer server running at: %s\n", url)
-			fmt.Println("Opening in browser...")
-			_ = openBrowser(url)
+			if !noOpen {
+				fmt.Println("Opening in browser...")
+				_ = openBrowser(url)
+			}
 
 			fmt.Println("Press Ctrl+C to stop the visualizer server.")
 
@@ -69,6 +80,8 @@ Examples:
 	}
 
 	cmd.Flags().StringVarP(&projectID, "projectId", "p", "", "Project id of the goals. If not provided, the default project will be used")
+	cmd.Flags().IntVarP(&port, "port", "P", 8765, "Port for the visualizer web server")
+	cmd.Flags().BoolVar(&noOpen, "no-open", false, "Do not automatically open browser")
 	_ = cmd.RegisterFlagCompletionFunc("projectId", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return getProjectCompletions(service), cobra.ShellCompDirectiveNoFileComp
 	})
