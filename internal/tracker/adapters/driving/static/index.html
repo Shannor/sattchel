@@ -129,16 +129,7 @@
           <span id="drawer-status-badge" class="badge">Status</span>
           <h2 id="drawer-title" style="margin-top: 8px">Goal Title</h2>
         </div>
-        <div class="drawer-header-actions">
-          <button id="drawer-copy-all-btn" class="copy-btn" title="Copy all goal details">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span>Copy All</span>
-          </button>
-          <button class="close-btn" title="Close">&times;</button>
-        </div>
+        <button class="close-btn" title="Close">&times;</button>
       </div>
       <div class="drawer-content">
         <div class="detail-section">
@@ -161,37 +152,34 @@
         </div>
 
         <div class="detail-section">
-          <span class="detail-label">Status & Metrics</span>
-          <div class="info-pill-container">
-            <div class="info-pill">
-              <span class="detail-label" style="font-size: 9px">Status</span>
-              <select id="drawer-status" class="pill-select">
-                <option value="draft">Draft</option>
-                <option value="open">Open</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
-            <div class="info-pill">
-              <span class="detail-label" style="font-size: 9px">Impact</span>
-              <select id="drawer-impact" class="pill-select">
-                <option value="unknown">Unknown</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-            <div class="info-pill">
-              <span class="detail-label" style="font-size: 9px">Effort</span>
-              <select id="drawer-effort" class="pill-select">
-                <option value="unknown">Unknown</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-          </div>
+          <span class="detail-label">Status</span>
+          <select id="drawer-status" class="owner-select">
+            <option value="draft">Draft</option>
+            <option value="open">Open</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <div class="detail-section">
+          <span class="detail-label">Impact</span>
+          <select id="drawer-impact" class="owner-select">
+            <option value="unknown">Unknown</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <div class="detail-section">
+          <span class="detail-label">Effort</span>
+          <select id="drawer-effort" class="owner-select">
+            <option value="unknown">Unknown</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
         </div>
 
         <div class="detail-section">

@@ -13,7 +13,6 @@ export class Drawer {
 
 		this.copyIdBtn = document.getElementById("drawer-copy-id-btn");
 		this.copyDescBtn = document.getElementById("drawer-copy-desc-btn");
-		this.copyAllBtn = document.getElementById("drawer-copy-all-btn");
 
 		this.onUpdate = null;
 		this.currentGoal = null;
@@ -47,9 +46,15 @@ export class Drawer {
 		if (this.copyDescBtn) {
 			this.copyDescBtn.addEventListener("click", () => this.copyDescription());
 		}
-		if (this.copyAllBtn) {
-			this.copyAllBtn.addEventListener("click", () => this.copyAllDetails());
-		}
+
+		this.handleOutsideClick = (e) => {
+			if (!this.element.classList.contains("open")) return;
+			if (this.element.contains(e.target)) return;
+			if (e.target.closest(".goal-card") || e.target.closest(".root-card"))
+				return;
+			this.close();
+		};
+		document.addEventListener("click", this.handleOutsideClick);
 	}
 
 	async copyToClipboard(text) {
@@ -117,25 +122,6 @@ export class Drawer {
 		const ok = await this.copyToClipboard(desc);
 		if (ok) {
 			this.showCopyFeedback(this.copyDescBtn, this.descElem, "Copy");
-		}
-	}
-
-	async copyAllDetails() {
-		if (!this.currentGoal) return;
-		const g = this.currentGoal;
-		const ownerName = g.member ? g.member.name : "Unassigned";
-		const lines = [
-			`ID: ${g.id || ""}`,
-			`Title: ${g.name || ""}`,
-			`Status: ${g.status || "draft"}`,
-			`Impact: ${g.impact || "unknown"}`,
-			`Effort: ${g.effort || "unknown"}`,
-			`Owner: ${ownerName}`,
-			`Description: ${g.description || "No description provided."}`,
-		];
-		const ok = await this.copyToClipboard(lines.join("\n"));
-		if (ok) {
-			this.showCopyFeedback(this.copyAllBtn, null, "Copy All");
 		}
 	}
 
