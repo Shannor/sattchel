@@ -249,3 +249,43 @@ func TestFileStorageExportImport(t *testing.T) {
 		t.Errorf("expected goal name 'Goal Export', got %v", goals)
 	}
 }
+
+func TestFileStorageExternalModificationReload(t *testing.T) {
+	tempDir := t.TempDir()
+	dbPath := filepath.Join(tempDir, "tracker.json")
+
+	storage1 := driven.NewFileStorage(dbPath, nil)
+	ctx := context.Background()
+
+	p, err := storage1.CreateProject(ctx, &core.Project{Label: "Project 1"})
+	if err != nil {
+		t.Fatalf("failed to create project: %v", err)
+	}
+
+	g1, err := storage1.CreateGoal(ctx, p.ID, &core.Goal{Name: "Goal 1", ProjectID: p.ID})
+	if err != nil {
+		t.Fatalf("failed to create goal 1: %v", err)
+	}
+
+	// Verify storage1 sees 1 goal
+	goals, err := storage1.GetGoals(ctx, p.ID)
+	if err != nil || len(goals) != 1 {
+		t.Fatalf("expected 1 goal, got %d (err: %v)", len(goals), err)
+	}
+
+	// External CLI process writes to disk
+	storage2 := driven.NewFileStorage(dbPath, nil)
+	err = storage2.DeleteGoal(ctx, g1.ID)
+	if err != nil {
+		t.Fatalf("failed to delete goal in external storage: %v", err)
+	}
+
+	// Now storage1 (e.g. running server) calls GetGoals again. It should reload from disk.
+	updatedGoals, err := storage1.GetGoals(ctx, p.ID)
+	if err != nil {
+		t.Fatalf("failed to get goals after external delete: %v", err)
+	}
+	if len(updatedGoals) != 0 {
+		t.Errorf("expected 0 goals after external delete, got %d", len(updatedGoals))
+	}
+}

@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/exp/maps"
@@ -26,9 +27,10 @@ var (
 )
 
 type FileStorage struct {
-	mu   sync.Mutex
-	path string
-	db   *DB
+	mu          sync.Mutex
+	path        string
+	db          *DB
+	lastModTime time.Time
 }
 
 type DB struct {
@@ -207,21 +209,27 @@ func (s *FileStorage) Transaction(ctx context.Context, fn func(ctx context.Conte
 	return nil
 }
 
-// ensureLoaded loads the DB from disk on first access. Caller must hold s.mu.
+// ensureLoaded loads the DB from disk on first access or if the file on disk has been modified. Caller must hold s.mu.
 func (s *FileStorage) ensureLoaded() error {
-	if s.db != nil {
+	info, statErr := os.Stat(s.path)
+	if s.db != nil && (statErr != nil || !info.ModTime().After(s.lastModTime)) {
 		return nil
 	}
+
 	data, err := os.ReadFile(s.path)
 	if errors.Is(err, os.ErrNotExist) {
-		s.db = newDB()
+		if s.db == nil {
+			s.db = newDB()
+		}
 		return nil
 	}
 	if err != nil {
 		return fmt.Errorf("read db: %w", err)
 	}
 	if len(data) == 0 {
-		s.db = newDB()
+		if s.db == nil {
+			s.db = newDB()
+		}
 		return nil
 	}
 	db := newDB()
@@ -230,6 +238,9 @@ func (s *FileStorage) ensureLoaded() error {
 	}
 	ensureMaps(db)
 	s.db = db
+	if statErr == nil {
+		s.lastModTime = info.ModTime()
+	}
 	return nil
 }
 
@@ -316,6 +327,9 @@ func (s *FileStorage) flush() error {
 	}
 	if err := os.Rename(tmp, s.path); err != nil {
 		return fmt.Errorf("rename tmp: %w", err)
+	}
+	if info, err := os.Stat(s.path); err == nil {
+		s.lastModTime = info.ModTime()
 	}
 	return nil
 }
