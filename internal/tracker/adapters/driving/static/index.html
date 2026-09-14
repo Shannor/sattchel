@@ -163,22 +163,33 @@
         </div>
 
         <div class="detail-section">
-          <span class="detail-label">Impact</span>
-          <select id="drawer-impact" class="owner-select">
-            <option value="unknown">Unknown</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
+          <div class="metrics-row">
+            <div class="metric-col">
+              <span class="detail-label">Impact</span>
+              <select id="drawer-impact" class="owner-select">
+                <option value="unknown">Unknown</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="metric-col">
+              <span class="detail-label">Effort</span>
+              <select id="drawer-effort" class="owner-select">
+                <option value="unknown">Unknown</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+          </div>
         </div>
 
-        <div class="detail-section">
-          <span class="detail-label">Effort</span>
-          <select id="drawer-effort" class="owner-select">
-            <option value="unknown">Unknown</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+        <div id="drawer-relationship-section" class="detail-section">
+          <span class="detail-label">Connection</span>
+          <select id="drawer-relationship" class="owner-select">
+            <option value="optional">Optional</option>
+            <option value="required">Required</option>
           </select>
         </div>
 

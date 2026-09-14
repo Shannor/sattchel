@@ -23,13 +23,14 @@ type MergeGoalRequest struct {
 
 // UpdateGoalRequest represents the payload to update a goal's details.
 type UpdateGoalRequest struct {
-	GoalID      string          `json:"goalId"`
-	Name        string          `json:"name"`
-	Description string          `json:"description"`
-	Status      core.GoalStatus `json:"status"`
-	Impact      core.Impact     `json:"impact"`
-	Effort      core.Effort     `json:"effort"`
-	MemberID    string          `json:"memberId"`
+	GoalID           string                `json:"goalId"`
+	Name             string                `json:"name"`
+	Description      string                `json:"description"`
+	Status           core.GoalStatus       `json:"status"`
+	Impact           core.Impact           `json:"impact"`
+	Effort           core.Effort           `json:"effort"`
+	LinkRelationship core.LinkRelationship `json:"linkRelationship"`
+	MemberID         string                `json:"memberId"`
 }
 
 func (s *HTTPServer) handleUpdateGoal(w http.ResponseWriter, r *http.Request) {
@@ -45,11 +46,12 @@ func (s *HTTPServer) handleUpdateGoal(w http.ResponseWriter, r *http.Request) {
 	}
 
 	opts := core.GoalOptions{
-		Description: req.Description,
-		Status:      req.Status,
-		Impact:      req.Impact,
-		Effort:      req.Effort,
-		MemberID:    req.MemberID,
+		Description:      req.Description,
+		Status:           req.Status,
+		Impact:           req.Impact,
+		Effort:           req.Effort,
+		LinkRelationship: req.LinkRelationship,
+		MemberID:         req.MemberID,
 	}
 
 	_, err := s.service.UpdateGoal(r.Context(), req.GoalID, req.Name, opts)

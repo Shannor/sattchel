@@ -1119,6 +1119,33 @@ func TestServiceUpdateGoal(t *testing.T) {
 			t.Errorf("unexpected updated goal: %+v", updated)
 		}
 	})
+
+	t.Run("update link relationship on goal parent", func(t *testing.T) {
+		targetGoal := &Goal{
+			ID:     "g-child",
+			Name:   "Child Goal",
+			Parent: &Link{TargetID: "g-parent", Relationship: LinkOptional},
+		}
+		repo := &mockTrackerRepository{
+			getGoalFunc: func(ctx context.Context, id string) (*Goal, error) {
+				return targetGoal, nil
+			},
+			updateGoalFunc: func(ctx context.Context, goal *Goal) (*Goal, error) {
+				return goal, nil
+			},
+		}
+		s := NewService(repo)
+		options := GoalOptions{
+			LinkRelationship: LinkRequired,
+		}
+		updated, err := s.UpdateGoal(context.Background(), "g-child", "", options)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if updated.Parent == nil || updated.Parent.Relationship != LinkRequired {
+			t.Errorf("expected parent relationship to be 'required', got: %+v", updated.Parent)
+		}
+	})
 }
 
 func TestServiceMergeProjects(t *testing.T) {

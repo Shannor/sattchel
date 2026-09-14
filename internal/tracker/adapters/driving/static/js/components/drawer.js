@@ -9,6 +9,10 @@ export class Drawer {
 		this.effortElem = document.getElementById("drawer-effort");
 		this.ownerElem = document.getElementById("drawer-owner");
 		this.idElem = document.getElementById("drawer-id");
+		this.relationshipElem = document.getElementById("drawer-relationship");
+		this.relationshipSection = document.getElementById(
+			"drawer-relationship-section",
+		);
 		this.closeBtn = this.element.querySelector(".close-btn");
 
 		this.copyIdBtn = document.getElementById("drawer-copy-id-btn");
@@ -25,6 +29,11 @@ export class Drawer {
 		this.impactElem.addEventListener("change", () => this.handleMetricChange());
 		this.effortElem.addEventListener("change", () => this.handleMetricChange());
 		this.ownerElem.addEventListener("change", () => this.handleMemberChange());
+		if (this.relationshipElem) {
+			this.relationshipElem.addEventListener("change", () =>
+				this.handleRelationshipChange(),
+			);
+		}
 		if (this.descElem) {
 			this.descElem.addEventListener("change", () =>
 				this.handleDescriptionChange(),
@@ -236,6 +245,29 @@ export class Drawer {
 		}
 	}
 
+	async handleRelationshipChange() {
+		if (!this.currentGoal || !this.onUpdate) return;
+		const newRel = this.relationshipElem.value;
+		const currentRel =
+			this.currentGoal.parent && this.currentGoal.parent.relationship
+				? this.currentGoal.parent.relationship
+				: "optional";
+
+		if (newRel === currentRel) return;
+
+		try {
+			await this.onUpdate(this.currentGoal.id, {
+				linkRelationship: newRel,
+			});
+			if (this.currentGoal.parent) {
+				this.currentGoal.parent.relationship = newRel;
+			}
+		} catch (err) {
+			alert("Failed to update relationship: " + err.message);
+			this.relationshipElem.value = currentRel;
+		}
+	}
+
 	normalizeStatus(status) {
 		if (!status) return "draft";
 		const s = status.toLowerCase().trim().replace(" ", "-");
@@ -271,6 +303,15 @@ export class Drawer {
 
 		this.impactElem.value = goal.impact || "unknown";
 		this.effortElem.value = goal.effort || "unknown";
+
+		const hasParent = goal.parent && goal.parent.targetId;
+		if (this.relationshipSection) {
+			this.relationshipSection.style.display = hasParent ? "flex" : "none";
+		}
+		if (this.relationshipElem && hasParent) {
+			this.relationshipElem.value =
+				(goal.parent && goal.parent.relationship) || "optional";
+		}
 
 		// Populate member select and set current value
 		this._populateMemberOptions();

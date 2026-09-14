@@ -46,6 +46,7 @@ export class API {
 				status: options.status || "",
 				impact: options.impact || "",
 				effort: options.effort || "",
+				linkRelationship: options.linkRelationship || "",
 				memberId: options.memberId || "",
 			}),
 		});

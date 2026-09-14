@@ -953,6 +953,9 @@ func (s *Service) UpdateGoal(ctx context.Context, goalID string, name string, op
 		if options.Effort != "" {
 			goal.Effort = options.Effort
 		}
+		if options.LinkRelationship != "" && goal.Parent != nil {
+			goal.Parent.Relationship = options.LinkRelationship
+		}
 		if options.MemberID != "" {
 			member, err := s.repo.GetMember(txCtx, options.MemberID)
 			if err != nil {
